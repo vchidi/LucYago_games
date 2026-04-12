@@ -188,7 +188,7 @@ $("#startBtn").addEventListener("click",()=>startGame(false));$("#reviewBtn").ad
 document.addEventListener("pointerdown",focusInput);
 document.addEventListener("touchstart",focusInput,{passive:true});
 $("#ipadInput").addEventListener("input",event=>{const value=event.target.value.replace(/\D/g,"");if(value){[...value].forEach(inputDigit)}event.target.value=""});
-window.addEventListener("keydown",event=>{if(/^\d$/.test(event.key))inputDigit(event.key);else if(event.key==="Backspace")deleteDigit();else if(event.key==="Enter")checkAnswer()});
+window.addEventListener("keydown",event=>{if(document.activeElement===$("#ipadInput"))return;if(/^\d$/.test(event.key))inputDigit(event.key);else if(event.key==="Backspace")deleteDigit();else if(event.key==="Enter")checkAnswer()});
 if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 window.addEventListener("load",()=>setTimeout(focusInput,150));
 render();setMode(state.mode);setMessage("Elige las tablas y pulsa Jugar.","neutral");
