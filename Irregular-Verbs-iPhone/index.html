@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4f8cff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Irregular Verbs">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Yago - Irregular Verbs Game</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{--bg1:#fff8e8;--bg2:#eaf7ff;--ink:#1f2a44;--muted:#667085;--blue:#4f8cff;--green:#28a745;--red:#e74c3c;--yellow:#ffcc4d;--pink:#ff6fb5;--teal:#10b7c4;--shadow:0 12px 30px rgba(31,42,68,.12)}
+*{box-sizing:border-box}
+html,body{margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100%}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:calc(8px + env(safe-area-inset-top)) 12px calc(10px + env(safe-area-inset-bottom))}
+.hero,.card{background:rgba(255,255,255,.95);border-radius:22px;box-shadow:var(--shadow)}
+.hero{padding:12px 14px}
+.card{padding:14px}
+.grid{margin-top:10px;display:block}
+.title{margin:0;font-size:clamp(22px,3vw,32px);font-weight:800}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.stat{background:#fff;border-radius:14px;padding:6px 10px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);min-width:96px}
+.label{font-size:10px;color:var(--muted)}
+.value{font-size:16px;font-weight:800;margin-top:2px}
+.mode-buttons,.play-buttons,.bottom-tools{display:flex;flex-wrap:nowrap;gap:8px}
+.mode-wrap{margin-top:10px}
+button,.file-label{border:0;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;white-space:nowrap}
+.primary{background:var(--blue);color:#fff}
+.secondary{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.warn{background:#ffe8cf;color:#8a4b00}
+.danger{background:#ffe0dc;color:#8f2d22}
+.success{background:#dff7e7;color:#126b2d}
+.small-btn,.small-file{padding:8px 12px;font-size:13px}
+input[type=file]{display:none}
+.mode-btn.active,.filter-btn.active{outline:3px solid rgba(79,140,255,.25)}
+.base{text-align:center;margin-bottom:10px}
+.base .word{font-size:clamp(28px,5vw,46px);font-weight:900;margin-top:4px}
+.prompt{border-radius:18px;padding:12px;margin-bottom:10px;border:3px solid transparent;background:#f7fbff}
+.prompt.active{border-color:var(--blue)}
+.prompt.good{background:#e9f9ef;border-color:#8ad4a0}
+.prompt.bad{background:#fff0ed;border-color:#f2a39a}
+.row-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.row-title{font-size:16px;font-weight:800}
+.status-pill{font-size:12px;padding:5px 8px;border-radius:999px;background:#eef2ff;color:#475467;min-width:78px;text-align:center}
+.letters{display:flex;flex-wrap:wrap;gap:2px;align-items:center;justify-content:center}
+.char{width:auto;height:auto;border-radius:0;display:flex;align-items:center;justify-content:center;font-size:clamp(28px,5vw,46px);font-weight:900;font-family:Arial,Helvetica,sans-serif;background:transparent;box-shadow:none;line-height:1;padding:0 1px}
+.char.fixed{background:transparent;color:#344054}
+.char.blank{background:transparent;border:0;box-shadow:none;color:#d6a300;min-width:.6em}
+.char.blank.filled{background:transparent;border:0;color:var(--ink)}
+.char.slash{width:auto;background:transparent;box-shadow:none;padding:0 2px}
+.hangman-box{margin:-2px 0 10px;background:linear-gradient(135deg,#fffdf7,#f6fbff 54%,#fff6fd);border:2px solid #e8eefc;border-radius:24px;padding:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.75)}
+.hangman-box.off{background:#fff;box-shadow:none}
+.hangman-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hangman-title{font-size:14px;font-weight:900;color:#364152;letter-spacing:.02em;text-transform:uppercase}
+.hangman-stats{display:flex;gap:8px;flex-wrap:wrap}
+.hangman-stat{background:#fff;border-radius:16px;padding:8px 12px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);min-width:110px}
+.hangman-caption{font-size:11px;color:var(--muted);font-weight:700}
+.hangman-value{font-size:20px;font-weight:900;margin-top:2px}
+.hangman-stage{position:relative;height:300px;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 20% 18%,rgba(255,255,255,.96),rgba(255,255,255,0) 28%),radial-gradient(circle at 80% 22%,rgba(255,204,77,.22),rgba(255,204,77,0) 24%),linear-gradient(180deg,#eaf7ff 0%,#f8fbff 62%,#fffaf0 100%)}
+.hangman-box.off .hangman-stage{background:#fff}
+.hangman-box.off .hangman-title,.hangman-box.off .hangman-stats,.hangman-box.off .hangman-sun,.hangman-box.off .hangman-cloud,.hangman-box.off .hangman-ground,.hangman-box.off .hangman-part{display:none}
+.hangman-sun{position:absolute;top:22px;right:26px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffde9,#ffd85d 60%,#ffb300 100%);box-shadow:0 0 0 10px rgba(255,216,93,.14)}
+.hangman-cloud{position:absolute;height:20px;border-radius:999px;background:rgba(255,255,255,.82);box-shadow:24px 0 0 rgba(255,255,255,.82),12px -8px 0 3px rgba(255,255,255,.82)}
+.hangman-cloud.one{top:48px;left:34px;width:42px}
+.hangman-cloud.two{top:84px;right:108px;width:34px;transform:scale(.92)}
+.hangman-ground{position:absolute;left:26px;right:26px;bottom:28px;height:3px;border-radius:999px;background:linear-gradient(90deg,rgba(148,163,184,.15),rgba(100,116,139,.42),rgba(148,163,184,.15))}
+.hangman-result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;pointer-events:none;opacity:0;transform:scale(.94);transition:opacity .25s ease,transform .25s ease}
+.hangman-result.visible{opacity:1;transform:scale(1)}
+.hangman-result-card{padding:18px 22px;border-radius:22px;font-weight:900;letter-spacing:.04em;box-shadow:0 20px 36px rgba(31,42,68,.18);backdrop-filter:blur(4px)}
+.hangman-result.win .hangman-result-card{background:linear-gradient(135deg,#fff6b2,#ffe36d,#fffbe6);color:#7a5200;border:2px solid rgba(255,204,77,.55)}
+.hangman-result.lose .hangman-result-card{background:linear-gradient(135deg,#ffe2ea,#ff9fbc,#fff0f4);color:#8d2049;border:2px solid rgba(255,111,181,.45)}
+.hangman-result-title{font-size:clamp(30px,5vw,46px);line-height:1}
+.hangman-result-text{margin-top:8px;font-size:14px;letter-spacing:.01em}
+.hangman-part{position:absolute;opacity:.12;transform-origin:center center;transition:opacity .28s ease,transform .28s ease;filter:drop-shadow(0 6px 10px rgba(31,42,68,.15))}
+.hangman-part.visible{opacity:1}
+.hangman-part.base{left:36px;bottom:42px;width:132px;height:12px;border-radius:999px;background:linear-gradient(90deg,#8a5a2b,#c08445)}
+.hangman-part.pole{left:78px;bottom:50px;width:14px;height:186px;border-radius:999px;background:linear-gradient(180deg,#8c5729,#d3954e)}
+.hangman-part.beam{left:78px;top:44px;width:144px;height:12px;border-radius:999px;background:linear-gradient(90deg,#9d6331,#dda45b)}
+.hangman-part.brace{left:88px;top:76px;width:86px;height:10px;border-radius:999px;background:linear-gradient(90deg,#bd7a3f,#efb26d);transform:rotate(-44deg);transform-origin:left center}
+.hangman-part.rope{left:210px;top:56px;width:8px;height:34px;border-radius:999px;background:linear-gradient(180deg,#ffd37a,#f2aa21)}
+.hangman-part.head{left:183px;top:88px;width:54px;height:54px;border-radius:50%;border:6px solid var(--pink);background:rgba(255,255,255,.22)}
+.hangman-part.neck{left:205px;top:142px;width:10px;height:14px;border-radius:999px;background:linear-gradient(180deg,#ff91c7,#ff6fb5)}
+.hangman-part.bodyTop{left:205px;top:154px;width:10px;height:44px;border-radius:999px;background:linear-gradient(180deg,var(--teal),#1786c6)}
+.hangman-part.bodyBottom{left:205px;top:196px;width:10px;height:40px;border-radius:999px;background:linear-gradient(180deg,#1786c6,#5dd0de)}
+.hangman-part.leftArm{left:165px;top:170px;width:46px;height:8px;border-radius:999px;background:linear-gradient(90deg,#4f8cff,#7bb8ff);transform:rotate(-34deg)}
+.hangman-part.rightArm{left:208px;top:170px;width:46px;height:8px;border-radius:999px;background:linear-gradient(90deg,#7bb8ff,#4f8cff);transform:rotate(34deg)}
+.hangman-part.leftForearm{left:151px;top:193px;width:38px;height:8px;border-radius:999px;background:linear-gradient(90deg,#53a0ff,#9dd0ff);transform:rotate(22deg)}
+.hangman-part.rightForearm{left:229px;top:193px;width:38px;height:8px;border-radius:999px;background:linear-gradient(90deg,#9dd0ff,#53a0ff);transform:rotate(-22deg)}
+.hangman-part.leftLeg{left:170px;top:236px;width:50px;height:8px;border-radius:999px;background:linear-gradient(90deg,#28a745,#8fdf85);transform:rotate(40deg)}
+.hangman-part.rightLeg{left:202px;top:236px;width:50px;height:8px;border-radius:999px;background:linear-gradient(90deg,#8fdf85,#28a745);transform:rotate(-40deg)}
+.message{min-height:48px;border-radius:16px;padding:10px 12px;background:#fffdf2;color:#694d00;font-weight:700;line-height:1.25;margin-top:10px;font-size:14px}
+.help,.study-note{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.25}
+.ipad-input{position:absolute;left:-9999px;top:auto;width:1px;height:1px;opacity:0;pointer-events:none}
+.study-card{background:#fffdf7;border:2px solid #f0ead7;border-radius:20px;padding:14px}
+.study-top-forms{font-family:"Courier New",monospace;font-size:28px;font-weight:900;text-align:center;background:#fff;border-radius:16px;padding:12px;margin-bottom:10px;line-height:1.25}
+.study-visual{font-size:22px;font-weight:900;text-align:center;margin:10px 0;padding:12px;background:#f7fbff;border-radius:16px}
+.study-hint{font-size:16px;line-height:1.3;background:#fff;border-radius:16px;padding:12px}
+.study-stack{margin-top:10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.study-word{font-family:"Courier New",monospace;font-size:24px;font-weight:900;background:#fff;border-radius:16px;padding:10px 12px;box-shadow:inset 0 0 0 2px #eef2ff;white-space:pre}
+.red{color:var(--red)}
+.green{color:var(--green)}
+@media (display-mode:standalone){body{min-height:100dvh}}
+@media (max-width:900px){.mode-buttons,.play-buttons,.bottom-tools{flex-wrap:wrap}}
+@media (max-width:640px){
+  .wrap{padding-left:10px;padding-right:10px}
+  .hero,.card{border-radius:18px}
+  .card{padding:12px}
+  .mode-buttons,.play-buttons,.bottom-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex-wrap:wrap;gap:6px}
+  .play-buttons button,.bottom-tools button,.bottom-tools label,.mode-buttons button{width:100%}
+  .char{font-size:clamp(28px,5vw,46px)}
+  .message{min-height:44px}
+  .study-top-forms{font-size:22px}
+  .study-word{font-size:20px}
+  .hangman-stage{height:250px}
+  .hangman-stat{min-width:96px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+  <h1 class="title">Irregular Verbs Game for Yago</h1>
+  <div class="stats">
+    <div class="stat"><div class="label">Aciertos</div><div class="value" id="scoreGood">0</div></div>
+    <div class="stat"><div class="label">Errores</div><div class="value" id="scoreBad">0</div></div>
+    <div class="stat"><div class="label">Verbo</div><div class="value"><span id="currentIndex">1</span>/<span id="totalCount">0</span></div></div>
+    <div class="stat"><div class="label">Conjunto cargado</div><div class="value" style="font-size:14px" id="datasetName">Inicial</div></div>
+  </div>
+  <div class="mode-wrap">
+    <div class="mode-buttons">
+      <button class="primary mode-btn active" id="modeTrickyBtn">Tricky letters</button>
+      <button class="warn mode-btn" id="modeBlindBtn">Blind</button>
+      <button class="success mode-btn" id="modeStudyBtn">Estudio</button>
+      <button class="secondary filter-btn" id="newOnlyBtn">Recien incorporadas</button>
+      <button class="secondary filter-btn" id="hangmanToggleBtn">Ahorcado: si</button>
+    </div>
+  </div>
+</section>
+<section class="grid">
+  <div class="card" id="gameCard">
+    <input id="ipadInput" class="ipad-input" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="play-buttons" style="margin-bottom:18px">
+      <button class="success" id="revealBtn">Solucion</button>
+      <button class="secondary" id="nextBtn">Siguiente</button>
+      <button class="danger" id="tryAgainBtn">Intentar otra vez</button>
+      <button class="primary" id="shuffleBtn">Mezclar verbos</button>
+      <button class="secondary" id="restartGameBtn">Re-empezar la partida</button>
+    </div>
+    <div id="gameView">
+      <div class="base">
+        <div class="label">Base form</div>
+        <div class="word" id="baseWord">write</div>
+      </div>
+      <div class="prompt active" id="psCard">
+        <div class="row-top">
+          <div class="row-title">Past simple</div>
+          <div class="status-pill" id="psStatus">Pendiente</div>
+        </div>
+        <div class="letters" id="psLetters"></div>
+      </div>
+      <div class="prompt" id="ppCard">
+        <div class="row-top">
+          <div class="row-title">Past participle</div>
+          <div class="status-pill" id="ppStatus">Pendiente</div>
+        </div>
+        <div class="letters" id="ppLetters"></div>
+      </div>
+      <div class="hangman-box" id="hangmanBox">
+        <div class="hangman-top">
+          <div class="hangman-title">Ahorcado</div>
+          <div class="hangman-stats">
+            <div class="hangman-stat">
+              <div class="hangman-caption">Vidas acumuladas</div>
+              <div class="hangman-value" id="hangmanLives">0</div>
+            </div>
+            <div class="hangman-stat">
+              <div class="hangman-caption">Partes visibles</div>
+              <div class="hangman-value"><span id="hangmanDamage">0</span>/<span id="hangmanTotal">10</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="hangman-stage" id="hangmanStage">
+          <div class="hangman-sun"></div>
+          <div class="hangman-cloud one"></div>
+          <div class="hangman-cloud two"></div>
+          <div class="hangman-ground"></div>
+          <div class="hangman-result" id="hangmanResult">
+            <div class="hangman-result-card">
+              <div class="hangman-result-title" id="hangmanResultTitle"></div>
+              <div class="hangman-result-text" id="hangmanResultText"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="message" id="messageBox">Escribe con el teclado del iPad.</div>
+      <div class="bottom-tools">
+        <button class="secondary" id="deleteBtn">Borrar ultima</button>
+        <button class="secondary" id="restartVerbBtn">Reiniciar verbo</button>
+        <label class="file-label secondary small-file">Importar Excel<input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.json"></label>
+        <button class="secondary small-btn" id="exportJsonBtn">Exportar</button>
+      </div>
+      <div class="help">Toca sobre el juego si necesitas volver a abrir el teclado del iPad. Importa tu Excel o JSON y el dispositivo recordara el ultimo conjunto cargado.</div>
+    </div>
+    <div id="studyView" style="display:none">
+      <div class="base">
+        <div class="label">Estudio</div>
+        <div class="word" id="studyBaseWord">write</div>
+      </div>
+      <div class="study-card">
+        <div class="study-top-forms" id="studyTopForms"></div>
+        <div class="study-visual" id="studyVisual">i -&gt; a -&gt; i+n</div>
+        <div class="study-hint" id="studyHint">Aqui aparecera una ayuda visual.</div>
+        <div class="study-stack">
+          <div class="study-word" id="studyBaseAligned"></div>
+          <div class="study-word" id="studyPSAligned"></div>
+          <div class="study-word" id="studyPPAligned"></div>
+        </div>
+        <div class="study-note">Puedes enriquecer el estudio con studyHint y studyVisual en el Excel.</div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+const D=[{baseForm:"write",pastSimple:"wrote",pastSimplePattern:"wr_te",pastParticiple:"written",pastParticiplePattern:"writt_e_",studyHint:"La i cambia a o y luego vuelve con -en.",studyVisual:"i -> o -> i+n",psHighlight:"o",ppHighlight:"en",isNew:"yes"},{baseForm:"give",pastSimple:"gave",pastSimplePattern:"g_ve",pastParticiple:"given",pastParticiplePattern:"give_",studyHint:"La i salta a a y vuelve con -n.",studyVisual:"i -> a -> i+n",psHighlight:"a",ppHighlight:"n",isNew:"yes"},{baseForm:"see",pastSimple:"saw",pastSimplePattern:"saw",pastParticiple:"seen",pastParticiplePattern:"see_",studyHint:"aw en pasado, ee+n en participio.",studyVisual:"ee -> aw -> ee+n",psHighlight:"aw",ppHighlight:"n",isNew:"yes"},{baseForm:"break",pastSimple:"broke",pastSimplePattern:"broke",pastParticiple:"broken",pastParticiplePattern:"______",studyHint:"ea cambia a o y luego anades -n.",studyVisual:"ea -> o -> o+n",psHighlight:"o",ppHighlight:"on",isNew:"yes"},{baseForm:"be",pastSimple:"was/were",pastSimplePattern:"was/were",pastParticiple:"been",pastParticiplePattern:"be__",studyHint:"Was/were en pasado y been en participio.",studyVisual:"be -> was/were -> bee+n",psHighlight:"was/were",ppHighlight:"en",isNew:"yes"},{baseForm:"eat",pastSimple:"ate",pastSimplePattern:"ate",pastParticiple:"eaten",pastParticiplePattern:"eat__",studyHint:"eat pasa a ate y vuelve con -en.",studyVisual:"eat -> ate -> eat+en",psHighlight:"a",ppHighlight:"en",isNew:"no"},{baseForm:"drink",pastSimple:"drank",pastSimplePattern:"dr_nk",pastParticiple:"drunk",pastParticiplePattern:"dr_nk",studyHint:"i, luego a, luego u.",studyVisual:"i -> a -> u",psHighlight:"a",ppHighlight:"u",isNew:"no"}];
+const HANGMAN_PARTS=["base","pole","beam","brace","rope","head","neck","bodyTop","bodyBottom","leftArm","rightArm","leftForearm","rightForearm","leftLeg","rightLeg"];
+const START_DAMAGE=4;
+let dataset=[...D],datasetName="Inicial",index=0,activeTarget="pastSimple",score={good:0,bad:0},currentMode="tricky",newOnly=false,hangmanEnabled=true,hangman={damage:START_DAMAGE,lives:0,status:"playing"};
+let autoNextTimer=null;
+const K="yago_irregular_verbs_saved_data_v1",NK="yago_irregular_verbs_saved_name_v1",$=s=>document.querySelector(s);
+function saveData(n){try{localStorage.setItem(K,JSON.stringify(D));localStorage.setItem(NK,n||"Excel guardado")}catch{}}
+function loadData(){try{const r=localStorage.getItem(K);if(!r)return false;const p=JSON.parse(r);if(!Array.isArray(p)||!p.length)return false;D.length=0;p.forEach(x=>D.push(x));datasetName=localStorage.getItem(NK)||"Excel guardado";return true}catch{return false}}
+function norm(a,p){p=String(p||a||"").trim();a=String(a||"").trim();if(!a)return p;if(!p)return a;if(p.length>a.length)p=p.slice(0,a.length);if(p.length<a.length)p+=a.slice(p.length);return p}
+function clean(e){const c={baseForm:String(e.baseForm||"").trim(),pastSimple:String(e.pastSimple||"").trim(),pastSimplePattern:String(e.pastSimplePattern||e.pastSimple||"").trim(),pastParticiple:String(e.pastParticiple||"").trim(),pastParticiplePattern:String(e.pastParticiplePattern||e.pastParticiple||"").trim(),studyVisual:String(e.studyVisual||"").trim(),studyHint:String(e.studyHint||"").trim(),psHighlight:String(e.psHighlight||"").trim(),ppHighlight:String(e.ppHighlight||"").trim(),isNew:String(e.isNew||"").trim().toLowerCase()};if(!c.baseForm||!c.pastSimple||!c.pastParticiple)return null;c.pastSimplePattern=norm(c.pastSimple,c.pastSimplePattern);c.pastParticiplePattern=norm(c.pastParticiple,c.pastParticiplePattern);return c}
+function filtered(){let b=D.map(clean).filter(Boolean);if(newOnly)b=b.filter(x=>["yes","si","1","true","x"].includes(x.isNew));return b}
+function modePattern(item,key){return currentMode==="blind"?item[key].split("").map(ch=>ch==="/" ? "/" : "_").join(""):(key==="pastSimple"?item.pastSimplePattern:item.pastParticiplePattern)}
+function makeState(answer,pattern){return{answer,pattern,guessed:[...pattern].map(ch=>ch==="_"?"":ch),ok:null}}
+function rebuild(){dataset=filtered();if(index>=dataset.length)index=0;dataset.forEach(item=>{item.state={pastSimple:makeState(item.pastSimple,modePattern(item,"pastSimple")),pastParticiple:makeState(item.pastParticiple,modePattern(item,"pastParticiple"))};item.meta={finished:false,revealed:false,pastSimple_scored:false,pastParticiple_scored:false}})}
+function item(){return dataset[index]}
+function nextBlank(s){return s.pattern.split("").findIndex((ch,i)=>ch==="_"&&(!s.guessed[i]||s.guessed[i]==="_"))}
+function lastFilled(s){for(let i=s.guessed.length-1;i>=0;i--)if(s.pattern[i]==="_"&&s.guessed[i])return i;return -1}
+function chars(s){return s.answer.split("").map((ch,i)=>ch==="/"?{t:"slash",v:"/"}:s.pattern[i]==="_"?{t:s.guessed[i]?"filled":"blank",v:s.guessed[i]||"_"}:{t:"fixed",v:ch})}
+function renderWord(el,s){el.innerHTML="";chars(s).forEach(it=>{const d=document.createElement("div");d.className="char "+(it.t==="filled"?"blank filled":it.t);d.textContent=it.v;el.appendChild(d)})}
+function focusInput(){const input=$("#ipadInput");if(input&&currentMode!=="study")input.focus()}
+function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextTimer=null}}
+function stats(){$("#scoreGood").textContent=score.good;$("#scoreBad").textContent=score.bad;$("#currentIndex").textContent=dataset.length?index+1:0;$("#totalCount").textContent=dataset.length;$("#datasetName").textContent=newOnly?"Recien incorporadas":datasetName;$("#hangmanToggleBtn").textContent=`Ahorcado: ${hangmanEnabled?"si":"no"}`}
+function msg(t){$("#messageBox").textContent=t}
+function setActive(t){activeTarget=t;$("#psCard").classList.toggle("active",t==="pastSimple");$("#ppCard").classList.toggle("active",t==="pastParticiple")}
+function statuses(){if(!dataset.length)return;["pastSimple","pastParticiple"].forEach(k=>{const card=$(k==="pastSimple"?"#psCard":"#ppCard"),st=$(k==="pastSimple"?"#psStatus":"#ppStatus"),s=item().state[k];card.classList.remove("good","bad");if(s.ok===true){card.classList.add("good");st.textContent="Bien"}else if(s.ok===false){card.classList.add("bad");st.textContent="Mal"}else st.textContent="Pendiente"})}
+function updateFinished(it){it.meta.finished=it.state.pastSimple.ok===true&&it.state.pastParticiple.ok===true}
+function queueNextVerb(){clearAutoNext();if(currentMode==="study"||!dataset.length)return;autoNextTimer=setTimeout(()=>{autoNextTimer=null;if(currentMode==="study"||!dataset.length)return;next()},1000)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function hi(w,t,cls){if(!t)return esc(w);const i=w.toLowerCase().indexOf(t.toLowerCase());if(i===-1)return esc(w);return `${esc(w.slice(0,i))}<span class="${cls}">${esc(w.slice(i,i+t.length))}</span>${esc(w.slice(i+t.length))}`}
+function renderStudy(){if(!dataset.length)return;const it=item();$("#studyBaseWord").textContent=it.baseForm;$("#studyTopForms").innerHTML=`${esc(it.baseForm)}&nbsp;&nbsp;${hi(it.pastSimple,it.psHighlight,"red")}&nbsp;&nbsp;${hi(it.pastParticiple,it.ppHighlight,"green")}`;$("#studyVisual").textContent=it.studyVisual||`${it.baseForm} -> ${it.pastSimple} -> ${it.pastParticiple}`;$("#studyHint").textContent=it.studyHint||"Anade studyHint en el Excel.";$("#studyBaseAligned").innerHTML=esc(it.baseForm);$("#studyPSAligned").innerHTML=hi(it.pastSimple,it.psHighlight,"red");$("#studyPPAligned").innerHTML=hi(it.pastParticiple,it.ppHighlight,"green")}
+function resetHangman(){hangman={damage:START_DAMAGE,lives:0,status:"playing"}}
+function clampHangman(){hangman.damage=Math.max(0,Math.min(hangman.damage,HANGMAN_PARTS.length));hangman.lives=Math.max(0,hangman.lives)}
+function evaluateHangmanState(){clampHangman();if(hangman.damage===0){hangman.status="won";return"GANASTE! Has desmontado todo el ahorcado."}if(hangman.damage>=HANGMAN_PARTS.length){hangman.status="lost";return"PERDISTE! El ahorcado se completo."}hangman.status="playing";return""}
+function applyHangmanSuccess(){if(hangman.status!=="playing")return"";if(hangman.damage>0){hangman.damage--;const end=evaluateHangmanState();return end||"Bien. Has quitado la ultima linea del ahorcado."}hangman.lives++;clampHangman();return"Bien. Has ganado una vida extra."}
+function applyHangmanFailure(){if(hangman.status!=="playing")return"";if(hangman.lives>0){hangman.lives--;clampHangman();return"Fallo, pero una vida acumulada ha anulado ese error."}hangman.damage++;const end=evaluateHangmanState();return end||"Fallo. Se anade una nueva linea al ahorcado."}
+function renderHangman(){const box=$("#hangmanBox"),stage=$("#hangmanStage"),result=$("#hangmanResult");if(!stage.querySelector(".hangman-part")){HANGMAN_PARTS.forEach(part=>{const piece=document.createElement("div");piece.className=`hangman-part ${part}`;piece.dataset.part=part;stage.appendChild(piece)})}box.classList.toggle("off",!hangmanEnabled&&hangman.status==="playing");HANGMAN_PARTS.forEach((part,i)=>{const node=stage.querySelector(`[data-part="${part}"]`);node.classList.toggle("visible",i<hangman.damage)});$("#hangmanLives").textContent=hangman.lives;$("#hangmanDamage").textContent=hangman.damage;$("#hangmanTotal").textContent=HANGMAN_PARTS.length;const won=hangman.status==="won",lost=hangman.status==="lost";result.className=`hangman-result${won?" visible win":lost?" visible lose":""}`;$("#hangmanResultTitle").textContent=won?"GANASTE!":lost?"PERDISTE!":"";$("#hangmanResultText").textContent=won?"Te has quedado sin piezas del ahorcado.":"Se construyo entero. Re-empezar la partida para volver a jugar."}
+function render(){if(!dataset.length){$("#baseWord").textContent="Sin datos";$("#psLetters").innerHTML="";$("#ppLetters").innerHTML="";$("#gameView").style.display=currentMode==="study"?"none":"block";$("#studyView").style.display=currentMode==="study"?"block":"none";renderHangman();stats();return}const it=item();$("#baseWord").textContent=it.baseForm;renderWord($("#psLetters"),it.state.pastSimple);renderWord($("#ppLetters"),it.state.pastParticiple);statuses();renderStudy();renderHangman();stats();const study=currentMode==="study";$("#gameView").style.display=study?"none":"block";$("#studyView").style.display=study?"block":"none";if(!study)setTimeout(focusInput,0)}
+function scoreOnce(it,k,ok){const mk=k+"_scored";if(it.meta[mk]||currentMode==="study")return;ok?score.good++:score.bad++;it.meta[mk]=true}
+function handleResolvedAnswer(ok,target){const result=ok?applyHangmanSuccess():applyHangmanFailure();const other=target==="pastSimple"?"pastParticiple":"pastSimple";const current=item();if(current&&current.state.pastSimple.ok===true&&current.state.pastParticiple.ok===true){queueNextVerb();return `${result} Pasando al siguiente verbo...`}if(target==="pastSimple"){setActive("pastParticiple");return `${result} Sigue con el otro verbo.`}if(ok&&hangman.status==="playing"){setActive(other);return `${result} Sigue con el otro verbo.`}return result||(!ok?"Fallo.":"Bien.")}
+function insert(letter){if(currentMode==="study"||!dataset.length)return;const it=item();const t=activeTarget,s=it.state[t],i=nextBlank(s);if(i===-1){msg("Ese recuadro ya esta completo. Pulsa borrar para corregirlo o toca el otro verbo.");return}s.guessed[i]=letter;const done=s.pattern.split("").every((ch,j)=>ch!=="_"||(s.guessed[j]&&s.guessed[j]!=="_"));if(done){const guess=s.answer.split("").map((ch,j)=>s.pattern[j]==="_"?(s.guessed[j]||""):ch).join("").toLowerCase(),ok=guess===String(it[t]||"").toLowerCase();s.ok=ok;scoreOnce(it,t,ok);if(!it.meta.revealed)msg(handleResolvedAnswer(ok,t));}else s.ok=null;updateFinished(it);render()}
+function del(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();const it=item(),s=it.state[activeTarget],i=lastFilled(s);if(i!==-1){s.guessed[i]="";s.ok=null;it.meta.revealed=false;it.meta[activeTarget+"_scored"]=false;updateFinished(it);render();msg("Ultima letra borrada.");return}msg("No hay letras para borrar en el verbo seleccionado.")}
+function resetOne(it){it.state={pastSimple:makeState(it.pastSimple,modePattern(it,"pastSimple")),pastParticiple:makeState(it.pastParticiple,modePattern(it,"pastParticiple"))};it.meta={finished:false,revealed:false,pastSimple_scored:false,pastParticiple_scored:false}}
+function reveal(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();const it=item();["pastSimple","pastParticiple"].forEach(k=>{const s=it.state[k];s.answer.split("").forEach((ch,i)=>{if(s.pattern[i]==="_")s.guessed[i]=ch});s.ok=true});it.meta.finished=true;it.meta.revealed=true;const result=applyHangmanSuccess();queueNextVerb();render();msg((result||"Solucion mostrada.")+" Pasando al siguiente verbo...");focusInput()}
+function restart(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();resetOne(item());setActive("pastSimple");render();msg("Puedes volver a intentarlo.")}
+function next(){clearAutoNext();if(!dataset.length)return;index=(index+1)%dataset.length;resetOne(item());setActive("pastSimple");render();msg("Nuevo verbo.")}
+function shuffle(){clearAutoNext();if(!dataset.length)return;dataset=dataset.sort(()=>Math.random()-.5);dataset.forEach(resetOne);index=0;setActive("pastSimple");render();msg("Verbos mezclados.")}
+function restartGame(){clearAutoNext();score={good:0,bad:0};index=0;rebuild();setActive("pastSimple");resetHangman();render();msg("Partida re-empezada.")}
+function setMode(m){clearAutoNext();currentMode=m;$("#modeTrickyBtn").classList.toggle("active",m==="tricky");$("#modeBlindBtn").classList.toggle("active",m==="blind");$("#modeStudyBtn").classList.toggle("active",m==="study");rebuild();setActive("pastSimple");render();msg(m==="study"?"Modo Estudio.":m==="blind"?"Modo Blind: todas las letras ocultas.":"Modo Tricky letters.")}
+function toggleNew(){clearAutoNext();newOnly=!newOnly;$("#newOnlyBtn").classList.toggle("active",newOnly);rebuild();index=0;setActive("pastSimple");render();msg(newOnly?"Solo verbos recien incorporados.":"Todos los verbos.")}
+function toggleHangman(){hangmanEnabled=!hangmanEnabled;$("#hangmanToggleBtn").classList.toggle("active",hangmanEnabled);render();msg(hangmanEnabled?"Ahorcado visible.":"Ahorcado oculto.")}
+function parseRows(rows){if(!rows.length)return[];const h=rows[0].map(v=>String(v||"").trim()),need=["baseForm","pastSimple","pastSimplePattern","pastParticiple","pastParticiplePattern"];if(!need.every(x=>h.includes(x)))return[];return rows.slice(1).map(r=>{const o={};h.forEach((x,i)=>o[x]=r[i]);return clean(o)}).filter(Boolean)}
+function importJson(text,name){clearAutoNext();const parsed=JSON.parse(text),rows=Array.isArray(parsed)?parsed.map(clean).filter(Boolean):[];if(!rows.length)throw new Error("El archivo no tiene verbos validos.");for(let i=0;i<D.length;i++)D[i]=rows[i]||D[i];while(D.length>rows.length)D.pop();datasetName=name||"JSON";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Datos importados y guardados.")}
+function importWorkbook(buf,name){clearAutoNext();const wb=XLSX.read(buf,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:""}),parsed=parseRows(rows);if(!parsed.length)throw new Error("No he encontrado el formato esperado en el Excel.");D.length=0;parsed.forEach(x=>D.push(x));datasetName=name||"Excel";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Excel importado y guardado.")}
+function exportJson(){const blob=new Blob([JSON.stringify(D,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="irregular_verbs_data.json";a.click();URL.revokeObjectURL(url)}
+$("#deleteBtn").addEventListener("click",del);$("#restartVerbBtn").addEventListener("click",restart);$("#revealBtn").addEventListener("click",reveal);$("#nextBtn").addEventListener("click",next);$("#tryAgainBtn").addEventListener("click",restart);$("#shuffleBtn").addEventListener("click",shuffle);$("#restartGameBtn").addEventListener("click",restartGame);$("#exportJsonBtn").addEventListener("click",exportJson);$("#modeTrickyBtn").addEventListener("click",()=>setMode("tricky"));$("#modeBlindBtn").addEventListener("click",()=>setMode("blind"));$("#modeStudyBtn").addEventListener("click",()=>setMode("study"));$("#newOnlyBtn").addEventListener("click",toggleNew);$("#hangmanToggleBtn").addEventListener("click",toggleHangman);
+$("#psCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastSimple");render();focusInput()});
+$("#ppCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastParticiple");render();focusInput()});
+document.addEventListener("pointerdown",e=>{if(currentMode==="study")return;if(e.target.closest("input[type=file]"))return;setTimeout(focusInput,0)});
+$("#ipadInput").addEventListener("input",e=>{const value=e.target.value.toLowerCase().replace(/[^a-z]/g,"");if(value){[...value].forEach(insert)}e.target.value=""});
+$("#fileInput").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{if(f.name.toLowerCase().endsWith(".json"))importJson(await f.text(),f.name);else importWorkbook(await f.arrayBuffer(),f.name)}catch(err){msg("Error al importar: "+err.message)}finally{e.target.value=""}});
+addEventListener("keydown",e=>{if(currentMode==="study")return;if(e.key==="Backspace"){e.preventDefault();del()}});
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+addEventListener("load",()=>setTimeout(focusInput,150));
+loadData();rebuild();render();
+</script>
+</body>
+</html>
