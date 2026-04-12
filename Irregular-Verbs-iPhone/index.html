@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -133,7 +133,7 @@ input[type=file]{display:none}
   </div>
   <div class="mode-wrap">
     <div class="mode-buttons">
-      <button class="primary mode-btn active" id="modeTrickyBtn">Tricky letters</button>
+      <button class="secondary" id="menuBtn">🏠</button>      <button class="primary mode-btn active" id="modeTrickyBtn">Tricky letters</button>
       <button class="warn mode-btn" id="modeBlindBtn">Blind</button>
       <button class="success mode-btn" id="modeStudyBtn">Estudio</button>
       <button class="secondary filter-btn" id="newOnlyBtn">Recien incorporadas</button>
@@ -281,7 +281,7 @@ function parseRows(rows){if(!rows.length)return[];const h=rows[0].map(v=>String(
 function importJson(text,name){clearAutoNext();const parsed=JSON.parse(text),rows=Array.isArray(parsed)?parsed.map(clean).filter(Boolean):[];if(!rows.length)throw new Error("El archivo no tiene verbos validos.");for(let i=0;i<D.length;i++)D[i]=rows[i]||D[i];while(D.length>rows.length)D.pop();datasetName=name||"JSON";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Datos importados y guardados.")}
 function importWorkbook(buf,name){clearAutoNext();const wb=XLSX.read(buf,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:""}),parsed=parseRows(rows);if(!parsed.length)throw new Error("No he encontrado el formato esperado en el Excel.");D.length=0;parsed.forEach(x=>D.push(x));datasetName=name||"Excel";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Excel importado y guardado.")}
 function exportJson(){const blob=new Blob([JSON.stringify(D,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="irregular_verbs_data.json";a.click();URL.revokeObjectURL(url)}
-$("#deleteBtn").addEventListener("click",del);$("#restartVerbBtn").addEventListener("click",restart);$("#revealBtn").addEventListener("click",reveal);$("#nextBtn").addEventListener("click",next);$("#tryAgainBtn").addEventListener("click",restart);$("#shuffleBtn").addEventListener("click",shuffle);$("#restartGameBtn").addEventListener("click",restartGame);$("#exportJsonBtn").addEventListener("click",exportJson);$("#modeTrickyBtn").addEventListener("click",()=>setMode("tricky"));$("#modeBlindBtn").addEventListener("click",()=>setMode("blind"));$("#modeStudyBtn").addEventListener("click",()=>setMode("study"));$("#newOnlyBtn").addEventListener("click",toggleNew);$("#hangmanToggleBtn").addEventListener("click",toggleHangman);
+$("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");$("#deleteBtn").addEventListener("click",del);$("#restartVerbBtn").addEventListener("click",restart);$("#revealBtn").addEventListener("click",reveal);$("#nextBtn").addEventListener("click",next);$("#tryAgainBtn").addEventListener("click",restart);$("#shuffleBtn").addEventListener("click",shuffle);$("#restartGameBtn").addEventListener("click",restartGame);$("#exportJsonBtn").addEventListener("click",exportJson);$("#modeTrickyBtn").addEventListener("click",()=>setMode("tricky"));$("#modeBlindBtn").addEventListener("click",()=>setMode("blind"));$("#modeStudyBtn").addEventListener("click",()=>setMode("study"));$("#newOnlyBtn").addEventListener("click",toggleNew);$("#hangmanToggleBtn").addEventListener("click",toggleHangman);
 $("#psCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastSimple");render();focusInput()});
 $("#ppCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastParticiple");render();focusInput()});
 document.addEventListener("pointerdown",e=>{if(currentMode==="study")return;if(e.target.closest("input[type=file]"))return;setTimeout(focusInput,0)});
@@ -294,3 +294,7 @@ loadData();rebuild();render();
 </script>
 </body>
 </html>
+
+
+
+
