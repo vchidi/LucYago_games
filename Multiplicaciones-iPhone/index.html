@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -10,168 +10,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Multiplicaciones Crowd Battle</title>
+<title>Multiplicaciones Pro</title>
 <style>
-:root{
-  --bg-a:#fff4de;
-  --bg-b:#e7f5ff;
-  --card:#fffdf8;
-  --ink:#20304a;
-  --muted:#6d7891;
-  --orange:#ff7b2c;
-  --orange-dark:#cf5d12;
-  --yellow:#ffd84d;
-  --green:#21b66f;
-  --green-soft:#dff8eb;
-  --red:#e55656;
-  --red-soft:#ffe4e2;
-  --blue:#3d74ff;
-  --blue-soft:#e8efff;
-  --purple:#7f5cff;
-  --shadow:0 18px 45px rgba(32,48,74,.13)
-}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
-body{font-family:"Trebuchet MS","Avenir Next","Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 10%,rgba(255,216,130,.85),transparent 22%),radial-gradient(circle at 92% 12%,rgba(122,197,255,.65),transparent 18%),radial-gradient(circle at 82% 88%,rgba(255,146,126,.42),transparent 22%),linear-gradient(160deg,var(--bg-a),var(--bg-b))}
-button,input{font:inherit}
-button{border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .14s ease,box-shadow .14s ease,opacity .14s ease,background .14s ease}
-button:active{transform:scale(.97)}
-button:disabled{opacity:.45;cursor:not-allowed}
-.app{max-width:1024px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom))}
-.hero,.card{background:rgba(255,253,248,.9);backdrop-filter:blur(12px);border-radius:28px;box-shadow:var(--shadow)}
-.hero{padding:18px 18px 16px}
-.hero-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-.eyebrow{display:inline-block;padding:7px 11px;border-radius:999px;background:#fff1dc;color:var(--orange-dark);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
-h1{margin:10px 0 0;font-size:clamp(34px,7vw,60px);line-height:.92}
-.sub{margin:10px 0 0;max-width:40rem;color:var(--muted);font-size:15px;line-height:1.35}
-.install-badge{padding:10px 14px;border-radius:20px;background:#fff;color:var(--blue);font-weight:800;font-size:13px;text-align:center;box-shadow:inset 0 0 0 2px rgba(61,116,255,.08)}
-.hero-strip{margin-top:14px;display:grid;grid-template-columns:1.15fr .85fr .85fr;gap:10px}
-.strip-card{background:#fff;border-radius:22px;padding:12px 14px;min-height:88px}
-.strip-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.strip-value{margin-top:8px;font-size:26px;font-weight:900}
-.progress-shell{margin-top:10px;height:14px;border-radius:999px;background:#eef3ff;overflow:hidden}
-.progress-fill{width:0%;height:100%;border-radius:999px;background:linear-gradient(90deg,#ffd84d,#ff9f43,#ff7b2c);transition:width .2s ease}
-.layout{display:grid;grid-template-columns:1fr 1.05fr;gap:14px;margin-top:14px}
-.card{padding:16px}
-.section-title{margin:0 0 12px;font-size:17px}
-.modes,.table-grid,.controls,.answer-pad,.row,.feedback-row,.battle-top,.battle-lanes,.battle-bars,.battle-armies{display:flex;flex-wrap:wrap;gap:8px}
-.mode-btn,.table-btn,.action-btn,.pad-btn,.tiny-btn{border-radius:20px;background:#fff;box-shadow:var(--shadow);color:var(--ink);font-weight:900}
-.mode-btn,.action-btn,.tiny-btn{padding:12px 14px}
-.mode-btn.active,.table-btn.active{outline:4px solid rgba(255,123,44,.22)}
-.primary{background:linear-gradient(135deg,var(--orange),#ff9748);color:#fff}
-.secondary{background:#fff}
-.ghost{background:#fff3df;color:var(--orange-dark)}
-.blue{background:var(--blue-soft);color:#1c52d0}
-.danger{background:var(--red-soft);color:#a52d2d}
-.table-grid{margin-top:10px}
-.table-btn{min-width:56px;flex:1 0 calc(16.66% - 8px);padding:13px 6px;text-align:center}
-.table-btn strong{display:block;font-size:24px;line-height:1}
-.table-btn span{display:block;margin-top:4px;font-size:11px;opacity:.72}
-.hint{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.35}
-.score-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.score-card{background:#fff;border-radius:22px;padding:12px;box-shadow:inset 0 0 0 2px rgba(61,116,255,.06)}
-.score-card.big{background:linear-gradient(135deg,#1e2443,#36478e);color:#fff;grid-column:span 2}
-.score-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.score-card.big .score-label{color:#d6defe}
-.score-value{margin-top:6px;font-size:28px;font-weight:900}
-.score-card.big .score-value{font-size:44px;line-height:.95}
-.score-burst{font-size:14px;font-weight:900;color:#ffe186}
-.question-stage{margin-top:14px;position:relative;overflow:hidden;border-radius:30px;padding:18px;background:radial-gradient(circle at top right,rgba(255,255,255,.22),transparent 28%),linear-gradient(135deg,#5c4bff,#3d74ff 58%,#29b8ff 100%);color:#fff;min-height:286px}
-.question-stage.good{animation:pulseGood .45s ease}
-.question-stage.bad{animation:shakeBad .35s ease}
-.bubble{position:absolute;border-radius:50%;background:rgba(255,255,255,.11)}
-.bubble.one{width:120px;height:120px;right:-24px;bottom:-32px}
-.bubble.two{width:74px;height:74px;left:-16px;top:58px}
-.stage-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.stage-tag{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.14);font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
-.lives{display:flex;gap:6px;font-size:20px}
-.question{margin-top:18px;font-size:clamp(58px,14vw,108px);line-height:.9;font-weight:900;text-align:center}
-.answer-box{margin-top:18px;background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.18);border-radius:24px;padding:14px 16px;text-align:center}
-.answer-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#dbebff}
-.answer-value{margin-top:6px;min-height:1.05em;font-size:clamp(38px,10vw,62px);font-weight:900}
-.battlefield{margin-top:14px;border-radius:30px;padding:16px;background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.75),transparent 25%),linear-gradient(180deg,#fff8ef 0%,#f2f7ff 54%,#e6f5ff 100%);box-shadow:inset 0 0 0 2px rgba(61,116,255,.08),0 18px 36px rgba(61,116,255,.10);position:relative;overflow:hidden}
-.battlefield.good{animation:battlePop .45s ease}
-.battlefield.bad{animation:battleDrop .4s ease}
-.battlefield::after{content:"";position:absolute;left:0;right:0;bottom:0;height:54px;background:linear-gradient(180deg,rgba(80,189,114,0),rgba(80,189,114,.22))}
-.battle-title{font-size:20px;font-weight:900}
-.battle-phase{padding:8px 12px;border-radius:999px;background:#fff;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-.battle-phase.won{background:#e8fff1;color:#0e7a43}
-.battle-phase.lost{background:#fff0ef;color:#b93434}
-.battle-phase.playing{background:#eef3ff;color:#3556c9}
-.battle-side{flex:1 1 calc(50% - 8px);min-width:0;background:rgba(255,255,255,.82);border-radius:26px;padding:14px;box-shadow:inset 0 0 0 2px rgba(32,48,74,.04);position:relative;overflow:hidden}
-.battle-side::after{content:"";position:absolute;inset:auto 0 0 0;height:8px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.5),rgba(255,255,255,0))}
-.battle-side.player{background:linear-gradient(180deg,rgba(233,255,244,.98),rgba(214,250,232,.92))}
-.battle-side.enemy{background:linear-gradient(180deg,rgba(255,242,240,.98),rgba(255,225,222,.94))}
-.battle-side.gain{box-shadow:inset 0 0 0 3px rgba(33,182,111,.24),0 0 0 6px rgba(33,182,111,.08);transform:translateY(-2px)}
-.battle-side.loss{box-shadow:inset 0 0 0 3px rgba(229,86,86,.22),0 0 0 6px rgba(229,86,86,.08)}
-.battle-head{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.battle-name{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
-.battle-count{font-size:clamp(36px,7vw,54px);font-weight:900;line-height:.9}
-.battle-sub{margin-top:6px;font-size:13px;color:var(--muted);font-weight:800}
-.battle-change{display:inline-flex;align-items:center;justify-content:center;min-width:74px;padding:8px 10px;border-radius:999px;font-size:20px;font-weight:900;line-height:1;box-shadow:0 10px 20px rgba(32,48,74,.12);background:#fff;color:#3556c9}
-.battle-change.up{background:linear-gradient(135deg,#1fd27a,#63ebb0);color:#fff;animation:changeBurst .55s ease}
-.battle-change.down{background:linear-gradient(135deg,#ff8d7d,#e55656);color:#fff;animation:changeBurst .55s ease}
-.battle-change.flat{background:#fff;color:#7b88a6}
-.battle-bars{margin-top:12px;flex-direction:column}
-.battle-bar-shell{border-radius:999px;overflow:hidden;background:#edf2ff;height:24px;position:relative;box-shadow:inset 0 2px 8px rgba(32,48,74,.10)}
-.battle-bar-shell::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent)}
-.battle-bar-fill{width:0%;height:100%;border-radius:999px;transition:width .28s ease,filter .28s ease}
-.battle-bar-fill.player{background:linear-gradient(90deg,#12c86e,#44e8a0 56%,#9bffd1);box-shadow:0 0 18px rgba(33,182,111,.38)}
-.battle-bar-fill.enemy{background:linear-gradient(90deg,#ff8574,#ff5d66 56%,#ffc1b7);box-shadow:0 0 18px rgba(229,86,86,.28)}
-.battle-bar-label{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);font-weight:800}
-.battle-armies{position:relative;justify-content:space-between;align-items:flex-end;margin-top:18px;padding:18px 10px 20px;min-height:176px;z-index:1;background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,.15));border-radius:24px}
-.battle-army{flex:1 1 calc(50% - 16px);display:flex;flex-wrap:wrap;gap:7px;align-content:flex-end;min-height:132px}
-.battle-army.enemy{justify-content:flex-end}
-.troop{width:22px;height:28px;border-radius:12px 12px 9px 9px;position:relative;box-shadow:0 8px 12px rgba(32,48,74,.12);animation:troopRise .24s ease both}
-.troop::before{content:"";position:absolute;width:14px;height:14px;border-radius:50%;left:4px;top:-7px;background:inherit}
-.troop.player{background:linear-gradient(180deg,#36e08c,#11a95f)}
-.troop.enemy{background:linear-gradient(180deg,#ff8f82,#e64d5d)}
-.troop.elite{transform:scale(1.16)}
-.battle-clash{width:74px;align-self:center;text-align:center;font-size:32px;font-weight:900;color:var(--purple);text-shadow:0 4px 14px rgba(127,92,255,.25)}
-.battle-versus{display:block;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
-.battle-foot{position:relative;z-index:1;margin-top:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.battle-pill{padding:12px 14px;border-radius:18px;background:#fff;font-size:14px;font-weight:900}
-.battle-pill.refuerzo{color:#12663d;background:#e9fff2}
-.battle-pill.bajas{color:#9b2a2a;background:#fff0ef}
-.feedback-banner{margin-top:12px;border-radius:22px;padding:14px 16px;font-size:18px;font-weight:900;text-align:center;background:#fff6db;color:#7d5a00;min-height:74px;display:flex;align-items:center;justify-content:center}
-.feedback-banner.good{background:linear-gradient(135deg,#e5ffef,#ccf6df);color:#10643a;box-shadow:0 0 0 4px rgba(33,182,111,.14) inset}
-.feedback-banner.bad{background:linear-gradient(135deg,#fff0ef,#ffd9d5);color:#9b2a2a;box-shadow:0 0 0 4px rgba(229,86,86,.12) inset}
-.feedback-banner.neutral{background:#fff6db}
-.feedback-row{margin-top:10px;align-items:center}
-.badge{padding:10px 12px;border-radius:18px;font-size:14px;font-weight:900;background:#fff}
-.combo-badge{background:#fff0d6;color:#9c5c0d}
-.points-badge{background:#e9fff2;color:#13653e}
-.status-badge{background:#eef3ff;color:#3556c9}
-.controls{margin-top:12px}
-.action-btn{flex:1 1 calc(33.333% - 8px)}
-.answer-pad{margin-top:12px}
-.pad-btn{flex:1 0 calc(33.333% - 8px);padding:15px 0;font-size:31px}
-.pad-btn.ok{background:linear-gradient(135deg,var(--green),#39d38a);color:#fff}
-.pad-btn.delete{background:var(--red-soft);color:#a52d2d;font-size:16px}
-.pad-btn.wide{flex-basis:calc(66.666% - 8px)}
-.records-grid{margin-top:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.record-card{background:#fff;border-radius:22px;padding:12px;box-shadow:inset 0 0 0 2px rgba(255,123,44,.08)}
-.record-label{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.08em}
-.record-value{margin-top:7px;font-size:26px;font-weight:900}
-.error-list{display:grid;gap:8px;margin-top:14px;max-height:270px;overflow:auto;padding-right:4px}
-.error-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;border-radius:20px;background:#fff}
-.error-main{font-weight:900;font-size:18px}
-.error-sub{margin-top:3px;font-size:12px;color:var(--muted)}
-.error-points{min-width:58px;text-align:center;padding:10px 8px;border-radius:16px;background:#fff5df;color:#a8640a;font-weight:900}
-.footer-note{margin-top:14px;text-align:center;color:var(--muted);font-size:12px}
-.confetti{position:absolute;inset:0;pointer-events:none}
-.spark{position:absolute;width:12px;height:12px;border-radius:50%;opacity:0}
-.show-spark{animation:sparkFly .7s ease}
-@keyframes sparkFly{0%{opacity:0;transform:translateY(12px) scale(.2)}20%{opacity:1}100%{opacity:0;transform:translateY(-56px) scale(1.25)}}
-@keyframes pulseGood{0%{transform:scale(1)}40%{transform:scale(1.015)}100%{transform:scale(1)}}
-@keyframes shakeBad{0%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}}
-@keyframes battlePop{0%{transform:scale(.98)}50%{transform:scale(1.015)}100%{transform:scale(1)}}
-@keyframes battleDrop{0%{transform:translateY(0)}35%{transform:translateY(4px)}100%{transform:translateY(0)}}
-@keyframes troopRise{0%{opacity:0;transform:translateY(12px) scale(.8)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes changeBurst{0%{transform:scale(.7) translateY(8px);opacity:0}60%{transform:scale(1.08) translateY(-2px);opacity:1}100%{transform:scale(1) translateY(0);opacity:1}}
-@media (max-width:900px){.layout{grid-template-columns:1fr}}
-@media (max-width:680px){.hero-strip,.score-grid,.records-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.score-card.big{grid-column:span 2}}
-@media (max-width:560px){.app{padding-left:10px;padding-right:10px}.hero,.card,.question-stage,.battlefield{border-radius:24px}.hero-top{flex-direction:column}.table-btn{flex-basis:calc(25% - 8px)}.action-btn{flex-basis:calc(50% - 8px)}.pad-btn{font-size:28px}.battle-side{flex-basis:100%}.battle-armies{gap:12px}.battle-clash{width:100%;order:3}.battle-army{flex-basis:calc(50% - 6px)}}
+:root{--bg-a:#fff4de;--bg-b:#e7f5ff;--card:#fffdf8;--ink:#20304a;--muted:#6d7891;--orange:#ff7b2c;--orange-dark:#cf5d12;--yellow:#ffd84d;--green:#21b66f;--green-soft:#dff8eb;--red:#e55656;--red-soft:#ffe4e2;--blue:#3d74ff;--blue-soft:#e8efff;--shadow:0 18px 45px rgba(32,48,74,.13)}*{box-sizing:border-box}html,body{margin:0;min-height:100%}body{font-family:"Trebuchet MS","Avenir Next","Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 10%,rgba(255,216,130,.85),transparent 22%),radial-gradient(circle at 92% 12%,rgba(122,197,255,.65),transparent 18%),radial-gradient(circle at 82% 88%,rgba(255,146,126,.42),transparent 22%),linear-gradient(160deg,var(--bg-a),var(--bg-b))}button,input{font:inherit}button{border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .14s ease,box-shadow .14s ease,opacity .14s ease,background .14s ease}button:active{transform:scale(.97)}button:disabled{opacity:.45;cursor:not-allowed}.app{max-width:1024px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom))}.hero,.card{background:rgba(255,253,248,.9);backdrop-filter:blur(12px);border-radius:28px;box-shadow:var(--shadow)}.hero{padding:18px 18px 16px}.hero-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.eyebrow{display:inline-block;padding:7px 11px;border-radius:999px;background:#fff1dc;color:var(--orange-dark);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}h1{margin:10px 0 0;font-size:clamp(34px,7vw,60px);line-height:.92}.sub{margin:10px 0 0;max-width:40rem;color:var(--muted);font-size:15px;line-height:1.35}.install-badge{padding:10px 14px;border-radius:20px;background:#fff;color:var(--blue);font-weight:800;font-size:13px;text-align:center;box-shadow:inset 0 0 0 2px rgba(61,116,255,.08)}.hero-strip{margin-top:14px;display:grid;grid-template-columns:1.15fr .85fr .85fr;gap:10px}.strip-card{background:#fff;border-radius:22px;padding:12px 14px;min-height:88px}.strip-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.strip-value{margin-top:8px;font-size:26px;font-weight:900}.progress-shell{margin-top:10px;height:14px;border-radius:999px;background:#eef3ff;overflow:hidden}.progress-fill{width:0%;height:100%;border-radius:999px;background:linear-gradient(90deg,#ffd84d,#ff9f43,#ff7b2c);transition:width .2s ease}.layout{display:grid;grid-template-columns:1fr 1.05fr;gap:14px;margin-top:14px}.card{padding:16px}.section-title{margin:0 0 12px;font-size:17px}.modes,.table-grid,.controls,.answer-pad,.row,.feedback-row{display:flex;flex-wrap:wrap;gap:8px}.mode-btn,.table-btn,.action-btn,.pad-btn,.tiny-btn{border-radius:20px;background:#fff;box-shadow:var(--shadow);color:var(--ink);font-weight:900}.mode-btn,.action-btn,.tiny-btn{padding:12px 14px}.mode-btn.active,.table-btn.active{outline:4px solid rgba(255,123,44,.22)}.primary{background:linear-gradient(135deg,var(--orange),#ff9748);color:#fff}.secondary{background:#fff}.ghost{background:#fff3df;color:var(--orange-dark)}.blue{background:var(--blue-soft);color:#1c52d0}.danger{background:var(--red-soft);color:#a52d2d}.table-grid{margin-top:10px}.table-btn{min-width:56px;flex:1 0 calc(16.66% - 8px);padding:13px 6px;text-align:center}.table-btn strong{display:block;font-size:24px;line-height:1}.table-btn span{display:block;margin-top:4px;font-size:11px;opacity:.72}.hint{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.35}.score-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.score-card{background:#fff;border-radius:22px;padding:12px;box-shadow:inset 0 0 0 2px rgba(61,116,255,.06)}.score-card.big{background:linear-gradient(135deg,#1e2443,#36478e);color:#fff;grid-column:span 2}.score-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.score-card.big .score-label{color:#d6defe}.score-value{margin-top:6px;font-size:28px;font-weight:900}.score-card.big .score-value{font-size:44px;line-height:.95}.score-burst{font-size:14px;font-weight:900;color:#ffe186}.question-stage{margin-top:14px;position:relative;overflow:hidden;border-radius:30px;padding:18px;background:radial-gradient(circle at top right,rgba(255,255,255,.22),transparent 28%),linear-gradient(135deg,#5c4bff,#3d74ff 58%,#29b8ff 100%);color:#fff;min-height:286px}.question-stage.good{animation:pulseGood .45s ease}.question-stage.bad{animation:shakeBad .35s ease}.bubble{position:absolute;border-radius:50%;background:rgba(255,255,255,.11)}.bubble.one{width:120px;height:120px;right:-24px;bottom:-32px}.bubble.two{width:74px;height:74px;left:-16px;top:58px}.stage-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.stage-tag{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.14);font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.lives{display:flex;gap:6px;font-size:20px}.question{margin-top:18px;font-size:clamp(58px,14vw,108px);line-height:.9;font-weight:900;text-align:center}.answer-box{margin-top:18px;background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.18);border-radius:24px;padding:14px 16px;text-align:center}.answer-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#dbebff}.answer-value{margin-top:6px;min-height:1.05em;font-size:clamp(38px,10vw,62px);font-weight:900}.feedback-banner{margin-top:12px;border-radius:22px;padding:14px 16px;font-size:18px;font-weight:900;text-align:center;background:#fff6db;color:#7d5a00;min-height:74px;display:flex;align-items:center;justify-content:center}.feedback-banner.good{background:linear-gradient(135deg,#e5ffef,#ccf6df);color:#10643a;box-shadow:0 0 0 4px rgba(33,182,111,.14) inset}.feedback-banner.bad{background:linear-gradient(135deg,#fff0ef,#ffd9d5);color:#9b2a2a;box-shadow:0 0 0 4px rgba(229,86,86,.12) inset}.feedback-banner.neutral{background:#fff6db}.feedback-row{margin-top:10px;align-items:center}.badge{padding:10px 12px;border-radius:18px;font-size:14px;font-weight:900;background:#fff}.combo-badge{background:#fff0d6;color:#9c5c0d}.points-badge{background:#e9fff2;color:#13653e}.status-badge{background:#eef3ff;color:#3556c9}.controls{margin-top:12px}.action-btn{flex:1 1 calc(33.333% - 8px)}.answer-pad{margin-top:12px}.pad-btn{flex:1 0 calc(33.333% - 8px);padding:15px 0;font-size:31px}.pad-btn.ok{background:linear-gradient(135deg,var(--green),#39d38a);color:#fff}.pad-btn.delete{background:var(--red-soft);color:#a52d2d;font-size:16px}.pad-btn.wide{flex-basis:calc(66.666% - 8px)}.records-grid{margin-top:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record-card{background:#fff;border-radius:22px;padding:12px;box-shadow:inset 0 0 0 2px rgba(255,123,44,.08)}.record-label{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.08em}.record-value{margin-top:7px;font-size:26px;font-weight:900}.error-list{display:grid;gap:8px;margin-top:14px;max-height:270px;overflow:auto;padding-right:4px}.error-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;border-radius:20px;background:#fff}.error-main{font-weight:900;font-size:18px}.error-sub{margin-top:3px;font-size:12px;color:var(--muted)}.error-points{min-width:58px;text-align:center;padding:10px 8px;border-radius:16px;background:#fff5df;color:#a8640a;font-weight:900}.footer-note{margin-top:14px;text-align:center;color:var(--muted);font-size:12px}.confetti{position:absolute;inset:0;pointer-events:none}.spark{position:absolute;width:12px;height:12px;border-radius:50%;opacity:0}.show-spark{animation:sparkFly .7s ease}@keyframes sparkFly{0%{opacity:0;transform:translateY(12px) scale(.2)}20%{opacity:1}100%{opacity:0;transform:translateY(-56px) scale(1.25)}}@keyframes pulseGood{0%{transform:scale(1)}40%{transform:scale(1.015)}100%{transform:scale(1)}}@keyframes shakeBad{0%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}}@media (max-width:900px){.layout{grid-template-columns:1fr}}@media (max-width:680px){.hero-strip,.score-grid,.records-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.score-card.big{grid-column:span 2}}@media (max-width:560px){.app{padding-left:10px;padding-right:10px}.hero,.card,.question-stage{border-radius:24px}.hero-top{flex-direction:column}.table-btn{flex-basis:calc(25% - 8px)}.action-btn{flex-basis:calc(50% - 8px)}.pad-btn{font-size:28px}}
 </style>
 </head>
 <body>
@@ -180,15 +21,15 @@ h1{margin:10px 0 0;font-size:clamp(34px,7vw,60px);line-height:.92}
     <div class="hero-top">
       <div>
         <div class="eyebrow">Juego para iPhone</div>
-        <h1>Multiplicaciones Crowd Battle</h1>
-        <p class="sub">Entrena tablas con una batalla de multitudes. Cada acierto trae refuerzos, cada fallo provoca bajas y todo sigue guardandose en este dispositivo.</p>
+        <h1>Multiplicaciones Pro</h1>
+        <p class="sub">Una version mucho mas visual, clara y divertida para entrenar tablas con puntos, rachas, repaso de errores y feedback gigante cuando esta bien o mal.</p>
       </div>
       <div class="install-badge">Safari -> Compartir -> Anadir a pantalla de inicio</div>
     </div>
     <div class="hero-strip">
       <div class="strip-card">
         <div class="strip-label">Mision del dia</div>
-        <div class="strip-value" id="missionText">Derrota al enemigo</div>
+        <div class="strip-value" id="missionText">Consigue 10 puntos</div>
         <div class="progress-shell"><div class="progress-fill" id="missionFill"></div></div>
       </div>
       <div class="strip-card">
@@ -240,52 +81,12 @@ h1{margin:10px 0 0;font-size:clamp(34px,7vw,60px);line-height:.92}
         <div class="confetti" id="confetti"></div>
         <div class="stage-top">
           <div class="stage-tag" id="questionLabel">Listo para jugar</div>
-          <div class="lives" id="starsView">&#9734; &#9734; &#9734;</div>
+          <div class="lives" id="starsView">⭐ ⭐ ⭐</div>
         </div>
         <div class="question" id="questionText">2 x 7</div>
         <div class="answer-box">
           <div class="answer-label">Tu respuesta</div>
           <div class="answer-value" id="answerValue">_</div>
-        </div>
-      </div>
-      <!-- Nuevo bloque principal: batalla entre multitudes -->
-      <div class="battlefield" id="battlefield">
-        <div class="battle-top">
-          <div class="battle-title">Batalla</div>
-          <div class="battle-phase playing" id="battlePhase">Esperando partida</div>
-        </div>
-        <div class="battle-lanes">
-          <div class="battle-side player" id="playerPanel">
-            <div class="battle-head">
-              <div class="battle-name">Tu multitud</div>
-              <div class="battle-count" id="playerCrowdText">10</div>
-            </div>
-            <div class="battle-change flat" id="playerChangeText">+0</div>
-            <div class="battle-sub" id="playerSubText">Lista para recibir refuerzos</div>
-          </div>
-          <div class="battle-side enemy" id="enemyPanel">
-            <div class="battle-head">
-              <div class="battle-name">Enemigo</div>
-              <div class="battle-count" id="enemyCrowdText">20</div>
-            </div>
-            <div class="battle-change flat" id="enemyChangeText">-0</div>
-            <div class="battle-sub" id="enemySubText">Esperando el primer choque</div>
-          </div>
-        </div>
-        <div class="battle-bars">
-          <div class="battle-bar-label"><span>Tu multitud</span><span id="playerBarLabel">10 / 10</span></div>
-          <div class="battle-bar-shell"><div class="battle-bar-fill player" id="playerBarFill"></div></div>
-          <div class="battle-bar-label"><span>Enemigo</span><span id="enemyBarLabel">20 / 20</span></div>
-          <div class="battle-bar-shell"><div class="battle-bar-fill enemy" id="enemyBarFill"></div></div>
-        </div>
-        <div class="battle-armies">
-          <div class="battle-army player" id="playerArmy"></div>
-          <div class="battle-clash"><span class="battle-versus">Choque</span>VS</div>
-          <div class="battle-army enemy" id="enemyArmy"></div>
-        </div>
-        <div class="battle-foot">
-          <div class="battle-pill refuerzo" id="battleEffectText">Refuerzos: +0</div>
-          <div class="battle-pill bajas" id="battleRiskText">Bajas: 0</div>
         </div>
       </div>
       <div class="feedback-banner neutral" id="messageBox">Elige las tablas y pulsa Jugar.</div>
@@ -333,59 +134,44 @@ h1{margin:10px 0 0;font-size:clamp(34px,7vw,60px);line-height:.92}
 <script>
 const STORAGE_KEY="multiplicaciones_iphone_v2";
 const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time:0},errors:[],totalAnswered:0};
-const state=loadState();
-let session=freshSession();
+const state=loadState();let session=freshSession();
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 function clone(obj){return JSON.parse(JSON.stringify(obj))}
-function defaultBattle(){return{playerCrowd:10,enemyCrowd:20,playerMax:10,enemyMax:20,level:1,phase:"playing"}}
 function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return clone(DEFAULT_STATE);const parsed=JSON.parse(raw);return{selectedTables:Array.isArray(parsed.selectedTables)&&parsed.selectedTables.length?parsed.selectedTables:[2],mode:parsed.mode==="time"?"time":"practice",records:{practice:Number(parsed.records&&parsed.records.practice||0),time:Number(parsed.records&&parsed.records.time||0)},errors:Array.isArray(parsed.errors)?parsed.errors:[],totalAnswered:Number(parsed.totalAnswered||0)}}catch{return clone(DEFAULT_STATE)}}
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar.",lastBattleChange:{reinforcements:0,losses:0,enemyLosses:0},battle:defaultBattle()}}
+function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar."}}
 function buildBank(tables){const bank=[];tables.forEach(table=>{for(let factor=1;factor<=10;factor+=1)bank.push({table,factor,result:table*factor})});return bank}
 function shuffle(list){const copy=list.slice();for(let i=copy.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const temp=copy[i];copy[i]=copy[j];copy[j]=temp}return copy}
-function initBattle(reviewMode){const selectedCount=reviewMode?Math.max(1,Math.min(12,state.errors.length)):Math.max(1,state.selectedTables.length);const enemyBase=20+Math.max(0,selectedCount-1)*2;const playerBase=10+(reviewMode?2:0);session.battle={playerCrowd:playerBase,enemyCrowd:enemyBase,playerMax:playerBase,enemyMax:enemyBase,level:selectedCount,phase:"playing"};session.lastBattleChange={reinforcements:0,losses:0,enemyLosses:0}}
-function bumpBattleMax(){session.battle.playerMax=Math.max(session.battle.playerMax,session.battle.playerCrowd,10);session.battle.enemyMax=Math.max(session.battle.enemyMax,session.battle.enemyCrowd,20)}
-function clampBattle(){session.battle.playerCrowd=Math.max(0,session.battle.playerCrowd);session.battle.enemyCrowd=Math.max(0,session.battle.enemyCrowd);bumpBattleMax()}
-function applyCorrectBattleEffect(){let reinforcements=2;if(session.streak>=5)reinforcements=4;else if(session.streak>=3)reinforcements=3;const enemyLosses=3;session.battle.playerCrowd+=reinforcements;session.battle.enemyCrowd-=enemyLosses;session.lastBattleChange={reinforcements,losses:0,enemyLosses};clampBattle()}
-function applyWrongBattleEffect(){const losses=4;session.battle.playerCrowd-=losses;session.lastBattleChange={reinforcements:0,losses,enemyLosses:0};clampBattle()}
-function applySkipBattleEffect(){const losses=2;session.battle.playerCrowd-=losses;session.lastBattleChange={reinforcements:0,losses,enemyLosses:0};clampBattle()}
 function nextQuestion(){if(!session.queue.length){const source=session.reviewMode?state.errors.map(item=>clone(item)):buildBank(state.selectedTables);session.queue=shuffle(source)}session.current=session.queue.shift()||null;session.answer="";render()}
-function startGame(reviewMode){if(!reviewMode&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay errores para repasar.","bad");return}stopTimer();session=freshSession();session.running=true;session.reviewMode=reviewMode;initBattle(reviewMode);setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos y gana la batalla.":"Partida iniciada. Tu multitud entra en combate.","good");if(state.mode==="time"&&!reviewMode){session.timeLeft=60;session.timerId=window.setInterval(()=>{session.timeLeft-=1;if(session.timeLeft<=0){session.timeLeft=0;finishTimedGame();return}renderStats()},1000)}nextQuestion()}
+function startGame(reviewMode){if(!reviewMode&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay errores para repasar.","bad");return}stopTimer();session=freshSession();session.running=true;session.reviewMode=reviewMode;setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos.":"Partida iniciada. A por muchos puntos.","good");if(state.mode==="time"&&!reviewMode){session.timeLeft=60;session.timerId=window.setInterval(()=>{session.timeLeft-=1;if(session.timeLeft<=0){session.timeLeft=0;finishTimedGame()}renderStats()},1000)}nextQuestion()}
 function stopTimer(){if(session.timerId){clearInterval(session.timerId);session.timerId=null}}
-function finishBattle(result){stopTimer();session.running=false;session.battle.phase=result;if(result==="won"){if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;if(state.mode==="time"&&session.score>state.records.time)state.records.time=session.score;saveState();setMessage("Victoria. La multitud enemiga ha llegado a 0.","good")}else{saveState();setMessage("Derrota. Tu multitud ha llegado a 0.","bad")}render()}
-function checkBattleEnd(){if(session.battle.enemyCrowd<=0){finishBattle("won");return true}if(session.battle.playerCrowd<=0){finishBattle("lost");return true}return false}
-function finishTimedGame(){stopTimer();session.running=false;if(session.battle.enemyCrowd<session.battle.playerCrowd)session.battle.phase="won";else if(session.battle.enemyCrowd>session.battle.playerCrowd)session.battle.phase="lost";else session.battle.phase="playing";if(session.score>state.records.time){state.records.time=session.score;saveState();setMessage("Tiempo terminado. Nuevo record en contrarreloj.","good")}else{saveState();setMessage("Tiempo terminado. La batalla se detiene por ahora.","neutral")}render()}
+function finishTimedGame(){stopTimer();session.running=false;if(session.score>state.records.time){state.records.time=session.score;saveState();setMessage("Tiempo terminado. Nuevo record en contrarreloj.","good")}else setMessage("Tiempo terminado. Buen intento. Vamos otra vez.","neutral");render()}
 function registerError(question,typed){const key=question.table+"x"+question.factor;const exists=state.errors.some(item=>item.table+"x"+item.factor===key);if(!exists)state.errors.unshift({table:question.table,factor:question.factor,result:question.result,lastWrong:typed});else state.errors=state.errors.map(item=>{if(item.table+"x"+item.factor!==key)return item;item.lastWrong=typed;return item});state.errors=state.errors.slice(0,50);saveState()}
 function removeError(question){const key=question.table+"x"+question.factor;state.errors=state.errors.filter(item=>item.table+"x"+item.factor!==key);saveState()}
 function comboBonus(){if(session.streak>=10)return 5;if(session.streak>=7)return 4;if(session.streak>=5)return 3;if(session.streak>=3)return 2;return 1}
 function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["#ffd84d","#ff8c42","#ffffff","#8ef0bf","#ffd2c8"];for(let i=0;i<10;i+=1){const spark=document.createElement("span");spark.className="spark show-spark";spark.style.left=12+Math.random()*76+"%";spark.style.top=44+Math.random()*32+"%";spark.style.background=colors[i%colors.length];spark.style.animationDelay=i*.03+"s";host.appendChild(spark)}setTimeout(()=>{host.innerHTML=""},750)}
 function flashStage(tone){const stage=$("#questionStage");stage.classList.remove("good","bad");void stage.offsetWidth;if(tone==="good"||tone==="bad")stage.classList.add(tone)}
-function flashBattle(tone){const field=$("#battlefield");field.classList.remove("good","bad");void field.offsetWidth;if(tone==="good"||tone==="bad")field.classList.add(tone)}
 function advanceAfterFeedback(){if(session.running&&(state.mode!=="time"||session.timeLeft>0||session.reviewMode))nextQuestion()}
-function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);applyCorrectBattleEffect();if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Bien. Llegan refuerzos. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+".","good");flashStage("good");flashBattle("good");celebrate()}else{session.lastDelta=0;session.streak=0;registerError(session.current,session.answer);applyWrongBattleEffect();saveState();setMessage("Tu multitud ha perdido unidades. La correcta era "+session.current.result+".","bad");flashStage("bad");flashBattle("bad")}if(session.reviewMode&&ok)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();if(checkBattleEnd())return;setTimeout(advanceAfterFeedback,650)}
-function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#lastResultText").textContent=tone==="good"?"Refuerzos":tone==="bad"?"Bajas":"Listo";$("#statusBadge").textContent=tone==="good"?"Respuesta correcta":tone==="bad"?"Respuesta incorrecta":"Esperando partida"}
+function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate()}else{session.lastDelta=0;session.streak=0;registerError(session.current,session.answer);saveState();setMessage("No pasa nada. La correcta era "+session.current.result+".","bad");flashStage("bad")}if(session.reviewMode&&ok)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,650)}
+function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#lastResultText").textContent=tone==="good"?"Genial":tone==="bad"?"Fallo":"Listo";$("#statusBadge").textContent=tone==="good"?"Respuesta correcta":tone==="bad"?"Respuesta incorrecta":"Esperando partida"}
 function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);saveState();render()}
 function setMode(mode){state.mode=mode;saveState();$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode)});renderStats()}
 function inputDigit(digit){if(!session.running||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
 function deleteDigit(){if(!session.running)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
-function skipQuestion(){if(!session.running||!session.current)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;applySkipBattleEffect();saveState();setMessage("Saltada. Tu multitud pierde 2 unidades. La correcta era "+session.current.result+".","bad");flashBattle("bad");render();if(checkBattleEnd())return;setTimeout(advanceAfterFeedback,500)}
+function skipQuestion(){if(!session.running||!session.current)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;saveState();setMessage("Saltada. La correcta era "+session.current.result+".","bad");render();setTimeout(advanceAfterFeedback,500)}
 function resetSession(){stopTimer();session=freshSession();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
-function missionTarget(){if(session.battle&&session.battle.enemyMax)return session.battle.enemyMax;return state.mode==="time"?50:20}
+function missionTarget(){if(state.mode==="time")return 50;if(session.reviewMode)return Math.max(5,state.errors.length);return 10}
 function renderTables(){const grid=$("#tableGrid");grid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}$("#selectedTablesText").textContent=state.selectedTables.length?state.selectedTables.join(", "):"ninguna"}
-function renderStats(){$("#modeLabel").textContent=session.reviewMode?"Repaso":state.mode==="time"?"60 s":"Practica";$("#timeValue").textContent=session.reviewMode?"-":state.mode==="time"?session.running?session.timeLeft+"s":"60s":"-";$("#scoreValue").textContent=session.score;$("#streakValue").textContent=session.streak;$("#hitsValue").textContent=session.hits;$("#scoreBurst").textContent="+"+session.lastDelta;$("#comboText").textContent="x"+session.streak;$("#comboBadge").textContent="Combo: x"+session.streak;$("#pointsBadge").textContent="Ultimos puntos: +"+session.lastDelta;$("#practiceRecord").textContent=state.records.practice;$("#timeRecord").textContent=state.records.time;$("#answeredValue").textContent=state.totalAnswered;$("#errorCount").textContent=state.errors.length;const target=missionTarget();const progress=Math.max(0,target-session.battle.enemyCrowd);const percent=Math.max(0,Math.min(100,Math.round(progress/Math.max(1,target)*100)));$("#missionText").textContent="Derrota a "+target+" enemigos";$("#missionFill").style.width=percent+"%";$("#starsView").textContent=session.battle.phase==="won"?"★★★":session.battle.phase==="lost"?"★☆☆":session.streak>=6?"★★★":session.streak>=3?"★★☆":session.streak>=1?"★☆☆":"☆☆☆"}
+function renderStats(){$("#modeLabel").textContent=session.reviewMode?"Repaso":state.mode==="time"?"60 s":"Practica";$("#timeValue").textContent=session.reviewMode?"-":state.mode==="time"?session.running?session.timeLeft+"s":"60s":"-";$("#scoreValue").textContent=session.score;$("#streakValue").textContent=session.streak;$("#hitsValue").textContent=session.hits;$("#scoreBurst").textContent="+"+session.lastDelta;$("#comboText").textContent="x"+session.streak;$("#comboBadge").textContent="Combo: x"+session.streak;$("#pointsBadge").textContent="Ultimos puntos: +"+session.lastDelta;$("#practiceRecord").textContent=state.records.practice;$("#timeRecord").textContent=state.records.time;$("#answeredValue").textContent=state.totalAnswered;$("#errorCount").textContent=state.errors.length;const target=missionTarget(),percent=Math.max(0,Math.min(100,Math.round(session.score/target*100)));$("#missionText").textContent="Consigue "+target+" puntos";$("#missionFill").style.width=percent+"%";$("#starsView").textContent=session.streak>=6?"⭐⭐⭐":session.streak>=3?"⭐⭐☆":session.streak>=1?"⭐☆☆":"☆☆☆"}
 function renderQuestion(){const label=$("#questionLabel"),question=$("#questionText");if(!session.current){label.textContent="Listo para jugar";question.textContent="2 x 7";return}label.textContent=session.reviewMode?"Repasa este error":"Resuelve ahora";question.textContent=session.current.table+" x "+session.current.factor}
 function renderAnswer(){$("#answerValue").textContent=session.answer||"_"}
-function buildArmyMarkup(count,type){const total=Math.max(0,Math.min(24,count));let markup="";for(let i=0;i<total;i+=1)markup+="<span class='troop "+type+(i>=18?" elite":"")+"'></span>";return markup||"<span class='battle-sub'>Sin unidades</span>"}
-function renderBattle(){const battle=session.battle||defaultBattle();const playerPercent=Math.max(0,Math.min(100,Math.round(battle.playerCrowd/Math.max(1,battle.playerMax)*100)));const enemyPercent=Math.max(0,Math.min(100,Math.round(battle.enemyCrowd/Math.max(1,battle.enemyMax)*100)));const phaseText=battle.phase==="won"?"Victoria":battle.phase==="lost"?"Derrota":session.running?"En combate":"Esperando partida";const playerGain=session.lastBattleChange.reinforcements;const playerLoss=session.lastBattleChange.losses;const enemyLoss=session.lastBattleChange.enemyLosses;const playerPanel=$("#playerPanel");const enemyPanel=$("#enemyPanel");const playerChange=$("#playerChangeText");const enemyChange=$("#enemyChangeText");$("#battlePhase").textContent=phaseText;$("#battlePhase").className="battle-phase "+(battle.phase||"playing");$("#playerCrowdText").textContent=battle.playerCrowd;$("#enemyCrowdText").textContent=battle.enemyCrowd;$("#playerBarLabel").textContent=battle.playerCrowd+" / "+battle.playerMax;$("#enemyBarLabel").textContent=battle.enemyCrowd+" / "+battle.enemyMax;$("#playerBarFill").style.width=playerPercent+"%";$("#enemyBarFill").style.width=enemyPercent+"%";$("#playerArmy").innerHTML=buildArmyMarkup(battle.playerCrowd,"player");$("#enemyArmy").innerHTML=buildArmyMarkup(battle.enemyCrowd,"enemy");playerPanel.className="battle-side player"+(playerGain>0?" gain":playerLoss>0?" loss":"");enemyPanel.className="battle-side enemy"+(enemyLoss>0?" loss":"");playerChange.className="battle-change "+(playerGain>0?"up":playerLoss>0?"down":"flat");enemyChange.className="battle-change "+(enemyLoss>0?"down":"flat");playerChange.textContent=playerGain>0?"+"+playerGain:playerLoss>0?"-"+playerLoss:"+0";enemyChange.textContent=enemyLoss>0?"-"+enemyLoss:"-0";$("#playerSubText").textContent=battle.phase==="won"?"Has arrasado el nivel "+battle.level:battle.phase==="lost"?"Tu multitud necesita volver a intentarlo":playerGain>0?"Tu multitud crece con fuerza":playerLoss>0?"Tu multitud ha sufrido bajas":session.running?"Sigue acertando para traer refuerzos":"Lista para recibir refuerzos";$("#enemySubText").textContent=battle.phase==="won"?"El enemigo ha sido derrotado":battle.phase==="lost"?"El enemigo ha resistido":enemyLoss>0?"El enemigo retrocede y pierde filas":session.running?"Cada acierto reduce sus filas":"Esperando el primer choque";$("#battleEffectText").textContent="Refuerzos: +"+playerGain+" | Danio enemigo: -"+enemyLoss;$("#battleRiskText").textContent="Bajas: "+playerLoss}
 function renderErrors(){const list=$("#errorList");list.innerHTML="";if(!state.errors.length){const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>Sin errores guardados</div><div class='error-sub'>Cuando falle una cuenta aparecera aqui para repasar.</div></div><div class='error-points'>OK</div>";list.appendChild(item);return}state.errors.forEach(err=>{const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>"+err.table+" x "+err.factor+" = "+err.result+"</div><div class='error-sub'>Ultimo fallo: "+err.lastWrong+"</div></div><div class='error-points'>Repasar</div>";list.appendChild(item)})}
 function renderControls(){const playing=session.running;$("#checkBtn").disabled=!playing;$("#skipBtn").disabled=!playing;$("#deleteBtn").disabled=!playing;$("#okPadBtn").disabled=!playing;$("#reviewBtn").disabled=!state.errors.length}
-function render(){renderTables();renderStats();renderQuestion();renderAnswer();renderBattle();renderErrors();renderControls()}
+function render(){renderTables();renderStats();renderQuestion();renderAnswer();renderErrors();renderControls()}
 $("#startBtn").addEventListener("click",()=>startGame(false));$("#reviewBtn").addEventListener("click",()=>startGame(true));$("#selectAllBtn").addEventListener("click",()=>{state.selectedTables=Array.from({length:12},(_,i)=>i+1);saveState();render()});$("#clearBtn").addEventListener("click",()=>{state.selectedTables=[];saveState();render()});$("#checkBtn").addEventListener("click",checkAnswer);$("#skipBtn").addEventListener("click",skipQuestion);$("#resetBtn").addEventListener("click",resetSession);$("#deleteBtn").addEventListener("click",deleteDigit);$("#okPadBtn").addEventListener("click",checkAnswer);$("#clearErrorsBtn").addEventListener("click",()=>{state.errors=[];saveState();render();setMessage("Errores borrados.","neutral")});$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.addEventListener("click",()=>setMode(btn.dataset.mode))});$$(".answer-pad button[data-digit]").forEach(btn=>btn.addEventListener("click",()=>inputDigit(btn.dataset.digit)));
 window.addEventListener("keydown",event=>{if(/^\d$/.test(event.key))inputDigit(event.key);else if(event.key==="Backspace")deleteDigit();else if(event.key==="Enter")checkAnswer()});
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 render();setMode(state.mode);setMessage("Elige las tablas y pulsa Jugar.","neutral");
 </script>
 </body>
 </html>
-
-
