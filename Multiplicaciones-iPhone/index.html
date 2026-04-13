@@ -73,8 +73,10 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .question-stage.bad .answer-label{color:#fff0a8}
 .answer-value{margin-top:6px;min-height:1.05em;font-size:clamp(52px,9vw,84px);font-weight:900;letter-spacing:.02em;text-shadow:0 6px 14px rgba(0,0,0,.18)}
 .question-stage.bad .answer-value{color:#ffd4d4}
-.correct-answer{display:none;margin-top:12px;padding:12px 14px;border-radius:18px;background:linear-gradient(135deg,#fff6af,#ffd34f);color:#6e4100;font-size:22px;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.16)}
-.correct-answer.show{display:block;animation:revealCorrect .22s ease}
+.correct-answer-row{display:none;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:12px}
+.correct-answer-row.show{display:grid;animation:revealCorrect .22s ease}
+.correct-answer{padding:12px 14px;border-radius:18px;background:linear-gradient(135deg,#fff6af,#ffd34f);color:#6e4100;font-size:22px;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.16)}
+.continue-btn{padding:12px 16px;border-radius:18px;background:linear-gradient(135deg,#2fbf7c,#53dd99);color:#fff;font-size:20px;font-weight:900;box-shadow:0 12px 24px rgba(34,181,111,.28)}
 .feedback-banner{margin-top:10px;border-radius:18px;padding:10px 14px;font-size:18px;font-weight:900;text-align:center;display:flex;align-items:center;justify-content:center;min-height:58px;box-shadow:var(--shadow-soft)}
 .feedback-banner.good{background:linear-gradient(135deg,#dffbe9,#bff1d3);color:#0f6d3b}
 .feedback-banner.bad{background:linear-gradient(135deg,#fff1ef,#ffd1cb);color:#9c2c2c}
@@ -83,6 +85,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .badge{padding:9px 11px;border-radius:14px;font-size:12px;font-weight:900;background:#eef3ff;color:#3658ca;box-shadow:var(--shadow-soft)}
 .controls{display:flex;gap:8px;margin-top:10px}
 .controls .action-btn{flex:1 1 0}
+.table-mode-controls{margin-top:12px}
 .answer-pad-shell{margin-top:14px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(245,247,255,.96));border-radius:26px;padding:12px;box-shadow:inset 0 0 0 2px rgba(55,114,255,.08),var(--shadow-soft)}
 .answer-pad-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
 .answer-pad-title strong{font-size:15px}
@@ -107,6 +110,13 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .table-btn{min-width:0;padding:12px 6px;text-align:center}
 .table-btn strong{display:block;font-size:22px;line-height:1}
 .table-btn span{display:block;margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.difficult-panel{display:none;margin-top:12px;padding:12px;border-radius:22px;background:linear-gradient(180deg,#fffdf8,#f2f7ff);box-shadow:inset 0 0 0 2px rgba(55,114,255,.08)}
+.difficult-panel.open{display:block}
+.difficult-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}
+.difficult-count{font-size:12px;font-weight:900;color:var(--blue-deep)}
+.fact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-height:320px;overflow:auto;padding-right:2px}
+.fact-btn{padding:10px 6px;border-radius:14px;background:#fff;color:var(--ink);font-size:15px;font-weight:900;box-shadow:var(--shadow-soft)}
+.fact-btn.active{background:linear-gradient(135deg,#ffe8d8,#fff3c1);outline:3px solid rgba(255,123,44,.22);color:var(--orange-deep)}
 .row{display:flex;justify-content:space-between;gap:8px;align-items:center}
 .confetti{position:absolute;inset:0;pointer-events:none}
 .spark{position:absolute;width:14px;height:14px;border-radius:50%;opacity:0}
@@ -120,10 +130,13 @@ button:disabled{opacity:.42;cursor:not-allowed}
   .app{padding-left:10px;padding-right:10px}.hero,.card,.table-panel,.question-stage,.answer-pad-shell{border-radius:22px}
   .hero-top{flex-direction:column;align-items:flex-start}.table-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .controls{flex-wrap:wrap}.controls .action-btn{flex-basis:calc(33.333% - 8px)}.answer-pad .pad-btn{min-height:64px;font-size:28px}
+  .fact-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (max-width:480px){
   .question{font-size:clamp(40px,13vw,60px)}.answer-value{font-size:clamp(48px,14vw,70px)}.feedback-banner{font-size:15px}
   .answer-pad .pad-btn{min-height:58px;font-size:25px;border-radius:18px}.pad-btn.delete{font-size:16px}.pad-btn.ok{font-size:20px}.table-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .correct-answer-row{grid-template-columns:1fr}
+  .fact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 </style>
 </head>
@@ -176,7 +189,10 @@ button:disabled{opacity:.42;cursor:not-allowed}
         <div class="answer-box" id="answerBox">
           <div class="answer-label" id="answerLabel">Tu respuesta</div>
           <div class="answer-value" id="answerValue">_</div>
-          <div class="correct-answer" id="correctAnswerBanner"></div>
+          <div class="correct-answer-row" id="correctAnswerRow">
+            <div class="correct-answer" id="correctAnswerBanner"></div>
+            <button class="continue-btn" id="continueBtn">¡Cierto!</button>
+          </div>
         </div>
       </div>
 
@@ -219,12 +235,23 @@ button:disabled{opacity:.42;cursor:not-allowed}
         <span id="selectedTablesFooterText" style="color:var(--muted);font-weight:900">2</span>
       </div>
       <div class="table-grid" id="tableGrid"></div>
+      <div class="controls table-mode-controls">
+        <button class="action-btn blue" id="difficultBtn">Difíciles</button>
+        <button class="action-btn secondary" id="editDifficultBtn">Editar difíciles</button>
+      </div>
+      <div class="difficult-panel" id="difficultPanel">
+        <div class="difficult-head">
+          <strong>Multiplicaciones difíciles</strong>
+          <span class="difficult-count" id="difficultCount">0 seleccionadas</span>
+        </div>
+        <div class="fact-grid" id="difficultGrid"></div>
+      </div>
       <div class="controls">
         <button class="action-btn secondary" id="selectAllBtn">Todas</button>
         <button class="action-btn secondary" id="clearBtn">Limpiar</button>
         <button class="action-btn primary" id="playFromTablesBtn">Jugar</button>
       </div>
-      <div class="hint">Las preguntas salen de las tablas elegidas del 1 al 10. Si fallas una, se guarda automaticamente para repasar luego.</div>
+      <div class="hint">Puedes jugar con tablas completas o con una lista personalizada de multiplicaciones difíciles como 8x7, 4x8 o las que quieras.</div>
     </aside>
   </div>
 
@@ -245,7 +272,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
 
 <script>
 const STORAGE_KEY="multiplicaciones_iphone_v3";
-const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time:0},errors:[],totalAnswered:0};
+const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time:0},errors:[],totalAnswered:0,sourceMode:"tables",difficultFacts:[],difficultEditorOpen:false};
 const state=loadState();
 let session=freshSession();
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
@@ -261,16 +288,21 @@ function loadState(){
       mode:parsed.mode==="time"?"time":"practice",
       records:{practice:Number(parsed.records&&parsed.records.practice||0),time:Number(parsed.records&&parsed.records.time||0)},
       errors:Array.isArray(parsed.errors)?parsed.errors:[],
-      totalAnswered:Number(parsed.totalAnswered||0)
+      totalAnswered:Number(parsed.totalAnswered||0),
+      sourceMode:parsed.sourceMode==="difficult"?"difficult":"tables",
+      difficultFacts:Array.isArray(parsed.difficultFacts)?parsed.difficultFacts.filter(item=>item&&Number.isFinite(Number(item.table))&&Number.isFinite(Number(item.factor))).map(item=>({table:Number(item.table),factor:Number(item.factor),result:Number(item.table)*Number(item.factor)})):[],
+      difficultEditorOpen:Boolean(parsed.difficultEditorOpen)
     }
   }catch{return clone(DEFAULT_STATE)}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar.",showCorrectAnswer:false}}
+function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar.",showCorrectAnswer:false,awaitingContinue:false}}
 function buildBank(tables){const bank=[];tables.forEach(table=>{for(let factor=1;factor<=10;factor+=1)bank.push({table,factor,result:table*factor})});return bank}
+function buildFactKey(table,factor){return table+"x"+factor}
+function buildSourceBank(){return state.sourceMode==="difficult"?state.difficultFacts.map(item=>clone(item)):buildBank(state.selectedTables)}
 function shuffle(list){const copy=list.slice();for(let i=copy.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const temp=copy[i];copy[i]=copy[j];copy[j]=temp}return copy}
-function nextQuestion(){if(!session.queue.length){const source=session.reviewMode?state.errors.map(item=>clone(item)):buildBank(state.selectedTables);session.queue=shuffle(source)}session.current=session.queue.shift()||null;session.answer="";session.showCorrectAnswer=false;render()}
-function startGame(reviewMode){if(!reviewMode&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay errores para repasar.","bad");return}stopTimer();session=freshSession();session.running=true;session.reviewMode=reviewMode;setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos.":"Partida iniciada. A por muchos puntos.","good");if(state.mode==="time"&&!reviewMode){session.timeLeft=60;session.timeDeadline=Date.now()+60000;renderStats();session.timerId=window.setInterval(updateTimer,250)}nextQuestion()}
+function nextQuestion(){if(!session.queue.length){const source=session.reviewMode?state.errors.map(item=>clone(item)):buildSourceBank();session.queue=shuffle(source)}session.current=session.queue.shift()||null;session.answer="";session.showCorrectAnswer=false;session.awaitingContinue=false;render()}
+function startGame(reviewMode){if(!reviewMode&&state.sourceMode==="tables"&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(!reviewMode&&state.sourceMode==="difficult"&&!state.difficultFacts.length){setMessage("Primero elige alguna multiplicacion dificil.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay errores para repasar.","bad");return}stopTimer();session=freshSession();session.running=true;session.reviewMode=reviewMode;setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos.":"Partida iniciada. A por muchos puntos.","good");if(state.mode==="time"&&!reviewMode){session.timeLeft=60;session.timeDeadline=Date.now()+60000;renderStats();session.timerId=window.setInterval(updateTimer,250)}nextQuestion()}
 function stopTimer(){if(session.timerId){clearInterval(session.timerId);session.timerId=null}session.timeDeadline=null}
 function updateTimer(){if(!session.running||state.mode!=="time"||session.reviewMode||!session.timeDeadline)return;const remainingMs=session.timeDeadline-Date.now();const nextTime=Math.max(0,Math.ceil(remainingMs/1000));if(nextTime!==session.timeLeft){session.timeLeft=nextTime;renderStats()}if(remainingMs<=0){session.timeLeft=0;finishTimedGame()}}
 function finishTimedGame(){stopTimer();session.running=false;if(session.score>state.records.time){state.records.time=session.score;saveState();setMessage("Tiempo terminado. Nuevo record en contrarreloj.","good")}else setMessage("Tiempo terminado. Buen intento. Vamos otra vez.","neutral");render()}
@@ -280,22 +312,26 @@ function comboBonus(){if(session.streak>=10)return 5;if(session.streak>=7)return
 function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["#ffd84d","#ff8c42","#ffffff","#8ef0bf","#ffd2c8"];for(let i=0;i<10;i+=1){const spark=document.createElement("span");spark.className="spark show-spark";spark.style.left=12+Math.random()*76+"%";spark.style.top=44+Math.random()*32+"%";spark.style.background=colors[i%colors.length];spark.style.animationDelay=i*.03+"s";host.appendChild(spark)}setTimeout(()=>{host.innerHTML=""},750)}
 function flashStage(tone){const stage=$("#questionStage");stage.classList.remove("good","bad");void stage.offsetWidth;if(tone==="good"||tone==="bad")stage.classList.add(tone)}
 function advanceAfterFeedback(){if(session.running&&(state.mode!=="time"||session.timeLeft>0||session.reviewMode))nextQuestion()}
-function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate()}else{session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;registerError(session.current,session.answer);saveState();setMessage("No pasa nada. La correcta era "+session.current.result+".","bad");flashStage("bad")}if(session.reviewMode&&ok)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,ok?700:1100)}
+function acknowledgeCorrect(){if(!session.awaitingContinue)return;advanceAfterFeedback()}
+function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa ¡Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;registerError(session.current,session.answer);saveState();setMessage("No pasa nada. Mira la correcta y pulsa ¡Cierto! para seguir.","bad");flashStage("bad");render()}
 function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"Respuesta correcta":tone==="bad"?"Respuesta incorrecta":"Esperando partida"}
-function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);saveState();render()}
+function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);state.sourceMode="tables";saveState();render()}
+function toggleDifficultFact(table,factor){const key=buildFactKey(table,factor);const exists=state.difficultFacts.some(item=>buildFactKey(item.table,item.factor)===key);if(exists)state.difficultFacts=state.difficultFacts.filter(item=>buildFactKey(item.table,item.factor)!==key);else state.difficultFacts=[...state.difficultFacts,{table,factor,result:table*factor}].sort((a,b)=>a.table-b.table||a.factor-b.factor);saveState();render()}
+function setSourceMode(mode){state.sourceMode=mode;saveState();render()}
+function toggleDifficultEditor(){state.difficultEditorOpen=!state.difficultEditorOpen;saveState();render()}
 function setMode(mode){state.mode=mode;saveState();$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode);btn.classList.toggle("primary",btn.dataset.mode===mode);btn.classList.toggle("ghost",btn.dataset.mode!==mode)});renderStats()}
-function inputDigit(digit){if(!session.running||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
-function deleteDigit(){if(!session.running)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
-function skipQuestion(){if(!session.running||!session.current)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;saveState();setMessage("Saltada. La correcta era "+session.current.result+".","bad");flashStage("bad");render();setTimeout(advanceAfterFeedback,1100)}
+function inputDigit(digit){if(!session.running||session.awaitingContinue||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
+function deleteDigit(){if(!session.running||session.awaitingContinue)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
+function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;saveState();setMessage("Saltada. Mira la correcta y pulsa ¡Cierto! para seguir.","bad");flashStage("bad");render()}
 function resetSession(){stopTimer();session=freshSession();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
 function scrollToTables(){const section=$("#tablesSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
 function scrollToGame(){const section=$("#gameSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
-function renderTables(){const grid=$("#tableGrid");grid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}const selected=state.selectedTables.length?state.selectedTables.join(", "):"ninguna";$("#selectedTablesFooterText").textContent=selected}
+function renderTables(){const grid=$("#tableGrid"),difficultGrid=$("#difficultGrid");grid.innerHTML="";difficultGrid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}for(let table=1;table<=12;table+=1){for(let factor=1;factor<=10;factor+=1){const btn=document.createElement("button");const active=state.difficultFacts.some(item=>item.table===table&&item.factor===factor);btn.className="fact-btn"+(active?" active":"");btn.textContent=table+"x"+factor;btn.addEventListener("click",()=>toggleDifficultFact(table,factor));difficultGrid.appendChild(btn)}}$("#difficultBtn").classList.toggle("primary",state.sourceMode==="difficult");$("#difficultBtn").classList.toggle("blue",state.sourceMode!=="difficult");$("#editDifficultBtn").classList.toggle("primary",state.difficultEditorOpen);$("#editDifficultBtn").classList.toggle("secondary",!state.difficultEditorOpen);$("#difficultPanel").classList.toggle("open",state.difficultEditorOpen);$("#difficultCount").textContent=state.difficultFacts.length+" seleccionadas";const selected=state.sourceMode==="difficult"?(state.difficultFacts.length?state.difficultFacts.length+" dificiles":"ninguna dificil"):state.selectedTables.length?state.selectedTables.join(", "):"ninguna";$("#selectedTablesFooterText").textContent=selected}
 function renderStats(){$("#timeValue").textContent=session.reviewMode?"-":state.mode==="time"?session.running?session.timeLeft+"s":"60s":"-";$("#scoreValue").textContent=session.score;$("#streakValue").textContent=session.streak;$("#scoreBurst").textContent="+"+session.lastDelta;$("#practiceRecord").textContent=state.records.practice;$("#timeRecord").textContent=state.records.time;$("#answeredValue").textContent=state.totalAnswered;$("#errorCount").textContent=state.errors.length;$("#starsView").innerHTML=session.streak>=6?"&#11088;&#11088;&#11088;":session.streak>=3?"&#11088;&#11088;&#9734;":session.streak>=1?"&#11088;&#9734;&#9734;":"&#9734;&#9734;&#9734;"}
 function renderQuestion(){const label=$("#questionLabel"),question=$("#questionText");if(!session.current){label.textContent="Listo para jugar";question.textContent="2 x 7";return}label.textContent=session.reviewMode?"Repasa este error":"Resuelve ahora";question.textContent=session.current.table+" x "+session.current.factor}
-function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Respuesta correcta: "+session.current.result;banner.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";banner.classList.remove("show")}}
+function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Respuesta correcta: "+session.current.result;row.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show")}}
 function renderErrors(){const list=$("#errorList");list.innerHTML="";if(!state.errors.length){const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>Sin errores guardados</div><div class='error-sub'>Cuando falle una cuenta aparecera aqui para repasar.</div></div><div class='error-points'>OK</div>";list.appendChild(item);return}state.errors.forEach(err=>{const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>"+err.table+" x "+err.factor+" = "+err.result+"</div><div class='error-sub'>Ultimo fallo: "+err.lastWrong+"</div></div><div class='error-points'>Repasar</div>";list.appendChild(item)})}
-function renderControls(){const playing=session.running;$("#checkBtn").disabled=!playing;$("#skipBtn").disabled=!playing;$("#deleteBtn").disabled=!playing;$("#okPadBtn").disabled=!playing;$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing});$("#reviewBtn").disabled=!state.errors.length}
+function renderControls(){const playing=session.running,locked=session.awaitingContinue;$("#checkBtn").disabled=!playing||locked;$("#skipBtn").disabled=!playing||locked;$("#deleteBtn").disabled=!playing||locked;$("#okPadBtn").disabled=!playing||locked;$("#continueBtn").disabled=!playing||!locked;$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing||locked});$("#reviewBtn").disabled=!state.errors.length}
 function render(){renderTables();renderStats();renderQuestion();renderAnswer();renderErrors();renderControls()}
 
 $("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");
@@ -303,19 +339,22 @@ $("#startBtn").addEventListener("click",()=>startGame(false));
 $("#reviewBtn").addEventListener("click",()=>startGame(true));
 $("#chooseTablesBtn").addEventListener("click",scrollToTables);
 $("#playFromTablesBtn").addEventListener("click",()=>{scrollToGame();startGame(false)});
-$("#selectAllBtn").addEventListener("click",()=>{state.selectedTables=Array.from({length:12},(_,i)=>i+1);saveState();render()});
-$("#clearBtn").addEventListener("click",()=>{state.selectedTables=[];saveState();render()});
+$("#selectAllBtn").addEventListener("click",()=>{state.selectedTables=Array.from({length:12},(_,i)=>i+1);state.sourceMode="tables";saveState();render()});
+$("#clearBtn").addEventListener("click",()=>{state.selectedTables=[];state.sourceMode="tables";saveState();render()});
+$("#difficultBtn").addEventListener("click",()=>setSourceMode("difficult"));
+$("#editDifficultBtn").addEventListener("click",toggleDifficultEditor);
 $("#checkBtn").addEventListener("click",checkAnswer);
 $("#skipBtn").addEventListener("click",skipQuestion);
 $("#resetBtn").addEventListener("click",resetSession);
 $("#deleteBtn").addEventListener("click",deleteDigit);
 $("#okPadBtn").addEventListener("click",checkAnswer);
+$("#continueBtn").addEventListener("click",acknowledgeCorrect);
 $("#clearErrorsBtn").addEventListener("click",()=>{state.errors=[];saveState();render();setMessage("Errores borrados.","neutral")});
 $$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.addEventListener("click",()=>setMode(btn.dataset.mode))});
 $$(".answer-pad button[data-digit]").forEach(btn=>btn.addEventListener("click",()=>inputDigit(btn.dataset.digit)));
 
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-window.addEventListener("load",()=>{render();setMode(state.mode);setMessage("Partida lista.","neutral");if(state.selectedTables.length)startGame(false)});
+window.addEventListener("load",()=>{render();setMode(state.mode);setMessage("Partida lista.","neutral");if((state.sourceMode==="tables"&&state.selectedTables.length)||(state.sourceMode==="difficult"&&state.difficultFacts.length))startGame(false)});
 </script>
 </body>
 </html>
