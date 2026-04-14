@@ -118,10 +118,13 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .fact-btn{padding:10px 6px;border-radius:14px;background:#fff;color:var(--ink);font-size:15px;font-weight:900;box-shadow:var(--shadow-soft)}
 .fact-btn.active{background:linear-gradient(135deg,#ffe8d8,#fff3c1);outline:3px solid rgba(255,123,44,.22);color:var(--orange-deep)}
 .row{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.confetti{position:absolute;inset:0;pointer-events:none}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .spark{position:absolute;width:14px;height:14px;border-radius:50%;opacity:0}
-.show-spark{animation:sparkFly .7s ease}
-@keyframes sparkFly{0%{opacity:0;transform:translateY(12px) scale(.2)}20%{opacity:1}100%{opacity:0;transform:translateY(-60px) scale(1.25)}}
+.show-spark{animation:sparkFly .95s ease-out}
+.firework{position:absolute;width:12px;height:12px;border-radius:50%;opacity:0;box-shadow:0 0 0 0 currentColor}
+.show-firework{animation:fireworkBoom 1s ease-out}
+@keyframes sparkFly{0%{opacity:0;transform:translateY(18px) scale(.25)}18%{opacity:1}100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(280deg) scale(1.35)}}
+@keyframes fireworkBoom{0%{opacity:0;transform:scale(.2)}18%{opacity:1}100%{opacity:0;transform:scale(1.2);box-shadow:0 -44px 0 4px currentColor,31px -31px 0 3px currentColor,44px 0 0 4px currentColor,31px 31px 0 3px currentColor,0 44px 0 4px currentColor,-31px 31px 0 3px currentColor,-44px 0 0 4px currentColor,-31px -31px 0 3px currentColor}}
 @keyframes pulseGood{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
 @keyframes shakeBad{0%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
 @keyframes revealCorrect{0%{opacity:0;transform:translateY(8px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
@@ -191,7 +194,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
           <div class="answer-value" id="answerValue">_</div>
           <div class="correct-answer-row" id="correctAnswerRow">
             <div class="correct-answer" id="correctAnswerBanner"></div>
-            <button class="continue-btn" id="continueBtn">¡Cierto!</button>
+            <button class="continue-btn" id="continueBtn">Cierto!</button>
           </div>
         </div>
       </div>
@@ -222,8 +225,8 @@ button:disabled{opacity:.42;cursor:not-allowed}
           <button class="pad-btn" data-digit="1">1</button>
           <button class="pad-btn" data-digit="2">2</button>
           <button class="pad-btn" data-digit="3">3</button>
-          <button class="pad-btn" data-digit="0">0</button>
           <button class="pad-btn delete" id="deleteBtn">Borrar</button>
+          <button class="pad-btn" data-digit="0">0</button>
           <button class="pad-btn ok" id="okPadBtn">OK</button>
         </div>
       </div>
@@ -296,7 +299,7 @@ function loadState(){
   }catch{return clone(DEFAULT_STATE)}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar.",showCorrectAnswer:false,awaitingContinue:false}}
+function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar.",showCorrectAnswer:false,awaitingContinue:false,repeatCurrentOnContinue:false}}
 function buildBank(tables){const bank=[];tables.forEach(table=>{for(let factor=1;factor<=10;factor+=1)bank.push({table,factor,result:table*factor})});return bank}
 function buildFactKey(table,factor){return table+"x"+factor}
 function buildSourceBank(){return state.sourceMode==="difficult"?state.difficultFacts.map(item=>clone(item)):buildBank(state.selectedTables)}
@@ -309,11 +312,11 @@ function finishTimedGame(){stopTimer();session.running=false;if(session.score>st
 function registerError(question,typed){const key=question.table+"x"+question.factor;const exists=state.errors.some(item=>item.table+"x"+item.factor===key);if(!exists)state.errors.unshift({table:question.table,factor:question.factor,result:question.result,lastWrong:typed});else state.errors=state.errors.map(item=>{if(item.table+"x"+item.factor!==key)return item;item.lastWrong=typed;return item});state.errors=state.errors.slice(0,50);saveState()}
 function removeError(question){const key=question.table+"x"+question.factor;state.errors=state.errors.filter(item=>item.table+"x"+item.factor!==key);saveState()}
 function comboBonus(){if(session.streak>=10)return 5;if(session.streak>=7)return 4;if(session.streak>=5)return 3;if(session.streak>=3)return 2;return 1}
-function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["#ffd84d","#ff8c42","#ffffff","#8ef0bf","#ffd2c8"];for(let i=0;i<10;i+=1){const spark=document.createElement("span");spark.className="spark show-spark";spark.style.left=12+Math.random()*76+"%";spark.style.top=44+Math.random()*32+"%";spark.style.background=colors[i%colors.length];spark.style.animationDelay=i*.03+"s";host.appendChild(spark)}setTimeout(()=>{host.innerHTML=""},750)}
+function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["#ffd84d","#ff8c42","#ffffff","#8ef0bf","#ffd2c8","#6ee7ff"];for(let i=0;i<22;i+=1){const spark=document.createElement("span");spark.className="spark show-spark";spark.style.left=10+Math.random()*80+"%";spark.style.top=30+Math.random()*42+"%";spark.style.background=colors[i%colors.length];spark.style.setProperty("--tx",-70+Math.random()*140+"px");spark.style.setProperty("--ty",-110-Math.random()*90+"px");spark.style.animationDelay=i*.018+"s";host.appendChild(spark)}for(let i=0;i<3;i+=1){const firework=document.createElement("span");firework.className="firework show-firework";firework.style.left=18+i*28+Math.random()*8+"%";firework.style.top=18+Math.random()*18+"%";firework.style.color=colors[(i*2)%colors.length];firework.style.animationDelay=.08+i*.12+"s";host.appendChild(firework)}setTimeout(()=>{host.innerHTML=""},1200)}
 function flashStage(tone){const stage=$("#questionStage");stage.classList.remove("good","bad");void stage.offsetWidth;if(tone==="good"||tone==="bad")stage.classList.add(tone)}
 function advanceAfterFeedback(){if(session.running&&(state.mode!=="time"||session.timeLeft>0||session.reviewMode))nextQuestion()}
-function acknowledgeCorrect(){if(!session.awaitingContinue)return;advanceAfterFeedback()}
-function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa ¡Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;registerError(session.current,session.answer);saveState();setMessage("No pasa nada. Mira la correcta y pulsa ¡Cierto! para seguir.","bad");flashStage("bad");render()}
+function acknowledgeCorrect(){if(!session.awaitingContinue)return;if(session.repeatCurrentOnContinue&&session.current)session.queue.unshift(clone(session.current));session.repeatCurrentOnContinue=false;advanceAfterFeedback()}
+function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render()}
 function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"Respuesta correcta":tone==="bad"?"Respuesta incorrecta":"Esperando partida"}
 function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);state.sourceMode="tables";saveState();render()}
 function toggleDifficultFact(table,factor){const key=buildFactKey(table,factor);const exists=state.difficultFacts.some(item=>buildFactKey(item.table,item.factor)===key);if(exists)state.difficultFacts=state.difficultFacts.filter(item=>buildFactKey(item.table,item.factor)!==key);else state.difficultFacts=[...state.difficultFacts,{table,factor,result:table*factor}].sort((a,b)=>a.table-b.table||a.factor-b.factor);saveState();render()}
@@ -322,7 +325,7 @@ function toggleDifficultEditor(){state.difficultEditorOpen=!state.difficultEdito
 function setMode(mode){state.mode=mode;saveState();$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode);btn.classList.toggle("primary",btn.dataset.mode===mode);btn.classList.toggle("ghost",btn.dataset.mode!==mode)});renderStats()}
 function inputDigit(digit){if(!session.running||session.awaitingContinue||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
 function deleteDigit(){if(!session.running||session.awaitingContinue)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
-function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;saveState();setMessage("Saltada. Mira la correcta y pulsa ¡Cierto! para seguir.","bad");flashStage("bad");render()}
+function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=false;saveState();setMessage("Saltada. Mira la correcta y pulsa Cierto! para seguir.","bad");flashStage("bad");render()}
 function resetSession(){stopTimer();session=freshSession();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
 function scrollToTables(){const section=$("#tablesSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
 function scrollToGame(){const section=$("#gameSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
