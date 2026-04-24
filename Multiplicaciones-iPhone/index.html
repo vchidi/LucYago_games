@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#ff7b2c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,7 +18,7 @@
   --red:#e25555;--red-deep:#b92e2e;--shadow:0 24px 60px rgba(26,45,78,.16);--shadow-soft:0 12px 26px rgba(26,45,78,.12)
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
+html,body{margin:0;min-height:100%;touch-action:manipulation}
 body{
   font-family:"Trebuchet MS","Avenir Next","Segoe UI",sans-serif;color:var(--ink);
   background:
@@ -27,6 +27,7 @@ body{
     radial-gradient(circle at 82% 88%,rgba(255,150,111,.4),transparent 20%),
     linear-gradient(155deg,var(--bg-1),var(--bg-2))
 }
+button,.pad-btn,.action-btn,.mode-btn,.table-btn,.tiny-btn,.continue-btn{touch-action:manipulation}
 button{font:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .14s ease,box-shadow .18s ease,background .18s ease,opacity .18s ease}
 button:active{transform:scale(.97)}
 button:disabled{opacity:.42;cursor:not-allowed}
@@ -86,15 +87,40 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .controls{display:flex;gap:8px;margin-top:10px}
 .controls .action-btn{flex:1 1 0}
 .table-mode-controls{margin-top:12px}
-.answer-pad-shell{margin-top:14px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(245,247,255,.96));border-radius:26px;padding:12px;box-shadow:inset 0 0 0 2px rgba(55,114,255,.08),var(--shadow-soft)}
-.answer-pad-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
-.answer-pad-title strong{font-size:15px}
-.answer-pad-title span{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.answer-pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.answer-pad .pad-btn{min-height:72px;font-size:30px;border-radius:22px;background:linear-gradient(180deg,#ffffff,#eef3ff)}
+.answer-pad-shell{margin-top:12px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(245,247,255,.96));border-radius:20px;padding:8px 9px;box-shadow:0 10px 18px rgba(26,45,78,.08)}
+.answer-pad-title{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}
+.answer-pad-title strong{font-size:12px}
+.answer-pad-title span{font-size:9px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.answer-pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.answer-pad .pad-btn{min-height:42px;font-size:20px;border-radius:14px;background:linear-gradient(180deg,#ffffff,#eef3ff)}
 .answer-pad .pad-btn:hover{box-shadow:0 18px 28px rgba(55,114,255,.14)}
-.pad-btn.delete{font-size:18px;background:linear-gradient(135deg,#fff0ef,#ffd6d2);color:var(--red-deep)}
-.pad-btn.ok{font-size:24px;background:linear-gradient(135deg,var(--green),#43d98f);color:#fff}
+.pad-btn.delete{font-size:13px;background:linear-gradient(135deg,#fff0ef,#ffd6d2);color:var(--red-deep)}
+.pad-btn.ok{font-size:17px;background:linear-gradient(135deg,var(--green),#43d98f);color:#fff}
+.aquarium-card{margin-top:14px;padding:16px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(243,249,255,.98));box-shadow:inset 0 0 0 2px rgba(55,114,255,.08),var(--shadow-soft)}
+.aquarium-card.hidden{display:none}
+.aquarium-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.aquarium-title{font-size:16px;font-weight:900}
+.aquarium-meta{font-size:12px;font-weight:900;color:var(--muted)}
+.aquarium-tank{position:relative;margin-top:10px;border-radius:28px;padding:16px;background:var(--tank-water,linear-gradient(180deg,#dff6ff 0%,#9fe3ff 42%,#4ab7ef 100%));border:1px solid #c5edf7;overflow:hidden;min-height:360px;box-shadow:inset 0 0 0 6px rgba(255,255,255,.28);transition:background .35s ease,filter .35s ease}
+.aquarium-tank.dead{--tank-water:linear-gradient(180deg,#cfd4d8 0%,#9aa4ab 52%,#7d878f 100%);filter:saturate(.35)}
+.aquarium-tank::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 16%,rgba(255,255,255,.65),transparent 18%),radial-gradient(circle at 82% 14%,rgba(255,255,255,.45),transparent 16%);pointer-events:none}
+.aquarium-tank::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(180deg,rgba(255,244,191,0),rgba(255,226,143,.88));pointer-events:none}
+.aquarium-stage{position:relative;height:324px;border-radius:22px;overflow:hidden}
+.tank-sand{position:absolute;left:0;right:0;bottom:0;height:48px;background:linear-gradient(180deg,#ffe8a3,#f5d47d);border-top:3px solid rgba(255,255,255,.38)}
+.tank-bubble{position:absolute;bottom:-24px;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.58);animation:floatup linear infinite}
+.aqua-item{position:absolute;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 10px 14px rgba(0,64,96,.12));user-select:none}
+.aqua-item.bad{filter:drop-shadow(0 12px 18px rgba(52,16,16,.22));animation:dangerbob 2.4s ease-in-out infinite}
+.aqua-item.bottom{bottom:14px}
+.aqua-item.middle{bottom:78px}
+.aqua-item.top{top:18px}
+.aqua-item.fish_orange,.aqua-item.fish_blue,.aqua-item.fish_puffer{animation:swim 4.8s ease-in-out infinite alternate}
+.tank-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;opacity:0;transform:scale(.96);pointer-events:none;transition:all .25s ease}
+.tank-overlay.visible{opacity:1;transform:scale(1)}
+.tank-overlay .panel-win{padding:22px 26px;border-radius:24px;background:linear-gradient(135deg,#fff9be,#fff2a3,#e8ffe5);box-shadow:0 16px 34px rgba(20,69,75,.18);font-weight:900;color:#195d44}
+.tank-overlay.lose .panel-win{background:linear-gradient(135deg,#edf8ff,#d8efff,#fff5c7);color:#1c557a}
+.overlay-big{font-size:clamp(26px,4vw,38px);line-height:1}
+.overlay-small{margin-top:10px;font-size:14px;line-height:1.35}
+.aquarium-log{margin-top:10px;padding:12px 14px;border-radius:18px;background:#fff;border:1px solid rgba(55,114,255,.12);font-weight:800;color:var(--ink)}
 .hint{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.35}
 .records-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .record-card{background:#fff;border-radius:18px;padding:10px;box-shadow:inset 0 0 0 2px rgba(255,123,44,.08)}
@@ -128,16 +154,19 @@ button:disabled{opacity:.42;cursor:not-allowed}
 @keyframes pulseGood{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
 @keyframes shakeBad{0%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
 @keyframes revealCorrect{0%{opacity:0;transform:translateY(8px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes swim{0%{transform:translateX(0)}100%{transform:translateX(10px)}}
+@keyframes floatup{0%{transform:translateY(0) scale(.9);opacity:.2}20%{opacity:.7}100%{transform:translateY(-220px) scale(1.15);opacity:0}}
+@keyframes dangerbob{0%{transform:translateY(0)}50%{transform:translateY(7px)}100%{transform:translateY(0)}}
 @media (max-width:980px){.layout{grid-template-columns:1fr}.table-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media (max-width:680px){
   .app{padding-left:10px;padding-right:10px}.hero,.card,.table-panel,.question-stage,.answer-pad-shell{border-radius:22px}
   .hero-top{flex-direction:column;align-items:flex-start}.table-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .controls{flex-wrap:wrap}.controls .action-btn{flex-basis:calc(33.333% - 8px)}.answer-pad .pad-btn{min-height:64px;font-size:28px}
+  .controls{flex-wrap:wrap}.controls .action-btn{flex-basis:calc(33.333% - 8px)}.answer-pad .pad-btn{min-height:38px;font-size:18px}
   .fact-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media (max-width:480px){
   .question{font-size:clamp(40px,13vw,60px)}.answer-value{font-size:clamp(48px,14vw,70px)}.feedback-banner{font-size:15px}
-  .answer-pad .pad-btn{min-height:58px;font-size:25px;border-radius:18px}.pad-btn.delete{font-size:16px}.pad-btn.ok{font-size:20px}.table-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .answer-pad .pad-btn{min-height:34px;font-size:16px;border-radius:14px}.pad-btn.delete{font-size:11px}.pad-btn.ok{font-size:14px}.table-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .correct-answer-row{grid-template-columns:1fr}
   .fact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -158,6 +187,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
       <button class="mode-btn primary active" data-mode="practice">Practica</button>
       <button class="mode-btn ghost" data-mode="time">Contrarreloj 60 s</button>
       <button class="action-btn blue" id="reviewBtn">Repasar errores</button>
+      <button class="action-btn secondary" id="aquariumToggleBtn">Pecera: si</button>
       <button class="action-btn secondary" id="chooseTablesBtn">Elige las tablas</button>
       <button class="action-btn primary" id="startBtn">Jugar</button>
     </div>
@@ -230,6 +260,28 @@ button:disabled{opacity:.42;cursor:not-allowed}
           <button class="pad-btn ok" id="okPadBtn">OK</button>
         </div>
       </div>
+
+      <div class="aquarium-card" id="aquariumCard">
+        <div class="aquarium-head">
+          <div>
+            <div class="aquarium-title">Pecera</div>
+            <div class="aquarium-meta" id="aquariumStateLabel">Pecera viva</div>
+          </div>
+          <div class="aquarium-meta" id="aquariumCounter">0/8 · ❤❤❤</div>
+        </div>
+        <div class="aquarium-tank" id="aquariumTank">
+          <div class="aquarium-stage" id="aquariumStage">
+            <div class="tank-sand"></div>
+          </div>
+          <div class="tank-overlay" id="tankOverlay">
+            <div class="panel-win">
+              <div class="overlay-big" id="overlayTitle"></div>
+              <div class="overlay-small" id="overlayText"></div>
+            </div>
+          </div>
+        </div>
+        <div class="aquarium-log" id="aquariumEvent">La pecera espera tu primera cuenta.</div>
+      </div>
     </section>
 
     <aside class="table-panel" id="tablesSection">
@@ -275,9 +327,35 @@ button:disabled{opacity:.42;cursor:not-allowed}
 
 <script>
 const STORAGE_KEY="multiplicaciones_iphone_v3";
-const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time:0},errors:[],totalAnswered:0,sourceMode:"tables",difficultFacts:[],difficultEditorOpen:false};
+const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time:0},errors:[],totalAnswered:0,sourceMode:"tables",difficultFacts:[],difficultEditorOpen:false,aquariumEnabled:true};
+const START_LIVES=3;
+const WIN_TARGET=8;
+const GOOD_ITEMS=["fish_orange","fish_blue","fish_puffer","plant","treasure","starfish","shell"];
+const FISH_TYPES=["fish_orange","fish_blue","fish_puffer"];
+const BAD_ITEMS=["big_octopus","baby_shark","weird_bug","crack","eel","poop_pollution","toxic_water","dark_cloud","black_bubbles","red_heater","breakage"];
+const ITEM_UI={
+  fish_orange:{emoji:"🐠",label:"pez naranja",zone:"middle",size:[34,52]},
+  fish_blue:{emoji:"🐟",label:"pez azul",zone:"middle",size:[34,52]},
+  fish_puffer:{emoji:"🐡",label:"pez globo",zone:"middle",size:[34,52]},
+  plant:{emoji:"🌿",label:"planta",zone:"bottom",size:[28,44]},
+  treasure:{emoji:"🪙",label:"tesoro",zone:"bottom",size:[26,36]},
+  starfish:{emoji:"⭐",label:"estrella",zone:"bottom",size:[24,34]},
+  shell:{emoji:"🐚",label:"concha",zone:"bottom",size:[24,34]},
+  big_octopus:{emoji:"🐙",label:"pulpo gigante",zone:"middle",size:[34,50]},
+  baby_shark:{emoji:"🦈",label:"tiburon",zone:"middle",size:[38,56]},
+  weird_bug:{emoji:"🪲",label:"bicho raro",zone:"bottom",size:[26,34]},
+  crack:{emoji:"🕳",label:"grieta",zone:"bottom",size:[30,38]},
+  eel:{emoji:"🐍",label:"anguila",zone:"middle",size:[30,42]},
+  poop_pollution:{emoji:"💩",label:"suciedad",zone:"bottom",size:[24,32]},
+  toxic_water:{emoji:"☣",label:"agua toxica",zone:"top",size:[28,38]},
+  dark_cloud:{emoji:"☁",label:"nube negra",zone:"top",size:[28,40]},
+  black_bubbles:{emoji:"●●●",label:"burbujas negras",zone:"top",size:[22,28]},
+  red_heater:{emoji:"♨",label:"calentador rojo",zone:"middle",size:[26,34]},
+  breakage:{emoji:"⚡",label:"rotura",zone:"top",size:[28,38]}
+};
 const state=loadState();
 let session=freshSession();
+let aquarium=freshAquarium();
 const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
 
 function clone(obj){return JSON.parse(JSON.stringify(obj))}
@@ -294,18 +372,29 @@ function loadState(){
       totalAnswered:Number(parsed.totalAnswered||0),
       sourceMode:parsed.sourceMode==="difficult"?"difficult":"tables",
       difficultFacts:Array.isArray(parsed.difficultFacts)?parsed.difficultFacts.filter(item=>item&&Number.isFinite(Number(item.table))&&Number.isFinite(Number(item.factor))).map(item=>({table:Number(item.table),factor:Number(item.factor),result:Number(item.table)*Number(item.factor)})):[],
-      difficultEditorOpen:Boolean(parsed.difficultEditorOpen)
+      difficultEditorOpen:Boolean(parsed.difficultEditorOpen),
+      aquariumEnabled:parsed.aquariumEnabled!==false
     }
   }catch{return clone(DEFAULT_STATE)}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar.",showCorrectAnswer:false,awaitingContinue:false,repeatCurrentOnContinue:false}}
+function freshAquarium(){return{goodItems:[],badItems:[],lives:START_LIVES,progress:0,status:"playing",dirt:0,lastEvent:"La pecera espera tu primera cuenta."}}
 function buildBank(tables){const bank=[];tables.forEach(table=>{for(let factor=1;factor<=10;factor+=1)bank.push({table,factor,result:table*factor})});return bank}
 function buildFactKey(table,factor){return table+"x"+factor}
 function buildSourceBank(){return state.sourceMode==="difficult"?state.difficultFacts.map(item=>clone(item)):buildBank(state.selectedTables)}
 function shuffle(list){const copy=list.slice();for(let i=copy.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const temp=copy[i];copy[i]=copy[j];copy[j]=temp}return copy}
+function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function makeAquariumItem(type){const meta=ITEM_UI[type];const size=rand(meta.size[0],meta.size[1]);let left=rand(6,84);if(meta.zone==="bottom")left=rand(4,88);const depth=meta.zone==="middle"?rand(64,138):meta.zone==="top"?rand(18,72):16;return{type,size,left,depth}}
+function waterGradient(){if(aquarium.status==="lost")return"linear-gradient(180deg,#cfd4d8 0%,#9aa4ab 52%,#7d878f 100%)";const danger=aquarium.dirt||0;const top=[223-Math.min(danger*10,92),246-Math.min(danger*13,120),255-Math.min(danger*18,150)];const mid=[159-Math.min(danger*12,108),227-Math.min(danger*18,138),255-Math.min(danger*26,185)];const bot=[74-Math.min(danger*10,64),183-Math.min(danger*16,118),239-Math.min(danger*22,156)];return `linear-gradient(180deg,rgb(${top.join(",")}) 0%,rgb(${mid.join(",")}) 42%,rgb(${bot.join(",")}) 100%)`}
+function addAquariumLife(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const mainFish=randomFrom(FISH_TYPES);const secondType=randomFrom(GOOD_ITEMS.filter(x=>x!==mainFish));aquarium.goodItems.push(makeAquariumItem(mainFish));aquarium.goodItems.push(makeAquariumItem(secondType));aquarium.dirt=Math.max(0,(aquarium.dirt||0)-1);aquarium.progress=Math.min(WIN_TARGET,aquarium.progress+1);aquarium.lastEvent=`Han entrado ${ITEM_UI[mainFish].label} y ${ITEM_UI[secondType].label}.`;if(aquarium.progress>=WIN_TARGET){aquarium.status="won";aquarium.lastEvent="La pecera esta llena de vida. Has ganado el minijuego.";}}
+function addAquariumProblem(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const type=randomFrom(BAD_ITEMS);aquarium.badItems.push(makeAquariumItem(type));aquarium.lives=Math.max(0,aquarium.lives-1);aquarium.dirt=(aquarium.dirt||0)+1;aquarium.lastEvent=`Ha aparecido ${ITEM_UI[type].label}.`;if(type==="toxic_water"||aquarium.lives===0){aquarium.status="lost";aquarium.lastEvent="La pecera se ha estropeado. Reinicia para empezar otra vez.";}}
+function resetAquarium(){aquarium=freshAquarium()}
+function toggleAquarium(){state.aquariumEnabled=!state.aquariumEnabled;saveState();if(state.aquariumEnabled)resetAquarium();render();setMessage(state.aquariumEnabled?"Pecera activada.":"Pecera desactivada.","neutral")}
+function renderAquarium(){const card=$("#aquariumCard");if(!card)return;card.classList.toggle("hidden",!state.aquariumEnabled);if(!state.aquariumEnabled)return;const tank=$("#aquariumTank"),stage=$("#aquariumStage"),overlay=$("#tankOverlay");tank.style.setProperty("--tank-water",waterGradient());tank.classList.toggle("dead",aquarium.status==="lost");stage.querySelectorAll(".aqua-item,.tank-bubble").forEach(n=>n.remove());for(let i=0;i<(aquarium.status==="lost"?4:10);i+=1){const b=document.createElement("div");b.className="tank-bubble";b.style.left=rand(4,94)+"%";b.style.animationDuration=rand(2400,5200)/1000+"s";b.style.animationDelay=rand(0,1800)/1000+"s";b.style.width=b.style.height=rand(10,18)+"px";if(aquarium.status==="lost")b.style.background="rgba(60,60,60,.35)";stage.appendChild(b)}[...aquarium.goodItems,...aquarium.badItems].forEach(item=>{const meta=ITEM_UI[item.type];const el=document.createElement("div");el.className=`aqua-item ${item.type} ${meta.zone}${BAD_ITEMS.includes(item.type)?" bad":""}`;el.textContent=meta.emoji;el.style.left=item.left+"%";el.style.fontSize=item.size+"px";if(meta.zone==="middle")el.style.bottom=item.depth+"px";if(meta.zone==="top")el.style.top=item.depth+"px";stage.appendChild(el)});const won=aquarium.status==="won",lost=aquarium.status==="lost";overlay.className="tank-overlay"+(won||lost?" visible":"")+(lost?" lose":"");$("#aquariumStateLabel").textContent=won?"Pecera perfecta":lost?"Pecera rota":"Pecera viva";$("#overlayTitle").textContent=won?"GANASTE":"";if(lost)$("#overlayTitle").textContent="OH NO";$("#overlayText").textContent=won?"La has llenado de vida.":lost?"Necesita una nueva partida para recuperarse.":"";$("#aquariumCounter").textContent=`${aquarium.progress}/${WIN_TARGET} · vidas ${aquarium.lives}`;$("#aquariumEvent").textContent=aquarium.lastEvent}
 function nextQuestion(){if(!session.queue.length){const source=session.reviewMode?state.errors.map(item=>clone(item)):buildSourceBank();session.queue=shuffle(source)}session.current=session.queue.shift()||null;session.answer="";session.showCorrectAnswer=false;session.awaitingContinue=false;render()}
-function startGame(reviewMode){if(!reviewMode&&state.sourceMode==="tables"&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(!reviewMode&&state.sourceMode==="difficult"&&!state.difficultFacts.length){setMessage("Primero elige alguna multiplicacion dificil.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay errores para repasar.","bad");return}stopTimer();session=freshSession();session.running=true;session.reviewMode=reviewMode;setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos.":"Partida iniciada. A por muchos puntos.","good");if(state.mode==="time"&&!reviewMode){session.timeLeft=60;session.timeDeadline=Date.now()+60000;renderStats();session.timerId=window.setInterval(updateTimer,250)}nextQuestion()}
+function startGame(reviewMode){if(!reviewMode&&state.sourceMode==="tables"&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(!reviewMode&&state.sourceMode==="difficult"&&!state.difficultFacts.length){setMessage("Primero elige alguna multiplicacion dificil.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay errores para repasar.","bad");return}stopTimer();session=freshSession();resetAquarium();session.running=true;session.reviewMode=reviewMode;setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos.":"Partida iniciada. A por muchos puntos.","good");if(state.mode==="time"&&!reviewMode){session.timeLeft=60;session.timeDeadline=Date.now()+60000;renderStats();session.timerId=window.setInterval(updateTimer,250)}nextQuestion()}
 function stopTimer(){if(session.timerId){clearInterval(session.timerId);session.timerId=null}session.timeDeadline=null}
 function updateTimer(){if(!session.running||state.mode!=="time"||session.reviewMode||!session.timeDeadline)return;const remainingMs=session.timeDeadline-Date.now();const nextTime=Math.max(0,Math.ceil(remainingMs/1000));if(nextTime!==session.timeLeft){session.timeLeft=nextTime;renderStats()}if(remainingMs<=0){session.timeLeft=0;finishTimedGame()}}
 function finishTimedGame(){stopTimer();session.running=false;if(session.score>state.records.time){state.records.time=session.score;saveState();setMessage("Tiempo terminado. Nuevo record en contrarreloj.","good")}else setMessage("Tiempo terminado. Buen intento. Vamos otra vez.","neutral");render()}
@@ -316,7 +405,7 @@ function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["
 function flashStage(tone){const stage=$("#questionStage");stage.classList.remove("good","bad");void stage.offsetWidth;if(tone==="good"||tone==="bad")stage.classList.add(tone)}
 function advanceAfterFeedback(){if(session.running&&(state.mode!=="time"||session.timeLeft>0||session.reviewMode))nextQuestion()}
 function acknowledgeCorrect(){if(!session.awaitingContinue)return;if(session.repeatCurrentOnContinue&&session.current)session.queue.unshift(clone(session.current));session.repeatCurrentOnContinue=false;advanceAfterFeedback()}
-function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render()}
+function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);addAquariumLife();if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);addAquariumProblem();saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render()}
 function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"Respuesta correcta":tone==="bad"?"Respuesta incorrecta":"Esperando partida"}
 function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);state.sourceMode="tables";saveState();render()}
 function toggleDifficultFact(table,factor){const key=buildFactKey(table,factor);const exists=state.difficultFacts.some(item=>buildFactKey(item.table,item.factor)===key);if(exists)state.difficultFacts=state.difficultFacts.filter(item=>buildFactKey(item.table,item.factor)!==key);else state.difficultFacts=[...state.difficultFacts,{table,factor,result:table*factor}].sort((a,b)=>a.table-b.table||a.factor-b.factor);saveState();render()}
@@ -325,8 +414,8 @@ function toggleDifficultEditor(){state.difficultEditorOpen=!state.difficultEdito
 function setMode(mode){state.mode=mode;saveState();$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode);btn.classList.toggle("primary",btn.dataset.mode===mode);btn.classList.toggle("ghost",btn.dataset.mode!==mode)});renderStats()}
 function inputDigit(digit){if(!session.running||session.awaitingContinue||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
 function deleteDigit(){if(!session.running||session.awaitingContinue)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
-function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=false;saveState();setMessage("Saltada. Mira la correcta y pulsa Cierto! para seguir.","bad");flashStage("bad");render()}
-function resetSession(){stopTimer();session=freshSession();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
+function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=false;addAquariumProblem();saveState();setMessage("Saltada. Mira la correcta y pulsa Cierto! para seguir.","bad");flashStage("bad");render()}
+function resetSession(){stopTimer();session=freshSession();resetAquarium();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
 function scrollToTables(){const section=$("#tablesSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
 function scrollToGame(){const section=$("#gameSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
 function renderTables(){const grid=$("#tableGrid"),difficultGrid=$("#difficultGrid");grid.innerHTML="";difficultGrid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}for(let table=1;table<=12;table+=1){for(let factor=1;factor<=10;factor+=1){const btn=document.createElement("button");const active=state.difficultFacts.some(item=>item.table===table&&item.factor===factor);btn.className="fact-btn"+(active?" active":"");btn.textContent=table+"x"+factor;btn.addEventListener("click",()=>toggleDifficultFact(table,factor));difficultGrid.appendChild(btn)}}$("#difficultBtn").classList.toggle("primary",state.sourceMode==="difficult");$("#difficultBtn").classList.toggle("blue",state.sourceMode!=="difficult");$("#editDifficultBtn").classList.toggle("primary",state.difficultEditorOpen);$("#editDifficultBtn").classList.toggle("secondary",!state.difficultEditorOpen);$("#difficultPanel").classList.toggle("open",state.difficultEditorOpen);$("#difficultCount").textContent=state.difficultFacts.length+" seleccionadas";const selected=state.sourceMode==="difficult"?(state.difficultFacts.length?state.difficultFacts.length+" dificiles":"ninguna dificil"):state.selectedTables.length?state.selectedTables.join(", "):"ninguna";$("#selectedTablesFooterText").textContent=selected}
@@ -335,11 +424,13 @@ function renderQuestion(){const label=$("#questionLabel"),question=$("#questionT
 function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Respuesta correcta: "+session.current.result;row.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show")}}
 function renderErrors(){const list=$("#errorList");list.innerHTML="";if(!state.errors.length){const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>Sin errores guardados</div><div class='error-sub'>Cuando falle una cuenta aparecera aqui para repasar.</div></div><div class='error-points'>OK</div>";list.appendChild(item);return}state.errors.forEach(err=>{const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>"+err.table+" x "+err.factor+" = "+err.result+"</div><div class='error-sub'>Ultimo fallo: "+err.lastWrong+"</div></div><div class='error-points'>Repasar</div>";list.appendChild(item)})}
 function renderControls(){const playing=session.running,locked=session.awaitingContinue;$("#checkBtn").disabled=!playing||locked;$("#skipBtn").disabled=!playing||locked;$("#deleteBtn").disabled=!playing||locked;$("#okPadBtn").disabled=!playing||locked;$("#continueBtn").disabled=!playing||!locked;$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing||locked});$("#reviewBtn").disabled=!state.errors.length}
-function render(){renderTables();renderStats();renderQuestion();renderAnswer();renderErrors();renderControls()}
+function renderToolbar(){const btn=$("#aquariumToggleBtn");if(!btn)return;btn.textContent=state.aquariumEnabled?"Pecera: si":"Pecera: no";btn.classList.toggle("primary",state.aquariumEnabled);btn.classList.toggle("secondary",!state.aquariumEnabled)}
+function render(){renderTables();renderStats();renderQuestion();renderAnswer();renderErrors();renderControls();renderToolbar();renderAquarium()}
 
 $("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");
 $("#startBtn").addEventListener("click",()=>startGame(false));
 $("#reviewBtn").addEventListener("click",()=>startGame(true));
+$("#aquariumToggleBtn").addEventListener("click",toggleAquarium);
 $("#chooseTablesBtn").addEventListener("click",scrollToTables);
 $("#playFromTablesBtn").addEventListener("click",()=>{scrollToGame();startGame(false)});
 $("#selectAllBtn").addEventListener("click",()=>{state.selectedTables=Array.from({length:12},(_,i)=>i+1);state.sourceMode="tables";saveState();render()});
@@ -357,6 +448,9 @@ $$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.addEventListener("
 $$(".answer-pad button[data-digit]").forEach(btn=>btn.addEventListener("click",()=>inputDigit(btn.dataset.digit)));
 
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+let lastTouchEnd=0;
+document.addEventListener("touchend",event=>{const now=Date.now();if(now-lastTouchEnd<300)event.preventDefault();lastTouchEnd=now;},{passive:false});
+document.addEventListener("dblclick",event=>event.preventDefault(),{passive:false});
 window.addEventListener("load",()=>{render();setMode(state.mode);setMessage("Partida lista.","neutral");if((state.sourceMode==="tables"&&state.selectedTables.length)||(state.sourceMode==="difficult"&&state.difficultFacts.length))startGame(false)});
 </script>
 </body>
