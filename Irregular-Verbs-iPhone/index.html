@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -155,7 +155,7 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
 .hangman-stat{border-radius:10px;padding:4px 7px;min-width:76px}
 .hangman-caption{font-size:8px;line-height:1}
 .hangman-value{font-size:13px;margin-top:0;line-height:1}
-.hangman-stage{height:225px;border-radius:14px}
+.hangman-stage{height:168px;border-radius:14px}
 .hangman-sun{top:12px;right:16px;width:34px;height:34px;box-shadow:0 0 0 6px rgba(255,216,93,.12)}
 .hangman-cloud.one{top:28px;left:25px;transform:scale(.7);transform-origin:left top}
 .hangman-cloud.two{top:48px;right:78px;transform:scale(.62);transform-origin:right top}
@@ -163,22 +163,22 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
 .hangman-result-card{padding:10px 14px;border-radius:16px}
 .hangman-result-title{font-size:clamp(22px,4vw,34px)}
 .hangman-result-text{margin-top:4px;font-size:11px}
-/* Polished compact gallows. Taller box, longer pole, aligned diagonal brace, larger hanging man. */
-.hangman-part.base{left:24px;bottom:22px;width:118px;height:10px}
-.hangman-part.pole{left:60px;bottom:31px;width:11px;height:166px}
-.hangman-part.beam{left:60px;top:24px;width:150px;height:10px}
-.hangman-part.brace{left:69px;top:70px;width:88px;height:8px;transform:rotate(-48deg);transform-origin:left center}
-.hangman-part.rope{left:202px;top:32px;width:6px;height:34px}
-.hangman-part.head{left:181px;top:64px;width:48px;height:48px;border-width:5px}
-.hangman-part.neck{left:202px;top:111px;width:7px;height:10px}
-.hangman-part.bodyTop{left:202px;top:120px;width:8px;height:35px}
-.hangman-part.bodyBottom{left:202px;top:154px;width:8px;height:26px}
-.hangman-part.leftArm{left:168px;top:135px;width:40px;height:7px;transform:rotate(-34deg)}
-.hangman-part.rightArm{left:206px;top:135px;width:40px;height:7px;transform:rotate(34deg)}
-.hangman-part.leftForearm{left:157px;top:156px;width:33px;height:7px;transform:rotate(22deg)}
-.hangman-part.rightForearm{left:226px;top:156px;width:33px;height:7px;transform:rotate(-22deg)}
-.hangman-part.leftLeg{left:169px;top:179px;width:45px;height:7px;transform:rotate(40deg)}
-.hangman-part.rightLeg{left:198px;top:179px;width:45px;height:7px;transform:rotate(-40deg)}
+/* Compact gallows + hanging man. Legs stay above the base. */
+.hangman-part.base{left:24px;bottom:22px;width:102px;height:9px}
+.hangman-part.pole{left:56px;bottom:29px;width:10px;height:116px}
+.hangman-part.beam{left:56px;top:18px;width:112px;height:9px}
+.hangman-part.brace{left:64px;top:42px;width:66px;height:7px;transform:rotate(-44deg);transform-origin:left center}
+.hangman-part.rope{left:160px;top:26px;width:6px;height:22px}
+.hangman-part.head{left:140px;top:48px;width:42px;height:42px;border-width:5px}
+.hangman-part.neck{left:158px;top:89px;width:7px;height:8px}
+.hangman-part.bodyTop{left:158px;top:96px;width:7px;height:29px}
+.hangman-part.bodyBottom{left:158px;top:124px;width:7px;height:23px}
+.hangman-part.leftArm{left:128px;top:108px;width:35px;height:6px;transform:rotate(-34deg)}
+.hangman-part.rightArm{left:161px;top:108px;width:35px;height:6px;transform:rotate(34deg)}
+.hangman-part.leftForearm{left:118px;top:126px;width:29px;height:6px;transform:rotate(22deg)}
+.hangman-part.rightForearm{left:178px;top:126px;width:29px;height:6px;transform:rotate(-22deg)}
+.hangman-part.leftLeg{left:130px;top:145px;width:39px;height:6px;transform:rotate(40deg)}
+.hangman-part.rightLeg{left:156px;top:145px;width:39px;height:6px;transform:rotate(-40deg)}
 .message{min-height:28px;border-radius:11px;padding:6px 8px;margin-top:5px;font-size:11px;line-height:1.15}
 .help,.study-note{display:none}
 .bottom-tools{margin-top:5px}
@@ -203,14 +203,14 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
   .mode-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .play-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .bottom-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hangman-stage{height:205px}
+  .hangman-stage{height:158px}
 }
 @media (max-height:620px){
   .title{display:none}
   .stats{margin-top:0}
   .hangman-top{display:none}
   .hangman-box{padding:5px}
-  .hangman-stage{height:195px}
+  .hangman-stage{height:150px}
   .message{min-height:24px;font-size:10.5px;padding:5px 7px}
   .base .word{font-size:clamp(22px,3.5vw,31px)}
   .char{font-size:clamp(20px,3.5vw,29px)}
@@ -393,7 +393,6 @@ loadData();rebuild();render();
 </script>
 </body>
 </html>
-
 
 
 
