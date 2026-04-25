@@ -181,7 +181,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
   .subtitle,.hero-badge{display:none!important}
   .toolbar{margin-top:6px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;flex-wrap:nowrap}
   .toolbar button{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:7px 5px;font-size:11px;border-radius:11px;box-shadow:0 5px 12px rgba(26,45,78,.10)}
-  .layout{flex:1 1 auto;min-height:0;margin-top:0;gap:6px;grid-template-columns:minmax(0,1.08fr) minmax(230px,.72fr)}
+  .layout{flex:0 0 auto;min-height:0;margin-top:0;gap:6px;grid-template-columns:minmax(0,1.08fr) minmax(230px,.72fr);align-items:stretch}
   .card,.table-panel{padding:7px;border-radius:18px;box-shadow:0 8px 20px rgba(26,45,78,.10)}
   .section-title{display:none}
   .score-grid{gap:5px;grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -210,7 +210,13 @@ button:disabled{opacity:.42;cursor:not-allowed}
   .answer-pad .pad-btn{min-height:30px;font-size:17px;border-radius:10px;box-shadow:0 4px 10px rgba(26,45,78,.08)}
   .pad-btn.delete{font-size:10px}
   .pad-btn.ok{font-size:13px}
-  .aquarium-card{display:none!important}
+  .aquarium-card{display:flex!important;flex:1 1 auto;min-height:0;margin-top:0;padding:7px;border-radius:18px;flex-direction:column;box-shadow:0 8px 20px rgba(26,45,78,.10)}
+  .aquarium-head{flex:0 0 auto}
+  .aquarium-title{font-size:13px}.aquarium-meta{font-size:10px}
+  .aquarium-tank{flex:1 1 auto;min-height:0;margin-top:5px;padding:8px;border-radius:18px;box-shadow:inset 0 0 0 4px rgba(255,255,255,.25)}
+  .aquarium-stage{height:100%;min-height:120px;border-radius:14px}
+  .aquarium-log{display:none}
+  .aquarium-card.hidden{display:none!important}
   .table-panel{align-self:stretch;min-height:0;overflow:hidden}
   .table-panel .row{margin-bottom:4px}
   .table-panel .section-title{display:block;font-size:13px;margin:0}
@@ -325,27 +331,6 @@ button:disabled{opacity:.42;cursor:not-allowed}
         </div>
       </div>
 
-      <div class="aquarium-card" id="aquariumCard">
-        <div class="aquarium-head">
-          <div>
-            <div class="aquarium-title">Pecera</div>
-            <div class="aquarium-meta" id="aquariumStateLabel">Pecera viva</div>
-          </div>
-          <div class="aquarium-meta" id="aquariumCounter">0/8 · ❤❤❤</div>
-        </div>
-        <div class="aquarium-tank" id="aquariumTank">
-          <div class="aquarium-stage" id="aquariumStage">
-            <div class="tank-sand"></div>
-          </div>
-          <div class="tank-overlay" id="tankOverlay">
-            <div class="panel-win">
-              <div class="overlay-big" id="overlayTitle"></div>
-              <div class="overlay-small" id="overlayText"></div>
-            </div>
-          </div>
-        </div>
-        <div class="aquarium-log" id="aquariumEvent">La pecera espera tu primera cuenta.</div>
-      </div>
     </section>
 
     <aside class="table-panel" id="tablesSection">
@@ -373,6 +358,29 @@ button:disabled{opacity:.42;cursor:not-allowed}
       <div class="hint">Puedes jugar con tablas completas o con una lista personalizada de multiplicaciones difíciles como 8x7, 4x8 o las que quieras.</div>
     </aside>
   </div>
+
+  <div class="aquarium-card" id="aquariumCard">
+        <div class="aquarium-head">
+          <div>
+            <div class="aquarium-title">Pecera</div>
+            <div class="aquarium-meta" id="aquariumStateLabel">Pecera viva</div>
+          </div>
+          <div class="aquarium-meta" id="aquariumCounter">0/8 · ❤❤❤</div>
+        </div>
+        <div class="aquarium-tank" id="aquariumTank">
+          <div class="aquarium-stage" id="aquariumStage">
+            <div class="tank-sand"></div>
+          </div>
+          <div class="tank-overlay" id="tankOverlay">
+            <div class="panel-win">
+              <div class="overlay-big" id="overlayTitle"></div>
+              <div class="overlay-small" id="overlayText"></div>
+            </div>
+          </div>
+        </div>
+        <div class="aquarium-log" id="aquariumEvent">La pecera espera tu primera cuenta.</div>
+      </div>
+
 
   <section class="card" style="margin-top:14px">
     <div class="row">
