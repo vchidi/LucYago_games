@@ -53,60 +53,46 @@ input[type=file]{display:none}
 .char.blank{background:transparent;border:0;box-shadow:none;color:#d6a300;min-width:.6em}
 .char.blank.filled{background:transparent;border:0;color:var(--ink)}
 .char.slash{width:auto;background:transparent;box-shadow:none;padding:0 2px}
-.hangman-box{margin:2px 0 5px!important;background:linear-gradient(135deg,#fffdf7,#f6fbff 54%,#fff6fd);border:1px solid #e8eefc;border-radius:18px;padding:8px!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.75)}
+.hangman-box{margin:-2px 0 10px;background:linear-gradient(135deg,#fffdf7,#f6fbff 54%,#fff6fd);border:2px solid #e8eefc;border-radius:24px;padding:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.75)}
 .hangman-box.off{background:#fff;box-shadow:none}
-.hangman-top{display:flex;align-items:center;justify-content:space-between;gap:5px;flex-wrap:wrap;margin-bottom:5px}
-.hangman-title{font-size:10px;font-weight:900;color:#364152;letter-spacing:.02em;text-transform:uppercase;line-height:1}
-.hangman-stats{display:flex;gap:4px;flex-wrap:wrap}
-.hangman-stat{background:#fff;border-radius:10px;padding:4px 7px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);min-width:76px}
-.hangman-caption{font-size:8px;color:var(--muted);font-weight:700;line-height:1}
-.hangman-value{font-size:13px;font-weight:900;margin-top:0;line-height:1}
-
-.hangman-stage{position:relative;height:200px!important;border-radius:15px;overflow:hidden;background:radial-gradient(circle at 20% 18%,rgba(255,255,255,.96),rgba(255,255,255,0) 28%),radial-gradient(circle at 80% 22%,rgba(255,204,77,.22),rgba(255,204,77,0) 24%),linear-gradient(180deg,#eaf7ff 0%,#f8fbff 62%,#fffaf0 100%)}
+.hangman-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hangman-title{font-size:14px;font-weight:900;color:#364152;letter-spacing:.02em;text-transform:uppercase}
+.hangman-stats{display:flex;gap:8px;flex-wrap:wrap}
+.hangman-stat{background:#fff;border-radius:16px;padding:8px 12px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);min-width:110px}
+.hangman-caption{font-size:11px;color:var(--muted);font-weight:700}
+.hangman-value{font-size:20px;font-weight:900;margin-top:2px}
+.hangman-stage{position:relative;height:300px;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 20% 18%,rgba(255,255,255,.96),rgba(255,255,255,0) 28%),radial-gradient(circle at 80% 22%,rgba(255,204,77,.22),rgba(255,204,77,0) 24%),linear-gradient(180deg,#eaf7ff 0%,#f8fbff 62%,#fffaf0 100%)}
 .hangman-box.off .hangman-stage{background:#fff}
 .hangman-box.off .hangman-title,.hangman-box.off .hangman-stats,.hangman-box.off .hangman-sun,.hangman-box.off .hangman-cloud,.hangman-box.off .hangman-ground,.hangman-box.off .hangman-part{display:none}
-
-.hangman-sun{position:absolute;top:12px;right:16px;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffde9,#ffd85d 60%,#ffb300 100%);box-shadow:0 0 0 6px rgba(255,216,93,.12)}
+.hangman-sun{position:absolute;top:22px;right:26px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffde9,#ffd85d 60%,#ffb300 100%);box-shadow:0 0 0 10px rgba(255,216,93,.14)}
 .hangman-cloud{position:absolute;height:20px;border-radius:999px;background:rgba(255,255,255,.82);box-shadow:24px 0 0 rgba(255,255,255,.82),12px -8px 0 3px rgba(255,255,255,.82)}
-.hangman-cloud.one{top:28px;left:25px;width:42px;transform:scale(.7);transform-origin:left top}
-.hangman-cloud.two{top:48px;right:78px;width:34px;transform:scale(.62);transform-origin:right top}
-.hangman-ground{position:absolute;left:18px;right:18px;bottom:14px!important;height:2px;border-radius:999px;background:linear-gradient(90deg,rgba(148,163,184,.15),rgba(100,116,139,.42),rgba(148,163,184,.15))}
-
-.hangman-result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;pointer-events:none;opacity:0;transform:scale(.94);transition:opacity .25s ease,transform .25s ease}
+.hangman-cloud.one{top:48px;left:34px;width:42px}
+.hangman-cloud.two{top:84px;right:108px;width:34px;transform:scale(.92)}
+.hangman-ground{position:absolute;left:26px;right:26px;bottom:28px;height:3px;border-radius:999px;background:linear-gradient(90deg,rgba(148,163,184,.15),rgba(100,116,139,.42),rgba(148,163,184,.15))}
+.hangman-result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;pointer-events:none;opacity:0;transform:scale(.94);transition:opacity .25s ease,transform .25s ease}
 .hangman-result.visible{opacity:1;transform:scale(1)}
-.hangman-result-card{padding:10px 14px;border-radius:16px;font-weight:900;letter-spacing:.04em;box-shadow:0 20px 36px rgba(31,42,68,.18);backdrop-filter:blur(4px)}
+.hangman-result-card{padding:18px 22px;border-radius:22px;font-weight:900;letter-spacing:.04em;box-shadow:0 20px 36px rgba(31,42,68,.18);backdrop-filter:blur(4px)}
 .hangman-result.win .hangman-result-card{background:linear-gradient(135deg,#fff6b2,#ffe36d,#fffbe6);color:#7a5200;border:2px solid rgba(255,204,77,.55)}
 .hangman-result.lose .hangman-result-card{background:linear-gradient(135deg,#ffe2ea,#ff9fbc,#fff0f4);color:#8d2049;border:2px solid rgba(255,111,181,.45)}
-.hangman-result-title{font-size:clamp(22px,4vw,34px);line-height:1}
-.hangman-result-text{margin-top:4px;font-size:11px;letter-spacing:.01em}
-
+.hangman-result-title{font-size:clamp(30px,5vw,46px);line-height:1}
+.hangman-result-text{margin-top:8px;font-size:14px;letter-spacing:.01em}
 .hangman-part{position:absolute;opacity:.12;transform-origin:center center;transition:opacity .28s ease,transform .28s ease;filter:drop-shadow(0 6px 10px rgba(31,42,68,.15))}
 .hangman-part.visible{opacity:1}
-
-/* Horca más grande y más larga */
-.hangman-part.base{left:24px!important;bottom:22px!important;width:118px!important;height:10px!important;border-radius:999px;background:linear-gradient(90deg,#8a5a2b,#c08445)}
-.hangman-part.pole{left:60px!important;bottom:30px!important;width:11px!important;height:165px!important;border-radius:999px;background:linear-gradient(180deg,#8c5729,#d3954e)}
-.hangman-part.beam{left:60px!important;top:8px!important;width:148px!important;height:10px!important;border-radius:999px;background:linear-gradient(90deg,#9d6331,#dda45b)}
-.hangman-part.brace{left:68px!important;top:39px!important;width:86px!important;height:8px!important;border-radius:999px;background:linear-gradient(90deg,#bd7a3f,#efb26d);transform:rotate(-44deg)!important;transform-origin:left center!important}
-.hangman-part.rope{left:184px!important;top:27px!important;width:6px!important;height:32px!important;border-radius:999px;background:linear-gradient(180deg,#ffd37a,#f2aa21)}
-
-/* Muñeco más grande y colgado */
-.hangman-part.head{left:163px!important;top:58px!important;width:48px!important;height:48px!important;border-radius:50%;border:5px solid var(--pink)!important;background:rgba(255,255,255,.22)}
-.hangman-part.neck{left:184px!important;top:105px!important;width:8px!important;height:9px!important;border-radius:999px;background:linear-gradient(180deg,#ff91c7,#ff6fb5)}
-.hangman-part.bodyTop{left:184px!important;top:113px!important;width:8px!important;height:34px!important;border-radius:999px;background:linear-gradient(180deg,var(--teal),#1786c6)}
-.hangman-part.bodyBottom{left:184px!important;top:146px!important;width:8px!important;height:26px!important;border-radius:999px;background:linear-gradient(180deg,#1786c6,#5dd0de)}
-
-.hangman-part.leftArm{left:149px!important;top:126px!important;width:41px!important;height:7px!important;border-radius:999px;background:linear-gradient(90deg,#4f8cff,#7bb8ff);transform:rotate(-34deg)!important}
-.hangman-part.rightArm{left:187px!important;top:126px!important;width:41px!important;height:7px!important;border-radius:999px;background:linear-gradient(90deg,#7bb8ff,#4f8cff);transform:rotate(34deg)!important}
-.hangman-part.leftForearm{left:136px!important;top:147px!important;width:34px!important;height:7px!important;border-radius:999px;background:linear-gradient(90deg,#53a0ff,#9dd0ff);transform:rotate(22deg)!important}
-.hangman-part.rightForearm{left:209px!important;top:147px!important;width:34px!important;height:7px!important;border-radius:999px;background:linear-gradient(90deg,#9dd0ff,#53a0ff);transform:rotate(-22deg)!important}
-
-.hangman-part.leftLeg{left:151px!important;top:170px!important;width:45px!important;height:7px!important;border-radius:999px;background:linear-gradient(90deg,#28a745,#8fdf85);transform:rotate(40deg)!important}
-.hangman-part.rightLeg{left:181px!important;top:170px!important;width:45px!important;height:7px!important;border-radius:999px;background:linear-gradient(90deg,#8fdf85,#28a745);transform:rotate(-40deg)!important}
-
-}
-
-
+.hangman-part.base{left:36px;bottom:42px;width:132px;height:12px;border-radius:999px;background:linear-gradient(90deg,#8a5a2b,#c08445)}
+.hangman-part.pole{left:78px;bottom:50px;width:14px;height:186px;border-radius:999px;background:linear-gradient(180deg,#8c5729,#d3954e)}
+.hangman-part.beam{left:78px;top:44px;width:144px;height:12px;border-radius:999px;background:linear-gradient(90deg,#9d6331,#dda45b)}
+.hangman-part.brace{left:88px;top:76px;width:86px;height:10px;border-radius:999px;background:linear-gradient(90deg,#bd7a3f,#efb26d);transform:rotate(-44deg);transform-origin:left center}
+.hangman-part.rope{left:210px;top:56px;width:8px;height:34px;border-radius:999px;background:linear-gradient(180deg,#ffd37a,#f2aa21)}
+.hangman-part.head{left:183px;top:88px;width:54px;height:54px;border-radius:50%;border:6px solid var(--pink);background:rgba(255,255,255,.22)}
+.hangman-part.neck{left:205px;top:142px;width:10px;height:14px;border-radius:999px;background:linear-gradient(180deg,#ff91c7,#ff6fb5)}
+.hangman-part.bodyTop{left:205px;top:154px;width:10px;height:44px;border-radius:999px;background:linear-gradient(180deg,var(--teal),#1786c6)}
+.hangman-part.bodyBottom{left:205px;top:196px;width:10px;height:40px;border-radius:999px;background:linear-gradient(180deg,#1786c6,#5dd0de)}
+.hangman-part.leftArm{left:165px;top:170px;width:46px;height:8px;border-radius:999px;background:linear-gradient(90deg,#4f8cff,#7bb8ff);transform:rotate(-34deg)}
+.hangman-part.rightArm{left:208px;top:170px;width:46px;height:8px;border-radius:999px;background:linear-gradient(90deg,#7bb8ff,#4f8cff);transform:rotate(34deg)}
+.hangman-part.leftForearm{left:151px;top:193px;width:38px;height:8px;border-radius:999px;background:linear-gradient(90deg,#53a0ff,#9dd0ff);transform:rotate(22deg)}
+.hangman-part.rightForearm{left:229px;top:193px;width:38px;height:8px;border-radius:999px;background:linear-gradient(90deg,#9dd0ff,#53a0ff);transform:rotate(-22deg)}
+.hangman-part.leftLeg{left:170px;top:236px;width:50px;height:8px;border-radius:999px;background:linear-gradient(90deg,#28a745,#8fdf85);transform:rotate(40deg)}
+.hangman-part.rightLeg{left:202px;top:236px;width:50px;height:8px;border-radius:999px;background:linear-gradient(90deg,#8fdf85,#28a745);transform:rotate(-40deg)}
 .message{min-height:48px;border-radius:16px;padding:10px 12px;background:#fffdf2;color:#694d00;font-weight:700;line-height:1.25;margin-top:10px;font-size:14px}
 .help,.study-note{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.25}
 .ipad-input{position:absolute;left:-9999px;top:auto;width:1px;height:1px;opacity:0;pointer-events:none}
@@ -179,7 +165,7 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
 .hangman-result-text{margin-top:4px;font-size:11px}
 /* Compact gallows + hanging man. Legs stay above the base. */
 .hangman-part.base{left:24px;bottom:22px;width:102px;height:9px}
-.hangman-part.pole{left:56px;bottom:29px;width:10px;height:165px}
+.hangman-part.pole{left:56px;bottom:29px;width:10px;height:116px}
 .hangman-part.beam{left:56px;top:18px;width:112px;height:9px}
 .hangman-part.brace{left:64px;top:42px;width:66px;height:7px;transform:rotate(-44deg);transform-origin:left center}
 .hangman-part.rope{left:160px;top:26px;width:6px;height:22px}
@@ -217,14 +203,14 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
   .mode-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .play-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .bottom-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hangman-stage{height:200px}
+  .hangman-stage{height:158px}
 }
 @media (max-height:620px){
   .title{display:none}
   .stats{margin-top:0}
   .hangman-top{display:none}
   .hangman-box{padding:5px}
-  .hangman-stage{height:200px}
+  .hangman-stage{height:150px}
   .message{min-height:24px;font-size:10.5px;padding:5px 7px}
   .base .word{font-size:clamp(22px,3.5vw,31px)}
   .char{font-size:clamp(20px,3.5vw,29px)}
