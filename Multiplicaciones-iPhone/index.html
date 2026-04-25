@@ -170,6 +170,70 @@ button:disabled{opacity:.42;cursor:not-allowed}
   .correct-answer-row{grid-template-columns:1fr}
   .fact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* Compactación iPad: todo el juego principal visible sin scroll */
+@media (min-width:681px) and (max-width:1180px){
+  html,body{height:100%;overflow:hidden}
+  .app{height:100dvh;max-width:1024px;padding:6px 8px 8px;display:flex;flex-direction:column;gap:6px}
+  .hero{padding:8px 10px;border-radius:18px;flex:0 0 auto}
+  .hero-top{display:block}
+  .title-wrap h1{font-size:28px;line-height:1;margin:0}
+  .subtitle,.hero-badge{display:none!important}
+  .toolbar{margin-top:6px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;flex-wrap:nowrap}
+  .toolbar button{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:7px 5px;font-size:11px;border-radius:11px;box-shadow:0 5px 12px rgba(26,45,78,.10)}
+  .layout{flex:1 1 auto;min-height:0;margin-top:0;gap:6px;grid-template-columns:minmax(0,1.08fr) minmax(230px,.72fr)}
+  .card,.table-panel{padding:7px;border-radius:18px;box-shadow:0 8px 20px rgba(26,45,78,.10)}
+  .section-title{display:none}
+  .score-grid{gap:5px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .score-card{padding:5px 8px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:4px;min-height:34px}
+  .score-label{font-size:9px;letter-spacing:.04em}
+  .score-value{font-size:19px;margin:0;line-height:1}
+  .score-burst{display:none}
+  .question-stage{margin-top:6px;padding:8px 10px;border-radius:18px;box-shadow:0 8px 18px rgba(55,114,255,.18)}
+  .stage-top{gap:5px}
+  .stage-tag{padding:4px 8px;font-size:9px}
+  .lives{padding:4px 7px;font-size:12px}
+  .question{margin-top:4px;font-size:clamp(42px,7vw,66px);line-height:.9}
+  .answer-box{margin-top:5px;padding:7px 8px 8px;border-radius:16px;border-width:2px}
+  .answer-label{font-size:9px}
+  .answer-value{margin-top:1px;font-size:clamp(42px,6vw,62px);line-height:.9;min-height:.9em}
+  .correct-answer-row{margin-top:5px;grid-template-columns:minmax(0,1fr) auto;gap:5px}
+  .correct-answer{padding:6px 8px;border-radius:12px;font-size:16px}
+  .continue-btn{padding:6px 9px;border-radius:12px;font-size:14px}
+  .feedback-banner{margin-top:5px;padding:5px 8px;min-height:30px;font-size:13px;border-radius:12px}
+  .feedback-row.compact-hidden{display:none!important}
+  .controls{gap:5px;margin-top:5px}
+  .controls .action-btn{padding:7px 6px;font-size:11px;border-radius:11px;box-shadow:0 5px 12px rgba(26,45,78,.10)}
+  .answer-pad-shell{margin-top:5px;padding:5px;border-radius:14px}
+  .answer-pad-title{display:none}
+  .answer-pad{gap:4px;grid-template-columns:repeat(6,minmax(0,1fr))}
+  .answer-pad .pad-btn{min-height:30px;font-size:17px;border-radius:10px;box-shadow:0 4px 10px rgba(26,45,78,.08)}
+  .pad-btn.delete{font-size:10px}
+  .pad-btn.ok{font-size:13px}
+  .aquarium-card{display:none!important}
+  .table-panel{align-self:stretch;min-height:0;overflow:hidden}
+  .table-panel .row{margin-bottom:4px}
+  .table-panel .section-title{display:block;font-size:13px;margin:0}
+  #selectedTablesFooterText{font-size:11px}
+  .table-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:5px}
+  .table-btn{padding:7px 3px;border-radius:10px;box-shadow:0 5px 12px rgba(26,45,78,.10)}
+  .table-btn strong{font-size:17px}
+  .table-btn span{display:none}
+  .table-mode-controls{margin-top:5px}
+  .difficult-panel{margin-top:5px;padding:6px;border-radius:14px}
+  .difficult-head{margin-bottom:4px;font-size:11px}
+  .difficult-count{font-size:10px}
+  .fact-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;max-height:180px}
+  .fact-btn{padding:5px 3px;border-radius:9px;font-size:11px}
+  .hint{display:none}
+  body>.app>section.card:last-child{display:none!important}
+}
+@media (max-width:680px){
+  .toolbar{flex-wrap:nowrap;overflow-x:auto;gap:5px}.toolbar button{white-space:nowrap;padding:8px 9px;font-size:12px}
+  .score-card{padding:7px 8px}.score-value{font-size:20px}.answer-pad{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.answer-pad .pad-btn{min-height:30px}
+  .subtitle,.hero-badge,.feedback-row.compact-hidden{display:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -178,17 +242,17 @@ button:disabled{opacity:.42;cursor:not-allowed}
     <div class="hero-top">
       <div class="title-wrap">
         <h1>Multiplicaciones</h1>
-        <div class="subtitle">Juego rapido, visual y sin teclado del sistema: todo se responde desde el panel numerico en pantalla.</div>
+        
       </div>
-      <div class="hero-badge">Modo iPhone</div>
+      
     </div>
     <div class="toolbar">
       <button class="action-btn secondary" id="menuBtn">Inicio</button>
       <button class="mode-btn primary active" data-mode="practice">Practica</button>
-      <button class="mode-btn ghost" data-mode="time">Contrarreloj 60 s</button>
-      <button class="action-btn blue" id="reviewBtn">Repasar errores</button>
-      <button class="action-btn secondary" id="aquariumToggleBtn">Pecera: si</button>
-      <button class="action-btn secondary" id="chooseTablesBtn">Elige las tablas</button>
+      <button class="mode-btn ghost" data-mode="time">60 s</button>
+      <button class="action-btn blue" id="reviewBtn">Errores</button>
+      <button class="action-btn secondary" id="aquariumToggleBtn">Pecera</button>
+      <button class="action-btn secondary" id="chooseTablesBtn">Tablas</button>
       <button class="action-btn primary" id="startBtn">Jugar</button>
     </div>
   </section>
@@ -229,21 +293,21 @@ button:disabled{opacity:.42;cursor:not-allowed}
         </div>
       </div>
 
-      <div class="feedback-banner neutral" id="messageBox">Elige las tablas y pulsa Jugar.</div>
-      <div class="feedback-row">
+      <div class="feedback-banner neutral" id="messageBox">Tablas y pulsa Jugar.</div>
+      <div class="feedback-row compact-hidden">
         <div class="badge" id="statusBadge">Esperando partida</div>
       </div>
 
       <div class="controls">
-        <button class="action-btn secondary" id="checkBtn">Comprobar</button>
+        <button class="action-btn secondary" id="checkBtn">OK</button>
         <button class="action-btn secondary" id="skipBtn">Saltar</button>
-        <button class="action-btn danger" id="resetBtn">Reiniciar</button>
+        <button class="action-btn danger" id="resetBtn">Reset</button>
       </div>
 
       <div class="answer-pad-shell">
         <div class="answer-pad-title">
-          <strong>Teclado numerico</strong>
-          <span>Usa solo este panel</span>
+          <strong>Teclado</strong>
+          <span></span>
         </div>
         <div class="answer-pad">
           <button class="pad-btn" data-digit="7">7</button>
@@ -286,7 +350,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
 
     <aside class="table-panel" id="tablesSection">
       <div class="row">
-        <h2 class="section-title" style="margin:0">Elige las tablas</h2>
+        <h2 class="section-title" style="margin:0">Tablas</h2>
         <span id="selectedTablesFooterText" style="color:var(--muted);font-weight:900">2</span>
       </div>
       <div class="table-grid" id="tableGrid"></div>
@@ -378,7 +442,7 @@ function loadState(){
   }catch{return clone(DEFAULT_STATE)}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Elige las tablas y pulsa Jugar.",showCorrectAnswer:false,awaitingContinue:false,repeatCurrentOnContinue:false}}
+function freshSession(){return{running:false,reviewMode:false,score:0,streak:0,timeLeft:60,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Tablas y pulsa Jugar.",showCorrectAnswer:false,awaitingContinue:false,repeatCurrentOnContinue:false}}
 function freshAquarium(){return{goodItems:[],badItems:[],lives:START_LIVES,progress:0,status:"playing",dirt:0,lastEvent:"La pecera espera tu primera cuenta."}}
 function buildBank(tables){const bank=[];tables.forEach(table=>{for(let factor=1;factor<=10;factor+=1)bank.push({table,factor,result:table*factor})});return bank}
 function buildFactKey(table,factor){return table+"x"+factor}
@@ -406,7 +470,7 @@ function flashStage(tone){const stage=$("#questionStage");stage.classList.remove
 function advanceAfterFeedback(){if(session.running&&(state.mode!=="time"||session.timeLeft>0||session.reviewMode))nextQuestion()}
 function acknowledgeCorrect(){if(!session.awaitingContinue)return;if(session.repeatCurrentOnContinue&&session.current)session.queue.unshift(clone(session.current));session.repeatCurrentOnContinue=false;advanceAfterFeedback()}
 function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);addAquariumLife();if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);addAquariumProblem();saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render()}
-function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"Respuesta correcta":tone==="bad"?"Respuesta incorrecta":"Esperando partida"}
+function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"OK":tone==="bad"?"Revisar":"Listo"}
 function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);state.sourceMode="tables";saveState();render()}
 function toggleDifficultFact(table,factor){const key=buildFactKey(table,factor);const exists=state.difficultFacts.some(item=>buildFactKey(item.table,item.factor)===key);if(exists)state.difficultFacts=state.difficultFacts.filter(item=>buildFactKey(item.table,item.factor)!==key);else state.difficultFacts=[...state.difficultFacts,{table,factor,result:table*factor}].sort((a,b)=>a.table-b.table||a.factor-b.factor);saveState();render()}
 function setSourceMode(mode){state.sourceMode=mode;saveState();render()}
@@ -421,10 +485,10 @@ function scrollToGame(){const section=$("#gameSection");if(section)section.scrol
 function renderTables(){const grid=$("#tableGrid"),difficultGrid=$("#difficultGrid");grid.innerHTML="";difficultGrid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}for(let table=1;table<=12;table+=1){for(let factor=1;factor<=10;factor+=1){const btn=document.createElement("button");const active=state.difficultFacts.some(item=>item.table===table&&item.factor===factor);btn.className="fact-btn"+(active?" active":"");btn.textContent=table+"x"+factor;btn.addEventListener("click",()=>toggleDifficultFact(table,factor));difficultGrid.appendChild(btn)}}$("#difficultBtn").classList.toggle("primary",state.sourceMode==="difficult");$("#difficultBtn").classList.toggle("blue",state.sourceMode!=="difficult");$("#editDifficultBtn").classList.toggle("primary",state.difficultEditorOpen);$("#editDifficultBtn").classList.toggle("secondary",!state.difficultEditorOpen);$("#difficultPanel").classList.toggle("open",state.difficultEditorOpen);$("#difficultCount").textContent=state.difficultFacts.length+" seleccionadas";const selected=state.sourceMode==="difficult"?(state.difficultFacts.length?state.difficultFacts.length+" dificiles":"ninguna dificil"):state.selectedTables.length?state.selectedTables.join(", "):"ninguna";$("#selectedTablesFooterText").textContent=selected}
 function renderStats(){$("#timeValue").textContent=session.reviewMode?"-":state.mode==="time"?session.running?session.timeLeft+"s":"60s":"-";$("#scoreValue").textContent=session.score;$("#streakValue").textContent=session.streak;$("#scoreBurst").textContent="+"+session.lastDelta;$("#practiceRecord").textContent=state.records.practice;$("#timeRecord").textContent=state.records.time;$("#answeredValue").textContent=state.totalAnswered;$("#errorCount").textContent=state.errors.length;$("#starsView").innerHTML=session.streak>=6?"&#11088;&#11088;&#11088;":session.streak>=3?"&#11088;&#11088;&#9734;":session.streak>=1?"&#11088;&#9734;&#9734;":"&#9734;&#9734;&#9734;"}
 function renderQuestion(){const label=$("#questionLabel"),question=$("#questionText");if(!session.current){label.textContent="Listo para jugar";question.textContent="2 x 7";return}label.textContent=session.reviewMode?"Repasa este error":"Resuelve ahora";question.textContent=session.current.table+" x "+session.current.factor}
-function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Respuesta correcta: "+session.current.result;row.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show")}}
+function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Correcta: "+session.current.result;row.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show")}}
 function renderErrors(){const list=$("#errorList");list.innerHTML="";if(!state.errors.length){const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>Sin errores guardados</div><div class='error-sub'>Cuando falle una cuenta aparecera aqui para repasar.</div></div><div class='error-points'>OK</div>";list.appendChild(item);return}state.errors.forEach(err=>{const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>"+err.table+" x "+err.factor+" = "+err.result+"</div><div class='error-sub'>Ultimo fallo: "+err.lastWrong+"</div></div><div class='error-points'>Repasar</div>";list.appendChild(item)})}
 function renderControls(){const playing=session.running,locked=session.awaitingContinue;$("#checkBtn").disabled=!playing||locked;$("#skipBtn").disabled=!playing||locked;$("#deleteBtn").disabled=!playing||locked;$("#okPadBtn").disabled=!playing||locked;$("#continueBtn").disabled=!playing||!locked;$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing||locked});$("#reviewBtn").disabled=!state.errors.length}
-function renderToolbar(){const btn=$("#aquariumToggleBtn");if(!btn)return;btn.textContent=state.aquariumEnabled?"Pecera: si":"Pecera: no";btn.classList.toggle("primary",state.aquariumEnabled);btn.classList.toggle("secondary",!state.aquariumEnabled)}
+function renderToolbar(){const btn=$("#aquariumToggleBtn");if(!btn)return;btn.textContent=state.aquariumEnabled?"Pecera":"Pecera no";btn.classList.toggle("primary",state.aquariumEnabled);btn.classList.toggle("secondary",!state.aquariumEnabled)}
 function render(){renderTables();renderStats();renderQuestion();renderAnswer();renderErrors();renderControls();renderToolbar();renderAquarium()}
 
 $("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");
