@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -45,7 +45,7 @@ input[type=file]{display:none}
 .spanish{margin-top:8px;font-size:clamp(34px,6vw,58px);font-weight:900;letter-spacing:-.04em}.smallnote{margin-top:8px;color:var(--muted);line-height:1.4}
 .word-zone{margin-top:18px;padding:18px;border-radius:24px;background:#f7fbff;border:1px solid #e2eef7}.word-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.word-title{font-weight:900;font-size:18px}
 .status{padding:8px 12px;border-radius:999px;font-weight:900;font-size:12px;background:#effbf1;color:#2c7a4b}
-.letters{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}.tile{min-width:44px;height:56px;padding:0 6px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:900;text-transform:lowercase}.tile.fixed{background:#edf7ff;color:#4b87c2;border:1px solid #d6ebfb}.tile.blank{background:#fff7dc;border:2px dashed #f4c85a;color:transparent}.tile.blank.filled{background:#fff;border:2px solid #dbe8f2;color:var(--text)}.tile.space{min-width:16px;background:transparent;border:0}
+.letters{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}.tile{min-width:44px;height:56px;padding:0 6px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:900;text-transform:lowercase}.tile.fixed{background:#edf7ff;color:#4b87c2;border:1px solid #d6ebfb}.tile.blank{background:#fff7dc;border:2px dashed #f4c85a;color:transparent}.tile.blank.filled{background:#fff;border:2px solid #dbe8f2;color:var(--text)}.tile.wrong{background:#ffe3e3!important;border-color:#ff9d9d!important;color:#7a1f1f!important}.tile.solution{background:#dff8df!important;border-color:#85db8a!important;color:#195d28!important}.tile.space{min-width:16px;background:transparent;border:0}
 .message{margin-top:16px;padding:14px 16px;border-radius:18px;background:#f3fff4;border:1px solid #d4efd8;min-height:56px;line-height:1.35;font-weight:700}.progress{height:12px;border-radius:999px;background:#e9f4fb;overflow:hidden;margin-top:12px}.bar{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),#41c86d);transition:width .25s ease}
 .side-title{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:900}.side-big{margin-top:8px;font-size:42px;font-weight:900}.side-game-card{padding:22px;background:linear-gradient(180deg,#fff,#f5fffb)}.panel-mini{padding:16px;border-radius:20px;background:#fff;border:1px solid var(--line)}
 .football-score{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:18px 20px;border-radius:24px;background:linear-gradient(135deg,#ffffff,#eefaff);border:1px solid var(--line);margin-top:14px}.football-team{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px}.football-team.right{justify-content:flex-end}.football-crest{width:26px;height:26px;border-radius:50%}.football-crest.yago{background:#2f7bff}.football-crest.rival{background:#ff5b69}.football-score-value{font-size:48px;font-weight:900;line-height:1}
@@ -97,6 +97,88 @@ html,body{height:var(--compact-vh);min-height:0;overflow:hidden;overscroll-behav
 body::before{display:none}.wrap{height:var(--compact-vh);max-width:none;width:100%;padding:6px;display:flex;flex-direction:column;gap:6px;overflow:hidden}.hero,.panel{border-radius:18px;box-shadow:0 8px 22px rgba(72,142,104,.11)}.hero{height:var(--hero-h);padding:8px 10px;flex:0 0 auto;overflow:hidden}.panel{margin:0;padding:8px;flex:1 1 auto;min-height:0;overflow:hidden}.badge{padding:4px 8px;font-size:9px}.title{margin:2px 0 0;font-size:clamp(20px,2.7vw,30px);line-height:1}.subtitle{display:none}.stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:6px}.stat{padding:5px 7px;border-radius:12px}.k{font-size:8px}.v{margin-top:1px;font-size:17px;line-height:1}.controls{margin-top:6px;gap:5px;flex-wrap:nowrap;overflow-x:auto}.controls button,.controls label.btn,.controls select.select-pill,button,label.btn,select.select-pill{border-radius:10px;padding:6px 8px;font-size:11px;line-height:1.05;box-shadow:none}.game-grid{height:100%;min-height:0;display:grid;grid-template-columns:minmax(300px,.72fr) minmax(420px,1.28fr);gap:8px;align-items:stretch;overflow:hidden}.card{border-radius:18px;min-height:0}.clue-card{height:100%;padding:10px;display:flex;flex-direction:column;overflow:hidden}.label{font-size:9px}.spanish{margin-top:2px;font-size:clamp(24px,4.2vw,42px);line-height:.95}.smallnote{margin-top:4px;font-size:11px;line-height:1.18}.word-zone{margin-top:8px;padding:10px;border-radius:16px}.word-head{margin-bottom:7px}.word-title{font-size:14px}.status{padding:5px 8px;font-size:10px}.letters{gap:5px}.tile{min-width:32px;height:38px;border-radius:11px;font-size:24px}.progress{height:8px;margin-top:8px}.actions{margin-top:8px;gap:5px}.message{margin-top:8px;padding:8px 10px;border-radius:12px;min-height:38px;font-size:13px;line-height:1.18}.mini{display:none}.match-stage{height:100%;min-height:0;margin:0;overflow:hidden}.side-game-card{height:100%;padding:10px;display:grid;grid-template-rows:auto auto 1fr;gap:6px;overflow:hidden}.side-title{font-size:9px}.side-big{display:none}.football-score{margin-top:0;padding:8px 10px;border-radius:16px}.football-team{font-size:14px}.football-crest{width:18px;height:18px}.football-score-value{font-size:28px}.football-panel{height:100%;min-height:0;margin-top:0;display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:8px}.football-field{height:100%;min-height:260px;max-height:var(--field-h);border-radius:22px;padding:12px}.football-field::before{inset:10px;border-width:3px;border-radius:18px}.football-mid{left:10px;right:10px;height:3px}.football-band-label{display:none}.football-player{width:50px;height:50px}.football-player-mark{font-size:16px}.football-player-role{font-size:8px}.football-player-name{min-width:70px;padding:4px 7px;font-size:10px}.football-ball{width:30px;height:30px;margin-left:-15px;margin-top:-15px;border-width:3px}.football-status-grid{height:100%;min-height:0;grid-template-columns:1fr;grid-auto-rows:min-content;gap:6px;overflow:hidden}.football-status{padding:8px 10px;border-radius:14px}.football-status .v{font-size:18px;margin-top:2px}.panel-mini{padding:8px;border-radius:14px}.football-log{max-height:82px;gap:5px}.football-log-item{padding:6px 8px;border-radius:10px;font-size:11px}.football-editor-panel,.footer-tools{display:none!important}.football-banner-title{font-size:clamp(30px,4vw,48px)}.football-banner-text{font-size:14px}
 body.keyboard-open{--hero-h:48px}body.keyboard-open .hero{padding:5px 8px}body.keyboard-open .badge,body.keyboard-open .stats,body.keyboard-open #menuBtn,body.keyboard-open #modeClassicBtn,body.keyboard-open #modeBlindBtn,body.keyboard-open #commentaryBtn,body.keyboard-open #shuffleBtn,body.keyboard-open #restartBtn,body.keyboard-open #noGameBtn,body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect,body.keyboard-open #regenTeamsBtn{display:none!important}body.keyboard-open .title{font-size:18px}body.keyboard-open .controls{position:absolute;right:10px;top:8px;margin:0;max-width:46%;justify-content:flex-end}body.keyboard-open .controls button{padding:6px 8px;font-size:10px}body.keyboard-open .panel{padding:5px}body.keyboard-open .game-grid{grid-template-columns:minmax(270px,.8fr) minmax(330px,1.2fr);gap:5px}body.keyboard-open .clue-card{padding:7px}body.keyboard-open .spanish{font-size:clamp(22px,3.5vw,32px)}body.keyboard-open .word-zone{margin-top:5px;padding:7px}body.keyboard-open .tile{min-width:26px;height:31px;font-size:19px;border-radius:8px}body.keyboard-open .word-head{margin-bottom:4px}body.keyboard-open .word-title{font-size:12px}body.keyboard-open .progress{height:6px;margin-top:5px}body.keyboard-open .actions{margin-top:5px}body.keyboard-open .actions button{padding:6px 7px;font-size:10px}body.keyboard-open .message{margin-top:5px;min-height:30px;padding:6px 8px;font-size:11px}body.keyboard-open .football-score{padding:5px 8px}body.keyboard-open .football-score-value{font-size:22px}body.keyboard-open .football-team{font-size:11px}body.keyboard-open .football-panel{grid-template-columns:minmax(0,1fr) 132px;gap:5px}body.keyboard-open .football-field{min-height:190px;border-radius:18px;padding:8px}body.keyboard-open .football-player{width:39px;height:39px}body.keyboard-open .football-player-name{min-width:54px;font-size:8px;padding:3px 5px}body.keyboard-open .football-player-mark{font-size:13px}body.keyboard-open .football-player-role{display:none}body.keyboard-open .football-ball{width:24px;height:24px;margin-left:-12px;margin-top:-12px}body.keyboard-open .football-status{padding:5px 7px}body.keyboard-open .football-status .v{font-size:14px}body.keyboard-open .panel-mini{display:none}body.keyboard-open .football-status-grid .football-status:nth-child(n+3){display:none}
 @media (max-width:760px){.game-grid,body.keyboard-open .game-grid{grid-template-columns:1fr}.match-stage{display:none}.hero{height:96px}.stats{grid-template-columns:repeat(5,1fr)}.controls{display:none}.tile{min-width:30px;height:36px;font-size:22px}}
+
+/* === Claridad de juego: muñecos, campo limpio y explicación de duelos === */
+.football-banner{display:none!important}
+.football-band-label{display:none!important}
+.football-player{border-radius:42% 42% 46% 46%;overflow:visible}
+.football-player-avatar{display:none!important}
+.football-player-fallback{font-size:30px;line-height:1}
+.football-player-doll{filter:drop-shadow(0 4px 2px rgba(0,0,0,.18))}
+.football-player-role,.football-player-mark{display:none!important}
+.football-player-name{background:rgba(255,255,255,.96);box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.football-why{padding:8px;border-radius:14px;background:#f7fbff;border:1px solid var(--line);font-size:11px;line-height:1.25;font-weight:800}
+.football-why-title{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900;margin-bottom:5px}
+.football-duel-bars{display:grid;gap:4px;margin-top:6px}
+.football-duel-row{display:grid;grid-template-columns:54px 1fr 24px;gap:6px;align-items:center}
+.football-duel-track{height:7px;border-radius:999px;background:#e7f1f5;overflow:hidden}
+.football-duel-fill{height:100%;width:50%;border-radius:999px;background:linear-gradient(90deg,#59b8ff,#41c86d)}
+.football-duel-fill.bad{background:linear-gradient(90deg,#ffa2a2,#ffcf60)}
+body.keyboard-open .football-why{font-size:10px;padding:6px}
+body.keyboard-open .football-duel-bars{display:none}
+</style>
+
+<style id="football-doll-layout-fixes">
+/* Boceto nuevo: panel de partido a la izquierda y campo más ancho */
+.football-panel{grid-template-columns:230px minmax(0,1fr)!important;align-items:stretch}
+.football-status-grid{order:1}.football-field{order:2}
+.football-field .football-banner{display:none!important}
+/* Muñecos dibujados, dos equipos diferenciados y sin etiqueta tipo pestaña */
+.football-player-wrap{gap:1px!important;z-index:3}
+.football-player{border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;width:54px!important;height:64px!important}
+.football-player.has-ball{transform:none!important;box-shadow:none!important}.football-player::after{display:none!important}
+.football-player-name{margin-top:-5px!important;min-width:0!important;padding:0 2px!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#fff!important;text-shadow:0 2px 4px rgba(0,0,0,.55);font-size:11px!important;line-height:1!important}
+.player-doll{position:relative;width:42px;height:58px;filter:drop-shadow(0 7px 4px rgba(0,0,0,.24))}
+.player-doll .head{position:absolute;left:12px;top:1px;width:18px;height:18px;border-radius:50%;background:#f3b176;border:2px solid rgba(75,42,18,.25)}
+.player-doll .hair{position:absolute;left:10px;top:-2px;width:22px;height:12px;border-radius:12px 12px 7px 7px;background:#5b3218;z-index:2}
+.player-doll .body{position:absolute;left:9px;top:20px;width:24px;height:25px;border-radius:9px 9px 7px 7px;border:2px solid rgba(0,0,0,.18)}
+.player-doll .arm{position:absolute;top:24px;width:9px;height:22px;border-radius:9px;background:#f3b176}.player-doll .arm.l{left:2px;transform:rotate(18deg)}.player-doll .arm.r{right:2px;transform:rotate(-18deg)}
+.player-doll .leg{position:absolute;top:43px;width:10px;height:17px;border-radius:6px;background:#26334a}.player-doll .leg.l{left:10px;transform:rotate(8deg)}.player-doll .leg.r{right:10px;transform:rotate(-8deg)}
+.player-doll .boot{position:absolute;top:56px;width:13px;height:5px;border-radius:5px;background:#151515}.player-doll .boot.l{left:7px}.player-doll .boot.r{right:7px}
+.football-player.yago .player-doll .body{background:linear-gradient(180deg,#2f83ff 0 58%,#103d9d 58%)}
+.football-player.rival .player-doll .body{background:linear-gradient(180deg,#ff513f 0 58%,#202020 58%)}
+.football-player.yago .player-doll .hair{background:#6b3a18}.football-player.rival .player-doll .hair{background:#171717}
+.football-player.rival .player-doll .head{background:#f1a45f}.football-player.yago .player-doll .head{background:#f6bf85}
+.football-player-wrap.near-ball .player-doll{animation:dollRun .5s ease-in-out infinite alternate}.football-player-wrap.celebrate .player-doll{animation:dollCelebrate .72s ease-in-out 2}.football-player-wrap.defend .player-doll{animation:dollDefend .45s ease-in-out 1}
+@keyframes dollRun{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-5px) rotate(2deg)}}
+@keyframes dollCelebrate{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-13px) scale(1.08)}70%{transform:rotate(-8deg)}}
+@keyframes dollDefend{50%{transform:scale(1.12) translateX(-4px)}}
+/* Balón sin rotación ni efecto raro; nunca debajo del jugador */
+.football-ball.pass,.football-ball.shot,.football-ball.goal,.football-ball.save,.football-ball.steal{animation:none!important}
+.football-ball.moving{transform:translateY(-8px) scale(1.08)!important}
+/* Panel izquierdo compacto para iPad */
+@media (max-width:1180px){.football-panel{grid-template-columns:176px minmax(0,1fr)!important}.football-log{max-height:118px}.football-status-grid{gap:5px}.football-status,.panel-mini{padding:7px 8px}.football-status .v{font-size:15px!important}.football-log-item{font-size:10px!important;line-height:1.18}}
+body.keyboard-open .football-panel{grid-template-columns:118px minmax(0,1fr)!important}
+body.keyboard-open .football-status-grid .football-status:nth-child(n+3){display:block!important}
+body.keyboard-open .football-status-grid .panel-mini{display:block!important;padding:4px!important}
+body.keyboard-open body.keyboard-open .football-log{max-height:44px!important}.football-why-title{font-size:9px;text-transform:uppercase;color:#5e7b70;font-weight:900;margin-bottom:2px}
+body.keyboard-open #builderEvent{font-size:9px!important;line-height:1.08!important}
+</style>
+
+<style id="requested-football-v2-overrides">
+/* Ajustes solicitados: bloque de partido a la izquierda, campo más ancho, sin texto encima del campo */
+.clue-card > .label{display:none!important}
+.clue-card .football-status-grid{margin-top:8px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;overflow:hidden;max-height:190px}
+.clue-card .football-status{padding:7px 8px;border-radius:12px}
+.clue-card .football-status .k{font-size:8px}
+.clue-card .football-status .v{font-size:13px;line-height:1.05}
+.clue-card .panel-mini{display:block;padding:7px;border-radius:12px;min-height:0}
+.clue-card .panel-mini .smallnote{font-size:10px;line-height:1.18;margin-top:3px}
+.clue-card .football-log{max-height:48px;gap:3px}
+.clue-card .football-log-item{padding:4px 6px;border-radius:8px;font-size:9px;line-height:1.12}
+.football-panel{grid-template-columns:1fr!important}
+.football-panel > .football-status-grid{display:none!important}
+.football-banner{display:none!important}
+.football-ball.pass,.football-ball.shot,.football-ball.goal,.football-ball.save,.football-ball.steal{animation:none!important}
+.football-ball{transition:left .75s cubic-bezier(.22,.9,.24,1),top .75s cubic-bezier(.22,.9,.24,1),transform .22s ease, box-shadow .22s ease!important}
+body.keyboard-open .clue-card .football-status-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:120px;gap:4px}
+body.keyboard-open .clue-card .football-status{padding:4px 6px}
+body.keyboard-open .clue-card .football-status .v{font-size:11px}
+body.keyboard-open .clue-card .panel-mini{padding:4px 5px}
+body.keyboard-open .clue-card .panel-mini .smallnote{font-size:8.5px}
+body.keyboard-open .clue-card .football-log{max-height:34px}
+body.keyboard-open .clue-card .football-log-item{font-size:8px;padding:3px 4px}
+body.keyboard-open .football-panel{grid-template-columns:1fr!important}
 </style>
 </head>
 <body>
@@ -184,8 +266,8 @@ body.keyboard-open{--hero-h:48px}body.keyboard-open .hero{padding:5px 8px}body.k
               <div class="football-status"><div class="k">Posesión</div><div class="v" id="footballPossession">Yago</div></div>
               <div class="football-status"><div class="k">Zona</div><div class="v" id="footballZone">Defensa</div></div>
               <div class="panel-mini">
-                <div class="side-title">Última jugada</div>
-                <div class="smallnote" id="builderEvent">Preparando el saque inicial.</div>
+                <div class="side-title">Por qué pasó</div>
+                <div class="football-why" id="builderEvent">Acierto = oportunidad. Luego hay duelo: tu jugada contra defensa rival.</div>
               </div>
               <div class="panel-mini">
                 <div class="side-title">Posesión y línea</div>
@@ -358,7 +440,7 @@ function buildTeamFromPool(pool,teamId,usedIds=new Set()){
   const yagoCandidate=teamId==='yago'?available.find(player=>normalizeText(player.name)==='yago'):null;
   if(yagoCandidate){
     const chosenLine=chooseYagoLine(slots);
-    teamPlayers.push({...makeEffectivePlayer(yagoCandidate),teamId,line:chosenLine,mark:'YAGO',side:'center'});
+    teamPlayers.push({...makeEffectivePlayer(yagoCandidate),teamId,line:chosenLine,mark:'',side:'center'});
     slots[chosenLine]=Math.max(0,slots[chosenLine]-1);
     usedIds.add(yagoCandidate.id);
   }
@@ -373,10 +455,7 @@ function buildTeamFromPool(pool,teamId,usedIds=new Set()){
       teamPlayers.push({...makeEffectivePlayer(candidate.player),teamId,line:lineKey,mark:'',side:'center'});
     }
   });
-  return teamPlayers.map((player,index)=>{
-    const prefix=player.line==='goalkeeper'?'GK':player.line==='defense'?'D':player.line==='midfield'?'M':'A';
-    return {...player,mark:player.mark||`${prefix}${teamPlayers.filter(p=>p.line===player.line).indexOf(player)+1}`,id:`${teamId}-${player.id}-${index}`};
-  });
+  return teamPlayers.map((player,index)=>({...player,mark:'',id:`${teamId}-${player.id}-${index}`}));
 }
 function validatePlayersPool(pool){
   if(!Array.isArray(pool)||pool.length<12) throw new Error('Necesitas al menos 12 jugadores para crear los dos equipos.');
@@ -387,7 +466,7 @@ function loadSaved(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){con
 function saveData(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(rawData));localStorage.setItem(STORAGE_NAME,datasetName);localStorage.setItem(PLAYERS_STORAGE_KEY,JSON.stringify(playersData));localStorage.setItem(PLAYERS_STORAGE_NAME,playersDatasetName);localStorage.setItem(FORMATION_STORAGE_KEY,formationKey);localStorage.setItem(YAGO_POSITION_STORAGE_KEY,preferredYagoLine);}catch{}}
 function buildDataset(){const cleaned=rawData.map(cleanEntry).filter(Boolean);window.datasetStates=cleaned.map(makeState);if(index>=window.datasetStates.length) index=0;}
 function current(){return window.datasetStates[index]}
-function visibleCells(state){return state.english.split('').map((ch,i)=>{if(ch===' ') return {type:'space',value:''};if(state.pattern[i]==='_') return {type:state.guess[i]?'filled':'blank',value:state.guess[i]||'•'};return {type:'fixed',value:ch};});}
+function visibleCells(state){return state.english.split('').map((ch,i)=>{if(ch===' ') return {type:'space',value:''};if(state.pattern[i]==='_'){const value=state.guess[i]||'•';const wrong=!!state.guess[i]&&state.guess[i]!==ch&&!state.revealed;return {type:wrong?'wrong':(state.guess[i]?'filled':'blank'),value};}return {type:'fixed',value:ch};});}
 function nextBlank(state){return state.pattern.split('').findIndex((ch,i)=>ch==='_'&&!state.guess[i])}
 function lastFilled(state){for(let i=state.guess.length-1;i>=0;i--) if(state.pattern[i]==='_'&&state.guess[i]) return i; return -1}
 function guessedWord(state){return state.english.split('').map((ch,i)=>state.pattern[i]==='_'?(state.guess[i]||''):ch).join('')}
@@ -434,7 +513,7 @@ function renderPlayersEditor(){
   $('#playersEditorInfo').textContent=`${playersDatasetName} · ${playersData.length} jugadores · formación ${formationKey}`;
   $('#playersDatasetName').textContent=`Jugadores: ${playersDatasetName}`;
 }
-function renderLetters(){const el=$('#letters');el.innerHTML='';const s=current();if(!s) return;visibleCells(s).forEach(c=>{const d=document.createElement('div');d.className='tile '+(c.type==='filled'?'blank filled':c.type);d.textContent=c.value;el.appendChild(d);});}
+function renderLetters(){const el=$('#letters');el.innerHTML='';const s=current();if(!s) return;visibleCells(s).forEach(c=>{const d=document.createElement('div');let cls=c.type==='filled'?'blank filled':c.type==='wrong'?'blank filled wrong':c.type;d.className='tile '+cls+(s.revealed&&c.type!=='space'?' solution':'');d.textContent=c.value;el.appendChild(d);});}
 function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
 function buildSpeechUtterance(text,langPattern,fallbackLang,voicePattern,rate,pitch){
   const utter=new SpeechSynthesisUtterance(text);
@@ -449,20 +528,28 @@ function buildSpeechUtterance(text,langPattern,fallbackLang,voicePattern,rate,pi
 }
 function flushSpeechQueue(){
   if(!window.speechSynthesis||activeSpeech||window.speechSynthesis.speaking) return;
-  if(pendingWordSpeech){
-    activeSpeech=buildSpeechUtterance(pendingWordSpeech,'en-','en-US','Google|Samantha|Daniel|Serena|Alex',0.82,1);
-    pendingWordSpeech=null;
-    window.speechSynthesis.speak(activeSpeech);
-    return;
-  }
+  // La narración del partido tiene prioridad para que GOL/PARADA se oiga justo después del chut.
   if(commentaryEnabled&&pendingCommentarySpeech){
     activeSpeech=buildSpeechUtterance(pendingCommentarySpeech,'es-','es-ES','Google|Monica|Paulina|Jorge|Luciana|Helena',1,1.05);
     pendingCommentarySpeech=null;
     window.speechSynthesis.speak(activeSpeech);
+    return;
+  }
+  if(pendingWordSpeech){
+    activeSpeech=buildSpeechUtterance(pendingWordSpeech,'en-','en-US','Google|Samantha|Daniel|Serena|Alex',0.82,1);
+    pendingWordSpeech=null;
+    window.speechSynthesis.speak(activeSpeech);
   }
 }
-function speakCommentary(text){
+function speakCommentary(text,urgent=false){
   if(!commentaryEnabled||!text) return;
+  if(urgent){
+    pendingWordSpeech=null;
+    if(window.speechSynthesis&&window.speechSynthesis.speaking){
+      window.speechSynthesis.cancel();
+      activeSpeech=null;
+    }
+  }
   pendingCommentarySpeech=text;
   flushSpeechQueue();
 }
@@ -472,9 +559,13 @@ const footballEngine=(()=>{
   const lineShort={goalkeeper:'POR',defense:'DEF',midfield:'MED',attack:'ATA'};
   const lineY={goalkeeper:{yago:86,rival:14},defense:{yago:68,rival:32},midfield:{yago:50,rival:50},attack:{yago:24,rival:76}};
   const xMap={one:[50],two:[36,64],three:[24,50,76]};
-  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,bannerTimer:null,eventTimer:null,lastEvent:null,ballTarget:null,banner:{title:'',text:'',tone:'good',visible:false}};
+  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,bannerTimer:null,eventTimer:null,lastEvent:null,ballTarget:null,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
   const refs={};
   function getTeamLabel(teamId){return teamId==='yago'?'Atletic Sant Just':'Rival'}
+  function playerDollHtml(teamId){
+    return `<div class="player-doll ${teamId}"><span class="hair"></span><span class="head"></span><span class="body"></span><span class="arm l"></span><span class="arm r"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span></div>`;
+  }
+  function stableHash(value){return String(value||'').split('').reduce((a,ch)=>((a*31+ch.charCodeAt(0))%997),7)}
 
   function init(){
     refs.card=$('#footballCard');
@@ -563,7 +654,7 @@ const footballEngine=(()=>{
   function showBanner(title,text,tone='good',duration=1200,kind=null){
     clearTimeout(state.bannerTimer);
     clearTimeout(state.eventTimer);
-    state.banner={title,text,tone,visible:true};
+    state.banner={title,text,tone,visible:false};
     state.lastEvent={kind:kind||inferEventKind(title),tone,teamId:state.possession,side:Math.random()>.5?'right':'left'};
     renderBanner();
     state.eventTimer=setTimeout(()=>{state.lastEvent=null;state.ballTarget=null;render();},Math.max(700,duration-120));
@@ -607,10 +698,34 @@ const footballEngine=(()=>{
     return player.gk*0.78+player.save*1.08+player.speed*0.1;
   }
 
-  function resolveContest(attackBase,defenseBase){
-    const attackTotal=attackBase+(Math.random()*20);
-    const defenseTotal=defenseBase+(Math.random()*20);
-    return {attackTotal,defenseTotal,attackerWins:attackTotal>=defenseTotal};
+  function resolveContest(attackBase,defenseBase,attackLabel='Ataque',defenseLabel='Defensa',successBonus=0){
+    const attackRoll=Math.random()*5;
+    const defenseRoll=Math.random()*5;
+    const attackTotal=attackBase+successBonus+attackRoll;
+    const defenseTotal=defenseBase+defenseRoll;
+    return {
+      attackTotal,
+      defenseTotal,
+      attackScore:Math.round(attackTotal),
+      defenseScore:Math.round(defenseTotal),
+      attackerWins:attackTotal>=defenseTotal,
+      attackLabel,
+      defenseLabel,
+      successBonus
+    };
+  }
+
+  function makeDuelExplanation(intro,attackerName,defenderName,duel,won){
+    const bonus=duel.successBonus?` + bonus por acierto ${Math.round(duel.successBonus)}`:'';
+    const result=won?'gana la jugada':'pierde el duelo';
+    return `${intro}<div class="football-duel-bars"><div class="football-duel-row"><span>${attackerName}</span><div class="football-duel-track"><div class="football-duel-fill" style="width:${Math.min(100,duel.attackScore*4)}%"></div></div><b>${duel.attackScore}</b></div><div class="football-duel-row"><span>${defenderName}</span><div class="football-duel-track"><div class="football-duel-fill bad" style="width:${Math.min(100,duel.defenseScore*4)}%"></div></div><b>${duel.defenseScore}</b></div></div><div>${attackerName} ${result}. ${duel.attackLabel}${bonus} contra ${duel.defenseLabel}.</div>`;
+  }
+
+  function getPlayerEmoji(player){
+    if(player.line==='goalkeeper') return '🧤';
+    if(player.teamId==='rival') return '🏃';
+    if(normalizeText(player.name)==='yago') return '🧒';
+    return '🏃';
   }
 
   function getNearbyPlayers(teamId,primaryLine,secondaryLine=null){
@@ -640,13 +755,16 @@ const footballEngine=(()=>{
   }
 
   function moveBallTo(teamId,lineKey,options={}){
-    const {logText='',bannerTitle='',bannerText='',bannerTone='good',commentaryText='',playerId=null}=options;
+    const {logText='',bannerTitle='',bannerText='',bannerTone='good',commentaryText='',playerId=null,ballTarget=null,eventKind=null,explanation='',keeperId=null}=options;
     state.possession=teamId;
     state.line=lineKey;
     state.playerId=pickBallOwner(teamId,lineKey,playerId);
+    if(ballTarget) state.ballTarget=ballTarget;
+    if(explanation) state.lastExplanation=explanation;
     if(logText) addLog(logText);
-    if(bannerTitle) showBanner(bannerTitle,bannerText||logText,bannerTone);
-    if(commentaryText) speakCommentary(commentaryText);
+    if(bannerTitle) showBanner(bannerTitle,bannerText||logText,bannerTone,1200,eventKind);
+    if(state.lastEvent&&keeperId) state.lastEvent.keeperId=keeperId;
+    if(commentaryText) speakCommentary(commentaryText,eventKind==='save'||eventKind==='goal');
     render();
   }
 
@@ -656,26 +774,31 @@ const footballEngine=(()=>{
     const opponentId=getOpponentId(teamId);
     const attacker=pickAdvanceAttacker(teamId,currentLine,targetLine);
     const defender=pickZoneDefender(opponentId,targetLine);
-    const duel=resolveContest(getAdvancePower(attacker,targetLine),getDefensivePower(defender,targetLine));
+    const bonus=teamId==='yago'?4:0;
+    const duel=resolveContest(getAdvancePower(attacker,targetLine),getDefensivePower(defender,targetLine),'pase/ataque','defensa',bonus);
     if(duel.attackerWins){
       return moveBallTo(teamId,targetLine,{
         playerId:attacker.id,
-        logText:`${attacker.name} supera a ${defender.name} y ${getTeamLabel(teamId)} llega a ${lineLabel[targetLine].toLowerCase()}.`,
+        logText:`${attacker.name} gana ${duel.attackScore}-${duel.defenseScore} a ${defender.name} y avanza a ${lineLabel[targetLine].toLowerCase()}.`,
         bannerTitle:targetLine==='attack'?'ATAQUE':'PASE',
-        bannerText:`${attacker.name} gana el duelo en ${lineLabel[targetLine].toLowerCase()}.`,
+        bannerText:`${attacker.name} gana el duelo.`,
         bannerTone:teamId==='yago'?'good':'bad',
+        eventKind:'pass',
+        explanation:makeDuelExplanation('Has acertado: eso da una oportunidad y un bonus. Ahora se resuelve el duelo de fútbol.',attacker.name,defender.name,duel,true),
         commentaryText:targetLine==='attack'
-          ?`${getTeamLabel(teamId)} entra en ataque.`
-          :`Pase ganado por ${attacker.name}.`
+          ?randomFrom([`${getTeamLabel(teamId)} pisa área con ${attacker.name}.`,`${attacker.name} rompe líneas y llega el peligro.`,`¡Ojo que ${getTeamLabel(teamId)} ya está en ataque!`])
+          :randomFrom([`${attacker.name} encuentra el pase bueno.`,`Buena combinación de ${getTeamLabel(teamId)}.`,`${attacker.name} supera la presión y avanza.`,`Jugada limpia: ${attacker.name} gana metros.`])
       });
     }
     return moveBallTo(opponentId,targetLine,{
       playerId:defender.id,
-      logText:`${defender.name} corta la jugada y ${getTeamLabel(opponentId)} recupera la pelota.`,
+      logText:`Aunque acertaste, ${defender.name} gana el duelo ${duel.defenseScore}-${duel.attackScore} y roba.`,
       bannerTitle:'ROBO',
-      bannerText:`${defender.name} gana el duelo y frena el avance.`,
+      bannerText:`${defender.name} gana el duelo.`,
       bannerTone:teamId==='yago'?'bad':'good',
-      commentaryText:`Robo de ${getTeamLabel(opponentId)}.`
+      eventKind:'steal',
+      explanation:makeDuelExplanation('Has acertado, pero no siempre avanzas: el acierto crea la jugada; el defensor puede ganar si su defensa sale más alta.',attacker.name,defender.name,duel,false),
+      commentaryText:randomFrom([`Robo de ${getTeamLabel(opponentId)}.`,`La defensa se anticipa y recupera ${getTeamLabel(opponentId)}.`,`Corte importante: balón para ${getTeamLabel(opponentId)}.`])
     });
   }
 
@@ -684,28 +807,29 @@ const footballEngine=(()=>{
     const ballOwner=getBallOwner();
     const lineKey=state.line;
     const recoverer=pickRecoveryPlayer(teamId,lineKey);
-    const duel=resolveContest(
-      getRecoveryPower(recoverer,lineKey)+bonus,
-      getRetentionPower(ballOwner||pickZoneDefender(opponentId,lineKey),lineKey)
-    );
+    const carrier=ballOwner||pickZoneDefender(opponentId,lineKey);
+    const duel=resolveContest(getRecoveryPower(recoverer,lineKey),getRetentionPower(carrier,lineKey),'robo/presión','control del balón',bonus);
     if(duel.attackerWins){
       return moveBallTo(teamId,lineKey,{
         playerId:recoverer.id,
-        logText:`${recoverer.name} roba la pelota a ${(ballOwner&&ballOwner.name)||'su rival'}.`,
+        logText:`${recoverer.name} presiona y roba ${duel.attackScore}-${duel.defenseScore} a ${carrier.name}.`,
         bannerTitle:'ROBO',
-        bannerText:`${recoverer.name} gana el duelo y cambia la posesión.`,
+        bannerText:`${recoverer.name} gana el duelo.`,
         bannerTone:teamId==='yago'?'good':'bad',
-        commentaryText:`Robo de ${getTeamLabel(teamId)}.`
+        eventKind:'steal',
+        explanation:makeDuelExplanation(teamId==='yago'?'Has acertado mientras atacaba el rival: eso da bonus para recuperar.':'Error: el rival recibe bonus para presionar y robar.',recoverer.name,carrier.name,duel,true),
+        commentaryText:randomFrom([`Robo de ${getTeamLabel(teamId)}.`,`Presión perfecta de ${getTeamLabel(teamId)}.`,`Recupera ${getTeamLabel(teamId)} tras una buena presión.`])
       });
     }
-    const carrier=ballOwner||pickZoneDefender(opponentId,lineKey);
     return moveBallTo(opponentId,lineKey,{
       playerId:carrier.id,
-      logText:`${carrier.name} protege bien la pelota y mantiene la posesión.`,
+      logText:`${carrier.name} aguanta el balón ${duel.defenseScore}-${duel.attackScore} y mantiene la posesión.`,
       bannerTitle:'DUELO',
-      bannerText:`${carrier.name} resiste la presión y sigue la jugada.`,
+      bannerText:`${carrier.name} resiste la presión.`,
       bannerTone:teamId==='yago'?'bad':'good',
-      commentaryText:`${getTeamLabel(opponentId)} aguanta la pelota.`
+      eventKind:'pass',
+      explanation:makeDuelExplanation(teamId==='yago'?'Has intentado recuperar, pero el rival protegió mejor el balón.':'El rival intentó robar, pero tu jugador protegió el balón.',recoverer.name,carrier.name,duel,false),
+      commentaryText:randomFrom([`${getTeamLabel(opponentId)} protege la pelota.`,`No hay robo: ${getTeamLabel(opponentId)} conserva el balón.`,`Aguanta bien ${getTeamLabel(opponentId)} y sigue la jugada.`])
     });
   }
 
@@ -713,26 +837,34 @@ const footballEngine=(()=>{
     const isYago=teamId==='yago';
     const attacker=getBallOwner()||pickZoneDefender(teamId,'attack');
     const goalkeeper=pickZoneDefender(getOpponentId(teamId),'goalkeeper');
-    speakCommentary(`Disparo de ${attacker.name}.`);
-    const shot=getShotPower(attacker);
-    const save=getSavePower(goalkeeper);
-    const duel=resolveContest(shot,save);
+    pendingWordSpeech=null;
+    speakCommentary(`Chuta ${attacker.name}.`,true);
+    const duel=resolveContest(getShotPower(attacker)+7,getSavePower(goalkeeper)*0.48,'tiro','parada',isYago?11:7);
     if(duel.attackerWins){
       state.score[teamId]+=1;
-      addLog(`${attacker.name} bate a ${goalkeeper.name} y marca para ${getTeamLabel(teamId)}.`);
+      addLog(`${attacker.name} chuta ${duel.attackScore}-${duel.defenseScore} y marca para ${getTeamLabel(teamId)}.`);
       state.ballTarget={x:50,y:isYago?4:96};
-      showBanner('¡GOOOL!','Disparo potente y la pelota entra sin remedio.',isYago?'good':'bad',1600,'goal');
-      speakCommentary(`Gol de ${getTeamLabel(teamId)}.`);
+      state.lastExplanation=makeDuelExplanation('Tiro a puerta: se compara el tiro del atacante con la parada del portero.',attacker.name,goalkeeper.name,duel,true);
+      showBanner('¡GOOOL!','Disparo potente y la pelota entra.',isYago?'good':'bad',1600,'goal');
+      if(state.lastEvent) state.lastEvent.keeperId=goalkeeper.id;
+      const scoreText=`${state.score.yago} a ${state.score.rival}`;
+      speakCommentary(randomFrom([`¡Gooooool de ${getTeamLabel(teamId)}! Marca ${attacker.name}. El marcador va ${scoreText}.`,`¡Golazo! ${attacker.name} la manda dentro para ${getTeamLabel(teamId)}. Resultado: ${scoreText}.`,`¡Gooooool! ${getTeamLabel(teamId)} suma uno. Ahora van ${scoreText}.`]),true);
       render();
-      return setTimeout(resetAfterGoal,900);
+      return setTimeout(()=>resetAfterGoal(getOpponentId(teamId)),950);
     }
+    const saveY=isYago?28:72;
+    const saveX=Math.max(22,Math.min(78,getX(goalkeeper)+(Math.random()>.5?8:-8)));
     return moveBallTo(getOpponentId(teamId),'goalkeeper',{
       playerId:goalkeeper.id,
-      logText:`${goalkeeper.name} detiene el tiro de ${attacker.name}.`,
+      ballTarget:{x:saveX,y:saveY},
+      logText:`${goalkeeper.name} para el tiro ${duel.defenseScore}-${duel.attackScore} de ${attacker.name}.`,
       bannerTitle:'¡PARADA!',
       bannerText:`${goalkeeper.name} gana el duelo bajo palos.`,
       bannerTone:isYago?'bad':'good',
-      commentaryText:'Parada del portero.'
+      eventKind:'save',
+      keeperId:goalkeeper.id,
+      explanation:makeDuelExplanation('Tiro a puerta: si la parada supera al tiro, el balón se queda dentro del campo, delante del portero.',attacker.name,goalkeeper.name,duel,false),
+      commentaryText:randomFrom([`¡Paradón de ${goalkeeper.name}! El balón queda vivo dentro del campo.`,`¡Qué parada de ${goalkeeper.name}! Evita el gol y se queda con la pelota.`,`¡Mano salvadora de ${goalkeeper.name}! No entra, sigue el partido.`])
     });
   }
 
@@ -754,23 +886,37 @@ const footballEngine=(()=>{
     return attemptAdvance('rival');
   }
 
-  function resetAfterGoal(){
-    pickStartingTeam();
-    addLog('Saque nuevo desde '+lineLabel[state.line].toLowerCase()+'.');
-    showBanner('SAQUE','Nueva jugada en marcha.','good',900);
-    speakCommentary('Saca '+getTeamLabel(state.possession)+'.');
+  function resetAfterGoal(kickoffTeam){
+    state.possession=kickoffTeam||getOpponentId(state.possession);
+    state.line='midfield';
+    state.playerId=pickBallOwner(state.possession,state.line);
+    state.ballTarget={x:50,y:50};
+    addLog(`Saca ${getTeamLabel(state.possession)} desde el centro tras el gol.`);
+    state.lastExplanation='Regla de saque: cuando un equipo marca, la siguiente jugada la empieza desde el centro el equipo que ha recibido el gol.';
+    showBanner('SAQUE','Saque desde el centro.','good',1100,'kickoff');
+    speakCommentary(`Saca ${getTeamLabel(state.possession)} desde el centro.`,true);
     render();
   }
 
   function getX(player){
+    if(state.lastEvent&&state.lastEvent.kind==='kickoff'&&player.id===state.playerId) return 50;
     const lineCount=getLinePlayers(player.teamId,player.line).length;
-    if(player.side==='left') return lineCount===3?xMap.three[0]:xMap.two[0];
-    if(player.side==='right') return lineCount===3?xMap.three[2]:xMap.two[1];
-    if(player.side==='center') return lineCount===3?xMap.three[1]:xMap.one[0];
-    return xMap.one[0];
+    let base=xMap.one[0];
+    if(player.side==='left') base=lineCount===3?xMap.three[0]:xMap.two[0];
+    if(player.side==='right') base=lineCount===3?xMap.three[2]:xMap.two[1];
+    if(player.side==='center') base=lineCount===3?xMap.three[1]:xMap.one[0];
+    const teamOffset=player.teamId==='yago'?-5:5;
+    const personal=((stableHash(player.id)%7)-3)*0.75;
+    const action=(state.lastEvent&&player.id===state.playerId)?(player.teamId==='yago'?3:-3):0;
+    return Math.max(8,Math.min(92,base+teamOffset+personal+action));
   }
 
-  function getY(player){return lineY[player.line][player.teamId]}
+  function getY(player){
+    if(state.lastEvent&&state.lastEvent.kind==='kickoff'&&player.id===state.playerId) return 50;
+    const personal=((stableHash(player.id)%5)-2)*1.3;
+    const action=(state.lastEvent&&player.id===state.playerId)?-2:0;
+    return Math.max(8,Math.min(92,lineY[player.line][player.teamId]+personal+action));
+  }
 
   function renderField(){
     refs.field.querySelectorAll('.football-band,.football-band-label,.football-player-wrap,.football-goal,.football-area,.football-speedline,.football-confetti').forEach(node=>node.remove());
@@ -790,12 +936,7 @@ const footballEngine=(()=>{
       const band=document.createElement('div');
       band.className='football-band';
       band.style.top=y+'%';
-      const label=document.createElement('div');
-      label.className='football-band-label';
-      label.style.top=y+'%';
-      label.textContent=lineLabel[lineKey];
       refs.field.appendChild(band);
-      refs.field.appendChild(label);
     });
     state.teams.forEach(team=>{
       team.players.forEach(player=>{
@@ -805,14 +946,12 @@ const footballEngine=(()=>{
         if(isOwner) wrap.classList.add('near-ball');
         if(state.lastEvent&&state.lastEvent.kind==='goal'&&team.id===state.possession) wrap.classList.add('celebrate');
         if(state.lastEvent&&state.lastEvent.kind==='steal'&&isOwner) wrap.classList.add('defend');
-        if(state.lastEvent&&state.lastEvent.kind==='save'&&isOwner) wrap.classList.add(state.lastEvent.side==='right'?'keeper-dive-right':'keeper-dive-left');
+        if(state.lastEvent&&(state.lastEvent.kind==='save'&&isOwner || state.lastEvent.kind==='goal'&&state.lastEvent.keeperId===player.id)) wrap.classList.add(state.lastEvent.side==='right'?'keeper-dive-right':'keeper-dive-left');
         wrap.style.left=getX(player)+'%';
         wrap.style.top=getY(player)+'%';
         const card=document.createElement('div');
         card.className='football-player '+team.color+(player.id===state.playerId&&team.id===state.possession?' has-ball':'');
-        card.innerHTML=player.photo
-          ?`<img class="football-player-avatar" src="${player.photo}" alt="${player.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="football-player-fallback" style="display:none"><span class="football-player-mark">${player.mark}</span><span class="football-player-role">${lineShort[player.line]}</span></div>`
-          :`<div class="football-player-fallback"><span class="football-player-mark">${player.mark}</span><span class="football-player-role">${lineShort[player.line]}</span></div>`;
+        card.innerHTML=playerDollHtml(team.id);
         const name=document.createElement('div');
         name.className='football-player-name';
         name.textContent=player.name;
@@ -829,7 +968,7 @@ const footballEngine=(()=>{
     const moveToken=++state.moveToken;
     const kind=(state.lastEvent&&state.lastEvent.kind)||'pass';
     refs.ball.className='football-ball moving '+kind;
-    const target=state.ballTarget||{x:getX(owner),y:getY(owner)-8};
+    const target=state.ballTarget||{x:Math.max(7,Math.min(93,getX(owner)+(owner.teamId==='yago'?3:-3))),y:Math.max(7,Math.min(93,getY(owner)))};
     refs.ball.style.left=target.x+'%';
     refs.ball.style.top=target.y+'%';
     const line=document.createElement('div');
@@ -857,7 +996,7 @@ const footballEngine=(()=>{
     refs.zone.textContent=lineLabel[state.line];
     refs.log.innerHTML=state.log.map(item=>`<div class="football-log-item">${item}</div>`).join('');
     refs.title.textContent=state.score.yago>state.score.rival?'Atletic Sant Just manda':state.score.yago<state.score.rival?'Rival manda':'Partido en juego';
-    $('#builderEvent').textContent=state.log[0]||'Preparando el saque inicial.';
+    $('#builderEvent').innerHTML='<div class="football-why-title">Regla</div>'+(state.lastExplanation||'Acierto = oportunidad. Luego hay duelo: tu jugada contra defensa rival.');
     $('#livesLabel').textContent=getTeamLabel(state.possession);
     $('#goalLabel').textContent=lineLabel[state.line];
   }
@@ -899,7 +1038,7 @@ function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextT
 function showSolutionThenNext(){const s=current();if(!s) return;clearAutoNext();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});s.revealed=true;render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra. Sigue la jugada.');},2000);}
 function speakCurrent(force=false){const s=current();if(!s) return;pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
-function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){s.checked=true;s.solved=false;stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Te enseño la solución y el rival aprovecha la jugada.');return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Mira la solución. No cuenta para el partido. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();if(autoAudio) speakCurrent(true);setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
 function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
 function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Última letra borrada.');}
 function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
@@ -966,10 +1105,20 @@ $('#hiddenInput').addEventListener('input',e=>{const value=e.target.value.toLowe
 document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();deleteLast();}});
 $('#menuBtn').addEventListener('click',()=>window.location.href='../index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{autoAudio=!autoAudio;setButtons();setMessage(autoAudio?'El audio automático está activado.':'El audio automático está desactivado.');if(autoAudio) speakCurrent();});$('#commentaryBtn').addEventListener('click',()=>{commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled) pendingCommentarySpeech=null;setButtons();setMessage(commentaryEnabled?'La locución del partido está activada.':'La locución del partido está desactivada.');});$('#repeatAudioBtn').addEventListener('click',()=>speakCurrent(true));$('#shuffleBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuración.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Formación actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Posición preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
 $('#playersEditor').addEventListener('change',e=>{const target=e.target;const indexAttr=target.dataset.playerIndex;const field=target.dataset.playerField;if(indexAttr===undefined||!field) return;const player=playersData[Number(indexAttr)];if(!player) return;player[field]=target.type==='checkbox'?(target.checked?1:0):(field==='name'||field==='role'||field==='photo'||field==='special'?target.value:clampStat(target.value));saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Jugador actualizado.');});
-window.addEventListener('load',()=>{loadSaved();footballEngine.init();setupVoices();buildDataset();render();setButtons();setTimeout(focusInput,150);if(autoAudio) setTimeout(()=>speakCurrent(),300);});
+
+function relocateFootballInfoPanel(){
+  const grid=document.querySelector('.football-status-grid');
+  const clue=document.querySelector('.clue-card');
+  const message=document.querySelector('#messageBox');
+  if(grid&&clue&&message&&!clue.contains(grid)){
+    message.insertAdjacentElement('afterend',grid);
+  }
+}
+window.addEventListener('load',()=>{relocateFootballInfoPanel();loadSaved();footballEngine.init();setupVoices();buildDataset();render();setButtons();setTimeout(focusInput,150);if(autoAudio) setTimeout(()=>speakCurrent(),300);});
 </script>
 <script id="ipad-compact-keyboard-detector">
 (function(){function setCompactViewport(){var vv=window.visualViewport;var h=vv?vv.height:window.innerHeight;document.documentElement.style.setProperty('--compact-vh',Math.max(260,Math.round(h))+'px');var keyboardOpen=vv?(window.innerHeight-vv.height>120||vv.height<520):false;document.body.classList.toggle('keyboard-open',keyboardOpen);}setCompactViewport();window.addEventListener('resize',setCompactViewport,{passive:true});window.addEventListener('orientationchange',function(){setTimeout(setCompactViewport,80)},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',setCompactViewport,{passive:true});visualViewport.addEventListener('scroll',setCompactViewport,{passive:true});}document.addEventListener('focusin',setCompactViewport);document.addEventListener('focusout',function(){setTimeout(setCompactViewport,120)});})();
 </script>
 </body>
 </html>
+
