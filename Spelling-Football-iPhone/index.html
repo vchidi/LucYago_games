@@ -1455,5 +1455,92 @@ body.game-off .stat:has(#stepCount){display:none!important}
 })();
 </script>
 
+
+<!-- Teclado iPad: abrir al tocar cualquier sitio y mantener foco -->
+<style id="ipad-keyboard-always-active-style">
+#hiddenInput.hidden-input,#hiddenInput{
+  position:fixed!important;
+  left:10px!important;
+  bottom:10px!important;
+  top:auto!important;
+  width:1px!important;
+  height:1px!important;
+  opacity:.01!important;
+  z-index:9999!important;
+  display:block!important;
+  visibility:visible!important;
+  pointer-events:none!important;
+  background:transparent!important;
+  color:transparent!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+</style>
+<script id="ipad-keyboard-always-active-script">
+(function(){
+  var keepKeyboardActive=true;
+  function getInput(){return document.getElementById('hiddenInput');}
+  function isFileTarget(target){return !!(target && target.closest && target.closest('input[type="file"], label.btn'));}
+  function focusKeyboard(){
+    var input=getInput();
+    if(!input) return;
+    try{input.removeAttribute('readonly');}catch(e){}
+    try{input.focus({preventScroll:true});}catch(e){try{input.focus();}catch(_){} }
+    try{input.setSelectionRange(input.value.length,input.value.length);}catch(e){}
+  }
+  window.focusInput=focusKeyboard;
+
+  function directTouchFocus(e){
+    if(isFileTarget(e.target)) return;
+    keepKeyboardActive=true;
+    focusKeyboard();
+  }
+  document.addEventListener('touchstart',directTouchFocus,{passive:true,capture:true});
+  document.addEventListener('pointerdown',directTouchFocus,{passive:true,capture:true});
+  document.addEventListener('click',directTouchFocus,{passive:true,capture:true});
+
+  function installBlurGuard(){
+    var input=getInput();
+    if(!input || input.dataset.blurGuardInstalled==='1') return;
+    input.dataset.blurGuardInstalled='1';
+    input.addEventListener('blur',function(){
+      if(!keepKeyboardActive) return;
+      setTimeout(focusKeyboard,60);
+      setTimeout(focusKeyboard,180);
+    });
+    input.addEventListener('input',function(){
+      setTimeout(focusKeyboard,0);
+    });
+  }
+
+  function refocusAfterRender(){
+    installBlurGuard();
+    setTimeout(focusKeyboard,30);
+    setTimeout(focusKeyboard,120);
+  }
+
+  var originalRender=window.render;
+  if(typeof originalRender==='function' && !originalRender.__keyboardWrapped){
+    var wrapped=function(){
+      var result=originalRender.apply(this,arguments);
+      refocusAfterRender();
+      return result;
+    };
+    wrapped.__keyboardWrapped=true;
+    window.render=wrapped;
+  }
+
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden) refocusAfterRender();
+  });
+  window.addEventListener('load',function(){
+    installBlurGuard();
+    refocusAfterRender();
+  });
+  if(document.readyState!=='loading'){installBlurGuard();refocusAfterRender();}
+})();
+</script>
+
 </body>
 </html>
