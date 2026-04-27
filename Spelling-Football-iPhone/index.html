@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#8fdcff">
 <title>Acierta el spelling correcto</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">syncQuickButtons();
-focusInput();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
   --sky1:#f3fff2;--sky2:#e7fff4;--sky3:#fffde8;--panel:#ffffffef;--line:#d9f0df;--text:#1f4a3a;--muted:#5e7b70;
@@ -183,55 +181,10 @@ body.keyboard-open .clue-card .football-log{max-height:34px}
 body.keyboard-open .clue-card .football-log-item{font-size:8px;padding:3px 4px}
 body.keyboard-open .football-panel{grid-template-columns:1fr!important}
 </style>
-<style id="fix-keyboard-buttons">
-.hidden-input{position:fixed!important;left:0!important;top:0!important;width:2px!important;height:2px!important;opacity:.01!important;pointer-events:none!important;z-index:1!important;background:transparent!important;border:0!important;color:transparent!important}
-.controls{display:flex!important;align-items:center!important;gap:5px!important}
-#menuBtn,#autoAudioBtn,#noGameBtn,#repeatAudioBtn{display:inline-flex!important;align-items:center!important;justify-content:center!important}
-body.keyboard-open #menuBtn,body.keyboard-open #autoAudioBtn,body.keyboard-open #noGameBtn,body.keyboard-open #repeatAudioBtn{display:inline-flex!important}
-body.keyboard-open .controls{position:absolute!important;right:8px!important;top:6px!important;margin:0!important;max-width:64%!important;justify-content:flex-end!important;overflow:visible!important}
-body.keyboard-open #repeatAudioBtn{max-width:96px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media (max-width:760px){.controls{display:flex!important;position:relative!important;overflow-x:auto!important}.match-stage{display:none}.hero{height:108px!important}}
-@media (max-width:760px){body.keyboard-open .controls{position:absolute!important;right:6px!important;top:5px!important;max-width:72%!important}.hero{height:52px!important}}
-</style>
 
-<style id="final-visible-toolbar-fix">
-/* FIX FINAL: barra fija siempre visible + teclado físico */
-.quickbar-fixed{position:fixed!important;top:calc(6px + env(safe-area-inset-top))!important;right:8px!important;z-index:99999!important;display:flex!important;gap:6px!important;align-items:center!important;justify-content:flex-end!important;pointer-events:auto!important}
-.quickbar-fixed button{display:inline-flex!important;align-items:center!important;justify-content:center!important;border-radius:999px!important;padding:8px 10px!important;font-size:13px!important;font-weight:900!important;background:#fff!important;border:1px solid rgba(31,74,58,.15)!important;box-shadow:0 8px 24px rgba(0,0,0,.16)!important;color:#1f4a3a!important;min-height:36px!important;white-space:nowrap!important}
-.quickbar-fixed #quickAudioBtn.audio-off{background:#fff0f0!important}
-.quickbar-fixed #quickSoloBtn.solo-on{background:#fff7dc!important}
-body.keyboard-open .quickbar-fixed{top:6px!important;right:6px!important;gap:4px!important}
-body.keyboard-open .quickbar-fixed button{font-size:12px!important;padding:7px 8px!important;min-height:32px!important}
-@media(max-width:760px){.quickbar-fixed button{font-size:12px!important;padding:7px 8px!important}.quickbar-fixed .label-mini{display:none!important}}
-</style>
 
-<style id="final-layout-keyboard-request-fix">
-/* Barra de iconos en la misma línea que las estadísticas */
-.hero-stats-line{display:flex;align-items:stretch;gap:6px;margin-top:6px;min-width:0}
-.hero-stats-line .stats{margin-top:0;flex:1 1 auto;min-width:0}
-.quickbar-fixed{position:static!important;top:auto!important;right:auto!important;z-index:10!important;display:flex!important;gap:5px!important;align-items:stretch!important;justify-content:flex-start!important;flex:0 0 auto!important;pointer-events:auto!important}
-.quickbar-fixed button{min-height:100%!important;border-radius:12px!important;padding:5px 8px!important;font-size:16px!important;box-shadow:0 6px 14px rgba(100,145,181,.10)!important}
-.quickbar-fixed .label-mini{display:none!important}
-/* El panel de partido vive debajo del bloque de spelling, y desaparece al jugar solo spelling */
-.clue-card .football-status-grid{margin-top:8px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;overflow:hidden;max-height:170px}
-body.no-football .match-stage,body.no-football .clue-card .football-status-grid{display:none!important}
-body.no-football .game-grid{grid-template-columns:1fr!important}
-/* Input suficientemente visible para que iPad abra teclado al enfocar programáticamente */
-.hidden-input{position:fixed!important;left:8px!important;bottom:8px!important;width:32px!important;height:32px!important;opacity:.01!important;pointer-events:none!important;z-index:9999!important;font-size:16px!important;background:transparent!important;border:0!important;color:transparent!important;caret-color:transparent!important}
-body.keyboard-open .hero-stats-line{margin-top:0}
-body.keyboard-open .quickbar-fixed{gap:4px!important}
-body.keyboard-open .quickbar-fixed button{font-size:14px!important;padding:4px 7px!important;min-height:30px!important}
-body.keyboard-open .clue-card .football-status-grid{max-height:110px}
-@media(max-width:760px){.hero-stats-line{gap:4px}.quickbar-fixed button{font-size:14px!important;padding:4px 7px!important}.hero-stats-line .stats{grid-template-columns:repeat(5,minmax(0,1fr))!important}}
-</style>
 </head>
 <body>
-<div id="quickbarFixed" class="quickbar-fixed" aria-label="Controles rápidos">
-  <button id="quickHomeBtn" type="button" title="Volver al menú">🏠</button>
-  <button id="quickAudioBtn" type="button" title="Poner o quitar todo el audio">🔊 <span class="label-mini">Audio</span></button>
-  <button id="quickSoloBtn" type="button" title="Jugar solo al spelling, sin partido">⚽ <span class="label-mini">Partido</span></button>
-</div>
-
 <div class="wrap">
   <section class="hero">
     <div class="topline">
@@ -242,22 +195,22 @@ body.keyboard-open .clue-card .football-status-grid{max-height:110px}
       </div>
     </div>
     <div class="stats">
-      <div class="stat"><div class="k">Aciertos</div><div class="v" id="goodCount">0</div></div>
+      <div class="stat stat-good"><button id="resetGoodBtn" class="zero-btn" type="button" title="Poner aciertos a 0">0</button><div><div class="k">Aciertos</div><div class="v" id="goodCount">0</div></div></div>
       <div class="stat"><div class="k">Errores</div><div class="v" id="badCount">0</div></div>
       <div class="stat"><div class="k">Racha</div><div class="v" id="streakCount">0</div></div>
       <div class="stat"><div class="k">Marcador</div><div class="v" id="stepCount">0 - 0</div></div>
       <div class="stat"><div class="k">Palabra</div><div class="v"><span id="currentIndex">1</span>/<span id="totalCount">0</span></div></div>
     </div>
     <div class="controls">
-      <button id="menuBtn" class="icon-btn" title="Volver al menú">🏠</button>
+      <button id="menuBtn" class="icon-btn" title="Menú principal">🏠</button>
       <button id="modeClassicBtn" class="primary active">Tricky letters</button>
       <button id="modeBlindBtn" class="violet">Blind</button>
-      <button id="autoAudioBtn" class="icon-btn" title="Poner o quitar todo el audio">🔊 Audio: sí</button>
+      <button id="autoAudioBtn">🔊 Audio: on</button>
       <button id="commentaryBtn" style="display:none">Locución: sí</button>
       <button id="repeatAudioBtn" class="amber">Repetir audio</button>
       <button id="shuffleBtn">Mezclar</button>
       <button id="restartBtn">Reiniciar partida</button>
-      <button id="noGameBtn" class="icon-btn" title="Jugar solo al spelling, sin partido">⚽ Partido: sí</button>
+      <button id="noGameBtn">🎮 Juego: on</button>
       <select id="formationSelect" class="select-pill">
         <option value="1-2-2-1">Formación 1-2-2-1</option>
         <option value="1-3-1-1">Formación 1-3-1-1</option>
@@ -1152,121 +1105,355 @@ async function importPlayersFile(file){
   if(gameEnabled) footballEngine.reset();
   render();
 }
-function focusInput(){
-  const input=$('#hiddenInput');
-  if(!input) return;
-  try{
-    input.removeAttribute('readonly');
-    input.disabled=false;
-    // En iPadOS el teclado aparece de forma más fiable si el input está visible en pantalla
-    // y el focus ocurre dentro de un gesto de usuario.
-    input.style.position='fixed';
-    input.style.left='8px';
-    input.style.bottom='8px';
-    input.style.width='32px';
-    input.style.height='32px';
-    input.style.fontSize='16px';
-    input.style.opacity='0.01';
-    input.focus({preventScroll:true});
-    input.setSelectionRange(input.value.length,input.value.length);
-  }catch(e){try{input.focus();}catch(_){}}
+function focusInput(){const input=$('#hiddenInput');if(input) input.focus({preventScroll:true});}
+function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextTimer=null;}}
+function showSolutionThenNext(){const s=current();if(!s) return;clearAutoNext();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});s.revealed=true;render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra. Sigue la jugada.');},2000);}
+function speakCurrent(force=false){const s=current();if(!s) return;pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
+function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Mira la solución. No cuenta para el partido. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();if(autoAudio) speakCurrent(true);setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
+function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Última letra borrada.');}
+function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
+function revealCurrent(){evaluateWord(true)}
+function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseño la solución y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
+function shuffleWords(){clearAutoNext();for(let i=rawData.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rawData[i],rawData[j]]=[rawData[j],rawData[i]];}index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Partido mezclado y listo otra vez.':'Palabras mezcladas sin juego.';setMessage('Palabras mezcladas.');}
+function restartGame(){clearAutoNext();stats={good:0,bad:0,streak:0};index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Empieza un partido nuevo.':'Juego sin minijuego activado.';setMessage('Partida reiniciada.');}
+function toggleNoGame(){gameEnabled=!gameEnabled;if(!gameEnabled) pendingCommentarySpeech=null;if(gameEnabled) footballEngine.reset();render();setButtons();setMessage(gameEnabled?'Football 7 activado.':'Sin juego activado.');}
+function setMode(nextMode){clearAutoNext();mode=nextMode;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'El partido vuelve a empezar con el nuevo modo.':'Modo cambiado sin juego.';setMessage(mode==='blind'?'Modo Blind activado.':'Modo Tricky letters activado.');}
+function exportJson(){const blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='yago_common_words_game.json';a.click();URL.revokeObjectURL(url);}
+function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>String(v||'').trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/español|español|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return [];return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
+function parsePlayerRows(rows){
+  if(!rows.length) return [];
+  const headers=rows[0].map(v=>normalizeText(v).replace(/\s+/g,'_'));
+  const idx=key=>headers.findIndex(h=>h===key);
+  const requiredMissing=PLAYER_REQUIRED_FIELDS.filter(key=>idx(key)===-1);
+  if(requiredMissing.length) throw new Error('Faltan columnas clave de jugadores: '+requiredMissing.join(', '));
+  return rows.slice(1).filter(row=>row.some(cell=>String(cell||'').trim())).map((row,rowIndex)=>normalizePlayerEntry({
+    id:idx('id')===-1?rowIndex+1:row[idx('id')],
+    name:row[idx('name')],
+    photo:idx('photo')===-1?'':row[idx('photo')],
+    role:idx('role')===-1?'':row[idx('role')],
+    gk:row[idx('gk')],
+    def:row[idx('def')],
+    mid:row[idx('mid')],
+    att:row[idx('att')],
+    pass:row[idx('pass')],
+    save:row[idx('save')],
+    speed:row[idx('speed')],
+    special:idx('special')===-1?'':row[idx('special')],
+    fixed_gk:idx('fixed_gk')===-1?1:row[idx('fixed_gk')],
+    fixed_def:idx('fixed_def')===-1?1:row[idx('fixed_def')],
+    fixed_mid:idx('fixed_mid')===-1?1:row[idx('fixed_mid')],
+    fixed_att:idx('fixed_att')===-1?1:row[idx('fixed_att')],
+    fixed_pass:idx('fixed_pass')===-1?1:row[idx('fixed_pass')],
+    fixed_save:idx('fixed_save')===-1?1:row[idx('fixed_save')],
+    fixed_speed:idx('fixed_speed')===-1?1:row[idx('fixed_speed')],
+    lock_profile:idx('lock_profile')===-1?1:row[idx('lock_profile')]
+  },rowIndex));
 }
-['pointerdown','touchstart','click'].forEach(type=>{
-  document.addEventListener(type,e=>{
-    const el=e.target&&e.target.closest?e.target:null;
-    if(el&&el.closest('input[type=file],button,select,label.btn')) return;
-    focusInput();
-  },{capture:true,passive:true});
-});
-$('.clue-card').addEventListener('click',()=>focusInput());
+async function importFile(file){clearAutoNext();if(file.name.toLowerCase().endsWith('.json')){const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.length) throw new Error('El JSON no tiene datos válidos.');rawData=parsed.map(cleanEntry).filter(Boolean);}else{const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''});const parsed=parseRows(rows);if(!parsed.length) throw new Error('No encuentro columnas de inglés, patrón y español.');rawData=parsed;}datasetName=file.name;saveData();restartGame();}
+async function importPlayersFile(file){
+  let parsedPlayers=[];
+  if(file.name.toLowerCase().endsWith('.json')){
+    const parsed=JSON.parse(await file.text());
+    const arrayData=Array.isArray(parsed)?parsed:parsed.players;
+    if(!Array.isArray(arrayData)||!arrayData.length) throw new Error('El JSON de jugadores no tiene datos válidos.');
+    parsedPlayers=validatePlayersPool(arrayData);
+  }else{
+    const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});
+    const sheetName=wb.SheetNames.find(name=>/players/i.test(name))||wb.SheetNames[0];
+    const ws=wb.Sheets[sheetName];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''});
+    parsedPlayers=validatePlayersPool(parsePlayerRows(rows));
+  }
+  playersData=parsedPlayers;
+  playersDatasetName=file.name;
+  saveData();
+  if(gameEnabled) footballEngine.reset();
+  render();
+}
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('input[type=file]')) setTimeout(focusInput,0);});
 $('#hiddenInput').addEventListener('input',e=>{const value=e.target.value.toLowerCase().replace(/[^a-z]/g,'');if(value) [...value].forEach(insertLetter);e.target.value='';});
-function handlePhysicalKeyboard(e){
-  const target=e.target;
-  const isEditable=target&&(['TEXTAREA','SELECT'].includes(target.tagName)||(target.tagName==='INPUT'&&target.id!=='hiddenInput'&&target.type!=='file'));
-  if(isEditable) return false;
-  if(e.ctrlKey||e.metaKey||e.altKey) return false;
-  if(e.key==='Backspace'){e.preventDefault();deleteLast();focusInput();return true;}
-  if(/^[a-zA-Z]$/.test(e.key)){e.preventDefault();insertLetter(e.key.toLowerCase());const input=$('#hiddenInput');if(input) input.value='';focusInput();return true;}
-  return false;
-}
-window.addEventListener('keydown',handlePhysicalKeyboard,true);
-window.addEventListener('keypress',e=>{ if(/^[a-zA-Z]$/.test(e.key)) handlePhysicalKeyboard(e); },true);
-document.addEventListener('keydown',e=>{
-  const target=e.target;
-  const typingInEditor=target&&(['INPUT','TEXTAREA','SELECT'].includes(target.tagName))&&target.id!=='hiddenInput';
-  if(typingInEditor) return;
-  if(e.ctrlKey||e.metaKey||e.altKey) return;
-  if(e.key==='Backspace'){e.preventDefault();deleteLast();return;}
-  if(/^[a-zA-Z]$/.test(e.key)){e.preventDefault();insertLetter(e.key.toLowerCase());const input=$('#hiddenInput');if(input) input.value='';return;}
-});
-
-function syncQuickButtons(){
-  const audioOn=autoAudio||commentaryEnabled;
-  const audioBtn=document.getElementById('quickAudioBtn');
-  const soloBtn=document.getElementById('quickSoloBtn');
-  if(audioBtn){audioBtn.innerHTML=audioOn?'🔊 <span class="label-mini">Audio</span>':'🔇 <span class="label-mini">Audio</span>';audioBtn.classList.toggle('audio-off',!audioOn);}
-  if(soloBtn){soloBtn.innerHTML=gameEnabled?'⚽ <span class="label-mini">Partido</span>':'✍️ <span class="label-mini">Solo</span>';soloBtn.classList.toggle('solo-on',!gameEnabled);}
-}
-const originalSetButtons=setButtons;
-setButtons=function(){ originalSetButtons(); syncQuickButtons(); };
-function toggleAllAudio(){
-  const next=!(autoAudio||commentaryEnabled);
-  autoAudio=next; commentaryEnabled=next;
-  if(!next){ pendingCommentarySpeech=null; pendingWordSpeech=null; if(window.speechSynthesis){window.speechSynthesis.cancel(); activeSpeech=null;} }
-  setButtons();
-  setMessage(next?'Audio activado.':'Audio desactivado.');
-  if(next) speakCurrent();
-}
-const qHome=document.getElementById('quickHomeBtn');
-const qAudio=document.getElementById('quickAudioBtn');
-const qSolo=document.getElementById('quickSoloBtn');
-if(qHome) qHome.addEventListener('click',()=>{window.location.href='../index.html';});
-if(qAudio) qAudio.addEventListener('click',toggleAllAudio);
-if(qSolo) qSolo.addEventListener('click',()=>{toggleNoGame();syncQuickButtons();});
-$('#menuBtn').addEventListener('click',()=>window.location.href='../index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{const next=!(autoAudio||commentaryEnabled);autoAudio=next;commentaryEnabled=next;if(!next){pendingCommentarySpeech=null;pendingWordSpeech=null;if(window.speechSynthesis){window.speechSynthesis.cancel();activeSpeech=null;}}setButtons();setMessage(next?'Audio activado: palabra y locución del partido.':'Audio desactivado.');if(next) speakCurrent();});$('#commentaryBtn').addEventListener('click',()=>{commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled) pendingCommentarySpeech=null;setButtons();setMessage(commentaryEnabled?'La locución del partido está activada.':'La locución del partido está desactivada.');});$('#repeatAudioBtn').addEventListener('click',()=>speakCurrent(true));$('#shuffleBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuración.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Formación actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Posición preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
+document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();deleteLast();}});
+$('#menuBtn').addEventListener('click',()=>window.location.href='index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{autoAudio=!autoAudio;setButtons();setMessage(autoAudio?'El audio automático está activado.':'El audio automático está desactivado.');if(autoAudio) speakCurrent();});$('#commentaryBtn').addEventListener('click',()=>{commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled) pendingCommentarySpeech=null;setButtons();setMessage(commentaryEnabled?'La locución del partido está activada.':'La locución del partido está desactivada.');});$('#repeatAudioBtn').addEventListener('click',()=>speakCurrent(true));$('#shuffleBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuración.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Formación actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Posición preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
 $('#playersEditor').addEventListener('change',e=>{const target=e.target;const indexAttr=target.dataset.playerIndex;const field=target.dataset.playerField;if(indexAttr===undefined||!field) return;const player=playersData[Number(indexAttr)];if(!player) return;player[field]=target.type==='checkbox'?(target.checked?1:0):(field==='name'||field==='role'||field==='photo'||field==='special'?target.value:clampStat(target.value));saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Jugador actualizado.');});
 
 function relocateFootballInfoPanel(){
   const grid=document.querySelector('.football-status-grid');
   const clue=document.querySelector('.clue-card');
-  const wordZone=document.querySelector('.word-zone');
-  if(grid&&clue&&wordZone&&!clue.contains(grid)){
-    wordZone.insertAdjacentElement('afterend',grid);
+  const message=document.querySelector('#messageBox');
+  if(grid&&clue&&message&&!clue.contains(grid)){
+    message.insertAdjacentElement('afterend',grid);
   }
 }
-function placeQuickbarInline(){
-  const hero=document.querySelector('.hero');
-  const stats=document.querySelector('.stats');
-  const quick=document.getElementById('quickbarFixed');
-  if(!hero||!stats||!quick) return;
-  let line=document.querySelector('.hero-stats-line');
-  if(!line){
-    line=document.createElement('div');
-    line.className='hero-stats-line';
-    stats.parentNode.insertBefore(line,stats);
-  }
-  if(!line.contains(quick)) line.appendChild(quick);
-  if(!line.contains(stats)) line.appendChild(stats);
-}
-function syncFootballVisibility(){
-  document.body.classList.toggle('no-football',!gameEnabled);
-}
-const originalToggleNoGameForLayout=toggleNoGame;
-toggleNoGame=function(){originalToggleNoGameForLayout();syncFootballVisibility();};
-const originalRenderForLayout=render;
-render=function(){originalRenderForLayout();syncFootballVisibility();};
-function armUniversalKeyboardFocus(){
-  ['pointerdown','touchstart','click'].forEach(type=>{
-    document.addEventListener(type,e=>{
-      if(e.target.closest('input[type=file],button,select,label.btn')) return;
-      focusInput();
-    },{capture:true,passive:true});
-  });
-}
-window.addEventListener('load',()=>{placeQuickbarInline();relocateFootballInfoPanel();armUniversalKeyboardFocus();loadSaved();footballEngine.init();setupVoices();buildDataset();render();setButtons();syncFootballVisibility();setTimeout(focusInput,150);if(autoAudio) setTimeout(()=>speakCurrent(),300);});
+window.addEventListener('load',()=>{relocateFootballInfoPanel();loadSaved();footballEngine.init();setupVoices();buildDataset();render();setButtons();setTimeout(focusInput,150);if(autoAudio) setTimeout(()=>speakCurrent(),300);});
 </script>
 <script id="ipad-compact-keyboard-detector">
 (function(){function setCompactViewport(){var vv=window.visualViewport;var h=vv?vv.height:window.innerHeight;document.documentElement.style.setProperty('--compact-vh',Math.max(260,Math.round(h))+'px');var keyboardOpen=vv?(window.innerHeight-vv.height>120||vv.height<520):false;document.body.classList.toggle('keyboard-open',keyboardOpen);}setCompactViewport();window.addEventListener('resize',setCompactViewport,{passive:true});window.addEventListener('orientationchange',function(){setTimeout(setCompactViewport,80)},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',setCompactViewport,{passive:true});visualViewport.addEventListener('scroll',setCompactViewport,{passive:true});}document.addEventListener('focusin',setCompactViewport);document.addEventListener('focusout',function(){setTimeout(setCompactViewport,120)});})();
 </script>
+
+<style id="menu-audio-game-request-overrides">
+.stat-good{position:relative;display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}
+.zero-btn{width:28px;height:28px;min-width:28px;padding:0;border-radius:999px;font-size:13px;line-height:1;background:#fff7dc;border:1px solid #f4c85a;color:#573900;box-shadow:none}
+#menuBtn{font-size:17px;min-width:42px}
+body.game-off .match-stage,
+body.game-off #footballCard,
+body.game-off .football-status-grid,
+body.game-off #formationSelect,
+body.game-off #yagoRoleSelect,
+body.game-off #regenTeamsBtn,
+body.game-off #stepCount,
+body.game-off .stat:nth-child(4),
+body.game-off .football-editor-panel{display:none!important}
+body.game-off .game-grid{grid-template-columns:1fr!important}
+body.game-off .clue-card{max-width:760px;margin:0 auto;width:100%}
+body.game-off .subtitle{display:none!important}
+body.game-off .badge{background:#fff7dc;color:#573900}
+body.game-off .message{background:#f7fbff;border-color:#e2eef7}
+body.game-off .clue-card .football-status-grid{display:none!important}
+body.game-off .side-title,
+body.game-off .side-big,
+body.game-off .football-score,
+body.game-off .football-panel{display:none!important}
+@media (max-width:640px){.zero-btn{width:24px;height:24px;min-width:24px;font-size:12px}.stat-good{gap:5px}}
+</style>
+<script id="menu-audio-game-request-script">
+(function(){
+  const MAIN_MENU_URL='index.html';
+  let controlsCleaned=false;
+
+  function replaceButton(id, handler){
+    const old=document.getElementById(id);
+    if(!old) return null;
+    const fresh=old.cloneNode(true);
+    old.replaceWith(fresh);
+    fresh.addEventListener('click', handler);
+    return fresh;
+  }
+
+  function setAllAudio(enabled){
+    autoAudio=enabled;
+    commentaryEnabled=enabled;
+    if(!enabled){
+      pendingWordSpeech=null;
+      pendingCommentarySpeech=null;
+      if(window.speechSynthesis) window.speechSynthesis.cancel();
+    }
+    setButtons();
+    setMessage(enabled?'Audio activado.':'Audio desactivado.');
+    if(enabled) speakCurrent(true);
+  }
+
+  const originalSetButtons=window.setButtons || setButtons;
+  window.setButtons=setButtons=function(){
+    if(typeof originalSetButtons==='function') originalSetButtons();
+    document.body.classList.toggle('game-off',!gameEnabled);
+    document.body.classList.toggle('game-on',gameEnabled);
+    const audioBtn=document.getElementById('autoAudioBtn');
+    const repeatBtn=document.getElementById('repeatAudioBtn');
+    const gameBtn=document.getElementById('noGameBtn');
+    const audioOn=!!(autoAudio||commentaryEnabled);
+    if(audioBtn){
+      audioBtn.textContent=audioOn?'🔊 Audio: on':'🔇 Audio: off';
+      audioBtn.classList.toggle('active',audioOn);
+      audioBtn.setAttribute('aria-pressed',String(audioOn));
+    }
+    if(repeatBtn){
+      repeatBtn.disabled=!audioOn;
+      repeatBtn.style.opacity=audioOn?'1':'.45';
+    }
+    if(gameBtn){
+      gameBtn.textContent=gameEnabled?'🎮 Juego: on':'🎮 Juego: off';
+      gameBtn.classList.toggle('active',!gameEnabled);
+      gameBtn.setAttribute('aria-pressed',String(gameEnabled));
+    }
+  };
+
+  const originalRender=window.render || render;
+  window.render=render=function(){
+    if(typeof originalRender==='function') originalRender();
+    setButtons();
+  };
+
+  window.toggleNoGame=toggleNoGame=function(){
+    gameEnabled=!gameEnabled;
+    if(!gameEnabled){
+      pendingCommentarySpeech=null;
+      commentaryEnabled=false;
+    }
+    if(gameEnabled) footballEngine.reset();
+    render();
+    setMessage(gameEnabled?'Juego activado. Vuelve el campo de fútbol.':'Juego desactivado. Solo queda la parte de completar palabras.');
+  };
+
+  function resetGoodOnly(){
+    stats.good=0;
+    render();
+    setMessage('Aciertos puestos a 0.');
+  }
+
+  function cleanControls(){
+    if(controlsCleaned) return;
+    controlsCleaned=true;
+    replaceButton('menuBtn',()=>{window.location.href=MAIN_MENU_URL;});
+    replaceButton('autoAudioBtn',()=>setAllAudio(!(autoAudio||commentaryEnabled)));
+    replaceButton('noGameBtn',()=>toggleNoGame());
+    replaceButton('resetGoodBtn',()=>resetGoodOnly());
+    const menu=document.getElementById('menuBtn');
+    if(menu){menu.textContent='🏠';menu.title='Menú principal';menu.setAttribute('aria-label','Menú principal');}
+    setButtons();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',cleanControls); else cleanControls();
+  window.addEventListener('load',()=>{cleanControls();setButtons();});
+})();
+</script>
+
+
+<style id="always-visible-top-controls-fix">
+/* Mantener visibles los controles pedidos en móvil/iPad */
+#menuBtn,#autoAudioBtn,#noGameBtn{display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap}
+#menuBtn{order:0!important}
+#autoAudioBtn{order:1!important}
+#noGameBtn{order:2!important}
+@media (max-width:760px){
+  .hero{height:auto!important;min-height:132px!important;overflow:visible!important}
+  .controls{display:flex!important;margin-top:8px!important;gap:6px!important;overflow-x:auto!important;flex-wrap:nowrap!important;padding-bottom:3px!important}
+  #menuBtn,#autoAudioBtn,#noGameBtn{position:relative!important;visibility:visible!important;opacity:1!important}
+  .panel{min-height:0!important}
+}
+body.keyboard-open .controls{display:flex!important;position:static!important;margin-top:6px!important;max-width:none!important;justify-content:flex-start!important}
+body.keyboard-open #menuBtn,
+body.keyboard-open #autoAudioBtn,
+body.keyboard-open #noGameBtn{display:inline-flex!important;visibility:visible!important;opacity:1!important;padding:6px 8px!important;font-size:10px!important}
+body.keyboard-open .hero{height:auto!important;min-height:56px!important;overflow:visible!important}
+body.keyboard-open #repeatAudioBtn{display:none!important}
+</style>
+
+
+
+
+
+
+<!-- Controles principales junto a ACIERTOS + estado guardado -->
+<style id="stats-main-controls-style">
+.stats{grid-template-columns:auto repeat(5,minmax(0,1fr))!important;align-items:stretch}
+.main-stat-controls{display:flex!important;gap:6px!important;align-items:center!important;justify-content:center!important;padding:8px!important}
+.main-stat-controls button{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:40px!important;height:40px!important;padding:8px 10px!important;border-radius:14px!important;white-space:nowrap!important}
+.main-stat-controls button.toggle-wide{min-width:92px!important}
+.main-stat-controls button.active-off{background:linear-gradient(135deg,#ffa2a2,#dff7e6)!important;color:#612020!important}
+.main-stat-controls button.active-on{background:linear-gradient(135deg,#59b8ff,#97d8ff)!important;color:#083560!important}
+/* Los controles duplicados de la barra superior quedan ocultos; los visibles están a la izquierda de Aciertos */
+.controls #menuBtn,.controls #autoAudioBtn,.controls #noGameBtn{display:none!important}
+/* Juego OFF: solo queda la zona de palabras, sin campo ni textos/bloques del partido */
+body.game-off .match-stage,
+body.game-off #footballCard,
+body.game-off .side-game-card,
+body.game-off .football-score,
+body.game-off .football-panel,
+body.game-off .football-field,
+body.game-off .football-status-grid,
+body.game-off .football-editor-panel,
+body.game-off .football-log,
+body.game-off .football-why,
+body.game-off .side-title,
+body.game-off .side-big,
+body.game-off #builderEvent,
+body.game-off #livesLabel,
+body.game-off #goalLabel,
+body.game-off #datasetName,
+body.game-off #playersDatasetName{display:none!important}
+body.game-off .game-grid{grid-template-columns:1fr!important}
+body.game-off .clue-card{max-width:760px;margin:0 auto;width:100%}
+body.game-off .stat:has(#stepCount){display:none!important}
+@media (max-width:760px){.stats{grid-template-columns:1fr repeat(2,minmax(0,1fr))!important}.main-stat-controls{grid-column:1/-1!important}.main-stat-controls button.toggle-wide{min-width:104px!important}}
+@media (max-width:520px){.main-stat-controls button{min-width:36px!important;height:36px!important;padding:7px 9px!important}.main-stat-controls button.toggle-wide{min-width:96px!important;font-size:11px!important}}
+</style>
+<script id="stats-main-controls-script">
+(function(){
+  const MENU_URL='index.html';
+  const GAME_KEY='spelling_football_game_enabled_v2';
+  const AUDIO_KEY='spelling_football_audio_enabled_v2';
+  function qs(s){return document.querySelector(s)}
+  function getStoredBool(key,fallback){
+    try{const v=localStorage.getItem(key); return v===null?fallback:v==='true';}catch(e){return fallback;}
+  }
+  function setStoredBool(key,value){try{localStorage.setItem(key,String(!!value));}catch(e){}}
+  function audioState(){return !!((typeof autoAudio!=='undefined'&&autoAudio)||(typeof commentaryEnabled!=='undefined'&&commentaryEnabled));}
+  function setAudioState(on, speak){
+    if(typeof autoAudio!=='undefined') autoAudio=!!on;
+    if(typeof commentaryEnabled!=='undefined') commentaryEnabled=!!on;
+    if(!on && window.speechSynthesis) window.speechSynthesis.cancel();
+    setStoredBool(AUDIO_KEY,!!on);
+    if(typeof setButtons==='function') setButtons();
+    refreshMainControls();
+    if(typeof setMessage==='function') setMessage(on?'Audio activado.':'Audio desactivado.');
+    if(on && speak && typeof speakCurrent==='function') speakCurrent(true);
+  }
+  function setGameState(on){
+    if(typeof gameEnabled!=='undefined') gameEnabled=!!on;
+    if(!on){
+      if(typeof pendingCommentarySpeech!=='undefined') pendingCommentarySpeech=null;
+      if(window.speechSynthesis && !audioState()) window.speechSynthesis.cancel();
+    }
+    setStoredBool(GAME_KEY,!!on);
+    document.body.classList.toggle('game-off',!on);
+    document.body.classList.toggle('game-on',!!on);
+    if(on && typeof footballEngine!=='undefined' && footballEngine && typeof footballEngine.reset==='function') footballEngine.reset();
+    if(typeof render==='function') render();
+    if(typeof setButtons==='function') setButtons();
+    refreshMainControls();
+    if(typeof setMessage==='function') setMessage(on?'Juego activado. Vuelve el campo de fútbol.':'Juego desactivado. Solo queda completar las palabras.');
+  }
+  function ensureControls(){
+    const stats=qs('.stats');
+    if(!stats || qs('#mainStatControls')) return;
+    const box=document.createElement('div');
+    box.className='stat main-stat-controls';
+    box.id='mainStatControls';
+    box.innerHTML='<button type="button" id="homeStatBtn" title="Menú principal" aria-label="Menú principal">🏠</button><button type="button" id="audioStatBtn" class="toggle-wide" aria-pressed="true">🔊 Audio: on</button><button type="button" id="gameStatBtn" class="toggle-wide" aria-pressed="true">🎮 Juego: on</button>';
+    stats.insertBefore(box,stats.firstElementChild);
+    qs('#homeStatBtn').addEventListener('click',()=>{window.location.href=MENU_URL;});
+    qs('#audioStatBtn').addEventListener('click',()=>setAudioState(!audioState(),true));
+    qs('#gameStatBtn').addEventListener('click',()=>setGameState(!(typeof gameEnabled==='undefined'?true:!!gameEnabled)));
+  }
+  window.refreshMainControls=function(){
+    ensureControls();
+    const a=audioState();
+    const g=typeof gameEnabled==='undefined'?true:!!gameEnabled;
+    const ab=qs('#audioStatBtn');
+    const gb=qs('#gameStatBtn');
+    if(ab){ab.textContent=a?'🔊 Audio: on':'🔇 Audio: off';ab.classList.toggle('active-on',a);ab.classList.toggle('active-off',!a);ab.setAttribute('aria-pressed',String(a));}
+    if(gb){gb.textContent=g?'🎮 Juego: on':'🎮 Juego: off';gb.classList.toggle('active-on',g);gb.classList.toggle('active-off',!g);gb.setAttribute('aria-pressed',String(g));}
+    document.body.classList.toggle('game-off',!g);
+    document.body.classList.toggle('game-on',g);
+  };
+  ensureControls();
+  // Restaurar estado guardado al abrir/recargar.
+  const storedAudio=getStoredBool(AUDIO_KEY,audioState());
+  const storedGame=getStoredBool(GAME_KEY,typeof gameEnabled==='undefined'?true:!!gameEnabled);
+  if(typeof autoAudio!=='undefined') autoAudio=storedAudio;
+  if(typeof commentaryEnabled!=='undefined') commentaryEnabled=storedAudio;
+  if(typeof gameEnabled!=='undefined') gameEnabled=storedGame;
+  if(!storedAudio && window.speechSynthesis) window.speechSynthesis.cancel();
+  document.body.classList.toggle('game-off',!storedGame);
+  document.body.classList.toggle('game-on',storedGame);
+  // Reemplazar los toggles originales para que también guarden estado si se usan por teclado/atajos.
+  const oldToggle=window.toggleNoGame;
+  window.toggleNoGame=function(){setGameState(!(typeof gameEnabled==='undefined'?true:!!gameEnabled));};
+  const originalSetButtons=window.setButtons;
+  if(typeof originalSetButtons==='function'){
+    window.setButtons=function(){originalSetButtons.apply(this,arguments);refreshMainControls();};
+  }
+  const originalRender=window.render;
+  if(typeof originalRender==='function'){
+    window.render=function(){originalRender.apply(this,arguments);refreshMainControls();};
+  }
+  if(typeof render==='function') render();
+  refreshMainControls();
+  window.addEventListener('load',()=>{ensureControls();refreshMainControls();});
+})();
+</script>
+
 </body>
 </html>
