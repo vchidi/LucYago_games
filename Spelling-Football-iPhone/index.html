@@ -183,6 +183,24 @@ body.keyboard-open .football-panel{grid-template-columns:1fr!important}
 </style>
 
 
+
+<style id="final-requested-controls-and-rule-fix">
+/* Controles principales visibles a la izquierda de ACIERTOS */
+.stats{grid-template-columns:minmax(360px,auto) repeat(5,minmax(0,1fr))!important;align-items:stretch}
+.stat-control-buttons{display:flex!important;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-start;padding:7px 8px!important}
+.stat-control-buttons button{padding:8px 9px;font-size:12px;border-radius:12px;white-space:nowrap}
+.stat-good{display:flex;gap:8px;align-items:center}
+.zero-btn{min-width:34px;height:34px;padding:0!important;border-radius:12px;background:#fff7dc!important;color:#573900!important}
+/* Que el texto de REGLA no quede cortado */
+.clue-card{overflow:auto!important}
+.clue-card .football-status-grid{max-height:none!important;overflow:visible!important}
+.football-why,#builderEvent{height:auto!important;max-height:none!important;overflow:visible!important;white-space:normal!important}
+.clue-card .panel-mini{height:auto!important;max-height:none!important;overflow:visible!important}
+body.keyboard-open .stats{display:grid!important;grid-template-columns:minmax(300px,auto) repeat(5,minmax(0,1fr))!important}
+body.keyboard-open .stat-control-buttons{display:flex!important}
+body.keyboard-open .stat-control-buttons button{padding:6px 7px;font-size:10px}
+@media (max-width:860px){.stats{grid-template-columns:1fr repeat(2,minmax(0,1fr))!important}.stat-control-buttons{grid-column:1/-1}}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -195,6 +213,12 @@ body.keyboard-open .football-panel{grid-template-columns:1fr!important}
       </div>
     </div>
     <div class="stats">
+      <div class="stat stat-control-buttons">
+        <button id="menuBtn" class="icon-btn" type="button" title="Menú principal">🏠</button>
+        <button id="autoAudioBtn" type="button">🔊 Audio: on</button>
+        <button id="noGameBtn" type="button">🎮 Juego: on</button>
+        <button id="shuffleBtn" type="button" title="Mezclar palabras">🔀 Mezclar</button>
+      </div>
       <div class="stat stat-good"><button id="resetGoodBtn" class="zero-btn" type="button" title="Poner aciertos a 0">0</button><div><div class="k">Aciertos</div><div class="v" id="goodCount">0</div></div></div>
       <div class="stat"><div class="k">Errores</div><div class="v" id="badCount">0</div></div>
       <div class="stat"><div class="k">Racha</div><div class="v" id="streakCount">0</div></div>
@@ -202,15 +226,11 @@ body.keyboard-open .football-panel{grid-template-columns:1fr!important}
       <div class="stat"><div class="k">Palabra</div><div class="v"><span id="currentIndex">1</span>/<span id="totalCount">0</span></div></div>
     </div>
     <div class="controls">
-      <button id="menuBtn" class="icon-btn" title="Menú principal">🏠</button>
       <button id="modeClassicBtn" class="primary active">Tricky letters</button>
       <button id="modeBlindBtn" class="violet">Blind</button>
-      <button id="autoAudioBtn">🔊 Audio: on</button>
       <button id="commentaryBtn" style="display:none">Locución: sí</button>
       <button id="repeatAudioBtn" class="amber">Repetir audio</button>
-      <button id="shuffleBtn">Mezclar</button>
       <button id="restartBtn">Reiniciar partida</button>
-      <button id="noGameBtn">🎮 Juego: on</button>
       <select id="formationSelect" class="select-pill">
         <option value="1-2-2-1">Formación 1-2-2-1</option>
         <option value="1-3-1-1">Formación 1-3-1-1</option>
@@ -1175,7 +1195,7 @@ async function importPlayersFile(file){
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('input[type=file]')) setTimeout(focusInput,0);});
 $('#hiddenInput').addEventListener('input',e=>{const value=e.target.value.toLowerCase().replace(/[^a-z]/g,'');if(value) [...value].forEach(insertLetter);e.target.value='';});
 document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();deleteLast();}});
-$('#menuBtn').addEventListener('click',()=>window.location.href='index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{autoAudio=!autoAudio;setButtons();setMessage(autoAudio?'El audio automático está activado.':'El audio automático está desactivado.');if(autoAudio) speakCurrent();});$('#commentaryBtn').addEventListener('click',()=>{commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled) pendingCommentarySpeech=null;setButtons();setMessage(commentaryEnabled?'La locución del partido está activada.':'La locución del partido está desactivada.');});$('#repeatAudioBtn').addEventListener('click',()=>speakCurrent(true));$('#shuffleBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuración.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Formación actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Posición preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
+$('#menuBtn').addEventListener('click',()=>window.location.href='../index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{autoAudio=!autoAudio;setButtons();setMessage(autoAudio?'El audio automático está activado.':'El audio automático está desactivado.');if(autoAudio) speakCurrent();});$('#commentaryBtn').addEventListener('click',()=>{commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled) pendingCommentarySpeech=null;setButtons();setMessage(commentaryEnabled?'La locución del partido está activada.':'La locución del partido está desactivada.');});$('#repeatAudioBtn').addEventListener('click',()=>speakCurrent(true));$('#shuffleBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuración.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Formación actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Posición preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
 $('#playersEditor').addEventListener('change',e=>{const target=e.target;const indexAttr=target.dataset.playerIndex;const field=target.dataset.playerField;if(indexAttr===undefined||!field) return;const player=playersData[Number(indexAttr)];if(!player) return;player[field]=target.type==='checkbox'?(target.checked?1:0):(field==='name'||field==='role'||field==='photo'||field==='special'?target.value:clampStat(target.value));saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Jugador actualizado.');});
 
 function relocateFootballInfoPanel(){
@@ -1539,6 +1559,165 @@ body.game-off .stat:has(#stepCount){display:none!important}
     refocusAfterRender();
   });
   if(document.readyState!=='loading'){installBlurGuard();refocusAfterRender();}
+})();
+</script>
+
+
+
+<!-- Ajuste final: una sola botonera, iconos sin texto y home a index raíz del proyecto GitHub -->
+<style id="final-single-icon-controls-github-home">
+  /* Ocultar la barra antigua para que no se dupliquen botones ni corte el juego */
+  .controls{display:none!important}
+
+  /* Una única botonera a la izquierda de ACIERTOS */
+  .stats{
+    display:grid!important;
+    grid-template-columns:auto repeat(5,minmax(82px,1fr))!important;
+    align-items:stretch!important;
+    gap:6px!important;
+    overflow:visible!important;
+  }
+  .stat-control-buttons{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:6px!important;
+    align-items:center!important;
+    justify-content:center!important;
+    padding:6px 8px!important;
+    min-width:190px!important;
+    overflow:visible!important;
+  }
+  .stat-control-buttons button{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:38px!important;
+    min-width:38px!important;
+    height:38px!important;
+    padding:0!important;
+    border-radius:13px!important;
+    font-size:18px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  #mainStatControls{display:none!important}
+  .main-stat-controls{display:none!important}
+
+  /* Evitar que el bloque de regla / explicación quede cortado */
+  .clue-card,
+  .clue-card .football-status-grid,
+  .clue-card .panel-mini,
+  .football-why,
+  #builderEvent{
+    max-height:none!important;
+    height:auto!important;
+    overflow:visible!important;
+    white-space:normal!important;
+  }
+
+  body.keyboard-open .stats{
+    display:grid!important;
+    grid-template-columns:auto repeat(5,minmax(70px,1fr))!important;
+  }
+  body.keyboard-open .stat-control-buttons{display:flex!important;min-width:176px!important}
+  body.keyboard-open .stat-control-buttons button{width:34px!important;min-width:34px!important;height:34px!important;font-size:16px!important}
+
+  @media (max-width:760px){
+    .hero{height:auto!important;min-height:0!important;overflow:visible!important}
+    .stats{grid-template-columns:1fr repeat(2,minmax(0,1fr))!important}
+    .stat-control-buttons{grid-column:1/-1!important;min-width:0!important;justify-content:flex-start!important}
+  }
+</style>
+<script id="final-single-icon-controls-github-home-script">
+(function(){
+  const MENU_URL='../index.html';
+  const GAME_KEY='spelling_football_game_enabled_v2';
+  const AUDIO_KEY='spelling_football_audio_enabled_v2';
+  const qs=(s)=>document.querySelector(s);
+
+  function saveBool(key,value){try{localStorage.setItem(key,String(!!value));}catch(e){}}
+  function audioIsOn(){return !!((typeof autoAudio!=='undefined'&&autoAudio)||(typeof commentaryEnabled!=='undefined'&&commentaryEnabled));}
+  function gameIsOn(){return typeof gameEnabled==='undefined'?true:!!gameEnabled;}
+
+  function removeDuplicateControls(){
+    document.querySelectorAll('#mainStatControls,.main-stat-controls').forEach(el=>el.remove());
+  }
+
+  function iconizeControls(){
+    removeDuplicateControls();
+    const home=qs('#menuBtn');
+    const audio=qs('#autoAudioBtn');
+    const game=qs('#noGameBtn');
+    const shuffle=qs('#shuffleBtn');
+
+    if(home){home.textContent='🏠';home.title='Menú principal';home.setAttribute('aria-label','Menú principal');}
+    if(audio){
+      const on=audioIsOn();
+      audio.textContent=on?'🔊':'🔇';
+      audio.title=on?'Audio on':'Audio off';
+      audio.setAttribute('aria-label',on?'Audio on':'Audio off');
+      audio.setAttribute('aria-pressed',String(on));
+    }
+    if(game){
+      const on=gameIsOn();
+      game.textContent=on?'🎮':'🚫';
+      game.title=on?'Juego on':'Juego off';
+      game.setAttribute('aria-label',on?'Juego on':'Juego off');
+      game.setAttribute('aria-pressed',String(on));
+    }
+    if(shuffle){shuffle.textContent='🔀';shuffle.title='Mezclar palabras';shuffle.setAttribute('aria-label','Mezclar palabras');}
+
+    document.body.classList.toggle('game-off',!gameIsOn());
+    document.body.classList.toggle('game-on',gameIsOn());
+  }
+
+  function setAudio(on){
+    if(typeof autoAudio!=='undefined') autoAudio=!!on;
+    if(typeof commentaryEnabled!=='undefined') commentaryEnabled=!!on;
+    saveBool(AUDIO_KEY,!!on);
+    if(!on && window.speechSynthesis) window.speechSynthesis.cancel();
+    if(typeof setButtons==='function') setButtons();
+    iconizeControls();
+    if(typeof setMessage==='function') setMessage(on?'Audio activado.':'Audio desactivado.');
+    if(on && typeof speakCurrent==='function') speakCurrent(true);
+  }
+
+  function setGame(on){
+    if(typeof gameEnabled!=='undefined') gameEnabled=!!on;
+    saveBool(GAME_KEY,!!on);
+    document.body.classList.toggle('game-off',!on);
+    document.body.classList.toggle('game-on',!!on);
+    if(on && typeof footballEngine!=='undefined' && footballEngine && typeof footballEngine.reset==='function') footballEngine.reset();
+    if(typeof render==='function') render();
+    if(typeof setButtons==='function') setButtons();
+    iconizeControls();
+    if(typeof setMessage==='function') setMessage(on?'Juego activado.':'Juego desactivado. Solo queda completar las palabras.');
+  }
+
+  function replaceWithCleanButton(id, handler){
+    const old=document.getElementById(id);
+    if(!old) return null;
+    const fresh=old.cloneNode(true);
+    old.replaceWith(fresh);
+    fresh.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();handler(e);},{capture:false});
+    return fresh;
+  }
+
+  function installFinalControls(){
+    removeDuplicateControls();
+    replaceWithCleanButton('menuBtn',()=>{ window.location.href=MENU_URL; });
+    replaceWithCleanButton('autoAudioBtn',()=>setAudio(!audioIsOn()));
+    replaceWithCleanButton('noGameBtn',()=>setGame(!gameIsOn()));
+    replaceWithCleanButton('shuffleBtn',()=>{ if(typeof shuffleWords==='function') shuffleWords(); iconizeControls(); });
+    iconizeControls();
+  }
+
+  // Evitar que scripts anteriores vuelvan a crear una segunda botonera.
+  window.refreshMainControls=iconizeControls;
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',installFinalControls);
+  else installFinalControls();
+  window.addEventListener('load',()=>{installFinalControls();setTimeout(iconizeControls,50);setTimeout(iconizeControls,250);});
 })();
 </script>
 
