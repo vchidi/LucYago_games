@@ -108,11 +108,9 @@ button:disabled{opacity:.42;cursor:not-allowed}
 .aquarium-stage{position:relative;height:324px;border-radius:22px;overflow:hidden}
 .tank-sand{position:absolute;left:0;right:0;bottom:0;height:48px;background:linear-gradient(180deg,#ffe8a3,#f5d47d);border-top:3px solid rgba(255,255,255,.38)}
 .tank-bubble{position:absolute;bottom:-24px;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.58);animation:floatup linear infinite}
-.aqua-item{position:absolute;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 10px 14px rgba(0,64,96,.12));user-select:none;line-height:1;transform:translate(-50%,-50%)}
-.aqua-item.bad{filter:drop-shadow(0 12px 18px rgba(52,16,16,.22));animation:dangerbob 2.4s ease-in-out infinite}
-.aqua-item.bottom{bottom:14px}
-.aqua-item.middle{bottom:78px}
-.aqua-item.top{top:18px}
+.aqua-item{position:absolute;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 10px 14px rgba(0,64,96,.12));user-select:none;line-height:1;width:1.25em;height:1.25em;--flip:1;transform:translate(-50%,-50%) scaleX(var(--flip))}
+.aqua-item.bad{filter:grayscale(1) brightness(.68) contrast(1.08) drop-shadow(0 12px 18px rgba(52,16,16,.22));animation:dangerbob 2.4s ease-in-out infinite}
+.aqua-item.bottom,.aqua-item.middle,.aqua-item.top{bottom:auto}
 .aqua-item.fish_orange,.aqua-item.fish_blue,.aqua-item.fish_puffer,.aqua-item.fish_tropical,.aqua-item.dolphin,.aqua-item.turtle,.aqua-item.jellyfish,.aqua-item.seahorse,.aqua-item.crab{animation:swim 4.8s ease-in-out infinite alternate}
 .tank-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;opacity:0;transform:scale(.96);pointer-events:none;transition:all .25s ease}
 .tank-overlay.visible{opacity:1;transform:scale(1)}
@@ -156,9 +154,9 @@ button:disabled{opacity:.42;cursor:not-allowed}
 @keyframes pulseGood{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
 @keyframes shakeBad{0%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
 @keyframes revealCorrect{0%{opacity:0;transform:translateY(8px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes swim{0%{transform:translateX(0)}100%{transform:translateX(10px)}}
+@keyframes swim{0%{transform:translate(-50%,-50%) scaleX(var(--flip)) translateX(0)}50%{transform:translate(-50%,-50%) scaleX(var(--flip)) translateX(0)}100%{transform:translate(-50%,-50%) scaleX(var(--flip)) translateX(10px)}}
 @keyframes floatup{0%{transform:translateY(0) scale(.9);opacity:.2}20%{opacity:.7}100%{transform:translateY(-220px) scale(1.15);opacity:0}}
-@keyframes dangerbob{0%{transform:translateY(0)}50%{transform:translateY(7px)}100%{transform:translateY(0)}}
+@keyframes dangerbob{0%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(7px)}100%{transform:translate(-50%,-50%) translateY(0)}}
 @media (max-width:980px){.layout{grid-template-columns:1fr}.table-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media (max-width:680px){
   .app{padding-left:10px;padding-right:10px}.hero,.card,.table-panel,.question-stage,.answer-pad-shell{border-radius:22px}
@@ -404,46 +402,38 @@ const STORAGE_KEY="multiplicaciones_iphone_v3";
 const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time:0},errors:[],totalAnswered:0,sourceMode:"tables",difficultFacts:[],difficultEditorOpen:false,aquariumEnabled:true};
 const START_LIVES=10;
 const WIN_TARGET=20;
-const GOOD_ITEMS=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","jellyfish","seahorse","crab","plant","treasure","starfish","shell","coral","pearl"];
-const FISH_TYPES=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","jellyfish","seahorse","crab"];
-const BAD_CREATURES=["big_octopus","baby_shark","weird_bug","eel","piranha","monster","snake","spider"];
-const BAD_SYMBOLS=["crack","poop_pollution","toxic_water","dark_cloud","black_bubbles","red_heater","breakage","warning","skull","bomb","virus"];
-const BAD_ITEMS=[...BAD_CREATURES,...BAD_SYMBOLS];
+const FISH_TYPES=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","crab"];
+const DECOR_ITEMS=["seaweed","plant","plant_tall","kelp","rock","rock_gray","shell","starfish","pearl","bubble_stone","white_stone"];
+const GOOD_ITEMS=[...FISH_TYPES,...DECOR_ITEMS];
+const BAD_CREATURES=["big_octopus","bad_octopus","bad_fish","bad_puffer","eel","piranha","bad_crab","bad_turtle"];
+const BAD_ITEMS=[...BAD_CREATURES];
 const ITEM_UI={
-  fish_orange:{emoji:"🐠",label:"pez naranja",zone:"middle",size:[48,72]},
-  fish_blue:{emoji:"🐟",label:"pez azul",zone:"middle",size:[48,72]},
-  fish_puffer:{emoji:"🐡",label:"pez globo",zone:"middle",size:[50,74]},
-  fish_tropical:{emoji:"🐠",label:"pez tropical",zone:"middle",size:[50,76]},
-  dolphin:{emoji:"🐬",label:"delfin",zone:"middle",size:[52,78]},
-  turtle:{emoji:"🐢",label:"tortuga",zone:"middle",size:[46,70]},
-  jellyfish:{emoji:"🪼",label:"medusa",zone:"middle",size:[48,72]},
-  seahorse:{emoji:"🦄",label:"caballito de mar",zone:"middle",size:[42,62]},
-  crab:{emoji:"🦀",label:"cangrejo",zone:"bottom",size:[42,64]},
-  plant:{emoji:"🌿",label:"planta",zone:"bottom",size:[42,62]},
-  treasure:{emoji:"🪙",label:"tesoro",zone:"bottom",size:[38,54]},
-  starfish:{emoji:"⭐",label:"estrella",zone:"bottom",size:[36,52]},
-  shell:{emoji:"🐚",label:"concha",zone:"bottom",size:[36,52]},
-  coral:{emoji:"🪸",label:"coral",zone:"bottom",size:[42,62]},
-  pearl:{emoji:"⚪",label:"perla",zone:"bottom",size:[30,42]},
-  big_octopus:{emoji:"🐙",label:"pulpo gigante",zone:"middle",size:[54,78]},
-  baby_shark:{emoji:"🦈",label:"tiburon",zone:"middle",size:[58,84]},
-  weird_bug:{emoji:"🪲",label:"bicho raro",zone:"middle",size:[42,62]},
-  eel:{emoji:"🐍",label:"anguila",zone:"middle",size:[44,66]},
-  piranha:{emoji:"🐟",label:"piraña",zone:"middle",size:[46,66]},
-  monster:{emoji:"👾",label:"monstruo",zone:"middle",size:[46,70]},
-  snake:{emoji:"🐍",label:"serpiente",zone:"middle",size:[44,66]},
-  spider:{emoji:"🕷️",label:"arana",zone:"middle",size:[42,62]},
-  crack:{emoji:"🕳",label:"grieta",zone:"bottom",size:[44,64]},
-  poop_pollution:{emoji:"💩",label:"suciedad",zone:"bottom",size:[40,58]},
-  toxic_water:{emoji:"☣",label:"agua toxica",zone:"middle",size:[44,66]},
-  dark_cloud:{emoji:"☁",label:"nube negra",zone:"top",size:[44,66]},
-  black_bubbles:{emoji:"●●●",label:"burbujas negras",zone:"middle",size:[32,48]},
-  red_heater:{emoji:"♨",label:"calentador rojo",zone:"middle",size:[42,60]},
-  breakage:{emoji:"⚡",label:"rotura",zone:"middle",size:[46,68]},
-  warning:{emoji:"⚠️",label:"peligro",zone:"middle",size:[44,66]},
-  skull:{emoji:"☠️",label:"calavera",zone:"middle",size:[48,72]},
-  bomb:{emoji:"💣",label:"bomba",zone:"middle",size:[44,66]},
-  virus:{emoji:"🦠",label:"virus",zone:"middle",size:[42,62]}
+  fish_orange:{emoji:"🐠",label:"pez naranja",zone:"middle",size:[46,66]},
+  fish_blue:{emoji:"🐟",label:"pez azul",zone:"middle",size:[46,66]},
+  fish_puffer:{emoji:"🐡",label:"pez globo",zone:"middle",size:[48,68]},
+  fish_tropical:{emoji:"🐠",label:"pez tropical",zone:"middle",size:[46,68]},
+  dolphin:{emoji:"🐬",label:"delfin",zone:"middle",size:[50,70]},
+  turtle:{emoji:"🐢",label:"tortuga",zone:"middle",size:[44,64]},
+  crab:{emoji:"🦀",label:"cangrejo",zone:"bottom",size:[40,58]},
+  seaweed:{emoji:"🌿",label:"alga",zone:"bottom",size:[42,60]},
+  plant:{emoji:"🌱",label:"planta",zone:"bottom",size:[38,56]},
+  plant_tall:{emoji:"🌿",label:"planta alta",zone:"bottom",size:[48,66]},
+  kelp:{emoji:"🌿",label:"alga alta",zone:"bottom",size:[50,68]},
+  rock:{emoji:"⚫",label:"roca",zone:"bottom",size:[28,40]},
+  rock_gray:{emoji:"⚪",label:"piedra",zone:"bottom",size:[26,38]},
+  shell:{emoji:"🐚",label:"concha",zone:"bottom",size:[34,48]},
+  starfish:{emoji:"⭐",label:"estrella de mar",zone:"bottom",size:[34,48]},
+  pearl:{emoji:"⚪",label:"perla",zone:"bottom",size:[26,38]},
+  bubble_stone:{emoji:"⚫",label:"piedra",zone:"bottom",size:[24,34]},
+  white_stone:{emoji:"⚪",label:"piedra clara",zone:"bottom",size:[24,34]},
+  big_octopus:{emoji:"🐙",label:"pulpo gigante",zone:"middle",size:[68,88]},
+  bad_octopus:{emoji:"🐙",label:"pulpo",zone:"middle",size:[66,86]},
+  bad_fish:{emoji:"🐟",label:"pez gris",zone:"middle",size:[66,86]},
+  bad_puffer:{emoji:"🐡",label:"pez globo gris",zone:"middle",size:[66,86]},
+  eel:{emoji:"🐍",label:"anguila",zone:"middle",size:[66,86]},
+  piranha:{emoji:"🐟",label:"piraña",zone:"middle",size:[66,86]},
+  bad_crab:{emoji:"🦀",label:"cangrejo",zone:"middle",size:[64,84]},
+  bad_turtle:{emoji:"🐢",label:"tortuga gris",zone:"middle",size:[64,84]}
 };
 const state=loadState();
 let session=freshSession();
@@ -478,13 +468,48 @@ function buildSourceBank(){return state.sourceMode==="difficult"?state.difficult
 function shuffle(list){const copy=list.slice();for(let i=copy.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const temp=copy[i];copy[i]=copy[j];copy[j]=temp}return copy}
 function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
 function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-function makeAquariumItem(type){const meta=ITEM_UI[type];const size=rand(meta.size[0],meta.size[1]);let x=rand(8,92),y=rand(12,82);if(meta.zone==="bottom")y=rand(72,92);if(meta.zone==="top")y=rand(10,34);return{type,size,x,y,left:x,depth:y}}
+function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
+function safeAquariumPercent(value,size,total){const margin=Math.min(34,Math.max(10,((size*.72)/Math.max(total,1))*100+4));return clamp(value,margin,100-margin)}
+function allAquariumItems(){return[...aquarium.goodItems,...aquarium.badItems]}
+function zoneRange(meta,isBad){
+  if(isBad)return{x1:18,x2:82,y1:18,y2:62};
+  if(meta.zone==="bottom")return{x1:14,x2:86,y1:58,y2:74};
+  if(meta.zone==="top")return{x1:16,x2:84,y1:18,y2:32};
+  return{x1:14,x2:86,y1:18,y2:62};
+}
+function itemGapPercent(a,b){
+  const sizeGap=Math.max(14,(a.size+b.size)/5.4);
+  const animalBonus=(FISH_TYPES.includes(a.type)||FISH_TYPES.includes(b.type)||BAD_ITEMS.includes(a.type)||BAD_ITEMS.includes(b.type))?5:2;
+  return sizeGap+animalBonus;
+}
+function itemDistance(a,b){
+  const dx=a.x-b.x;
+  const dy=(a.y-b.y)*1.28;
+  return Math.sqrt(dx*dx+dy*dy);
+}
+function overlapsAquariumItem(candidate,others){return others.some(other=>itemDistance(candidate,other)<itemGapPercent(candidate,other))}
+function makeAquariumItem(type){
+  const meta=ITEM_UI[type];
+  const isBad=BAD_ITEMS.includes(type);
+  const size=rand(meta.size[0],meta.size[1]);
+  const range=zoneRange(meta,isBad);
+  const others=allAquariumItems();
+  let best=null;
+  let bestScore=-1;
+  for(let attempt=0;attempt<220;attempt+=1){
+    const candidate={type,size,x:rand(range.x1,range.x2),y:rand(range.y1,range.y2),flip:Math.random()<.5?-1:1};
+    const nearest=others.length?Math.min(...others.map(other=>itemDistance(candidate,other)-itemGapPercent(candidate,other))):999;
+    if(nearest>bestScore){bestScore=nearest;best=candidate}
+    if(nearest>=0)return{...candidate,left:candidate.x,depth:candidate.y};
+  }
+  return{...best,left:best.x,depth:best.y};
+}
 function waterGradient(){if(aquarium.status==="lost")return"linear-gradient(180deg,#cfd4d8 0%,#9aa4ab 52%,#7d878f 100%)";const danger=aquarium.dirt||0;const top=[223-Math.min(danger*10,92),246-Math.min(danger*13,120),255-Math.min(danger*18,150)];const mid=[159-Math.min(danger*12,108),227-Math.min(danger*18,138),255-Math.min(danger*26,185)];const bot=[74-Math.min(danger*10,64),183-Math.min(danger*16,118),239-Math.min(danger*22,156)];return `linear-gradient(180deg,rgb(${top.join(",")}) 0%,rgb(${mid.join(",")}) 42%,rgb(${bot.join(",")}) 100%)`}
-function addAquariumLife(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const mainFish=randomFrom(FISH_TYPES);const extraPool=GOOD_ITEMS.filter(x=>x!==mainFish);const secondType=randomFrom(extraPool);const thirdType=session.streak>0&&session.streak%5===0?randomFrom(extraPool):null;aquarium.goodItems.push(makeAquariumItem(mainFish));aquarium.goodItems.push(makeAquariumItem(secondType));if(thirdType)aquarium.goodItems.push(makeAquariumItem(thirdType));aquarium.dirt=Math.max(0,(aquarium.dirt||0)-1);aquarium.progress=Math.min(WIN_TARGET,aquarium.progress+1);aquarium.lastEvent=`Han entrado ${ITEM_UI[mainFish].label} y ${ITEM_UI[secondType].label}.`;if(aquarium.progress>=WIN_TARGET){aquarium.status="won";aquarium.lastEvent="La pecera esta llena de vida. Has ganado el minijuego.";}}
-function addAquariumProblem(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const creature=randomFrom(BAD_CREATURES);const symbol=randomFrom(BAD_SYMBOLS);aquarium.badItems.push(makeAquariumItem(creature));aquarium.badItems.push(makeAquariumItem(symbol));aquarium.lives=Math.max(0,aquarium.lives-1);aquarium.dirt=(aquarium.dirt||0)+1;aquarium.lastEvent=`Han aparecido ${ITEM_UI[creature].label} y ${ITEM_UI[symbol].label}.`;if(aquarium.lives===0){aquarium.status="lost";aquarium.lastEvent="La pecera se ha estropeado. Reinicia para empezar otra vez.";}}
+function addAquariumLife(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const mainFish=randomFrom(FISH_TYPES);const secondType=randomFrom(DECOR_ITEMS);const thirdType=session.streak>0&&session.streak%4===0?randomFrom(DECOR_ITEMS):null;aquarium.goodItems.push(makeAquariumItem(mainFish));aquarium.goodItems.push(makeAquariumItem(secondType));if(thirdType)aquarium.goodItems.push(makeAquariumItem(thirdType));aquarium.dirt=Math.max(0,(aquarium.dirt||0)-1);aquarium.progress=Math.min(WIN_TARGET,aquarium.progress+1);aquarium.lastEvent=`Han entrado ${ITEM_UI[mainFish].label} y ${ITEM_UI[secondType].label}.`;if(aquarium.progress>=WIN_TARGET){aquarium.status="won";aquarium.lastEvent="La pecera esta llena de vida. Has ganado el minijuego.";}}
+function addAquariumProblem(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const creature=randomFrom(BAD_CREATURES);let second=randomFrom(BAD_CREATURES);if(BAD_CREATURES.length>1){while(second===creature)second=randomFrom(BAD_CREATURES)}aquarium.badItems.push(makeAquariumItem(creature));aquarium.badItems.push(makeAquariumItem(second));aquarium.lives=Math.max(0,aquarium.lives-1);aquarium.dirt=(aquarium.dirt||0)+1;aquarium.lastEvent=`Han aparecido ${ITEM_UI[creature].label} y ${ITEM_UI[second].label}.`;if(aquarium.lives===0){aquarium.status="lost";aquarium.lastEvent="La pecera se ha estropeado. Reinicia para empezar otra vez.";}}
 function resetAquarium(){aquarium=freshAquarium()}
 function toggleAquarium(){state.aquariumEnabled=!state.aquariumEnabled;saveState();if(state.aquariumEnabled)resetAquarium();render();setMessage(state.aquariumEnabled?"Pecera activada.":"Pecera desactivada.","neutral")}
-function renderAquarium(){const card=$("#aquariumCard");if(!card)return;card.classList.toggle("hidden",!state.aquariumEnabled);if(!state.aquariumEnabled)return;const tank=$("#aquariumTank"),stage=$("#aquariumStage"),overlay=$("#tankOverlay");tank.style.setProperty("--tank-water",waterGradient());tank.classList.toggle("dead",aquarium.status==="lost");stage.querySelectorAll(".aqua-item,.tank-bubble").forEach(n=>n.remove());for(let i=0;i<(aquarium.status==="lost"?5:14);i+=1){const b=document.createElement("div");b.className="tank-bubble";b.style.left=rand(4,94)+"%";b.style.animationDuration=rand(2400,5200)/1000+"s";b.style.animationDelay=rand(0,1800)/1000+"s";b.style.width=b.style.height=rand(10,20)+"px";if(aquarium.status==="lost")b.style.background="rgba(60,60,60,.35)";stage.appendChild(b)}[...aquarium.goodItems,...aquarium.badItems].forEach(item=>{const meta=ITEM_UI[item.type];if(!meta)return;const el=document.createElement("div");el.className=`aqua-item ${item.type} ${meta.zone}${BAD_ITEMS.includes(item.type)?" bad":""}`;el.textContent=meta.emoji;el.style.left=(item.x??item.left??50)+"%";el.style.top=(item.y??50)+"%";el.style.fontSize=item.size+"px";el.style.animationDelay=rand(0,900)/1000+"s";stage.appendChild(el)});const won=aquarium.status==="won",lost=aquarium.status==="lost";overlay.className="tank-overlay"+(won||lost?" visible":"")+(lost?" lose":"");$("#aquariumStateLabel").textContent=won?"Pecera perfecta":lost?"Pecera rota":"Pecera viva";$("#overlayTitle").textContent=won?"GANASTE":"";if(lost)$("#overlayTitle").textContent="☠️";$("#overlayText").textContent=won?"La has llenado de vida.":lost?"MUERTE EN LA PECERA":"";$("#aquariumCounter").textContent=`${aquarium.progress}/${WIN_TARGET} · vidas ${aquarium.lives}`;$("#aquariumEvent").textContent=aquarium.lastEvent}
+function renderAquarium(){const card=$("#aquariumCard");if(!card)return;card.classList.toggle("hidden",!state.aquariumEnabled);if(!state.aquariumEnabled)return;const tank=$("#aquariumTank"),stage=$("#aquariumStage"),overlay=$("#tankOverlay");tank.style.setProperty("--tank-water",waterGradient());tank.classList.toggle("dead",aquarium.status==="lost");stage.querySelectorAll(".aqua-item,.tank-bubble").forEach(n=>n.remove());for(let i=0;i<(aquarium.status==="lost"?10:30);i+=1){const b=document.createElement("div");b.className="tank-bubble";b.style.left=rand(3,97)+"%";b.style.animationDuration=rand(1700,5600)/1000+"s";b.style.animationDelay=rand(0,2200)/1000+"s";b.style.width=b.style.height=rand(6,18)+"px";if(aquarium.status==="lost")b.style.background="rgba(60,60,60,.35)";stage.appendChild(b)}[...aquarium.goodItems,...aquarium.badItems].forEach(item=>{const meta=ITEM_UI[item.type];if(!meta)return;const el=document.createElement("div");el.className=`aqua-item ${item.type} ${meta.zone}${BAD_ITEMS.includes(item.type)?" bad":""}`;el.textContent=meta.emoji;const safeX=safeAquariumPercent(item.x??item.left??50,item.size,stage.clientWidth||320);const safeY=safeAquariumPercent(item.y??50,item.size,stage.clientHeight||240);el.style.left=safeX+"%";el.style.top=safeY+"%";el.style.fontSize=item.size+"px";el.style.setProperty("--flip",item.flip||1);stage.appendChild(el)});const won=aquarium.status==="won",lost=aquarium.status==="lost";overlay.className="tank-overlay"+(won||lost?" visible":"")+(lost?" lose":"");$("#aquariumStateLabel").textContent=won?"Pecera perfecta":lost?"Pecera rota":"Pecera viva";$("#overlayTitle").textContent=won?"GANASTE":"";if(lost)$("#overlayTitle").textContent="☠️";$("#overlayText").textContent=won?"La has llenado de vida.":lost?"MUERTE EN LA PECERA":"";$("#aquariumCounter").textContent=`${aquarium.progress}/${WIN_TARGET} · vidas ${aquarium.lives}`;$("#aquariumEvent").textContent=aquarium.lastEvent}
 function nextQuestion(){if(!session.queue.length){const source=session.reviewMode?state.errors.map(item=>clone(item)):buildSourceBank();session.queue=shuffle(source)}session.current=session.queue.shift()||null;session.answer="";session.showCorrectAnswer=false;session.awaitingContinue=false;render()}
 function startGame(reviewMode){if(!reviewMode&&state.sourceMode==="tables"&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(!reviewMode&&state.sourceMode==="difficult"&&!state.difficultFacts.length){setMessage("Primero elige alguna multiplicacion dificil.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay errores para repasar.","bad");return}stopTimer();session=freshSession();resetAquarium();session.running=true;session.reviewMode=reviewMode;setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos.":"Partida iniciada. A por muchos puntos.","good");if(state.mode==="time"&&!reviewMode){session.timeLeft=60;session.timeDeadline=Date.now()+60000;renderStats();session.timerId=window.setInterval(updateTimer,250)}nextQuestion()}
 function stopTimer(){if(session.timerId){clearInterval(session.timerId);session.timerId=null}session.timeDeadline=null}
