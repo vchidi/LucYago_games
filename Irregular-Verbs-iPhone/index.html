@@ -35,6 +35,8 @@ button,.file-label{border:0;border-radius:999px;padding:8px 12px;font-size:13px;
 .warn{background:#ffe8cf;color:#8a4b00}
 .danger{background:#ffe0dc;color:#8f2d22}
 .success{background:#dff7e7;color:#126b2d}
+.solution-ok{background:#c9f7d7;color:#126b2d;box-shadow:inset 0 0 0 2px rgba(18,107,45,.10)}
+.solution-ok.hidden{display:none!important}
 .small-btn,.small-file{padding:8px 12px;font-size:13px}
 input[type=file]{display:none}
 .mode-btn.active,.filter-btn.active{outline:3px solid rgba(79,140,255,.25)}
@@ -155,7 +157,7 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
 .hangman-stat{border-radius:10px;padding:4px 7px;min-width:76px}
 .hangman-caption{font-size:8px;line-height:1}
 .hangman-value{font-size:13px;margin-top:0;line-height:1}
-.hangman-stage{height:208px;border-radius:14px}
+.hangman-stage{height:168px;border-radius:14px}
 .hangman-sun{top:12px;right:16px;width:34px;height:34px;box-shadow:0 0 0 6px rgba(255,216,93,.12)}
 .hangman-cloud.one{top:28px;left:25px;transform:scale(.7);transform-origin:left top}
 .hangman-cloud.two{top:48px;right:78px;transform:scale(.62);transform-origin:right top}
@@ -163,22 +165,22 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
 .hangman-result-card{padding:10px 14px;border-radius:16px}
 .hangman-result-title{font-size:clamp(22px,4vw,34px)}
 .hangman-result-text{margin-top:4px;font-size:11px}
-/* Compact iPad gallows + hanging man. The box is taller and the full body hangs above the base. */
-.hangman-part.base{left:24px;bottom:22px;width:126px;height:9px}
-.hangman-part.pole{left:58px;bottom:29px;width:10px;height:170px}
-.hangman-part.beam{left:58px;top:7px;width:138px;height:9px}
-.hangman-part.brace{left:66px;top:37px;width:34px;height:7px;transform:rotate(-44deg);transform-origin:left center}
-.hangman-part.rope{left:188px;top:15px;width:6px;height:24px}
-.hangman-part.head{left:168px;top:39px;width:42px;height:42px;border-width:5px}
-.hangman-part.neck{left:186px;top:80px;width:7px;height:8px}
-.hangman-part.bodyTop{left:186px;top:87px;width:7px;height:31px}
-.hangman-part.bodyBottom{left:186px;top:116px;width:7px;height:26px}
-.hangman-part.leftArm{left:156px;top:100px;width:35px;height:6px;transform:rotate(-34deg)}
-.hangman-part.rightArm{left:189px;top:100px;width:35px;height:6px;transform:rotate(34deg)}
-.hangman-part.leftForearm{left:146px;top:118px;width:29px;height:6px;transform:rotate(22deg)}
-.hangman-part.rightForearm{left:206px;top:118px;width:29px;height:6px;transform:rotate(-22deg)}
-.hangman-part.leftLeg{left:158px;top:140px;width:38px;height:6px;transform:rotate(36deg)}
-.hangman-part.rightLeg{left:184px;top:140px;width:38px;height:6px;transform:rotate(-36deg)}
+/* Compact gallows + hanging man. Legs stay above the base. */
+.hangman-part.base{left:24px;bottom:22px;width:102px;height:9px}
+.hangman-part.pole{left:56px;bottom:29px;width:10px;height:116px}
+.hangman-part.beam{left:56px;top:18px;width:112px;height:9px}
+.hangman-part.brace{left:64px;top:42px;width:66px;height:7px;transform:rotate(-44deg);transform-origin:left center}
+.hangman-part.rope{left:160px;top:26px;width:6px;height:22px}
+.hangman-part.head{left:140px;top:48px;width:42px;height:42px;border-width:5px}
+.hangman-part.neck{left:158px;top:89px;width:7px;height:8px}
+.hangman-part.bodyTop{left:158px;top:96px;width:7px;height:29px}
+.hangman-part.bodyBottom{left:158px;top:124px;width:7px;height:23px}
+.hangman-part.leftArm{left:128px;top:108px;width:35px;height:6px;transform:rotate(-34deg)}
+.hangman-part.rightArm{left:161px;top:108px;width:35px;height:6px;transform:rotate(34deg)}
+.hangman-part.leftForearm{left:118px;top:126px;width:29px;height:6px;transform:rotate(22deg)}
+.hangman-part.rightForearm{left:178px;top:126px;width:29px;height:6px;transform:rotate(-22deg)}
+.hangman-part.leftLeg{left:130px;top:145px;width:39px;height:6px;transform:rotate(40deg)}
+.hangman-part.rightLeg{left:156px;top:145px;width:39px;height:6px;transform:rotate(-40deg)}
 .message{min-height:28px;border-radius:11px;padding:6px 8px;margin-top:5px;font-size:11px;line-height:1.15}
 .help,.study-note{display:none}
 .bottom-tools{margin-top:5px}
@@ -203,14 +205,14 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
   .mode-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .play-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .bottom-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hangman-stage{height:198px}
+  .hangman-stage{height:158px}
 }
 @media (max-height:620px){
   .title{display:none}
   .stats{margin-top:0}
   .hangman-top{display:none}
   .hangman-box{padding:5px}
-  .hangman-stage{height:190px}
+  .hangman-stage{height:150px}
   .message{min-height:24px;font-size:10.5px;padding:5px 7px}
   .base .word{font-size:clamp(22px,3.5vw,31px)}
   .char{font-size:clamp(20px,3.5vw,29px)}
@@ -245,6 +247,7 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
     <input id="ipadInput" class="ipad-input" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
     <div class="play-buttons" style="margin-bottom:18px">
       <button class="success" id="revealBtn">Solucion</button>
+      <button class="solution-ok hidden" id="solutionOkBtn">OK</button>
       <button class="secondary" id="nextBtn">Siguiente</button>
       <button class="danger" id="tryAgainBtn">Intentar otra vez</button>
       <button class="primary" id="shuffleBtn">Mezclar verbos</button>
@@ -326,12 +329,12 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
 </section>
 </div>
 <script>
-const D=[{baseForm:"write",pastSimple:"wrote",pastSimplePattern:"wr_te",pastParticiple:"written",pastParticiplePattern:"writt_e_",studyHint:"La i cambia a o y luego vuelve con -en.",studyVisual:"i -> o -> i+n",psHighlight:"o",ppHighlight:"en",isNew:"yes"},{baseForm:"give",pastSimple:"gave",pastSimplePattern:"g_ve",pastParticiple:"given",pastParticiplePattern:"give_",studyHint:"La i salta a a y vuelve con -n.",studyVisual:"i -> a -> i+n",psHighlight:"a",ppHighlight:"n",isNew:"yes"},{baseForm:"see",pastSimple:"saw",pastSimplePattern:"saw",pastParticiple:"seen",pastParticiplePattern:"see_",studyHint:"aw en pasado, ee+n en participio.",studyVisual:"ee -> aw -> ee+n",psHighlight:"aw",ppHighlight:"n",isNew:"yes"},{baseForm:"break",pastSimple:"broke",pastSimplePattern:"broke",pastParticiple:"broken",pastParticiplePattern:"______",studyHint:"ea cambia a o y luego anades -n.",studyVisual:"ea -> o -> o+n",psHighlight:"o",ppHighlight:"on",isNew:"yes"},{baseForm:"be",pastSimple:"was/were",pastSimplePattern:"was/were",pastParticiple:"been",pastParticiplePattern:"be__",studyHint:"Was/were en pasado y been en participio.",studyVisual:"be -> was/were -> bee+n",psHighlight:"was/were",ppHighlight:"en",isNew:"yes"},{baseForm:"eat",pastSimple:"ate",pastSimplePattern:"ate",pastParticiple:"eaten",pastParticiplePattern:"eat__",studyHint:"eat pasa a ate y vuelve con -en.",studyVisual:"eat -> ate -> eat+en",psHighlight:"a",ppHighlight:"en",isNew:"no"},{baseForm:"drink",pastSimple:"drank",pastSimplePattern:"dr_nk",pastParticiple:"drunk",pastParticiplePattern:"dr_nk",studyHint:"i, luego a, luego u.",studyVisual:"i -> a -> u",psHighlight:"a",ppHighlight:"u",isNew:"no"}];
+const D=[{"baseForm":"write","pastSimple":"wrote","pastSimplePattern":"wr_te","pastParticiple":"written","pastParticiplePattern":"writ_e_","studyVisual":"i → o → i+t+n","studyHint":"Piensa en WRITE con la i atrapada. La i cambia a o en wrote, y en written vuelve el sonido i y aparecen dos t + en.","psHighlight":"o","ppHighlight":"tn","isNew":"yes"},{"baseForm":"give","pastSimple":"gave","pastSimplePattern":"g_ve","pastParticiple":"given","pastParticiplePattern":"give_","studyVisual":"i → a → i+n","studyHint":"En GIVE, la i salta a una a en gave. Después vuelve la i en given y se añade -n.","psHighlight":"a","ppHighlight":"n","isNew":"yes"},{"baseForm":"see","pastSimple":"saw","pastSimplePattern":"s__","pastParticiple":"seen","pastParticiplePattern":"see_","studyVisual":"ee → aw → ee+n","studyHint":"SEE se abre mucho y aparece una a en saw. Luego vuelve el ee largo y se pega una n: seen.","psHighlight":"aw","ppHighlight":"n","isNew":"yes"},{"baseForm":"break","pastSimple":"broke","pastSimplePattern":"br___","pastParticiple":"broken","pastParticiplePattern":"br____","studyVisual":"ea → o → o+n","studyHint":"BREAK se rompe: ea cambia a o en broke. Luego a broke se le añade -n para formar broken.","psHighlight":"o","ppHighlight":"on","isNew":"yes"},{"baseForm":"be","pastSimple":"was/were","pastSimplePattern":"w__/w___","pastParticiple":"been","pastParticiplePattern":"be__","studyVisual":"be → was/were → bee+n","studyHint":"BE es especial: en pasado puede ser was o were. En participio se queda been, con bee + n.","psHighlight":"was/were","ppHighlight":"en","isNew":"yes"},{"baseForm":"eat","pastSimple":"ate","pastSimplePattern":"___","pastParticiple":"eaten","pastParticiplePattern":"eat__","studyVisual":"eat → ate → eat+en","studyHint":"EAT pierde la e inicial larga y queda ate. Luego vuelve eat y se añade -en: eaten.","psHighlight":"ate","ppHighlight":"en","isNew":"yes"},{"baseForm":"drink","pastSimple":"drank","pastSimplePattern":"dr_nk","pastParticiple":"drunk","pastParticiplePattern":"dr_nk","studyVisual":"i → a → u","studyHint":"DRINK cambia i por a en drank. Después la a se convierte en u en drunk.","psHighlight":"a","ppHighlight":"u","isNew":"yes"},{"baseForm":"go","pastSimple":"went","pastSimplePattern":"w___","pastParticiple":"gone","pastParticiplePattern":"go__","studyVisual":"go → went → go+n","studyHint":"GO desaparece y aparece WENT. Luego vuelve GO y se añade una n.","psHighlight":"went","ppHighlight":"ne","isNew":"no"},{"baseForm":"do","pastSimple":"did","pastSimplePattern":"d__","pastParticiple":"done","pastParticiplePattern":"do__","studyVisual":"do → did → do+ne","studyHint":"DO cambia la o por i en DID. Luego vuelve DO y se añade -ne.","psHighlight":"id","ppHighlight":"ne","isNew":"no"},{"baseForm":"come","pastSimple":"came","pastSimplePattern":"c_me","pastParticiple":"come","pastParticiplePattern":"c_me","studyVisual":"o → a → o","studyHint":"COME cambia la o por a en CAME. Luego vuelve a COME igual.","psHighlight":"a","ppHighlight":"","isNew":"no"},{"baseForm":"take","pastSimple":"took","pastSimplePattern":"t___","pastParticiple":"taken","pastParticiplePattern":"take_","studyVisual":"a → oo → a+en","studyHint":"TAKE cambia a por oo en TOOK. Luego vuelve la a y se añade -en.","psHighlight":"oo","ppHighlight":"en","isNew":"no"},{"baseForm":"have","pastSimple":"had","pastSimplePattern":"ha_","pastParticiple":"had","pastParticiplePattern":"ha_","studyVisual":"ve → d → d","studyHint":"HAVE se corta: desaparece ve y queda HAD, igual en participio.","psHighlight":"d","ppHighlight":"d","isNew":"no"},{"baseForm":"make","pastSimple":"made","pastSimplePattern":"ma_e","pastParticiple":"made","pastParticiplePattern":"ma_e","studyVisual":"k → d → d","studyHint":"MAKE cambia la k por d en MADE, y se mantiene igual después.","psHighlight":"d","ppHighlight":"d","isNew":"no"},{"baseForm":"say","pastSimple":"said","pastSimplePattern":"sa__","pastParticiple":"said","pastParticiplePattern":"sa__","studyVisual":"y → id → id","studyHint":"SAY cambia la y por id en SAID y ya no cambia más.","psHighlight":"id","ppHighlight":"id","isNew":"no"}];
 const HANGMAN_PARTS=["base","pole","beam","brace","rope","head","neck","bodyTop","bodyBottom","leftArm","rightArm","leftForearm","rightForearm","leftLeg","rightLeg"];
 const START_DAMAGE=4;
-let dataset=[...D],datasetName="Inicial",index=0,activeTarget="pastSimple",score={good:0,bad:0},currentMode="tricky",newOnly=false,hangmanEnabled=true,hangman={damage:START_DAMAGE,lives:0,status:"playing"};
-let autoNextTimer=null;
-const K="yago_irregular_verbs_saved_data_v1",NK="yago_irregular_verbs_saved_name_v1",$=s=>document.querySelector(s);
+let dataset=[...D],datasetName="Excel actualizado",index=0,activeTarget="pastSimple",score={good:0,bad:0},currentMode="tricky",newOnly=false,hangmanEnabled=true,hangman={damage:START_DAMAGE,lives:0,status:"playing"};
+let autoNextTimer=null,solutionPending=null;
+const K="yago_irregular_verbs_saved_data_v3",NK="yago_irregular_verbs_saved_name_v3",$=s=>document.querySelector(s);
 function saveData(n){try{localStorage.setItem(K,JSON.stringify(D));localStorage.setItem(NK,n||"Excel guardado")}catch{}}
 function loadData(){try{const r=localStorage.getItem(K);if(!r)return false;const p=JSON.parse(r);if(!Array.isArray(p)||!p.length)return false;D.length=0;p.forEach(x=>D.push(x));datasetName=localStorage.getItem(NK)||"Excel guardado";return true}catch{return false}}
 function norm(a,p){p=String(p||a||"").trim();a=String(a||"").trim();if(!a)return p;if(!p)return a;if(p.length>a.length)p=p.slice(0,a.length);if(p.length<a.length)p+=a.slice(p.length);return p}
@@ -368,19 +371,21 @@ function handleResolvedAnswer(ok,target){const result=ok?applyHangmanSuccess():a
 function insert(letter){if(currentMode==="study"||!dataset.length)return;const it=item();const t=activeTarget,s=it.state[t],i=nextBlank(s);if(i===-1){msg("Ese recuadro ya esta completo. Pulsa borrar para corregirlo o toca el otro verbo.");return}s.guessed[i]=letter;const done=s.pattern.split("").every((ch,j)=>ch!=="_"||(s.guessed[j]&&s.guessed[j]!=="_"));if(done){const guess=s.answer.split("").map((ch,j)=>s.pattern[j]==="_"?(s.guessed[j]||""):ch).join("").toLowerCase(),ok=guess===String(it[t]||"").toLowerCase();s.ok=ok;scoreOnce(it,t,ok);if(!it.meta.revealed)msg(handleResolvedAnswer(ok,t));}else s.ok=null;updateFinished(it);render()}
 function del(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();const it=item(),s=it.state[activeTarget],i=lastFilled(s);if(i!==-1){s.guessed[i]="";s.ok=null;it.meta.revealed=false;it.meta[activeTarget+"_scored"]=false;updateFinished(it);render();msg("Ultima letra borrada.");return}msg("No hay letras para borrar en el verbo seleccionado.")}
 function resetOne(it){it.state={pastSimple:makeState(it.pastSimple,modePattern(it,"pastSimple")),pastParticiple:makeState(it.pastParticiple,modePattern(it,"pastParticiple"))};it.meta={finished:false,revealed:false,pastSimple_scored:false,pastParticiple_scored:false}}
-function reveal(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();const it=item();["pastSimple","pastParticiple"].forEach(k=>{const s=it.state[k];s.answer.split("").forEach((ch,i)=>{if(s.pattern[i]==="_")s.guessed[i]=ch});s.ok=true});it.meta.finished=true;it.meta.revealed=true;const result=applyHangmanSuccess();queueNextVerb();render();msg((result||"Solucion mostrada.")+" Pasando al siguiente verbo...");focusInput()}
-function restart(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();resetOne(item());setActive("pastSimple");render();msg("Puedes volver a intentarlo.")}
-function next(){clearAutoNext();if(!dataset.length)return;index=(index+1)%dataset.length;resetOne(item());setActive("pastSimple");render();msg("Nuevo verbo.")}
-function shuffle(){clearAutoNext();if(!dataset.length)return;dataset=dataset.sort(()=>Math.random()-.5);dataset.forEach(resetOne);index=0;setActive("pastSimple");render();msg("Verbos mezclados.")}
-function restartGame(){clearAutoNext();score={good:0,bad:0};index=0;rebuild();setActive("pastSimple");resetHangman();render();msg("Partida re-empezada.")}
-function setMode(m){clearAutoNext();currentMode=m;$("#modeTrickyBtn").classList.toggle("active",m==="tricky");$("#modeBlindBtn").classList.toggle("active",m==="blind");$("#modeStudyBtn").classList.toggle("active",m==="study");rebuild();setActive("pastSimple");render();msg(m==="study"?"Modo Estudio.":m==="blind"?"Modo Blind: todas las letras ocultas.":"Modo Tricky letters.")}
-function toggleNew(){clearAutoNext();newOnly=!newOnly;$("#newOnlyBtn").classList.toggle("active",newOnly);rebuild();index=0;setActive("pastSimple");render();msg(newOnly?"Solo verbos recien incorporados.":"Todos los verbos.")}
+function showSolutionOk(show){const b=$("#solutionOkBtn");if(b)b.classList.toggle("hidden",!show)}
+function reveal(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();const it=item(),hadError=it.state.pastSimple.ok===false||it.state.pastParticiple.ok===false;["pastSimple","pastParticiple"].forEach(k=>{const s=it.state[k];s.answer.split("").forEach((ch,i)=>{if(s.pattern[i]==="_")s.guessed[i]=ch});s.ok=true});it.meta.finished=true;it.meta.revealed=true;solutionPending={repeat:hadError};render();showSolutionOk(true);msg(hadError?"Solucion mostrada. Pulsa OK y se repetira este mismo verbo hasta hacerlo bien.":"Solucion mostrada. Pulsa OK para continuar.");focusInput()}
+function solutionOk(){if(!solutionPending)return;const repeat=solutionPending.repeat;solutionPending=null;showSolutionOk(false);if(repeat){resetOne(item());setActive("pastSimple");render();msg("Repite este mismo verbo hasta hacerlo bien.")}else next();focusInput()}
+function restart(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();solutionPending=null;showSolutionOk(false);resetOne(item());setActive("pastSimple");render();msg("Puedes volver a intentarlo.")}
+function next(){clearAutoNext();solutionPending=null;showSolutionOk(false);if(!dataset.length)return;index=(index+1)%dataset.length;resetOne(item());setActive("pastSimple");render();msg("Nuevo verbo.")}
+function shuffle(){clearAutoNext();solutionPending=null;showSolutionOk(false);if(!dataset.length)return;dataset=dataset.sort(()=>Math.random()-.5);dataset.forEach(resetOne);index=0;setActive("pastSimple");render();msg("Verbos mezclados.")}
+function restartGame(){clearAutoNext();solutionPending=null;showSolutionOk(false);score={good:0,bad:0};index=0;rebuild();setActive("pastSimple");resetHangman();render();msg("Partida re-empezada.")}
+function setMode(m){clearAutoNext();solutionPending=null;showSolutionOk(false);currentMode=m;$("#modeTrickyBtn").classList.toggle("active",m==="tricky");$("#modeBlindBtn").classList.toggle("active",m==="blind");$("#modeStudyBtn").classList.toggle("active",m==="study");rebuild();setActive("pastSimple");render();msg(m==="study"?"Modo Estudio.":m==="blind"?"Modo Blind: todas las letras ocultas.":"Modo Tricky letters.")}
+function toggleNew(){clearAutoNext();solutionPending=null;showSolutionOk(false);newOnly=!newOnly;$("#newOnlyBtn").classList.toggle("active",newOnly);rebuild();index=0;setActive("pastSimple");render();msg(newOnly?"Solo verbos recien incorporados.":"Todos los verbos.")}
 function toggleHangman(){hangmanEnabled=!hangmanEnabled;$("#hangmanToggleBtn").classList.toggle("active",hangmanEnabled);render();msg(hangmanEnabled?"Ahorcado visible.":"Ahorcado oculto.")}
 function parseRows(rows){if(!rows.length)return[];const h=rows[0].map(v=>String(v||"").trim()),need=["baseForm","pastSimple","pastSimplePattern","pastParticiple","pastParticiplePattern"];if(!need.every(x=>h.includes(x)))return[];return rows.slice(1).map(r=>{const o={};h.forEach((x,i)=>o[x]=r[i]);return clean(o)}).filter(Boolean)}
 function importJson(text,name){clearAutoNext();const parsed=JSON.parse(text),rows=Array.isArray(parsed)?parsed.map(clean).filter(Boolean):[];if(!rows.length)throw new Error("El archivo no tiene verbos validos.");for(let i=0;i<D.length;i++)D[i]=rows[i]||D[i];while(D.length>rows.length)D.pop();datasetName=name||"JSON";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Datos importados y guardados.")}
 function importWorkbook(buf,name){clearAutoNext();const wb=XLSX.read(buf,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:""}),parsed=parseRows(rows);if(!parsed.length)throw new Error("No he encontrado el formato esperado en el Excel.");D.length=0;parsed.forEach(x=>D.push(x));datasetName=name||"Excel";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Excel importado y guardado.")}
 function exportJson(){const blob=new Blob([JSON.stringify(D,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="irregular_verbs_data.json";a.click();URL.revokeObjectURL(url)}
-$("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");$("#deleteBtn").addEventListener("click",del);$("#restartVerbBtn").addEventListener("click",restart);$("#revealBtn").addEventListener("click",reveal);$("#nextBtn").addEventListener("click",next);$("#tryAgainBtn").addEventListener("click",restart);$("#shuffleBtn").addEventListener("click",shuffle);$("#restartGameBtn").addEventListener("click",restartGame);$("#exportJsonBtn").addEventListener("click",exportJson);$("#modeTrickyBtn").addEventListener("click",()=>setMode("tricky"));$("#modeBlindBtn").addEventListener("click",()=>setMode("blind"));$("#modeStudyBtn").addEventListener("click",()=>setMode("study"));$("#newOnlyBtn").addEventListener("click",toggleNew);$("#hangmanToggleBtn").addEventListener("click",toggleHangman);
+$("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");$("#solutionOkBtn").addEventListener("click",solutionOk);$("#deleteBtn").addEventListener("click",del);$("#restartVerbBtn").addEventListener("click",restart);$("#revealBtn").addEventListener("click",reveal);$("#nextBtn").addEventListener("click",next);$("#tryAgainBtn").addEventListener("click",restart);$("#shuffleBtn").addEventListener("click",shuffle);$("#restartGameBtn").addEventListener("click",restartGame);$("#exportJsonBtn").addEventListener("click",exportJson);$("#modeTrickyBtn").addEventListener("click",()=>setMode("tricky"));$("#modeBlindBtn").addEventListener("click",()=>setMode("blind"));$("#modeStudyBtn").addEventListener("click",()=>setMode("study"));$("#newOnlyBtn").addEventListener("click",toggleNew);$("#hangmanToggleBtn").addEventListener("click",toggleHangman);
 $("#psCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastSimple");render();focusInput()});
 $("#ppCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastParticiple");render();focusInput()});
 document.addEventListener("pointerdown",e=>{if(currentMode==="study")return;if(e.target.closest("input[type=file]"))return;setTimeout(focusInput,0)});
