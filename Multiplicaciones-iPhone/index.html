@@ -524,7 +524,20 @@ function comboBonus(){if(session.streak>=10)return 5;if(session.streak>=7)return
 function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["#ffd84d","#ff8c42","#ffffff","#8ef0bf","#ffd2c8","#6ee7ff"];for(let i=0;i<22;i+=1){const spark=document.createElement("span");spark.className="spark show-spark";spark.style.left=10+Math.random()*80+"%";spark.style.top=30+Math.random()*42+"%";spark.style.background=colors[i%colors.length];spark.style.setProperty("--tx",-70+Math.random()*140+"px");spark.style.setProperty("--ty",-110-Math.random()*90+"px");spark.style.animationDelay=i*.018+"s";host.appendChild(spark)}for(let i=0;i<3;i+=1){const firework=document.createElement("span");firework.className="firework show-firework";firework.style.left=18+i*28+Math.random()*8+"%";firework.style.top=18+Math.random()*18+"%";firework.style.color=colors[(i*2)%colors.length];firework.style.animationDelay=.08+i*.12+"s";host.appendChild(firework)}setTimeout(()=>{host.innerHTML=""},1200)}
 function flashStage(tone){const stage=$("#questionStage");stage.classList.remove("good","bad");void stage.offsetWidth;if(tone==="good"||tone==="bad")stage.classList.add(tone)}
 function advanceAfterFeedback(){if(session.running&&(state.mode!=="time"||session.timeLeft>0||session.reviewMode))nextQuestion()}
-function acknowledgeCorrect(){if(!session.awaitingContinue)return;if(session.repeatCurrentOnContinue&&session.current)session.queue.unshift(clone(session.current));session.repeatCurrentOnContinue=false;session.awaitingContinue=false;session.showCorrectAnswer=false;advanceAfterFeedback()}
+function acknowledgeCorrect(){
+  if(!(session.awaitingContinue||session.showCorrectAnswer)||!session.current)return;
+  const repeat=session.repeatCurrentOnContinue;
+  session.awaitingContinue=false;
+  session.showCorrectAnswer=false;
+  session.repeatCurrentOnContinue=false;
+  session.answer="";
+  if(repeat){
+    setMessage("Prueba otra vez la misma cuenta.","neutral");
+    render();
+    return;
+  }
+  advanceAfterFeedback();
+}
 function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);addAquariumLife();if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);addAquariumProblem();saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render();forceCorrectButtonVisible();requestAnimationFrame(forceCorrectButtonVisible)}
 function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"OK":tone==="bad"?"Revisar":"Listo"}
 function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);state.sourceMode="tables";saveState();render()}
@@ -537,7 +550,12 @@ function deleteDigit(){if(!session.running||session.awaitingContinue)return;sess
 function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=false;addAquariumProblem();saveState();setMessage("Saltada. Mira la correcta y pulsa Cierto! para seguir.","bad");flashStage("bad");render();forceCorrectButtonVisible();requestAnimationFrame(forceCorrectButtonVisible)}
 function resetSession(){stopTimer();session=freshSession();resetAquarium();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
 function isIPadCompact(){return window.matchMedia&&window.matchMedia("(min-width:681px) and (max-width:1180px)").matches}
-function setTablesOpen(open){document.body.classList.toggle("ipad-tables-open",open);document.body.classList.toggle("ipad-tables-closed",!open)}
+function setTablesOpen(open){
+  document.body.classList.toggle("ipad-tables-open",open);
+  document.body.classList.toggle("ipad-tables-closed",!open);
+  const btn=document.querySelector("#chooseTablesBtn");
+  if(btn)btn.textContent=open?"Cerrar tablas":"Tablas";
+}
 function scrollToTables(){if(isIPadCompact())setTablesOpen(!document.body.classList.contains("ipad-tables-open"));const section=$("#tablesSection");if(section&&(!isIPadCompact()||document.body.classList.contains("ipad-tables-open")))section.scrollIntoView({behavior:"smooth",block:"start"})}
 function scrollToGame(){if(isIPadCompact())setTablesOpen(false);const section=$("#gameSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
 function renderTables(){const grid=$("#tableGrid"),difficultGrid=$("#difficultGrid");grid.innerHTML="";difficultGrid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}for(let table=1;table<=12;table+=1){for(let factor=1;factor<=10;factor+=1){const btn=document.createElement("button");const active=state.difficultFacts.some(item=>item.table===table&&item.factor===factor);btn.className="fact-btn"+(active?" active":"");btn.textContent=table+"x"+factor;btn.addEventListener("click",()=>toggleDifficultFact(table,factor));difficultGrid.appendChild(btn)}}$("#difficultBtn").classList.toggle("primary",state.sourceMode==="difficult");$("#difficultBtn").classList.toggle("blue",state.sourceMode!=="difficult");$("#editDifficultBtn").classList.toggle("primary",state.difficultEditorOpen);$("#editDifficultBtn").classList.toggle("secondary",!state.difficultEditorOpen);$("#difficultPanel").classList.toggle("open",state.difficultEditorOpen);$("#difficultCount").textContent=state.difficultFacts.length+" seleccionadas";const selected=state.sourceMode==="difficult"?(state.difficultFacts.length?state.difficultFacts.length+" dificiles":"ninguna dificil"):state.selectedTables.length?state.selectedTables.join(", "):"ninguna";$("#selectedTablesFooterText").textContent=selected}
@@ -595,11 +613,11 @@ function bindPadDigit(btn){
 }
 
 $("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");
-$("#startBtn").addEventListener("click",()=>startGame(false));
-$("#reviewBtn").addEventListener("click",()=>startGame(true));
+$("#startBtn").addEventListener("click",()=>{if(isIPadCompact())setTablesOpen(false);startGame(false)});
+$("#reviewBtn").addEventListener("click",()=>{if(isIPadCompact())setTablesOpen(false);startGame(true)});
 $("#aquariumToggleBtn").addEventListener("click",toggleAquarium);
 $("#chooseTablesBtn").addEventListener("click",scrollToTables);
-$("#playFromTablesBtn").addEventListener("click",()=>{scrollToGame();startGame(false)});
+$("#playFromTablesBtn").addEventListener("click",()=>{if(isIPadCompact())setTablesOpen(false);scrollToGame();startGame(false)});
 $("#selectAllBtn").addEventListener("click",()=>{state.selectedTables=Array.from({length:12},(_,i)=>i+1);state.sourceMode="tables";saveState();render()});
 $("#clearBtn").addEventListener("click",()=>{state.selectedTables=[];state.sourceMode="tables";saveState();render()});
 $("#difficultBtn").addEventListener("click",()=>setSourceMode("difficult"));
