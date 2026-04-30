@@ -28,7 +28,7 @@ body{
     linear-gradient(155deg,var(--bg-1),var(--bg-2))
 }
 button,.pad-btn,.action-btn,.mode-btn,.table-btn,.tiny-btn,.continue-btn{touch-action:manipulation}
-button{font:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .14s ease,box-shadow .18s ease,background .18s ease,opacity .18s ease}
+button{font:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;transition:transform .14s ease,box-shadow .18s ease,background .18s ease,opacity .18s ease}
 button:active{transform:scale(.97)}
 button:disabled{opacity:.42;cursor:not-allowed}
 .app{max-width:1180px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 12px calc(18px + env(safe-area-inset-bottom))}
@@ -232,6 +232,9 @@ button:disabled{opacity:.42;cursor:not-allowed}
   .fact-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;max-height:180px}
   .fact-btn{padding:5px 3px;border-radius:9px;font-size:11px}
   .hint{display:none}
+  body.ipad-tables-closed #tablesSection{display:none!important}
+  body.ipad-tables-closed .layout{grid-template-columns:1fr}
+  body.ipad-tables-open #tablesSection{display:block!important}
   body>.app>section.card:last-child{display:none!important}
 }
 @media (max-width:680px){
@@ -521,8 +524,8 @@ function comboBonus(){if(session.streak>=10)return 5;if(session.streak>=7)return
 function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["#ffd84d","#ff8c42","#ffffff","#8ef0bf","#ffd2c8","#6ee7ff"];for(let i=0;i<22;i+=1){const spark=document.createElement("span");spark.className="spark show-spark";spark.style.left=10+Math.random()*80+"%";spark.style.top=30+Math.random()*42+"%";spark.style.background=colors[i%colors.length];spark.style.setProperty("--tx",-70+Math.random()*140+"px");spark.style.setProperty("--ty",-110-Math.random()*90+"px");spark.style.animationDelay=i*.018+"s";host.appendChild(spark)}for(let i=0;i<3;i+=1){const firework=document.createElement("span");firework.className="firework show-firework";firework.style.left=18+i*28+Math.random()*8+"%";firework.style.top=18+Math.random()*18+"%";firework.style.color=colors[(i*2)%colors.length];firework.style.animationDelay=.08+i*.12+"s";host.appendChild(firework)}setTimeout(()=>{host.innerHTML=""},1200)}
 function flashStage(tone){const stage=$("#questionStage");stage.classList.remove("good","bad");void stage.offsetWidth;if(tone==="good"||tone==="bad")stage.classList.add(tone)}
 function advanceAfterFeedback(){if(session.running&&(state.mode!=="time"||session.timeLeft>0||session.reviewMode))nextQuestion()}
-function acknowledgeCorrect(){if(!session.awaitingContinue)return;if(session.repeatCurrentOnContinue&&session.current)session.queue.unshift(clone(session.current));session.repeatCurrentOnContinue=false;advanceAfterFeedback()}
-function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);addAquariumLife();if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);addAquariumProblem();saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render()}
+function acknowledgeCorrect(){if(!session.awaitingContinue)return;if(session.repeatCurrentOnContinue&&session.current)session.queue.unshift(clone(session.current));session.repeatCurrentOnContinue=false;session.awaitingContinue=false;session.showCorrectAnswer=false;advanceAfterFeedback()}
+function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}const typed=Number(session.answer),ok=typed===session.current.result;session.answered+=1;state.totalAnswered+=1;if(ok){session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);addAquariumLife();if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;saveState();setMessage("Muy bien. "+session.current.table+" x "+session.current.factor+" = "+session.current.result+". +"+gained+" puntos.","good");flashStage("good");celebrate();if(session.reviewMode)session.queue=session.queue.filter(item=>!(item.table===session.current.table&&item.factor===session.current.factor));render();setTimeout(advanceAfterFeedback,700);return}session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);addAquariumProblem();saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render();forceCorrectButtonVisible();requestAnimationFrame(forceCorrectButtonVisible)}
 function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"OK":tone==="bad"?"Revisar":"Listo"}
 function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);state.sourceMode="tables";saveState();render()}
 function toggleDifficultFact(table,factor){const key=buildFactKey(table,factor);const exists=state.difficultFacts.some(item=>buildFactKey(item.table,item.factor)===key);if(exists)state.difficultFacts=state.difficultFacts.filter(item=>buildFactKey(item.table,item.factor)!==key);else state.difficultFacts=[...state.difficultFacts,{table,factor,result:table*factor}].sort((a,b)=>a.table-b.table||a.factor-b.factor);saveState();render()}
@@ -531,18 +534,65 @@ function toggleDifficultEditor(){state.difficultEditorOpen=!state.difficultEdito
 function setMode(mode){state.mode=mode;saveState();$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode);btn.classList.toggle("primary",btn.dataset.mode===mode);btn.classList.toggle("ghost",btn.dataset.mode!==mode)});renderStats()}
 function inputDigit(digit){if(!session.running||session.awaitingContinue||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
 function deleteDigit(){if(!session.running||session.awaitingContinue)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
-function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=false;addAquariumProblem();saveState();setMessage("Saltada. Mira la correcta y pulsa Cierto! para seguir.","bad");flashStage("bad");render()}
+function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;registerError(session.current,session.answer||"-");session.streak=0;session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=false;addAquariumProblem();saveState();setMessage("Saltada. Mira la correcta y pulsa Cierto! para seguir.","bad");flashStage("bad");render();forceCorrectButtonVisible();requestAnimationFrame(forceCorrectButtonVisible)}
 function resetSession(){stopTimer();session=freshSession();resetAquarium();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
-function scrollToTables(){const section=$("#tablesSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
-function scrollToGame(){const section=$("#gameSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
+function isIPadCompact(){return window.matchMedia&&window.matchMedia("(min-width:681px) and (max-width:1180px)").matches}
+function setTablesOpen(open){document.body.classList.toggle("ipad-tables-open",open);document.body.classList.toggle("ipad-tables-closed",!open)}
+function scrollToTables(){if(isIPadCompact())setTablesOpen(!document.body.classList.contains("ipad-tables-open"));const section=$("#tablesSection");if(section&&(!isIPadCompact()||document.body.classList.contains("ipad-tables-open")))section.scrollIntoView({behavior:"smooth",block:"start"})}
+function scrollToGame(){if(isIPadCompact())setTablesOpen(false);const section=$("#gameSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
 function renderTables(){const grid=$("#tableGrid"),difficultGrid=$("#difficultGrid");grid.innerHTML="";difficultGrid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}for(let table=1;table<=12;table+=1){for(let factor=1;factor<=10;factor+=1){const btn=document.createElement("button");const active=state.difficultFacts.some(item=>item.table===table&&item.factor===factor);btn.className="fact-btn"+(active?" active":"");btn.textContent=table+"x"+factor;btn.addEventListener("click",()=>toggleDifficultFact(table,factor));difficultGrid.appendChild(btn)}}$("#difficultBtn").classList.toggle("primary",state.sourceMode==="difficult");$("#difficultBtn").classList.toggle("blue",state.sourceMode!=="difficult");$("#editDifficultBtn").classList.toggle("primary",state.difficultEditorOpen);$("#editDifficultBtn").classList.toggle("secondary",!state.difficultEditorOpen);$("#difficultPanel").classList.toggle("open",state.difficultEditorOpen);$("#difficultCount").textContent=state.difficultFacts.length+" seleccionadas";const selected=state.sourceMode==="difficult"?(state.difficultFacts.length?state.difficultFacts.length+" dificiles":"ninguna dificil"):state.selectedTables.length?state.selectedTables.join(", "):"ninguna";$("#selectedTablesFooterText").textContent=selected}
 function renderStats(){$("#timeValue").textContent=session.reviewMode?"-":state.mode==="time"?session.running?session.timeLeft+"s":"60s":"-";$("#scoreValue").textContent=session.score;$("#streakValue").textContent=session.streak;$("#scoreBurst").textContent="+"+session.lastDelta;$("#practiceRecord").textContent=state.records.practice;$("#timeRecord").textContent=state.records.time;$("#answeredValue").textContent=state.totalAnswered;$("#errorCount").textContent=state.errors.length;$("#starsView").innerHTML=session.streak>=6?"&#11088;&#11088;&#11088;":session.streak>=3?"&#11088;&#11088;&#9734;":session.streak>=1?"&#11088;&#9734;&#9734;":"&#9734;&#9734;&#9734;"}
 function renderQuestion(){const label=$("#questionLabel"),question=$("#questionText");if(!session.current){label.textContent="Listo para jugar";question.textContent="2 x 7";return}label.textContent=session.reviewMode?"Repasa este error":"Resuelve ahora";question.textContent=session.current.table+" x "+session.current.factor}
-function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Correcta: "+session.current.result;row.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show")}}
+function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if((session.showCorrectAnswer||session.awaitingContinue)&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Correcta: "+session.current.result;row.classList.add("show");row.style.display="grid"}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show");row.style.display=""}}
 function renderErrors(){const list=$("#errorList");list.innerHTML="";if(!state.errors.length){const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>Sin errores guardados</div><div class='error-sub'>Cuando falle una cuenta aparecera aqui para repasar.</div></div><div class='error-points'>OK</div>";list.appendChild(item);return}state.errors.forEach(err=>{const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>"+err.table+" x "+err.factor+" = "+err.result+"</div><div class='error-sub'>Ultimo fallo: "+err.lastWrong+"</div></div><div class='error-points'>Repasar</div>";list.appendChild(item)})}
-function renderControls(){const playing=session.running,locked=session.awaitingContinue;$("#checkBtn").disabled=!playing||locked;$("#skipBtn").disabled=!playing||locked;$("#deleteBtn").disabled=!playing||locked;$("#okPadBtn").disabled=!playing||locked;$("#continueBtn").disabled=!playing||!locked;$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing||locked});$("#reviewBtn").disabled=!state.errors.length}
+function renderControls(){const playing=session.running,locked=session.awaitingContinue;$("#checkBtn").disabled=!playing||locked;$("#skipBtn").disabled=!playing||locked;$("#deleteBtn").disabled=!playing||locked;$("#okPadBtn").disabled=!playing||locked;$("#continueBtn").disabled=!(playing&&locked&&session.current);$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing||locked});$("#reviewBtn").disabled=!state.errors.length}
+function forceCorrectButtonVisible(){
+  if(!session.awaitingContinue||!session.current)return;
+  const row=$("#correctAnswerRow"),btn=$("#continueBtn"),banner=$("#correctAnswerBanner");
+  if(row){row.classList.add("show");row.style.display="grid"}
+  if(btn){btn.disabled=false;btn.style.pointerEvents="auto"}
+  if(banner)banner.textContent="Correcta: "+session.current.result;
+}
 function renderToolbar(){const btn=$("#aquariumToggleBtn");if(!btn)return;btn.textContent=state.aquariumEnabled?"Pecera":"Pecera no";btn.classList.toggle("primary",state.aquariumEnabled);btn.classList.toggle("secondary",!state.aquariumEnabled)}
 function render(){renderTables();renderStats();renderQuestion();renderAnswer();renderErrors();renderControls();renderToolbar();renderAquarium()}
+
+let lastSubmitAt=0;
+function safeCheckAnswer(){
+  const now=Date.now();
+  if(now-lastSubmitAt<220)return;
+  lastSubmitAt=now;
+  checkAnswer();
+}
+function bindTap(selector,handler){
+  const el=$(selector);
+  if(!el)return;
+  let pointerHandledAt=0;
+  el.addEventListener("pointerup",event=>{
+    if(el.disabled)return;
+    pointerHandledAt=Date.now();
+    event.preventDefault();
+    handler(event);
+  },{passive:false});
+  el.addEventListener("click",event=>{
+    if(el.disabled)return;
+    if(Date.now()-pointerHandledAt<450){event.preventDefault();return}
+    handler(event);
+  });
+}
+function bindPadDigit(btn){
+  let pointerHandledAt=0;
+  btn.addEventListener("pointerup",event=>{
+    if(btn.disabled)return;
+    pointerHandledAt=Date.now();
+    event.preventDefault();
+    inputDigit(btn.dataset.digit);
+  },{passive:false});
+  btn.addEventListener("click",event=>{
+    if(btn.disabled)return;
+    if(Date.now()-pointerHandledAt<450){event.preventDefault();return}
+    inputDigit(btn.dataset.digit);
+  });
+}
 
 $("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");
 $("#startBtn").addEventListener("click",()=>startGame(false));
@@ -554,21 +604,24 @@ $("#selectAllBtn").addEventListener("click",()=>{state.selectedTables=Array.from
 $("#clearBtn").addEventListener("click",()=>{state.selectedTables=[];state.sourceMode="tables";saveState();render()});
 $("#difficultBtn").addEventListener("click",()=>setSourceMode("difficult"));
 $("#editDifficultBtn").addEventListener("click",toggleDifficultEditor);
-$("#checkBtn").addEventListener("click",checkAnswer);
+bindTap("#checkBtn",safeCheckAnswer);
 $("#skipBtn").addEventListener("click",skipQuestion);
 $("#resetBtn").addEventListener("click",resetSession);
-$("#deleteBtn").addEventListener("click",deleteDigit);
-$("#okPadBtn").addEventListener("click",checkAnswer);
-$("#continueBtn").addEventListener("click",acknowledgeCorrect);
+bindTap("#deleteBtn",deleteDigit);
+bindTap("#okPadBtn",safeCheckAnswer);
+bindTap("#continueBtn",acknowledgeCorrect);
 $("#clearErrorsBtn").addEventListener("click",()=>{state.errors=[];saveState();render();setMessage("Errores borrados.","neutral")});
 $$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.addEventListener("click",()=>setMode(btn.dataset.mode))});
-$$(".answer-pad button[data-digit]").forEach(btn=>btn.addEventListener("click",()=>inputDigit(btn.dataset.digit)));
+$$(".answer-pad button[data-digit]").forEach(bindPadDigit);
 
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-let lastTouchEnd=0;
-document.addEventListener("touchend",event=>{const now=Date.now();if(now-lastTouchEnd<300)event.preventDefault();lastTouchEnd=now;},{passive:false});
-document.addEventListener("dblclick",event=>event.preventDefault(),{passive:false});
-window.addEventListener("load",()=>{render();setMode(state.mode);setMessage("Partida lista.","neutral");if((state.sourceMode==="tables"&&state.selectedTables.length)||(state.sourceMode==="difficult"&&state.difficultFacts.length))startGame(false)});
+document.addEventListener("gesturestart",event=>event.preventDefault(),{passive:false});
+document.addEventListener("dblclick",event=>{
+  if(event.target&&event.target.closest&&event.target.closest("button"))return;
+  event.preventDefault();
+},{passive:false});
+window.addEventListener("resize",()=>{if(isIPadCompact()&&!document.body.classList.contains("ipad-tables-open"))setTablesOpen(false);else if(!isIPadCompact())document.body.classList.remove("ipad-tables-open","ipad-tables-closed")});
+window.addEventListener("load",()=>{if(isIPadCompact())setTablesOpen(false);render();setMode(state.mode);setMessage("Partida lista.","neutral");if((state.sourceMode==="tables"&&state.selectedTables.length)||(state.sourceMode==="difficult"&&state.difficultFacts.length))startGame(false)});
 </script>
 </body>
 </html>
