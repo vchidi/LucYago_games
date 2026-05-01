@@ -106,6 +106,7 @@ input[type=file]{display:none}
 .study-word{font-family:"Courier New",monospace;font-size:24px;font-weight:900;background:#fff;border-radius:16px;padding:10px 12px;box-shadow:inset 0 0 0 2px #eef2ff;white-space:pre}
 .red{color:var(--red)}
 .green{color:var(--green)}
+.study-arrow{color:var(--muted);font-weight:900}
 @media (display-mode:standalone){body{min-height:100dvh}}
 @media (max-width:900px){.mode-buttons,.play-buttons,.bottom-tools{flex-wrap:wrap}}
 @media (max-width:640px){
@@ -157,30 +158,30 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
 .hangman-stat{border-radius:10px;padding:4px 7px;min-width:76px}
 .hangman-caption{font-size:8px;line-height:1}
 .hangman-value{font-size:13px;margin-top:0;line-height:1}
-.hangman-stage{height:168px;border-radius:14px}
+.hangman-stage{height:218px;border-radius:14px}
 .hangman-sun{top:12px;right:16px;width:34px;height:34px;box-shadow:0 0 0 6px rgba(255,216,93,.12)}
 .hangman-cloud.one{top:28px;left:25px;transform:scale(.7);transform-origin:left top}
 .hangman-cloud.two{top:48px;right:78px;transform:scale(.62);transform-origin:right top}
-.hangman-ground{left:18px;right:18px;bottom:15px;height:2px}
+.hangman-ground{left:18px;right:18px;bottom:18px;height:2px}
 .hangman-result-card{padding:10px 14px;border-radius:16px}
 .hangman-result-title{font-size:clamp(22px,4vw,34px)}
 .hangman-result-text{margin-top:4px;font-size:11px}
-/* Compact gallows + hanging man. Legs stay above the base. */
-.hangman-part.base{left:24px;bottom:22px;width:102px;height:9px}
-.hangman-part.pole{left:56px;bottom:29px;width:10px;height:116px}
-.hangman-part.beam{left:56px;top:18px;width:112px;height:9px}
-.hangman-part.brace{left:64px;top:42px;width:66px;height:7px;transform:rotate(-44deg);transform-origin:left center}
-.hangman-part.rope{left:160px;top:26px;width:6px;height:22px}
-.hangman-part.head{left:140px;top:48px;width:42px;height:42px;border-width:5px}
-.hangman-part.neck{left:158px;top:89px;width:7px;height:8px}
-.hangman-part.bodyTop{left:158px;top:96px;width:7px;height:29px}
-.hangman-part.bodyBottom{left:158px;top:124px;width:7px;height:23px}
-.hangman-part.leftArm{left:128px;top:108px;width:35px;height:6px;transform:rotate(-34deg)}
-.hangman-part.rightArm{left:161px;top:108px;width:35px;height:6px;transform:rotate(34deg)}
-.hangman-part.leftForearm{left:118px;top:126px;width:29px;height:6px;transform:rotate(22deg)}
-.hangman-part.rightForearm{left:178px;top:126px;width:29px;height:6px;transform:rotate(-22deg)}
-.hangman-part.leftLeg{left:130px;top:145px;width:39px;height:6px;transform:rotate(40deg)}
-.hangman-part.rightLeg{left:156px;top:145px;width:39px;height:6px;transform:rotate(-40deg)}
+/* Compact iPad gallows: taller, with the completed body clearly hanging above the base. */
+.hangman-part.base{left:24px;bottom:24px;width:112px;height:9px}
+.hangman-part.pole{left:56px;bottom:31px;width:10px;height:176px}
+.hangman-part.beam{left:56px;top:13px;width:132px;height:9px}
+.hangman-part.brace{left:64px;top:38px;width:50px;height:7px;transform:rotate(-36deg);transform-origin:left center}
+.hangman-part.rope{left:181px;top:22px;width:6px;height:34px}
+.hangman-part.head{left:161px;top:56px;width:42px;height:42px;border-width:5px}
+.hangman-part.neck{left:179px;top:97px;width:7px;height:8px}
+.hangman-part.bodyTop{left:179px;top:104px;width:7px;height:31px}
+.hangman-part.bodyBottom{left:179px;top:134px;width:7px;height:28px}
+.hangman-part.leftArm{left:149px;top:117px;width:35px;height:6px;transform:rotate(-34deg)}
+.hangman-part.rightArm{left:182px;top:117px;width:35px;height:6px;transform:rotate(34deg)}
+.hangman-part.leftForearm{left:139px;top:135px;width:29px;height:6px;transform:rotate(22deg)}
+.hangman-part.rightForearm{left:199px;top:135px;width:29px;height:6px;transform:rotate(-22deg)}
+.hangman-part.leftLeg{left:151px;top:158px;width:42px;height:6px;transform:rotate(40deg)}
+.hangman-part.rightLeg{left:177px;top:158px;width:42px;height:6px;transform:rotate(-40deg)}
 .message{min-height:28px;border-radius:11px;padding:6px 8px;margin-top:5px;font-size:11px;line-height:1.15}
 .help,.study-note{display:none}
 .bottom-tools{margin-top:5px}
@@ -205,14 +206,14 @@ button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:
   .mode-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .play-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
   .bottom-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hangman-stage{height:158px}
+  .hangman-stage{height:198px}
 }
 @media (max-height:620px){
   .title{display:none}
   .stats{margin-top:0}
   .hangman-top{display:none}
   .hangman-box{padding:5px}
-  .hangman-stage{height:150px}
+  .hangman-stage{height:204px}
   .message{min-height:24px;font-size:10.5px;padding:5px 7px}
   .base .word{font-size:clamp(22px,3.5vw,31px)}
   .char{font-size:clamp(20px,3.5vw,29px)}
@@ -358,7 +359,20 @@ function updateFinished(it){it.meta.finished=it.state.pastSimple.ok===true&&it.s
 function queueNextVerb(){clearAutoNext();if(currentMode==="study"||!dataset.length)return;autoNextTimer=setTimeout(()=>{autoNextTimer=null;if(currentMode==="study"||!dataset.length)return;next()},1000)}
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 function hi(w,t,cls){if(!t)return esc(w);const i=w.toLowerCase().indexOf(t.toLowerCase());if(i===-1)return esc(w);return `${esc(w.slice(0,i))}<span class="${cls}">${esc(w.slice(i,i+t.length))}</span>${esc(w.slice(i+t.length))}`}
-function renderStudy(){if(!dataset.length)return;const it=item();$("#studyBaseWord").textContent=it.baseForm;$("#studyTopForms").innerHTML=`${esc(it.baseForm)}&nbsp;&nbsp;${hi(it.pastSimple,it.psHighlight,"red")}&nbsp;&nbsp;${hi(it.pastParticiple,it.ppHighlight,"green")}`;$("#studyVisual").textContent=it.studyVisual||`${it.baseForm} -> ${it.pastSimple} -> ${it.pastParticiple}`;$("#studyHint").textContent=it.studyHint||"Anade studyHint en el Excel.";$("#studyBaseAligned").innerHTML=esc(it.baseForm);$("#studyPSAligned").innerHTML=hi(it.pastSimple,it.psHighlight,"red");$("#studyPPAligned").innerHTML=hi(it.pastParticiple,it.ppHighlight,"green")}
+function colorizeStudyVisual(visual,psH,ppH){
+  const raw=String(visual||"");
+  const arrow=raw.includes("->")?"->":(raw.includes("→")?"→":null);
+  if(!arrow){return hi(hi(raw,psH,"red"),ppH,"green")}
+  const parts=raw.split(arrow);
+  if(parts.length>=3){
+    const first=esc(parts[0]);
+    const middle=hi(parts[1],psH,"red");
+    const last=hi(parts.slice(2).join(arrow),ppH,"green");
+    return `${first}<span class="study-arrow"> ${arrow} </span>${middle}<span class="study-arrow"> ${arrow} </span>${last}`;
+  }
+  return hi(hi(raw,psH,"red"),ppH,"green");
+}
+function renderStudy(){if(!dataset.length)return;const it=item();$("#studyBaseWord").textContent=it.baseForm;$("#studyTopForms").innerHTML=`${esc(it.baseForm)}&nbsp;&nbsp;${hi(it.pastSimple,it.psHighlight,"red")}&nbsp;&nbsp;${hi(it.pastParticiple,it.ppHighlight,"green")}`;const visual=it.studyVisual||`${it.baseForm} -> ${it.pastSimple} -> ${it.pastParticiple}`;$("#studyVisual").innerHTML=colorizeStudyVisual(visual,it.psHighlight,it.ppHighlight);$("#studyHint").textContent=it.studyHint||"Anade studyHint en el Excel.";$("#studyBaseAligned").innerHTML=esc(it.baseForm);$("#studyPSAligned").innerHTML=hi(it.pastSimple,it.psHighlight,"red");$("#studyPPAligned").innerHTML=hi(it.pastParticiple,it.ppHighlight,"green")}
 function resetHangman(){hangman={damage:START_DAMAGE,lives:0,status:"playing"}}
 function clampHangman(){hangman.damage=Math.max(0,Math.min(hangman.damage,HANGMAN_PARTS.length));hangman.lives=Math.max(0,hangman.lives)}
 function evaluateHangmanState(){clampHangman();if(hangman.damage===0){hangman.status="won";return"GANASTE! Has desmontado todo el ahorcado."}if(hangman.damage>=HANGMAN_PARTS.length){hangman.status="lost";return"PERDISTE! El ahorcado se completo."}hangman.status="playing";return""}
@@ -398,6 +412,5 @@ loadData();rebuild();render();
 </script>
 </body>
 </html>
-
 
 
