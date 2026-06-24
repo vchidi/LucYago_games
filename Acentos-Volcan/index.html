@@ -1,0 +1,2529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,user-scalable=no" />
+<title>🌋 volcán de las tildes</title>
+
+<style>
+:root{
+  --bg:#dff4ff;
+  --panel:#ffffff;
+  --ink:#1d2840;
+  --muted:#69748d;
+  --blue:#2f7cff;
+  --blue2:#eaf2ff;
+  --good:#19ad67;
+  --bad:#ef3b3b;
+  --orange:#ff8b2e;
+  --yellow:#ffd75f;
+  --lava:#ff2d20;
+  --lava2:#ff8c1f;
+  --dark:#362b33;
+  --shadow:0 10px 26px rgba(27,43,76,.14);
+  --soft:0 5px 14px rgba(27,43,76,.11);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 82% 9%, #fff6b6 0 38px, transparent 40px),
+    linear-gradient(150deg,#bdeeff,#fff1c7 55%,#ddf5d6);
+}
+
+button{font-family:inherit}
+
+.app{
+  height:100dvh;
+  max-width:1180px;
+  margin:0 auto;
+  padding:8px;
+  display:grid;
+  grid-template-rows:auto 1fr;
+  gap:7px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-height:43px;
+}
+
+.title{
+  flex:1;
+  font-weight:1000;
+  font-size:20px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:9px 10px;
+  font-size:14px;
+  font-weight:1000;
+  background:#fff;
+  color:var(--ink);
+  box-shadow:var(--soft);
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.btn.green{background:var(--good);color:#fff}
+.btn.blue{background:var(--blue);color:#fff}
+.btn.orange{background:var(--orange);color:#fff}
+.btn.red{background:var(--bad);color:#fff}
+.btn.yellow{background:var(--yellow);color:#392b00}
+
+.topbar .btn{
+  background:#fff;
+  color:var(--ink);
+}
+
+.topbar .btn.selected{
+  background:var(--blue);
+  color:#fff;
+}
+
+.topbar .solutionBtn{
+  background:#dff8e9;
+  color:#12663c;
+}
+
+.homeBtn{
+  font-size:18px;
+  min-width:39px;
+}
+
+.nextBtn{
+  background:var(--blue) !important;
+  color:#fff !important;
+  font-size:18px;
+  padding:10px 24px;
+  border-radius:16px;
+}
+
+.main{
+  min-height:0;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:8px;
+}
+
+.card{
+  min-height:0;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(255,255,255,.75);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:10px;
+}
+
+.left{
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  gap:7px;
+  overflow:hidden;
+}
+
+.stats{
+  display:flex;
+  gap:5px;
+  flex-wrap:nowrap;
+  overflow:hidden;
+}
+
+.stat{
+  flex:1;
+  min-width:0;
+  background:#fff;
+  border-radius:13px;
+  padding:7px 6px;
+  font-size:13px;
+  font-weight:1000;
+  text-align:center;
+  box-shadow:var(--soft);
+  white-space:nowrap;
+}
+
+.wordBox{
+  text-align:center;
+}
+
+.prompt{
+  color:var(--muted);
+  font-weight:900;
+  font-size:13px;
+}
+
+.word{
+  font-size:43px;
+  line-height:1;
+  font-weight:1000;
+  margin:4px 0 2px;
+  letter-spacing:.7px;
+}
+
+.subhint{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:900;
+}
+
+.mission{
+  min-height:0;
+  display:grid;
+  grid-template-rows:1fr 1fr 1fr;
+  gap:6px;
+}
+
+.q{
+  min-height:0;
+  border-radius:17px;
+  padding:8px;
+  border:2px solid #edf1f9;
+  background:#fbfdff;
+  transition:.2s;
+  overflow:hidden;
+}
+
+.q.active{
+  border-color:var(--blue);
+  background:linear-gradient(180deg,#fff,#edf5ff);
+}
+
+.q.done{
+  border-color:var(--good);
+  background:#ecfff4;
+}
+
+.q.locked{
+  opacity:.45;
+  filter:grayscale(.25);
+}
+
+.q.off{
+  opacity:.25;
+  filter:grayscale(.6);
+}
+
+.q.badflash{
+  animation:shake .25s linear;
+  border-color:var(--bad);
+  background:#fff0f0;
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}
+}
+
+.qHead{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:6px;
+}
+
+.badge{
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-weight:1000;
+  background:#eaf2ff;
+  color:var(--blue);
+  font-size:14px;
+  flex:0 0 auto;
+}
+
+.q.done .badge{
+  background:var(--good);
+  color:#fff;
+}
+
+.qTitle{
+  font-weight:1000;
+  font-size:15px;
+}
+
+.inlineFeedback{
+  display:none;
+  margin-top:6px;
+  border-radius:12px;
+  padding:6px 8px;
+  background:#fff;
+  box-shadow:var(--soft);
+  font-size:13px;
+  line-height:1.25;
+  font-weight:800;
+}
+
+.inlineFeedback.show{display:block}
+
+.inlineFeedback.good{
+  border:2px solid rgba(25,173,103,.35);
+  background:#effff5;
+}
+
+.inlineFeedback.bad{
+  border:2px solid rgba(239,59,59,.32);
+  background:#fff3f3;
+}
+
+.inlineFeedback .syllables{
+  display:block;
+  font-size:18px;
+  margin-bottom:3px;
+}
+
+.options{
+  display:flex;
+  gap:6px;
+  flex-wrap:nowrap;
+  align-items:center;
+}
+
+.opt{
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  box-shadow:var(--soft);
+  padding:9px 9px;
+  min-width:0;
+  flex:1;
+  font-size:15px;
+  font-weight:1000;
+  color:var(--ink);
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.opt:disabled{opacity:.45;cursor:not-allowed}
+.opt.ok{background:var(--good);color:#fff}
+.opt.bad{background:var(--bad);color:#fff}
+
+.accentBtns{
+  overflow:hidden;
+}
+
+.accentBtns .opt{
+  flex:1 1 0;
+  min-width:0;
+  padding:7px 6px;
+  font-size:14px;
+  text-transform:lowercase;
+}
+
+.accentBtns .accentChoice{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1px;
+  line-height:1.05;
+}
+
+.accentBtns .accentSyll{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:1000;
+}
+
+.accentBtns .accentVowel{
+  font-size:19px;
+  font-weight:1000;
+}
+
+.accentBtns .opt.ok .accentSyll,
+.accentBtns .opt.bad .accentSyll{
+  color:#fff;
+}
+
+.resultPanel{
+  display:none;
+  border-radius:17px;
+  background:#fff;
+  box-shadow:var(--soft);
+  padding:8px;
+  overflow:hidden;
+}
+
+.resultPanel.show{display:block}
+
+.solutionWord{
+  text-align:center;
+  font-size:28px;
+  line-height:1.05;
+  font-weight:1000;
+}
+
+.tonica{
+  font-weight:1000;
+  color:var(--blue);
+}
+
+.acento{
+  color:#ff1111;
+  text-shadow:0 1px 0 rgba(255,255,255,.9);
+}
+
+.explain{
+  margin-top:4px;
+  font-size:13px;
+  line-height:1.25;
+  text-align:center;
+}
+
+.studyBox{
+  display:none;
+  position:absolute;
+  inset:58px 8px 8px 8px;
+  z-index:50;
+  overflow:auto;
+  background:#fff9df;
+  border:2px solid #ffe08a;
+  border-radius:22px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+  padding:14px;
+  font-size:16px;
+  line-height:1.45;
+}
+
+.studyBox.show{display:block}
+
+.studyBox h2{margin:0 0 8px;text-transform:lowercase}
+.studyBox h3{margin:8px 0 4px;text-transform:lowercase}
+
+.studyGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.rule{
+  background:#fff;
+  border-radius:15px;
+  padding:10px;
+  box-shadow:var(--soft);
+}
+
+.right{
+  display:grid;
+  grid-template-rows:1fr auto;
+  gap:7px;
+  overflow:hidden;
+}
+
+.scene{
+  position:relative;
+  overflow:hidden;
+  border-radius:21px;
+  background:
+    radial-gradient(circle at 78% 12%, #fff3a6 0 31px, transparent 33px),
+    linear-gradient(#65cfff 0 47%, #b9f2ff 48% 57%, #55bd7f 58% 100%);
+}
+
+.skyShade{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  transition:.35s;
+  background:rgba(0,0,0,0);
+  z-index:20;
+}
+
+.scene.danger .skyShade{background:rgba(65,20,15,.18)}
+.scene.panic .skyShade{
+  background:radial-gradient(circle at 50% 32%, transparent 0 42%, rgba(68,10,10,.38) 72%);
+  animation:pulseDanger .55s infinite alternate;
+}
+
+@keyframes pulseDanger{
+  from{opacity:.75}
+  to{opacity:1}
+}
+
+.cloud{
+  position:absolute;
+  font-size:28px;
+  opacity:.85;
+  animation:drift 13s infinite linear;
+  z-index:2;
+}
+
+.c1{top:28px;left:-90px}
+.c2{top:66px;left:35%;animation-duration:18s}
+.c3{top:108px;left:-180px;animation-duration:21s}
+
+@keyframes drift{
+  from{transform:translateX(0)}
+  to{transform:translateX(850px)}
+}
+
+.island{
+  position:absolute;
+  left:50%;
+  bottom:-14px;
+  width:560px;
+  height:135px;
+  transform:translateX(-50%);
+  border-radius:55% 55% 0 0;
+  background:linear-gradient(#f1cf85,#b97839);
+  box-shadow:inset 0 18px 0 rgba(255,255,255,.18);
+  z-index:5;
+}
+
+.volcano{
+  position:absolute;
+  left:50%;
+  bottom:74px;
+  width:365px;
+  height:280px;
+  transform:translateX(-50%);
+  z-index:6;
+}
+
+.cone{
+  position:absolute;
+  bottom:0;
+  left:18px;
+  width:330px;
+  height:270px;
+  background:
+    linear-gradient(115deg,rgba(0,0,0,.38),transparent 39%),
+    linear-gradient(245deg,rgba(255,255,255,.15),transparent 46%),
+    linear-gradient(120deg,#4b3c42,#7a6054 58%,#42353d);
+  clip-path:polygon(50% 0%, 100% 100%, 0% 100%);
+  filter:drop-shadow(0 18px 20px rgba(0,0,0,.28));
+  z-index:6;
+}
+
+.craterLip{
+  position:absolute;
+  top:0;
+  left:50%;
+  width:118px;
+  height:43px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:#2a2229;
+  box-shadow:
+    0 0 0 8px rgba(78,55,52,.95),
+    0 5px 0 rgba(0,0,0,.2),
+    0 0 28px rgba(255,107,36,.45);
+  z-index:11;
+}
+
+.craterHot{
+  position:absolute;
+  top:11px;
+  left:50%;
+  width:82px;
+  height:18px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,#ffd45c,#ff3d1c 56%,#3a1e1c 72%);
+  z-index:12;
+  animation:hot 1s infinite alternate;
+}
+
+@keyframes hot{
+  from{filter:brightness(.95)}
+  to{filter:brightness(1.35)}
+}
+
+.flow{
+  position:absolute;
+  top:27px;
+  border-radius:0 0 25px 25px;
+  background:linear-gradient(var(--lava),var(--lava2));
+  box-shadow:0 0 18px rgba(255,59,38,.65);
+  transform-origin:top center;
+  transition:.35s;
+  z-index:8;
+}
+
+.f1{left:166px;width:32px;height:150px}
+.f2{left:110px;width:19px;height:102px;transform:rotate(19deg)}
+.f3{left:235px;width:17px;height:92px;transform:rotate(-21deg)}
+.f4{left:144px;width:13px;height:77px;transform:rotate(8deg)}
+
+.treeLine{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:36px;
+  z-index:15;
+  text-align:center;
+  font-size:26px;
+  letter-spacing:7px;
+  transition:.25s;
+}
+
+.creatures{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:128px;
+  z-index:15;
+  text-align:center;
+  font-size:23px;
+  letter-spacing:15px;
+}
+
+.lavaLake{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:0%;
+  background:
+    radial-gradient(circle at 18% 28%,#ffe179 0 7px,transparent 9px),
+    radial-gradient(circle at 58% 65%,#fff181 0 8px,transparent 10px),
+    linear-gradient(180deg,var(--lava2),var(--lava));
+  z-index:30;
+  transition:.45s;
+  box-shadow:0 -15px 34px rgba(255,45,32,.55);
+}
+
+.lavaLake:before{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:-14px;
+  height:26px;
+  background:radial-gradient(ellipse at center, rgba(255,145,34,.96) 0 56%, transparent 57%);
+  background-size:66px 26px;
+  animation:waves 1.25s infinite linear;
+}
+
+@keyframes waves{
+  from{background-position:0 0}
+  to{background-position:66px 0}
+}
+
+.eventLayer{
+  position:absolute;
+  inset:0;
+  z-index:40;
+  pointer-events:none;
+}
+
+.particle{
+  position:absolute;
+  font-size:22px;
+  animation:rise 1.6s forwards ease-out;
+}
+
+@keyframes rise{
+  0%{transform:translateY(0) scale(.65);opacity:1}
+  100%{transform:translateY(-140px) scale(1.25);opacity:0}
+}
+
+.lavaBomb{
+  position:absolute;
+  font-size:25px;
+  animation:bomb 1s forwards ease-in;
+}
+
+@keyframes bomb{
+  0%{transform:translateY(-90px) scale(.65);opacity:0}
+  20%{opacity:1}
+  100%{transform:translateY(190px) scale(1.2);opacity:0}
+}
+
+.flash{
+  animation:flash .35s;
+}
+
+@keyframes flash{
+  0%,100%{filter:none}
+  45%{filter:brightness(1.7) saturate(1.7)}
+}
+
+.statusBanner{
+  position:absolute;
+  left:10px;
+  top:10px;
+  right:10px;
+  z-index:45;
+  display:flex;
+  gap:6px;
+  justify-content:space-between;
+}
+
+.pill{
+  background:rgba(255,255,255,.88);
+  box-shadow:var(--soft);
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:13px;
+  font-weight:1000;
+  white-space:nowrap;
+}
+
+.progressBox{
+  background:#fff;
+  border-radius:16px;
+  box-shadow:var(--soft);
+  padding:8px;
+}
+
+.progressHead{
+  display:flex;
+  justify-content:space-between;
+  font-weight:1000;
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.track{
+  height:16px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#edf2f8;
+}
+
+.trackFill{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--good),#98e7af);
+  transition:.3s;
+}
+
+.dataBox{
+  display:none;
+  position:absolute;
+  inset:58px 8px 8px 8px;
+  z-index:52;
+  overflow:auto;
+  background:#fffdf5;
+  border:2px solid #ffd76c;
+  border-radius:22px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+  padding:14px;
+}
+
+.dataBox.show{display:block}
+
+.dataBox textarea{
+  width:100%;
+  min-height:260px;
+  border:2px solid #ead489;
+  border-radius:14px;
+  padding:10px;
+  font-family:Consolas,monospace;
+  font-size:14px;
+}
+
+.dataHelp{
+  background:#fff;
+  border-radius:14px;
+  padding:10px;
+  box-shadow:var(--soft);
+  margin:8px 0;
+  font-size:14px;
+  line-height:1.35;
+}
+
+.reviewBox{
+  display:none;
+  position:absolute;
+  inset:58px 8px 8px 8px;
+  z-index:51;
+  overflow:auto;
+  background:#f8fbff;
+  border:2px solid #bcd7ff;
+  border-radius:22px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+  padding:14px;
+}
+
+.reviewBox.show{display:block}
+
+.reviewItem{
+  background:#fff;
+  border-radius:14px;
+  box-shadow:var(--soft);
+  padding:9px;
+  margin-bottom:8px;
+  font-size:15px;
+}
+
+@media(max-width:900px){
+  .app{padding:6px;gap:5px}
+  .topbar{gap:4px;min-height:37px}
+  .title{font-size:16px}
+  .btn{font-size:12px;padding:7px 7px;border-radius:11px}
+  .main{grid-template-columns:1.03fr .97fr;gap:6px}
+  .card{padding:7px;border-radius:16px}
+  .stat{font-size:11px;padding:5px 4px}
+  .word{font-size:34px}
+  .prompt,.subhint{font-size:11px}
+  .q{padding:6px;border-radius:13px}
+  .qHead{margin-bottom:4px}
+  .badge{width:21px;height:21px;font-size:12px}
+  .qTitle{font-size:13px}
+  .inlineFeedback{font-size:11px;padding:4px 6px;margin-top:4px}
+  .inlineFeedback .syllables{font-size:15px}
+  .opt{font-size:13px;padding:7px 6px;border-radius:10px}
+  .accentBtns .opt{font-size:12px;padding:5px 4px}
+  .accentBtns .accentSyll{font-size:10px}
+  .accentBtns .accentVowel{font-size:16px}
+  .solutionWord{font-size:22px}
+  .explain{font-size:11px}
+  .scene{border-radius:16px}
+  .volcano{width:330px;height:245px;bottom:66px}
+  .cone{width:298px;height:235px;left:16px}
+  .craterLip{width:104px;height:36px}
+  .craterHot{width:72px;height:16px}
+  .f1{left:150px;width:29px}
+  .f2{left:99px}
+  .f3{left:214px}
+  .f4{left:130px}
+  .treeLine{font-size:22px;letter-spacing:4px}
+  .creatures{font-size:19px;bottom:112px}
+  .island{width:485px;height:118px}
+  .pill{font-size:11px;padding:6px 8px}
+  .studyGrid{grid-template-columns:1fr}
+}
+
+/* iPad horizontal típico: 1024x768 */
+@media(max-height:780px){
+  .app{grid-template-rows:40px 1fr}
+  .word{font-size:31px}
+  .stats{height:30px}
+  .stat{font-size:11px;padding:5px 4px}
+  .left{gap:5px}
+  .q{padding:5px}
+  .opt{padding:6px 6px}
+  .resultPanel{padding:5px}
+  .solutionWord{font-size:21px}
+  .explain{font-size:11px}
+}
+
+/* --- motor visual pueblo + volcán --- */
+.scene{
+  position:relative;
+  overflow:hidden;
+  border-radius:21px;
+  background:linear-gradient(#70d4ff 0 52%, #9ee7ff 53% 59%, #72c86e 60% 100%);
+}
+.sun{
+  position:absolute;top:18px;right:28px;font-size:38px;z-index:1;
+  filter:drop-shadow(0 0 12px rgba(255,219,93,.8));
+  animation:sunFloat 5s infinite ease-in-out;
+}
+@keyframes sunFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.ground{
+  position:absolute;left:-5%;right:-5%;bottom:-18px;height:155px;
+  background:radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.18) 0 22%, transparent 23%),linear-gradient(#6bc76c,#3c9e55);
+  border-radius:55% 55% 0 0;z-index:4;
+}
+.villageZone{position:absolute;left:12px;bottom:34px;width:53%;height:215px;z-index:35}
+.townItem{
+  position:absolute;transform:translate(-50%,-100%);
+  filter:drop-shadow(0 7px 5px rgba(0,0,0,.18));
+  transition:transform .25s ease, opacity .25s ease;
+  animation:popIn .28s ease-out;user-select:none;
+}
+.townItem.destroyed{animation:destroyItem .42s forwards ease-in}
+@keyframes popIn{0%{transform:translate(-50%,-100%) scale(.15);opacity:0}70%{transform:translate(-50%,-100%) scale(1.15);opacity:1}100%{transform:translate(-50%,-100%) scale(1)}}
+@keyframes destroyItem{0%{transform:translate(-50%,-100%) scale(1) rotate(0);opacity:1}100%{transform:translate(-50%,-40%) scale(.2) rotate(35deg);opacity:0}}
+.town-house{font-size:44px}.town-tree{font-size:34px}.town-person{font-size:20px}.town-dog{font-size:18px}.town-lamp{font-size:24px}.town-flower{font-size:20px}.town-car{font-size:30px}.town-bench{font-size:23px}.town-rare{font-size:40px}
+.volcanoWrap{position:absolute;right:5%;bottom:75px;width:320px;height:275px;z-index:22}
+.volcanoShape{
+  position:absolute;left:50%;bottom:0;width:285px;height:245px;transform:translateX(-50%);
+  clip-path:polygon(50% 0%, 99% 100%, 1% 100%);
+  background:linear-gradient(115deg,rgba(255,255,255,.16),transparent 32%),linear-gradient(245deg,rgba(0,0,0,.24),transparent 40%),linear-gradient(180deg,#6d91b7,#3f5f83);
+  filter:drop-shadow(0 18px 20px rgba(0,0,0,.28));transition:background .45s, filter .45s;z-index:8;
+}
+.volcanoWrap.heat1 .volcanoShape{background:linear-gradient(115deg,rgba(255,255,255,.13),transparent 32%),linear-gradient(245deg,rgba(0,0,0,.24),transparent 40%),linear-gradient(180deg,#8c817f,#68565b)}
+.volcanoWrap.heat2 .volcanoShape{background:linear-gradient(115deg,rgba(255,255,255,.11),transparent 32%),linear-gradient(245deg,rgba(0,0,0,.28),transparent 40%),linear-gradient(180deg,#9d6751,#64454b)}
+.volcanoWrap.heat3 .volcanoShape,.volcanoWrap.heat4 .volcanoShape,.volcanoWrap.heat5 .volcanoShape{
+  background:linear-gradient(115deg,rgba(255,255,255,.10),transparent 32%),linear-gradient(245deg,rgba(0,0,0,.30),transparent 40%),linear-gradient(180deg,#a94737,#4a3038);
+  filter:drop-shadow(0 18px 20px rgba(0,0,0,.28)) drop-shadow(0 0 18px rgba(255,77,35,.42));
+}
+.craterOuter{
+  position:absolute;top:-1px;left:50%;width:105px;height:38px;transform:translateX(-50%);
+  border-radius:50%;background:#34465d;box-shadow:0 0 0 8px rgba(65,83,103,.96), 0 5px 0 rgba(0,0,0,.23);
+  z-index:13;transition:background .35s, box-shadow .35s;
+}
+.craterInner{
+  position:absolute;top:10px;left:50%;width:76px;height:17px;transform:translateX(-50%);
+  border-radius:50%;background:#22324a;z-index:14;transition:background .35s, box-shadow .35s;
+}
+.volcanoWrap.heat2 .craterOuter,.volcanoWrap.heat3 .craterOuter,.volcanoWrap.heat4 .craterOuter,.volcanoWrap.heat5 .craterOuter{
+  background:#3b2b31;box-shadow:0 0 0 8px rgba(75,47,45,.95), 0 0 22px rgba(255,93,38,.5);
+}
+.volcanoWrap.heat2 .craterInner{background:#5c2e23}
+.volcanoWrap.heat3 .craterInner,.volcanoWrap.heat4 .craterInner,.volcanoWrap.heat5 .craterInner{
+  background:radial-gradient(circle,#ffe16c,#ff5a25 58%,#4a1915 75%);
+  box-shadow:0 0 20px rgba(255,92,37,.8);animation:hot 1s infinite alternate;
+}
+.innerLava{
+  position:absolute;left:50%;bottom:0;width:92px;height:0%;transform:translateX(-50%);
+  clip-path:polygon(50% 0%, 86% 100%, 14% 100%);
+  background:linear-gradient(#ffe45f,#ff4a25 45%,#d91818);z-index:10;transition:height .45s;
+  box-shadow:0 0 24px rgba(255,65,32,.7);
+}
+.innerLava:after{content:"";position:absolute;left:21px;top:8px;width:18px;height:75%;border-radius:999px;background:rgba(255,237,116,.55)}
+.volcanoGlow{
+  position:absolute;left:50%;bottom:8px;width:270px;height:240px;transform:translateX(-50%);
+  border-radius:50%;background:radial-gradient(circle, rgba(255,79,32,.42), transparent 68%);
+  opacity:0;z-index:4;transition:opacity .35s;
+}
+.volcanoWrap.heat4 .volcanoGlow,.volcanoWrap.heat5 .volcanoGlow{opacity:1;animation:pulseGlow .55s infinite alternate}
+@keyframes pulseGlow{from{transform:translateX(-50%) scale(.92)}to{transform:translateX(-50%) scale(1.08)}}
+.smokePuff{
+  position:absolute;top:-52px;left:50%;transform:translateX(-50%);
+  font-size:28px;z-index:18;opacity:0;transition:.3s;
+}
+.volcanoWrap.heat1 .smokePuff,.volcanoWrap.heat2 .smokePuff{opacity:.45;animation:smokeDrift 2.2s infinite ease-in-out}
+.volcanoWrap.heat3 .smokePuff,.volcanoWrap.heat4 .smokePuff,.volcanoWrap.heat5 .smokePuff{opacity:.85;animation:smokeDrift .9s infinite ease-in-out}
+@keyframes smokeDrift{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-62%) translateY(-10px)}}
+.eruptionLayer{position:absolute;inset:0;z-index:55;pointer-events:none}
+.eruptionParticle{position:absolute;font-size:24px;animation:eruptionFly 1.05s forwards ease-out}
+@keyframes eruptionFly{0%{transform:translate(0,0) scale(.6);opacity:0}18%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1.2);opacity:0}}
+.shockwave{position:absolute;left:67%;top:45%;width:20px;height:20px;border:3px solid rgba(255,79,32,.75);border-radius:50%;animation:shock 650ms forwards ease-out}
+@keyframes shock{to{transform:scale(13);opacity:0}}
+.scene.panic{animation:sceneShake .16s 5 linear}
+@keyframes sceneShake{0%,100%{transform:translate(0,0)}25%{transform:translate(2px,-1px)}50%{transform:translate(-2px,1px)}75%{transform:translate(1px,2px)}}
+.scene.hotSky .skyShade{background:rgba(105,35,18,.13)}
+.scene.alarmSky .skyShade{background:radial-gradient(circle at 70% 40%, transparent 0 22%, rgba(79,8,8,.32) 75%);animation:pulseDanger .6s infinite alternate}
+@media(max-width:900px){
+  .sun{font-size:29px;right:18px;top:14px}.villageZone{left:8px;bottom:28px;width:54%;height:185px}
+  .town-house{font-size:36px}.town-tree{font-size:29px}.town-person{font-size:17px}.town-dog{font-size:15px}.town-lamp{font-size:20px}.town-flower{font-size:17px}.town-car{font-size:24px}.town-bench{font-size:20px}.town-rare{font-size:32px}
+  .volcanoWrap{right:2%;bottom:62px;width:270px;height:235px}.volcanoShape{width:245px;height:210px}.craterOuter{width:92px;height:33px}.craterInner{width:66px;height:15px}.innerLava{width:78px}
+}
+
+
+/* --- ajuste v8: volcán más realista, cráter integrado --- */
+.volcanoWrap{
+  right:4%;
+  bottom:66px;
+  width:340px;
+  height:282px;
+}
+.volcanoShape{
+  left:50%;
+  bottom:0;
+  width:320px;
+  height:240px;
+  transform:translateX(-50%);
+  clip-path:polygon(
+    5% 100%,
+    22% 57%,
+    34% 27%,
+    42% 11%,
+    58% 11%,
+    66% 27%,
+    78% 57%,
+    95% 100%
+  );
+  border-radius:0 0 18px 18px;
+}
+.craterOuter{
+  top:16px;
+  left:50%;
+  width:112px;
+  height:38px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:#33465c;
+  box-shadow:
+    0 0 0 7px rgba(60,76,94,.96),
+    0 8px 0 rgba(0,0,0,.22),
+    inset 0 -6px 8px rgba(0,0,0,.28);
+}
+.craterInner{
+  top:27px;
+  width:78px;
+  height:15px;
+}
+.innerLava{
+  bottom:8px;
+  width:86px;
+  clip-path:polygon(50% 0%, 83% 100%, 17% 100%);
+}
+.smokePuff{
+  top:-33px;
+}
+@media(max-width:900px){
+  .volcanoWrap{right:1%;bottom:56px;width:286px;height:238px}
+  .volcanoShape{width:268px;height:205px}
+  .craterOuter{top:13px;width:98px;height:34px}
+  .craterInner{top:23px;width:68px;height:14px}
+  .innerLava{width:72px}
+}
+
+
+/* --- ajuste v10: cráter integrado correctamente --- */
+.volcanoShape{
+  clip-path:polygon(
+    3% 100%,
+    18% 60%,
+    30% 30%,
+    40% 15%,
+    46% 11%,
+    54% 11%,
+    60% 15%,
+    70% 30%,
+    82% 60%,
+    97% 100%
+  ) !important;
+}
+
+.craterOuter{
+  width:82px !important;
+  height:26px !important;
+  top:22px !important;
+  border-radius:50%;
+}
+
+.craterInner{
+  width:56px !important;
+  height:10px !important;
+  top:30px !important;
+}
+
+.innerLava{
+  width:58px !important;
+  bottom:10px !important;
+}
+
+@media(max-width:900px){
+  .craterOuter{
+    width:70px !important;
+    height:22px !important;
+    top:18px !important;
+  }
+
+  .craterInner{
+    width:46px !important;
+    height:9px !important;
+    top:25px !important;
+  }
+
+  .innerLava{
+    width:48px !important;
+  }
+}
+
+
+/* --- ajuste v11: cráter más bajo, encajado en la boca --- */
+.craterOuter{
+  top:34px !important;
+  width:74px !important;
+  height:23px !important;
+  box-shadow:
+    0 0 0 5px rgba(60,76,94,.96),
+    0 5px 0 rgba(0,0,0,.23),
+    inset 0 -5px 8px rgba(0,0,0,.28) !important;
+}
+
+.craterInner{
+  top:41px !important;
+  width:50px !important;
+  height:9px !important;
+}
+
+.smokePuff{
+  top:-18px !important;
+}
+
+.innerLava{
+  width:50px !important;
+  bottom:10px !important;
+}
+
+@media(max-width:900px){
+  .craterOuter{
+    top:28px !important;
+    width:64px !important;
+    height:20px !important;
+  }
+  .craterInner{
+    top:34px !important;
+    width:42px !important;
+    height:8px !important;
+  }
+  .smokePuff{
+    top:-12px !important;
+  }
+}
+
+
+/* --- ajuste v12: cráter mucho más bajo e incrustado en la ladera --- */
+.craterOuter{
+  top:58px !important;
+  width:64px !important;
+  height:19px !important;
+  box-shadow:
+    0 0 0 4px rgba(60,76,94,.96),
+    0 4px 0 rgba(0,0,0,.23),
+    inset 0 -4px 7px rgba(0,0,0,.30) !important;
+}
+
+.craterInner{
+  top:64px !important;
+  width:42px !important;
+  height:8px !important;
+}
+
+.smokePuff{
+  top:4px !important;
+}
+
+.innerLava{
+  width:42px !important;
+  bottom:12px !important;
+  clip-path:polygon(50% 0%, 80% 100%, 20% 100%) !important;
+}
+
+@media(max-width:900px){
+  .craterOuter{
+    top:48px !important;
+    width:54px !important;
+    height:17px !important;
+  }
+  .craterInner{
+    top:53px !important;
+    width:36px !important;
+    height:7px !important;
+  }
+  .smokePuff{
+    top:0px !important;
+  }
+  .innerLava{
+    width:36px !important;
+  }
+}
+
+
+/* --- ajuste v13: pequeño descenso extra del cráter --- */
+.craterOuter{
+  top:68px !important;
+}
+
+.craterInner{
+  top:73px !important;
+}
+
+.smokePuff{
+  top:14px !important;
+}
+
+@media(max-width:900px){
+  .craterOuter{
+    top:56px !important;
+  }
+
+  .craterInner{
+    top:61px !important;
+  }
+
+  .smokePuff{
+    top:8px !important;
+  }
+}
+
+
+/* --- ajuste v14: cráter un poco más bajo y pueblo solo en el prado --- */
+.craterOuter{
+  top:74px !important;
+}
+
+.craterInner{
+  top:79px !important;
+}
+
+.smokePuff{
+  top:20px !important;
+}
+
+/* limitar construcciones al prado izquierdo */
+.villageZone{
+  width:42% !important;
+  left:10px !important;
+}
+
+@media(max-width:900px){
+  .craterOuter{
+    top:61px !important;
+  }
+
+  .craterInner{
+    top:66px !important;
+  }
+
+  .smokePuff{
+    top:12px !important;
+  }
+
+  .villageZone{
+    width:40% !important;
+    left:6px !important;
+  }
+}
+
+
+/* --- ajuste v16: proporciones coherentes y prado seguro --- */
+.villageZone{
+  width:38% !important;
+  left:8px !important;
+  bottom:31px !important;
+  height:205px !important;
+}
+
+/* tamaños proporcionados */
+.town-house{font-size:38px !important}
+.town-building{font-size:50px !important}
+.town-special{font-size:48px !important}
+.town-tree{font-size:31px !important}
+.town-person{font-size:17px !important}
+.town-animal{font-size:17px !important}
+.town-dog{font-size:17px !important}
+.town-lamp{font-size:21px !important}
+.town-flower{font-size:18px !important}
+.town-car{font-size:25px !important}
+.town-bench{font-size:20px !important}
+.town-rare{font-size:42px !important}
+
+@media(max-width:900px){
+  .villageZone{
+    width:36% !important;
+    left:5px !important;
+    height:178px !important;
+  }
+  .town-house{font-size:31px !important}
+  .town-building{font-size:40px !important}
+  .town-special{font-size:39px !important}
+  .town-tree{font-size:25px !important}
+  .town-person{font-size:14px !important}
+  .town-animal{font-size:14px !important}
+  .town-dog{font-size:14px !important}
+  .town-lamp{font-size:17px !important}
+  .town-flower{font-size:15px !important}
+  .town-car{font-size:20px !important}
+  .town-bench{font-size:17px !important}
+  .town-rare{font-size:34px !important}
+}
+
+
+/* --- ajuste v17: sol libre y pueblo alrededor del volcán --- */
+.sun{
+  top:56px !important;
+  right:14px !important;
+  font-size:34px !important;
+  z-index:1 !important;
+}
+
+.villageZone{
+  left:8px !important;
+  right:8px !important;
+  width:auto !important;
+  bottom:31px !important;
+  height:205px !important;
+  pointer-events:none;
+}
+
+.town-lamp{display:none !important}
+
+@media(max-width:900px){
+  .sun{
+    top:48px !important;
+    right:12px !important;
+    font-size:27px !important;
+  }
+  .villageZone{
+    left:5px !important;
+    right:5px !important;
+    width:auto !important;
+    height:178px !important;
+  }
+}
+
+
+/* --- ajuste v18: iconos limpios, muy separados y sin invadir el volcán --- */
+.villageZone{
+  left:6px !important;
+  right:6px !important;
+  width:auto !important;
+  bottom:30px !important;
+}
+
+.town-building{font-size:52px !important}
+.town-special{font-size:50px !important}
+.town-house{font-size:39px !important}
+.town-rare{font-size:38px !important}
+.town-tree{font-size:30px !important}
+.town-car{font-size:25px !important}
+.town-bench{font-size:20px !important}
+.town-person{font-size:16px !important}
+.town-animal{font-size:16px !important}
+.town-flower{font-size:17px !important}
+
+@media(max-width:900px){
+  .villageZone{
+    left:4px !important;
+    right:4px !important;
+  }
+  .town-building{font-size:42px !important}
+  .town-special{font-size:40px !important}
+  .town-house{font-size:32px !important}
+  .town-rare{font-size:31px !important}
+  .town-tree{font-size:25px !important}
+  .town-car{font-size:20px !important}
+  .town-bench{font-size:16px !important}
+  .town-person{font-size:13px !important}
+  .town-animal{font-size:13px !important}
+  .town-flower{font-size:14px !important}
+}
+
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <a class="btn homeBtn" href="../index.html">🏠</a>
+    <div class="title">🌋 volcán de las tildes</div>
+    <button class="btn" onclick="newWord()">nueva</button>
+    <button class="btn" onclick="resetGame()">volver a empezar</button>
+    <button class="btn" onclick="shuffleWords()">mezclar</button>
+    <button class="btn" onclick="toggleGoal()">meta <span id="goalBtn">12</span></button>
+    <button class="btn" id="studyBtn" onclick="toggleStudy()">estudio</button>
+    <button class="btn solutionBtn" onclick="showSolution(true)">solución</button>
+    <button class="btn" id="reviewBtn" onclick="toggleReview()">errores</button>
+    <button class="btn" id="dataBtn" onclick="toggleDataBox()">palabras</button>
+  </div>
+
+  <div class="main">
+
+    <section class="card left">
+
+      <div class="stats">
+        <div class="stat">✅ <span id="hits">0</span></div>
+        <div class="stat">❌ <span id="fails">0</span></div>
+        <div class="stat">🌋 <span id="lavaTxt">0</span>/5</div>
+        <div class="stat">⭐ <span id="streak">0</span></div>
+      </div>
+
+      <div class="wordBox">
+        <div class="prompt">responde los pasos en orden</div>
+        <div class="word" id="word">camion</div>
+        <div class="subhint" id="subhint">primero clasifica la palabra</div>
+      </div>
+
+      <div class="mission">
+
+        <div class="q active" id="q1">
+          <div class="qHead">
+            <div class="badge" id="b1">1</div>
+            <div class="qTitle">clasifica la palabra</div>
+          </div>
+          <div class="options" id="typeOptions"></div>
+          <div class="inlineFeedback" id="fb1"></div>
+        </div>
+
+        <div class="q locked" id="q2">
+          <div class="qHead">
+            <div class="badge" id="b2">2</div>
+            <div class="qTitle">¿lleva tilde?</div>
+          </div>
+          <div class="options" id="accentOptions"></div>
+          <div class="inlineFeedback" id="fb2"></div>
+        </div>
+
+        <div class="q locked" id="q3">
+          <div class="qHead">
+            <div class="badge" id="b3">3</div>
+            <div class="qTitle">¿dónde va y de qué lado?</div>
+          </div>
+          <div class="options accentBtns" id="vowelOptions"></div>
+          <div class="inlineFeedback" id="fb3"></div>
+        </div>
+
+      </div>
+
+      <div class="resultPanel" id="resultPanel">
+        <div class="solutionWord" id="solutionWord"></div>
+        <div class="explain" id="solutionExplain"></div>
+      </div>
+
+      <div class="resultPanel" id="feedbackPanel">
+        <div class="explain" id="feedbackExplain"></div>
+      </div>
+
+      <div style="text-align:center;margin-top:4px;">
+        <button class="btn nextBtn" id="nextBtn" onclick="goNextWord()" style="display:none;">
+          siguiente →
+        </button>
+      </div>
+
+    </section>
+
+    <section class="card right">
+      <div class="scene" id="scene">
+        <div class="skyShade"></div>
+        <div class="sun">☀️</div>
+        <div class="cloud c1">☁️ ☁️</div>
+        <div class="cloud c2">☁️</div>
+        <div class="cloud c3">☁️ ☁️</div>
+
+        <div class="statusBanner">
+          <div class="pill" id="mood">❄️ volcán apagado</div>
+          <div class="pill" id="eventPill">pueblo: 2</div>
+        </div>
+
+        <div class="ground"></div>
+        <div class="villageZone" id="villageZone"></div>
+
+        <div class="volcanoWrap" id="volcanoWrap">
+          <div class="volcanoGlow" id="volcanoGlow"></div>
+          <div class="volcanoShape" id="volcanoShape"></div>
+          <div class="innerLava" id="innerLava"></div>
+          <div class="craterOuter"></div>
+          <div class="craterInner" id="craterInner"></div>
+          <div class="smokePuff" id="smokePuff">💨</div>
+        </div>
+
+        <div class="eruptionLayer" id="eruptionLayer"></div>
+      </div>
+
+      <div class="progressBox">
+        <div class="progressHead">
+          <span>construir el pueblo</span>
+          <span id="progressText">0/12</span>
+        </div>
+        <div class="track"><div class="trackFill" id="trackFill"></div></div>
+      </div>
+    </section>
+
+  </div>
+
+</div>
+
+<div class="studyBox" id="studyBox">
+  <h2>estudio</h2>
+  <div class="studyGrid">
+    <div class="rule">
+      <h3>agudas</h3>
+      <p>la fuerza está en la última sílaba.</p>
+      <p>ca-mi-<span class="tonica"><span class="acento">ó</span>n</span></p>
+      <p>llevan tilde si terminan en vocal, n o s.</p>
+    </div>
+    <div class="rule">
+      <h3>llanas</h3>
+      <p>la fuerza está en la penúltima sílaba.</p>
+      <p><span class="tonica"><span class="acento">á</span>r</span>-bol</p>
+      <p>llevan tilde si no terminan en vocal, n o s.</p>
+    </div>
+    <div class="rule">
+      <h3>esdrújulas</h3>
+      <p>la fuerza está en la antepenúltima sílaba.</p>
+      <p><span class="tonica">m<span class="acento">ú</span></span>-si-ca</p>
+      <p>siempre llevan tilde.</p>
+    </div>
+  </div>
+  <p>para catalán: el juego ya distingue acento agudo ´ y acento grave `.</p>
+  <button class="btn red" onclick="toggleStudy()">cerrar</button>
+</div>
+
+<div class="reviewBox" id="reviewBox">
+  <h2>revisión de errores</h2>
+  <div id="reviewList"></div>
+  <button class="btn red" onclick="toggleReview()">cerrar</button>
+</div>
+
+<div class="dataBox" id="dataBox">
+  <h2>banco de palabras</h2>
+  <div class="dataHelp">
+    Puedes alimentar el juego pegando una tabla copiada de Excel/Google Sheets o un CSV con estas columnas:<br>
+    <b>word, correct, syllables, type, accent, accentChar, accentSide, rule</b><br><br>
+    Ejemplo:<br>
+    <code>camion,camión,ca-mi-ón,aguda,true,ó,agudo,es aguda y termina en n: lleva tilde.</code><br>
+    <code>casa,casa,ca-sa,llana,false,,none,es llana y termina en vocal: no lleva tilde.</code>
+  </div>
+  <textarea id="dataInput" spellcheck="false"></textarea>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+    <button class="btn green" onclick="loadWordsFromText()">cargar palabras</button>
+    <button class="btn blue" onclick="exportWordsToTextarea()">ver actuales</button>
+    <button class="btn yellow" onclick="restoreDefaultWords()">restaurar banco inicial</button>
+    <button class="btn red" onclick="toggleDataBox()">cerrar</button>
+  </div>
+</div>
+
+<script>
+let defaultWords = [
+  {word:"camion", correct:"camión", syllables:["ca","mi","ón"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"arbol", correct:"árbol", syllables:["ár","bol"], type:"llana", accent:true, accentChar:"á", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"musica", correct:"música", syllables:["mú","si","ca"], type:"esdrujula", accent:true, accentChar:"ú", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"cafe", correct:"café", syllables:["ca","fé"], type:"aguda", accent:true, accentChar:"é", accentSide:"agudo", rule:"es aguda y termina en vocal: lleva tilde."},
+  {word:"lapiz", correct:"lápiz", syllables:["lá","piz"], type:"llana", accent:true, accentChar:"á", accentSide:"agudo", rule:"es llana y termina en z: lleva tilde."},
+  {word:"telefono", correct:"teléfono", syllables:["te","lé","fo","no"], type:"esdrujula", accent:true, accentChar:"é", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"reloj", correct:"reloj", syllables:["re","loj"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en j: no lleva tilde."},
+  {word:"casa", correct:"casa", syllables:["ca","sa"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en vocal: no lleva tilde."},
+  {word:"orden", correct:"orden", syllables:["or","den"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en n: no lleva tilde."},
+  {word:"compas", correct:"compás", syllables:["com","pás"], type:"aguda", accent:true, accentChar:"á", accentSide:"agudo", rule:"es aguda y termina en s: lleva tilde."},
+  {word:"facil", correct:"fácil", syllables:["fá","cil"], type:"llana", accent:true, accentChar:"á", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"rapido", correct:"rápido", syllables:["rá","pi","do"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"pared", correct:"pared", syllables:["pa","red"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en d: no lleva tilde."},
+  {word:"jueves", correct:"jueves", syllables:["jue","ves"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en s: no lleva tilde."},
+  {word:"medico", correct:"médico", syllables:["mé","di","co"], type:"esdrujula", accent:true, accentChar:"é", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"banana", correct:"banana", syllables:["ba","na","na"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en vocal: no lleva tilde."},
+  {word:"america", correct:"américa", syllables:["a","mé","ri","ca"], type:"esdrujula", accent:true, accentChar:"é", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"matematicas", correct:"matemáticas", syllables:["ma","te","má","ti","cas"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"papel", correct:"papel", syllables:["pa","pel"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en l: no lleva tilde."},
+
+  {word:"tambien", correct:"también", syllables:["tam","bién"], type:"aguda", accent:true, accentChar:"é", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"jardin", correct:"jardín", syllables:["jar","dín"], type:"aguda", accent:true, accentChar:"í", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"sillon", correct:"sillón", syllables:["si","llón"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"limon", correct:"limón", syllables:["li","món"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"cancion", correct:"canción", syllables:["can","ción"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"avion", correct:"avión", syllables:["a","vión"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"ingles", correct:"inglés", syllables:["in","glés"], type:"aguda", accent:true, accentChar:"é", accentSide:"agudo", rule:"es aguda y termina en s: lleva tilde."},
+  {word:"frances", correct:"francés", syllables:["fran","cés"], type:"aguda", accent:true, accentChar:"é", accentSide:"agudo", rule:"es aguda y termina en s: lleva tilde."},
+  {word:"sofa", correct:"sofá", syllables:["so","fá"], type:"aguda", accent:true, accentChar:"á", accentSide:"agudo", rule:"es aguda y termina en vocal: lleva tilde."},
+  {word:"bebe", correct:"bebé", syllables:["be","bé"], type:"aguda", accent:true, accentChar:"é", accentSide:"agudo", rule:"es aguda y termina en vocal: lleva tilde."},
+  {word:"menu", correct:"menú", syllables:["me","nú"], type:"aguda", accent:true, accentChar:"ú", accentSide:"agudo", rule:"es aguda y termina en vocal: lleva tilde."},
+  {word:"jamon", correct:"jamón", syllables:["ja","món"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"salon", correct:"salón", syllables:["sa","lón"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+  {word:"raton", correct:"ratón", syllables:["ra","tón"], type:"aguda", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es aguda y termina en n: lleva tilde."},
+
+  {word:"animal", correct:"animal", syllables:["a","ni","mal"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en l: no lleva tilde."},
+  {word:"ciudad", correct:"ciudad", syllables:["ciu","dad"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en d: no lleva tilde."},
+  {word:"doctor", correct:"doctor", syllables:["doc","tor"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en r: no lleva tilde."},
+  {word:"comer", correct:"comer", syllables:["co","mer"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en r: no lleva tilde."},
+  {word:"azul", correct:"azul", syllables:["a","zul"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en l: no lleva tilde."},
+  {word:"nariz", correct:"nariz", syllables:["na","riz"], type:"aguda", accent:false, accentChar:"", accentSide:"none", rule:"es aguda pero termina en z: no lleva tilde."},
+
+  {word:"marmol", correct:"mármol", syllables:["már","mol"], type:"llana", accent:true, accentChar:"á", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"azucar", correct:"azúcar", syllables:["a","zú","car"], type:"llana", accent:true, accentChar:"ú", accentSide:"agudo", rule:"es llana y termina en r: lleva tilde."},
+  {word:"cesped", correct:"césped", syllables:["cés","ped"], type:"llana", accent:true, accentChar:"é", accentSide:"agudo", rule:"es llana y termina en d: lleva tilde."},
+  {word:"carcel", correct:"cárcel", syllables:["cár","cel"], type:"llana", accent:true, accentChar:"á", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"angel", correct:"ángel", syllables:["án","gel"], type:"llana", accent:true, accentChar:"á", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"trebol", correct:"trébol", syllables:["tré","bol"], type:"llana", accent:true, accentChar:"é", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"dificil", correct:"difícil", syllables:["di","fí","cil"], type:"llana", accent:true, accentChar:"í", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"util", correct:"útil", syllables:["ú","til"], type:"llana", accent:true, accentChar:"ú", accentSide:"agudo", rule:"es llana y termina en l: lleva tilde."},
+  {word:"album", correct:"álbum", syllables:["ál","bum"], type:"llana", accent:true, accentChar:"á", accentSide:"agudo", rule:"es llana y termina en m: lleva tilde."},
+
+  {word:"mesa", correct:"mesa", syllables:["me","sa"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en vocal: no lleva tilde."},
+  {word:"libro", correct:"libro", syllables:["li","bro"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en vocal: no lleva tilde."},
+  {word:"ventana", correct:"ventana", syllables:["ven","ta","na"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en vocal: no lleva tilde."},
+  {word:"zapato", correct:"zapato", syllables:["za","pa","to"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en vocal: no lleva tilde."},
+  {word:"examen", correct:"examen", syllables:["e","xa","men"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en n: no lleva tilde."},
+  {word:"imagen", correct:"imagen", syllables:["i","ma","gen"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en n: no lleva tilde."},
+  {word:"joven", correct:"joven", syllables:["jo","ven"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en n: no lleva tilde."},
+  {word:"lunes", correct:"lunes", syllables:["lu","nes"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en s: no lleva tilde."},
+  {word:"viernes", correct:"viernes", syllables:["vier","nes"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en s: no lleva tilde."},
+  {word:"crisis", correct:"crisis", syllables:["cri","sis"], type:"llana", accent:false, accentChar:"", accentSide:"none", rule:"es llana y termina en s: no lleva tilde."},
+
+  {word:"plastico", correct:"plástico", syllables:["plás","ti","co"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"sabado", correct:"sábado", syllables:["sá","ba","do"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"numero", correct:"número", syllables:["nú","me","ro"], type:"esdrujula", accent:true, accentChar:"ú", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"pagina", correct:"página", syllables:["pá","gi","na"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"lampara", correct:"lámpara", syllables:["lám","pa","ra"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"brujula", correct:"brújula", syllables:["brú","ju","la"], type:"esdrujula", accent:true, accentChar:"ú", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"triangulo", correct:"triángulo", syllables:["tri","án","gu","lo"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"periodico", correct:"periódico", syllables:["pe","rió","di","co"], type:"esdrujula", accent:true, accentChar:"ó", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"semaforo", correct:"semáforo", syllables:["se","má","fo","ro"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."},
+  {word:"fantastico", correct:"fantástico", syllables:["fan","tás","ti","co"], type:"esdrujula", accent:true, accentChar:"á", accentSide:"agudo", rule:"es esdrújula: siempre lleva tilde."}
+];
+
+let words = [...defaultWords];
+
+let current;
+let queue = [];
+let step = 1;
+let hits = 0;
+let fails = 0;
+let lava = 0;
+let volcanoHeat = 0;
+let streak = 0;
+let solvedInThisWord = false;
+let correctionMode = false;
+let villageItems = [];
+let nextVillageId = 1;
+let eruptionCount = 0;
+let goalHits = 12;
+let goalOptions = [12,15,20,25];
+let goalIndex = 0;
+let errorLog = [];
+
+const languageConfig = {
+  es: {
+    accents: {
+      "a":["á"],
+      "e":["é"],
+      "i":["í"],
+      "o":["ó"],
+      "u":["ú"]
+    }
+  },
+
+  ca: {
+    accents: {
+      "a":["á","à"],
+      "e":["é","è"],
+      "i":["í"],
+      "o":["ó","ò"],
+      "u":["ú"]
+    }
+  }
+};
+
+let currentLanguage = "es";
+
+const $ = id => document.getElementById(id);
+
+function shuffleArray(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function shuffleWords(){
+  queue = shuffleArray([...words]);
+  eventText("🔀 palabras mezcladas");
+  newWord();
+}
+
+function nextFromQueue(){
+  if(!queue.length) queue = shuffleArray([...words]);
+  return queue.pop();
+}
+
+function newWord(){
+  current = nextFromQueue();
+  step = 1;
+  solvedInThisWord = false;
+  correctionMode = false;
+  $("word").textContent = current.word;
+  $("subhint").textContent = "primero clasifica la palabra";
+  $("resultPanel").classList.remove("show");
+  $("feedbackPanel").classList.remove("show");
+  $("nextBtn").style.display="none";
+  clearInlineFeedback();
+  setQuestionState(1);
+  renderAllOptions();
+}
+
+function renderAllOptions(){
+  const typeOptions = $("typeOptions");
+  typeOptions.innerHTML = "";
+  [["esdrujula","esdrújula"],["llana","llana"],["aguda","aguda"]].forEach(([value,label])=>{
+    typeOptions.appendChild(makeOpt(label, () => answerType(value)));
+  });
+
+  const accentOptions = $("accentOptions");
+  accentOptions.innerHTML = "";
+  [["yes","sí"],["no","no"]].forEach(([value,label])=>{
+    accentOptions.appendChild(makeOpt(label, () => answerAccent(value)));
+  });
+
+  renderVowelOptions();
+
+  updateDisabled();
+}
+
+function renderVowelOptions(){
+  const vowelOptions = $("vowelOptions");
+  vowelOptions.innerHTML = "";
+
+  if(!current.accent){
+    return;
+  }
+
+  const plainToAccent = languageConfig[currentLanguage].accents;
+
+  current.syllables.forEach((syllable, syllIndex)=>{
+    const plainSyllable = removeAccents(syllable.toLowerCase());
+    [...plainSyllable].forEach((ch, charIndex)=>{
+      if(!plainToAccent[ch]) return;
+
+      plainToAccent[ch].forEach(accented=>{
+        const choiceId = `${syllIndex}:${charIndex}:${accented}`;
+        const btn = document.createElement("button");
+        btn.className = "opt";
+        btn.dataset.choice = choiceId;
+        btn.innerHTML = `
+          <span class="accentChoice">
+            <span class="accentSyll">${syllableForButton(syllable, charIndex, accented)}</span>
+            <span class="accentVowel">${accented}</span>
+          </span>
+        `;
+        btn.onclick = () => answerVowel(choiceId);
+        vowelOptions.appendChild(btn);
+      });
+    });
+  });
+}
+
+function removeAccents(text){
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+function syllableForButton(syllable, charIndex, accented){
+  const chars = [...removeAccents(syllable.toLowerCase())];
+  chars[charIndex] = accented;
+  return chars.join("");
+}
+
+function expectedAccentChoice(){
+  const ti = tonicIndex(current);
+  const tonic = current.syllables[ti];
+  const plain = [...removeAccents(tonic.toLowerCase())];
+  const accentPlain = removeAccents(current.accentChar.toLowerCase());
+  const idx = plain.findIndex(ch => ch === accentPlain);
+  return `${ti}:${idx}:${current.accentChar}`;
+}
+
+function makeOpt(label,onClick){
+  const b=document.createElement("button");
+  b.className="opt";
+  b.textContent=label;
+  b.onclick=onClick;
+  return b;
+}
+
+function setQuestionState(activeStep, skip3=false){
+  step=activeStep;
+  [1,2,3].forEach(n=>{
+    const q=$("q"+n);
+    const b=$("b"+n);
+    q.classList.remove("active","done","locked","off","badflash");
+    if(skip3 && n===3){ q.classList.add("off"); b.textContent="—"; return; }
+    if(n < activeStep){ q.classList.add("done"); b.textContent="✓"; }
+    else if(n === activeStep){ q.classList.add("active"); b.textContent=n; }
+    else { q.classList.add("locked"); b.textContent=n; }
+  });
+  updateDisabled();
+}
+
+function updateDisabled(){
+  document.querySelectorAll("#typeOptions .opt").forEach(b=>b.disabled=step!==1||solvedInThisWord);
+  document.querySelectorAll("#accentOptions .opt").forEach(b=>b.disabled=step!==2||solvedInThisWord);
+  document.querySelectorAll("#vowelOptions .opt").forEach(b=>b.disabled=step!==3||solvedInThisWord);
+}
+
+function clearInlineFeedback(){
+  ["fb1","fb2","fb3"].forEach(id=>{
+    const el=$(id);
+    if(!el) return;
+    el.className="inlineFeedback";
+    el.innerHTML="";
+  });
+}
+
+function setInlineFeedback(n, ok, content){
+  const el=$("fb"+n);
+  if(!el) return;
+  el.className="inlineFeedback show " + (ok ? "good" : "bad");
+  el.innerHTML=content;
+}
+
+function typeReasonText(w){
+  if(w.type==="aguda") return "es aguda porque la sílaba tónica está en la última.";
+  if(w.type==="llana") return "es llana porque la sílaba tónica está en la penúltima.";
+  return "es esdrújula porque la sílaba tónica está en la antepenúltima.";
+}
+
+function accentReasonText(w){
+  const last = removeAccents(w.correct.slice(-1).toLowerCase());
+  if(w.accent){
+    if(w.type==="aguda") return "lleva tilde por ser aguda y acabar en " + last + ".";
+    if(w.type==="llana") return "lleva tilde por ser llana y no acabar en vocal, n o s. acaba en " + last + ".";
+    return "lleva tilde porque las esdrújulas siempre llevan tilde.";
+  }
+  if(w.type==="aguda") return "no lleva tilde porque es aguda y no acaba en vocal, n o s. acaba en " + last + ".";
+  if(w.type==="llana") return "no lleva tilde porque es llana y acaba en vocal, n o s. acaba en " + last + ".";
+  return "las esdrújulas siempre llevan tilde.";
+}
+
+function accentPositionReasonText(w){
+  return "la tilde va en " + w.accentChar + " dentro de la sílaba tónica.";
+}
+
+function syllableLine(w){
+  return `<span class="syllables">${formatSyllables(w)}</span>`;
+}
+
+function formatSyllablesNoAccent(w){
+  const ti=tonicIndex(w);
+  return w.syllables.map((s,i)=>{
+    const plain = removeAccents(s.toLowerCase());
+    return i===ti ? `<span class="tonica">${plain}</span>` : plain;
+  }).join("-");
+}
+
+function syllableLineNoAccent(w){
+  return `<span class="syllables">${formatSyllablesNoAccent(w)}</span>`;
+}
+
+function cleanRuleForSummary(w){
+  if(w.type==="aguda"){
+    if(w.accent) return "termina en vocal, n o s: lleva tilde.";
+    return "no termina en vocal, n o s: no lleva tilde.";
+  }
+  if(w.type==="llana"){
+    if(w.accent) return "no termina en vocal, n o s: lleva tilde.";
+    return "termina en vocal, n o s: no lleva tilde.";
+  }
+  return "siempre lleva tilde.";
+}
+
+function summaryTypeLine(w){
+  return typeReasonText(w).replace("es aguda porque ","").replace("es llana porque ","").replace("es esdrújula porque ","");
+}
+
+function answerType(value){
+  if(step!==1) return;
+  if(value===current.type){
+    markButton("#typeOptions", labelType(value), "ok");
+    setInlineFeedback(1, true, `<b>bien.</b> ${syllableLineNoAccent(current)} ${typeReasonText(current)}`);
+    $("subhint").textContent = "ahora decide si lleva tilde";
+    setTimeout(()=>setQuestionState(2),520);
+  }else{
+    setInlineFeedback(1, false, `${syllableLineNoAccent(current)} ${typeReasonText(current)}`);
+    wrong("#typeOptions", labelType(value), "q1", "clasificación incorrecta");
+  }
+}
+
+function answerAccent(value){
+  if(step!==2) return;
+  const saysAccent=value==="yes";
+  if(saysAccent===current.accent){
+    markButton("#accentOptions", saysAccent?"sí":"no", "ok");
+    setInlineFeedback(2, true, `<b>bien.</b> ${accentReasonText(current)}`);
+    if(!current.accent){
+      setQuestionState(4, true);
+      completeWord(true);
+    }else{
+      $("subhint").textContent = "elige la vocal acentuada y el lado";
+      setTimeout(()=>setQuestionState(3),520);
+    }
+  }else{
+    setInlineFeedback(2, false, accentReasonText(current));
+    wrong("#accentOptions", saysAccent?"sí":"no", "q2", "decisión de tilde incorrecta");
+  }
+}
+
+function answerVowel(value){
+  if(step!==3) return;
+  const expected = expectedAccentChoice();
+  if(value===expected){
+    markChoice("#vowelOptions", value, "ok");
+    setInlineFeedback(3, true, `<b>bien.</b> ${syllableLine(current)} ${accentPositionReasonText(current)}`);
+    completeWord(false);
+  }else{
+    markChoice("#vowelOptions", value, "bad");
+    const selected = document.querySelector(`#vowelOptions .opt[data-choice="${CSS.escape(value)}"]`);
+    const readable = selected ? selected.textContent.trim().replace(/\s+/g," ") : value;
+    setInlineFeedback(3, false, `${syllableLine(current)} ${accentPositionReasonText(current)}`);
+    wrongNoButton("q3", "posición del acento incorrecta: "+readable);
+  }
+}
+
+function wrong(container,label,qid,reason){
+  markButton(container,label,"bad");
+  const q=$(qid);
+  q.classList.remove("badflash");
+  void q.offsetWidth;
+  q.classList.add("badflash");
+  recordError(reason);
+  showFailureFeedback(reason);
+  fail(reason);
+  correctionMode = true;
+  correctionMode = true;
+}
+
+function labelType(v){return v==="esdrujula"?"esdrújula":v}
+
+function markButton(container,label,cls){
+  document.querySelectorAll(container+" .opt").forEach(b=>{
+    if(b.textContent===label) b.classList.add(cls);
+  });
+}
+
+function markChoice(container,choice,cls){
+  document.querySelectorAll(container+" .opt").forEach(b=>{
+    if(b.dataset.choice===choice) b.classList.add(cls);
+  });
+}
+
+function wrongNoButton(qid,reason){
+  const q=$(qid);
+  q.classList.remove("badflash");
+  void q.offsetWidth;
+  q.classList.add("badflash");
+  recordError(reason);
+  showFailureFeedback(reason);
+  fail(reason);
+}
+
+function goNextWord(){
+  $("nextBtn").style.display="none";
+  newWord();
+}
+
+function completeWord(skippedThird){
+  if(window.LucYagoReto && !correctionMode){
+    window.LucYagoReto.record(true);
+    const rp=window.LucYagoReto.progress();
+    if(rp.ok>=window.LucYagoReto.target){return;}
+  }
+  solvedInThisWord=true;
+  updateDisabled();
+
+  if(correctionMode){
+    $("subhint").textContent = "corregido, no suma ni cambia el volcán";
+    eventText("corrección neutra");
+  }else{
+    hits++;
+    streak++;
+    celebrate();
+    $("subhint").textContent = skippedThird ? "correcto: no lleva tilde" : "misión completa";
+  }
+
+  showSolution(false);
+  $("nextBtn").style.display="inline-block";
+}
+
+function fail(reason){
+  if(window.LucYagoReto){window.LucYagoReto.record(false);}
+  fails++;
+  streak=0;
+  dangerEffect(reason);
+  // derrota gestionada por el pueblo destruido
+}
+
+function recordError(reason){
+  if(!current) return;
+  errorLog.unshift({
+    word:current.word,
+    correct:current.correct,
+    reason,
+    rule:current.rule,
+    syllables:formatSyllables(current)
+  });
+  if(errorLog.length>30) errorLog.pop();
+}
+
+function showFailureFeedback(reason){
+  // el feedback ahora sale dentro del recuadro 1, 2 o 3
+}
+
+function showSolution(countAsFail){
+  if(!current) return;
+  $("resultPanel").classList.add("show");
+  $("solutionWord").innerHTML = formatSolutionWord(current);
+  $("solutionExplain").innerHTML = `
+    <b>${labelType(current.type)}</b> · sílaba tónica: <b>${formatSyllables(current)}</b> · ${current.accent ? "tilde: "+current.accentChar : "sin tilde"}<br>
+    ${summaryTypeLine(current)}<br>
+    ${cleanRuleForSummary(current)}
+  `;
+  if(countAsFail && !solvedInThisWord){
+    solvedInThisWord=true;
+    updateDisabled();
+    recordError("pidió solución");
+    showFailureFeedback("pidió solución");
+    $("nextBtn").style.display="inline-block";
+    fail("pidió solución");
+  }
+}
+
+function tonicIndex(w){
+  if(w.type==="aguda") return w.syllables.length-1;
+  if(w.type==="llana") return w.syllables.length-2;
+  return w.syllables.length-3;
+}
+
+function formatSyllables(w){
+  const ti=tonicIndex(w);
+  return w.syllables.map((s,i)=>{
+    let out=s;
+    if(w.accent) out=out.replace(w.accentChar, `<span class="acento">${w.accentChar}</span>`);
+    return i===ti ? `<span class="tonica">${out}</span>` : out;
+  }).join("-");
+}
+
+function formatSolutionWord(w){
+  return formatSyllables(w);
+}
+
+function updateStats(){
+  $("hits").textContent=hits;
+  $("fails").textContent=fails;
+  $("lavaTxt").textContent=volcanoHeat;
+  $("streak").textContent=streak;
+  $("goalBtn").textContent=goalHits;
+  $("progressText").textContent=`${Math.min(villageItems.length,goalHits)}/${goalHits}`;
+  $("trackFill").style.width=`${Math.min(100,villageItems.length/goalHits*100)}%`;
+
+  updateVolcanoVisual();
+  renderVillage();
+
+  if(villageItems.length >= goalHits && volcanoHeat === 0){
+    $("mood").textContent = "🏆 pueblo salvado";
+    eventText("victoria");
+  }
+}
+
+function updateVolcanoVisual(){
+  const wrap = $("volcanoWrap");
+  if(wrap) wrap.className = "volcanoWrap heat" + Math.min(5, volcanoHeat);
+
+  const inner = $("innerLava");
+  if(inner){
+    const lavaPercent = volcanoHeat <= 2 ? 0 : (volcanoHeat-2) * 28;
+    inner.style.height = Math.min(86, lavaPercent) + "%";
+  }
+
+  const scene = $("scene");
+  if(scene){
+    scene.classList.toggle("hotSky", volcanoHeat >= 2);
+    scene.classList.toggle("alarmSky", volcanoHeat >= 4);
+  }
+
+  if(volcanoHeat === 0) $("mood").textContent = "❄️ volcán apagado";
+  else if(volcanoHeat === 1) $("mood").textContent = "🌫️ empieza a calentarse";
+  else if(volcanoHeat === 2) $("mood").textContent = "🔥 volcán caliente";
+  else if(volcanoHeat === 3) $("mood").textContent = "🌋 lava subiendo";
+  else if(volcanoHeat === 4) $("mood").textContent = "🚨 erupción próxima";
+  else $("mood").textContent = "💥 erupción";
+}
+
+function renderVillage(){
+  const zone = $("villageZone");
+  if(!zone) return;
+  zone.innerHTML = "";
+  villageItems.forEach(item=>{
+    const el = document.createElement("div");
+    el.className = "townItem town-" + item.kind;
+    el.textContent = item.emoji;
+    el.style.left = item.x + "%";
+    el.style.bottom = item.y + "%";
+    el.style.zIndex = String(20 + Math.round(item.y));
+    zone.appendChild(el);
+  });
+  $("eventPill").textContent = "pueblo: " + villageItems.length;
+}
+
+
+function itemSize(kind){
+  if(kind==="building" || kind==="special") return 32;
+  if(kind==="rare") return 30;
+  if(kind==="house") return 26;
+  if(kind==="tree") return 22;
+  if(kind==="car") return 18;
+  if(kind==="bench" || kind==="lamp") return 15;
+  if(kind==="person" || kind==="animal" || kind==="dog" || kind==="flower") return 14;
+  return 16;
+}
+
+function randomPositionForKind(kind){
+  const p = { x: 4 + Math.random()*92, y: Math.random()*72 };
+
+  // zonas: izquierda, prado bajo delante del volcán, derecha
+  const zoneRoll = Math.random();
+
+  if(zoneRoll < 0.36){
+    p.x = 4 + Math.random()*32;
+  }else if(zoneRoll < 0.70){
+    p.x = 38 + Math.random()*32;
+  }else{
+    p.x = 76 + Math.random()*20;
+  }
+
+  if(kind === "house") p.y = Math.random()*22;
+  else if(kind === "building" || kind === "special") p.y = Math.random()*16;
+  else if(kind === "person" || kind === "animal" || kind === "dog" || kind === "flower" || kind === "lamp") p.y = 4 + Math.random()*40;
+  else if(kind === "tree") p.y = 6 + Math.random()*48;
+  else if(kind === "rare") p.y = 8 + Math.random()*30;
+  else p.y = Math.random()*56;
+
+  // Delante del volcán sí, encima del cono no.
+  if(p.x > 38 && p.x < 74){
+    p.y = Math.min(p.y, 18);
+  }
+
+  return p;
+}
+
+function overlapsVolcanoZone(item){
+  // Bloquea la zona del cono; permite iconos abajo, delante del volcán.
+  if(item.x > 43 && item.x < 81 && item.y > 21) return true;
+  if((item.kind==="building" || item.kind==="special" || item.kind==="rare" || item.kind==="house") && item.x > 40 && item.x < 84 && item.y > 14) return true;
+  return false;
+}
+
+function tooCloseToOther(a,b){
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  return dist < (itemSize(a.kind) + itemSize(b.kind) + 7);
+}
+
+function assignPositionNoOverlap(placed){
+  let best = null;
+  let bestScore = -Infinity;
+
+  for(let tries=0; tries<360; tries++){
+    const p = randomPositionForKind(placed.kind);
+    placed.x = p.x;
+    placed.y = p.y;
+
+    let ok = true;
+    let nearest = 999;
+
+    for(const other of villageItems){
+      const dx = placed.x - other.x;
+      const dy = placed.y - other.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      nearest = Math.min(nearest, dist);
+      if(tooCloseToOther(placed, other)){
+        ok = false;
+        break;
+      }
+    }
+
+    if(overlapsVolcanoZone(placed)){
+      ok = false;
+    }
+
+    if(ok) return true;
+
+    if(nearest > bestScore){
+      bestScore = nearest;
+      best = {x: placed.x, y: placed.y};
+    }
+  }
+
+  if(best){
+    placed.x = best.x;
+    placed.y = best.y;
+  }
+  return false;
+}
+
+function addVillageItem(forceKind){
+  const kinds = [
+    {kind:"house", emoji:"🏠", weight:18},
+    {kind:"house", emoji:"🏡", weight:16},
+    {kind:"house", emoji:"🏘️", weight:8},
+    {kind:"building", emoji:"🏢", weight:5},
+    {kind:"building", emoji:"🏤", weight:4},
+    {kind:"building", emoji:"🏫", weight:4},
+    {kind:"building", emoji:"🏥", weight:3},
+    {kind:"special", emoji:"⛪", weight:2},
+    {kind:"special", emoji:"🕌", weight:1},
+    {kind:"house", emoji:"🛖", weight:2},
+    {kind:"building", emoji:"🏭", weight:1},
+    {kind:"house", emoji:"🛒", weight:2},
+    {kind:"house", emoji:"🎪", weight:1},
+
+    {kind:"tree", emoji:"🌳", weight:14},
+    {kind:"tree", emoji:"🌲", weight:10},
+    {kind:"tree", emoji:"🌴", weight:4},
+    {kind:"tree", emoji:"🌵", weight:2},
+    {kind:"tree", emoji:"🎄", weight:2},
+
+    {kind:"flower", emoji:"🌷", weight:7},
+    {kind:"flower", emoji:"🌹", weight:5},
+    {kind:"flower", emoji:"🌺", weight:4},
+    {kind:"flower", emoji:"🌸", weight:5},
+    {kind:"flower", emoji:"🌼", weight:5},
+    {kind:"flower", emoji:"🌻", weight:5},
+    {kind:"flower", emoji:"🌱", weight:4},
+    {kind:"flower", emoji:"🌾", weight:2},
+
+    {kind:"person", emoji:"🚶", weight:5},
+    {kind:"person", emoji:"🚶‍♀️", weight:5},
+    {kind:"person", emoji:"🚶‍♂️", weight:5},
+    {kind:"person", emoji:"🧍‍♀️", weight:4},
+    {kind:"person", emoji:"🧍‍♂️", weight:4},
+    {kind:"person", emoji:"🚶‍♀️", weight:2},
+    {kind:"person", emoji:"🚶‍♂️", weight:2},
+    {kind:"person", emoji:"👷‍♀️", weight:2},
+    {kind:"person", emoji:"👩‍🌾", weight:2},
+    {kind:"person", emoji:"👨‍🌾", weight:2},
+    {kind:"person", emoji:"🏃", weight:1},
+    {kind:"person", emoji:"🏃‍♀️", weight:1},
+    {kind:"person", emoji:"🏃‍♂️", weight:1},
+    {kind:"person", emoji:"🚶", weight:2},
+    {kind:"person", emoji:"🧍", weight:4},
+    {kind:"person", emoji:"🧑‍🤝‍🧑", weight:1},
+
+    {kind:"animal", emoji:"🐕", weight:5},
+    {kind:"animal", emoji:"🐈", weight:4},
+    {kind:"animal", emoji:"🐓", weight:2},
+    {kind:"animal", emoji:"🦆", weight:2},
+    {kind:"animal", emoji:"🐑", weight:1},
+    {kind:"animal", emoji:"🐐", weight:1},
+    {kind:"animal", emoji:"🐄", weight:1},
+    {kind:"animal", emoji:"🐎", weight:1},
+    {kind:"animal", emoji:"🐖", weight:1},
+    {kind:"animal", emoji:"🐇", weight:1},
+    {kind:"animal", emoji:"🕊️", weight:2},
+
+    {kind:"car", emoji:"🚗", weight:4},
+    {kind:"car", emoji:"🚕", weight:2},
+    {kind:"car", emoji:"🚙", weight:2},
+    {kind:"car", emoji:"🚌", weight:1},
+    {kind:"car", emoji:"🚑", weight:1},
+    {kind:"car", emoji:"🚒", weight:1},
+    {kind:"car", emoji:"🚜", weight:1},
+    {kind:"car", emoji:"🛵", weight:2},
+    {kind:"car", emoji:"🚲", weight:3},
+
+    {kind:"lamp", emoji:"🚏", weight:2},
+    {kind:"bench", emoji:"🪑", weight:4},
+    {kind:"bench", emoji:"⛲", weight:1},
+    {kind:"bench", emoji:"🗿", weight:1},
+    {kind:"bench", emoji:"📮", weight:2},
+    {kind:"bench", emoji:"🛝", weight:2},
+    {kind:"bench", emoji:"🧱", weight:2},
+    {kind:"bench", emoji:"🪧", weight:2},
+    {kind:"bench", emoji:"🛤️", weight:1},
+    {kind:"bench", emoji:"🎠", weight:1},
+    {kind:"bench", emoji:"⚽", weight:2},
+    {kind:"bench", emoji:"🧺", weight:1},
+    {kind:"bench", emoji:"🛹", weight:1},
+    {kind:"bench", emoji:"🛴", weight:1},
+
+    {kind:"rare", emoji:"🚁", weight:1},
+      ];
+
+  let choice;
+  if(forceKind === "house"){
+    choice = Math.random() > .5 ? {kind:"house", emoji:"🏠"} : {kind:"house", emoji:"🏡"};
+  }else{
+    const bag = [];
+    kinds.forEach(k=>{ for(let i=0;i<k.weight;i++) bag.push(k); });
+    choice = bag[Math.floor(Math.random()*bag.length)];
+  }
+
+  const placed = {
+    id: nextVillageId++,
+    kind: choice.kind,
+    emoji: choice.emoji,
+    x: 0,
+    y: 0
+  };
+
+  assignPositionNoOverlap(placed);
+
+  villageItems.push(placed);
+  renderVillage();
+}
+
+function destroyVillageItem(){
+  if(!villageItems.length) return;
+  const houses = villageItems.filter(i=>i.kind==="house");
+  const pool = houses.length ? houses : villageItems;
+  const victim = pool[Math.floor(Math.random()*pool.length)];
+  const idx = villageItems.findIndex(i=>i.id===victim.id);
+
+  const zone = $("villageZone");
+  const existing = zone ? [...zone.children][idx] : null;
+  if(existing) existing.classList.add("destroyed");
+
+  setTimeout(()=>{
+    villageItems = villageItems.filter(i=>i.id!==victim.id);
+    renderVillage();
+    if(villageItems.length <= 0){
+      setTimeout(()=>{
+        alert("💥 todo el pueblo ha sido destruido");
+        resetGame();
+      }, 300);
+    }
+  }, 380);
+}
+
+function applyCorrectVisual(){
+  if(volcanoHeat > 0){
+    volcanoHeat = Math.max(0, volcanoHeat - 1);
+    eventText("❄️ el volcán se enfría");
+    coolingParticles();
+  }else{
+    addVillageItem();
+    eventText("🏘️ el pueblo crece");
+    buildParticles();
+  }
+  updateStats();
+}
+
+function applyWrongVisual(reason){
+  if(volcanoHeat < 5){
+    volcanoHeat++;
+    eventText(volcanoHeat >= 3 ? "🌋 la lava sube" : "🔥 el volcán se calienta");
+    heatParticles();
+  }else{
+    eruptionCount++;
+    eruptAndDestroy();
+  }
+  updateStats();
+}
+
+function eruptAndDestroy(){
+  eventText("💥 erupción destruye una casa");
+  const scene=$("scene");
+  if(scene){
+    scene.classList.add("panic");
+    setTimeout(()=>scene.classList.remove("panic"),850);
+  }
+
+  const shock=document.createElement("div");
+  shock.className="shockwave";
+  $("eruptionLayer").appendChild(shock);
+  setTimeout(()=>shock.remove(),700);
+
+  for(let i=0;i<18;i++){
+    spawnEruption(["🔥","🪨","💥","🌋"][Math.floor(Math.random()*4)], 250+Math.random()*70, 90+Math.random()*40, -250+Math.random()*180, -170+Math.random()*230);
+  }
+
+  setTimeout(destroyVillageItem, 380);
+}
+
+function spawnEruption(char,x,y,dx,dy){
+  const p=document.createElement("div");
+  p.className="eruptionParticle";
+  p.textContent=char;
+  p.style.left=x+"px";
+  p.style.top=y+"px";
+  p.style.setProperty("--dx", dx+"px");
+  p.style.setProperty("--dy", dy+"px");
+  $("eruptionLayer").appendChild(p);
+  setTimeout(()=>p.remove(),1150);
+}
+
+function heatParticles(){
+  for(let i=0;i<8;i++){
+    spawnEruption(["🔥","💨"][Math.floor(Math.random()*2)], 255+Math.random()*60, 90+Math.random()*50, -40+Math.random()*80, -90-Math.random()*75);
+  }
+}
+
+function coolingParticles(){
+  for(let i=0;i<8;i++){
+    spawnEruption(["💧","❄️","✨"][Math.floor(Math.random()*3)], 230+Math.random()*90, 115+Math.random()*60, -55+Math.random()*110, -75-Math.random()*70);
+  }
+}
+
+function buildParticles(){
+  for(let i=0;i<8;i++){
+    spawnEruption(["✨","🌱","🏗️"][Math.floor(Math.random()*3)], 70+Math.random()*190, 250+Math.random()*90, -40+Math.random()*80, -50-Math.random()*65);
+  }
+}
+
+function eventText(txt){
+  $("eventPill").textContent=txt;
+  setTimeout(()=>{$("eventPill").textContent = "pueblo: " + villageItems.length},1300);
+}
+
+function spawn(char,x,y,kind="particle"){
+  spawnEruption(char,x,y,-40+Math.random()*80,-100-Math.random()*80);
+}
+
+function dangerEffect(reason){
+  applyWrongVisual(reason);
+}
+
+function celebrate(){
+  applyCorrectVisual();
+}
+
+function toggleStudy(){
+  $("studyBox").classList.toggle("show");
+  $("studyBtn").classList.toggle("selected", $("studyBox").classList.contains("show"));
+}
+
+function toggleReview(){
+  const box=$("reviewBox");
+  box.classList.toggle("show");
+  $("reviewBtn").classList.toggle("selected", box.classList.contains("show"));
+  renderReview();
+}
+
+function renderReview(){
+  const list=$("reviewList");
+  if(!errorLog.length){
+    list.innerHTML="<p>todavía no hay errores para revisar.</p>";
+    return;
+  }
+  list.innerHTML=errorLog.map(e=>`
+    <div class="reviewItem">
+      <b>${e.word}</b> → ${e.syllables}<br>
+      <small>${e.reason}. ${e.rule}</small>
+    </div>
+  `).join("");
+}
+
+function toggleGoal(){
+  goalIndex=(goalIndex+1)%goalOptions.length;
+  goalHits=goalOptions[goalIndex];
+  eventText("meta: "+goalHits);
+  updateStats();
+}
+
+function toggleDataBox(){
+  $("dataBox").classList.toggle("show");
+  $("dataBtn").classList.toggle("selected", $("dataBox").classList.contains("show"));
+}
+
+function csvSplitLine(line){
+  const out=[];
+  let cur="";
+  let quote=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch === '"'){
+      quote = !quote;
+    }else if((ch === "," || ch === "\t" || ch === ";") && !quote){
+      out.push(cur.trim());
+      cur="";
+    }else{
+      cur += ch;
+    }
+  }
+  out.push(cur.trim());
+  return out.map(x=>x.replace(/^"|"$/g,""));
+}
+
+function loadWordsFromText(){
+  const text=$("dataInput").value.trim();
+  if(!text){
+    alert("pega primero una tabla o CSV");
+    return;
+  }
+  const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  let start=0;
+  if(lines[0].toLowerCase().includes("word") && lines[0].toLowerCase().includes("correct")) start=1;
+  const loaded=[];
+  for(let i=start;i<lines.length;i++){
+    const c=csvSplitLine(lines[i]);
+    if(c.length<8) continue;
+    const [word,correct,syllables,type,accent,accentChar,accentSide,rule]=c;
+    if(!word || !correct || !syllables || !type) continue;
+    loaded.push({
+      word,
+      correct,
+      syllables:syllables.split("-").map(s=>s.trim()).filter(Boolean),
+      type:type.trim().toLowerCase().replace("esdrújula","esdrujula"),
+      accent:String(accent).toLowerCase().trim()==="true" || String(accent).toLowerCase().trim()==="sí" || String(accent).toLowerCase().trim()==="si",
+      accentChar:accentChar || "",
+      accentSide:accentSide || "none",
+      rule:rule || ""
+    });
+  }
+  if(!loaded.length){
+    alert("no he podido cargar palabras. revisa columnas y separadores.");
+    return;
+  }
+  words=loaded;
+  queue=shuffleArray([...words]);
+  eventText("📚 "+words.length+" palabras cargadas");
+  toggleDataBox();
+  resetGame();
+}
+
+function exportWordsToTextarea(){
+  $("dataInput").value = "word,correct,syllables,type,accent,accentChar,accentSide,rule\n" + words.map(w =>
+    [w.word,w.correct,w.syllables.join("-"),labelType(w.type),w.accent,w.accentChar,w.accentSide,w.rule]
+      .map(v => `"${String(v).replaceAll('"','""')}"`).join(",")
+  ).join("\n");
+}
+
+function restoreDefaultWords(){
+  words=[...defaultWords];
+  queue=shuffleArray([...words]);
+  exportWordsToTextarea();
+  eventText("📚 banco inicial restaurado");
+  resetGame();
+}
+
+function resetGame(){
+  hits=0; fails=0; lava=0; volcanoHeat=0; streak=0; solvedInThisWord=false; correctionMode=false; errorLog=[];
+  villageItems=[]; nextVillageId=1; eruptionCount=0;
+  addVillageItem("house");
+  addVillageItem("house");
+  queue=shuffleArray([...words]);
+  updateStats();
+  newWord();
+}
+
+resetGame();
+</script>
+
+<script id="lucyago-reto-common">
+/* LucYagoReto Common v1 */
+(function(){
+  const params=new URLSearchParams(location.search);
+  const active=params.get('reto')==='1';
+  if(!active) return;
+  const game=params.get('game')||document.title||'juego';
+  const target=Math.max(1,parseInt(params.get('preguntas')||'10',10));
+  const returnUrl=params.get('return')||'../reto_mixto.html';
+  const sessionKey=params.get('session')||'lucyago_reto_session';
+  let locked=false;
+  function getSession(){try{return JSON.parse(localStorage.getItem(sessionKey)||'{}')}catch(e){return {}}}
+  function setSession(s){localStorage.setItem(sessionKey,JSON.stringify(s));}
+  function ensureGame(s){
+    s.results=s.results||{};
+    if(!s.results[game]) s.results[game]={ok:0,bad:0,total:target,target:target,done:false,name:game};
+    s.results[game].total=target; s.results[game].target=target;
+    return s.results[game];
+  }
+  function total(r){return (r.ok||0)+(r.bad||0)}
+  function paint(){
+    const s=getSession(), r=ensureGame(s);
+    let bar=document.getElementById('lucyagoRetoBar');
+    if(!bar){
+      bar=document.createElement('div');bar.id='lucyagoRetoBar';
+      bar.style.cssText='position:fixed;left:10px;right:10px;bottom:10px;z-index:999999;background:#fffdf8;color:#21314c;border:3px solid #ffd84d;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:8px 12px;font-family:Arial,sans-serif;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:8px;';
+      document.body.appendChild(bar);
+    }
+    const done=Math.min(target,(r.ok||0));
+    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
+    setSession(s);
+  }
+  function finish(){
+    if(locked) return; locked=true;
+    const s=getSession(), r=ensureGame(s); r.done=true; s.lastFinished=game; setSession(s);
+    paint();
+    setTimeout(()=>{location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);},450);
+  }
+  window.LucYagoReto={
+    active:true, game, target, sessionKey,
+    record:function(ok){
+      if(locked) return;
+      const s=getSession(), r=ensureGame(s);
+      if((r.ok||0)>=target) {finish(); return;}
+      if(ok) r.ok=(r.ok||0)+1; else r.bad=(r.bad||0)+1;
+      setSession(s); paint();
+      if((r.ok||0)>=target) finish();
+    },
+    finish:finish,
+    progress:function(){const s=getSession(), r=ensureGame(s); return {ok:r.ok||0,bad:r.bad||0,total:target,done:total(r)}}
+  };
+  window.addEventListener('load',()=>setTimeout(paint,250));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2428 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff8a3d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tresor Unitats">
+<meta name="mobile-web-app-capable" content="yes">
+<title>El Tresor de les Unitats</title>
+<style>
+:root{
+  --bg-a:#fff4de;
+  --bg-b:#e7f5ff;
+  --card:#fffdf8;
+  --ink:#20304a;
+  --muted:#6d7891;
+  --orange:#ff7b2c;
+  --orange-dark:#cf5d12;
+  --yellow:#ffd84d;
+  --green:#20b86f;
+  --green-soft:#dff8eb;
+  --red:#e55656;
+  --red-soft:#ffe4e2;
+  --blue:#3d74ff;
+  --blue-soft:#e8efff;
+  --purple:#7657e8;
+  --sand:#ffe6b8;
+  --line:rgba(32,48,74,.09);
+  --shadow:0 18px 45px rgba(32,48,74,.13);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{
+  font-family:"Trebuchet MS","Avenir Next","Segoe UI",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 10%,rgba(255,216,130,.82),transparent 22%),
+    radial-gradient(circle at 88% 12%,rgba(122,197,255,.60),transparent 18%),
+    radial-gradient(circle at 82% 88%,rgba(255,146,126,.38),transparent 22%),
+    linear-gradient(160deg,var(--bg-a),var(--bg-b));
+  touch-action:manipulation;
+}
+button,input{font:inherit}
+button{
+  border:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .14s ease,box-shadow .14s ease,opacity .14s ease,background .14s ease;
+}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.48;cursor:not-allowed}
+.app{
+  width:100%;
+  max-width:1180px;
+  height:100dvh;
+  margin:0 auto;
+  padding:calc(10px + env(safe-area-inset-top)) 12px calc(10px + env(safe-area-inset-bottom));
+  display:grid;
+  grid-template-rows:auto 1fr;
+  gap:10px;
+  overflow:hidden;
+}
+.topbar,.panel{
+  background:rgba(255,253,248,.91);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.72);
+  box-shadow:var(--shadow);
+  border-radius:24px;
+}
+.topbar{
+  min-height:86px;
+  padding:12px 14px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+}
+.home-btn,.route-btn,.game-toggle-btn,.action-btn,.pad-btn,.choice-btn,.tiny-btn,.test-btn{
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 10px 22px rgba(32,48,74,.11);
+  color:var(--ink);
+  font-weight:900;
+}
+.home-btn{width:52px;height:52px;font-size:25px}
+.brand h1{margin:2px 0 0;font-size:clamp(28px,4vw,48px);line-height:.94;letter-spacing:0}
+.eyebrow{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#fff1dc;
+  color:var(--orange-dark);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.top-stats{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.stat-pill{
+  min-width:92px;
+  padding:9px 11px;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:inset 0 0 0 1px var(--line);
+}
+.stat-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900}
+.stat-value{margin-top:3px;font-size:22px;font-weight:900;line-height:1}.coin-bar{font-size:18px;letter-spacing:1px;white-space:nowrap;max-width:210px;overflow:hidden;text-overflow:clip}
+.route-btn{
+  min-width:116px;
+  padding:13px 15px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--orange),#ff9748);
+}
+.game-toggle-btn{
+  min-width:96px;
+  padding:13px 14px;
+  color:#fff;
+  background:linear-gradient(135deg,#20b86f,#39d38a);
+}
+.game-toggle-btn.off{background:linear-gradient(135deg,#6d7891,#9aa4b8)}
+body.no-adventure .right-panel{display:none}
+body.no-adventure .game{grid-template-columns:minmax(330px,760px);justify-content:center}
+body.no-adventure .adventure-stat{display:none}
+body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
+.game{
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(330px,.86fr) minmax(500px,1.14fr);
+  gap:10px;
+}
+.panel{min-height:0;padding:12px;overflow:hidden}
+.left-panel{
+  display:grid;
+  grid-template-rows:auto auto auto auto auto 1fr auto auto;
+  gap:7px;
+}
+.right-panel{
+  display:grid;
+  grid-template-columns:1fr 150px;
+  grid-template-rows:1fr auto;
+  gap:10px;
+}
+.section-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.section-title{margin:0;font-size:17px}
+.mode-badge,.feedback,.progress-chip{
+  padding:8px 11px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+}
+.mode-badge{background:var(--blue-soft);color:#285bd5}
+.progress-chip{background:#fff3df;color:var(--orange-dark)}
+.test-selector{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}
+.test-btn{min-height:34px;padding:6px 4px;font-size:10.5px;line-height:1.05;background:#fff;color:var(--ink)}
+.test-btn.active{background:linear-gradient(135deg,#ffe8d8,#fff3c1);outline:3px solid rgba(255,123,44,.22);color:var(--orange-dark)}
+.test-btn.mix{background:linear-gradient(135deg,var(--orange),#ff9748);color:#fff}
+.test-btn.mix.active{outline:4px solid rgba(255,216,77,.35)}
+.level-row{display:flex;gap:7px;align-items:center;justify-content:space-between}
+.level-toggle{display:flex;gap:6px}
+.level-btn{min-height:34px;padding:7px 10px;border-radius:15px;background:#fff;color:var(--ink);box-shadow:0 8px 18px rgba(32,48,74,.10);font-size:11px;font-weight:900}
+.level-btn.active{background:#fff3df;color:var(--orange-dark);outline:3px solid rgba(255,123,44,.20)}
+.help-note{display:none;margin-top:-2px;padding:8px 10px;border-radius:16px;background:#fff8dc;color:#755000;font-size:11px;font-weight:900;line-height:1.2;box-shadow:inset 0 0 0 2px rgba(255,216,77,.28)}
+.help-note.show{display:block}
+.question-card{
+  position:relative;
+  overflow:hidden;
+  min-height:174px;
+  padding:14px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at top right,rgba(255,255,255,.22),transparent 28%),
+    linear-gradient(135deg,#5c4bff,#3d74ff 58%,#29b8ff);
+  color:#fff;
+}
+.question-card.good{animation:pulseGood .45s ease}
+.question-card.bad{animation:shakeBad .35s ease}
+.question-meta{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.tag{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.16);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.question-text{
+  margin-top:10px;
+  min-height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:clamp(21px,2.7vw,34px);
+  line-height:1.1;
+  font-weight:900;
+}
+.answer-box{
+  margin-top:9px;
+  min-height:58px;
+  padding:11px 13px;
+  border:3px solid rgba(255,255,255,.18);
+  border-radius:20px;
+  background:rgba(255,255,255,.15);
+  text-align:center;
+  cursor:pointer;
+}
+.answer-box.active,.answer-box.filled{border-color:#ffb35c;background:rgba(255,179,92,.22);box-shadow:0 0 0 4px rgba(255,179,92,.20), inset 0 0 0 1px rgba(255,255,255,.22)}
+.answer-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#dbebff;font-weight:900}
+.answer-value{margin-top:3px;font-size:clamp(24px,3.5vw,38px);font-weight:900;line-height:1.05;word-break:break-word}
+.conversion-table{
+  display:none;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:5px;
+  padding:9px;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:inset 0 0 0 2px rgba(61,116,255,.08);
+}
+.conversion-table.show{display:grid}
+.unit-cell{
+  min-height:44px;
+  border-radius:14px;
+  background:#eef3ff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+.unit-cell span{font-size:9px;color:var(--muted);font-weight:900}
+.unit-cell.active{background:#fff0d6;color:#9c5c0d}
+.order-area{
+  min-height:56px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+  padding:9px;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:inset 0 0 0 2px rgba(32,48,74,.06);
+}
+.unit-token,.choice-btn,.match-card{
+  min-width:53px;
+  padding:11px 9px;
+  text-align:center;
+}
+.unit-token{
+  border-radius:16px;
+  background:#fff3df;
+  color:var(--orange-dark);
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(32,48,74,.10);
+}
+.unit-token.selected{opacity:.42}
+.scale-line{flex-wrap:nowrap;overflow:hidden;justify-content:center}
+.scale-line .unit-token{min-width:0;flex:1 1 0;padding:9px 4px}
+.order-slots{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.order-slot{min-height:42px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.12);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--muted)}
+.order-slot.filled{background:#fff3df;color:var(--orange-dark);box-shadow:0 8px 18px rgba(32,48,74,.10)}
+.order-pool{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:7px}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.match-column{display:grid;gap:6px}
+.match-card{min-height:38px;border-radius:15px;background:#fff;color:var(--ink);font-weight:900;box-shadow:0 8px 18px rgba(32,48,74,.10)}
+.match-card.selected{outline:3px solid rgba(61,116,255,.30);background:#eef3ff}
+.match-card.done{opacity:.95;color:#10233f;box-shadow:0 8px 18px rgba(32,48,74,.12), inset 0 0 0 3px rgba(255,255,255,.55)}
+.match-card.pair-0{background:#dff8eb}.match-card.pair-1{background:#ffe8c7}.match-card.pair-2{background:#e1edff}.match-card.pair-3{background:#f1e7ff}.match-card.pair-4{background:#fff6b8}.match-card.pair-5{background:#dff7ff}.match-card.pair-6{background:#ffdfe7}
+.match-card.wrong{animation:shakeBad .35s ease;background:#ffe4e2!important;color:#9b2a2a!important;box-shadow:inset 0 0 0 3px rgba(238,91,82,.35)}
+.match-status{text-align:center;font-size:12px;font-weight:900;color:var(--muted);padding:4px}
+.convert-work{display:grid;gap:8px;margin-bottom:12px}
+.convert-toggle-row{display:flex;justify-content:center;margin:3px 0 12px}
+.convert-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.convert-cell{min-height:38px;border-radius:13px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900}
+.convert-head{background:#fff;color:var(--ink);font-size:13px}
+.convert-cell.source,.convert-cell.target{background:#fff;color:var(--ink);outline:0;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08)}
+.convert-cell.active,.convert-cell.filled{background:#fff7ed;color:var(--ink);outline:0;box-shadow:inset 0 0 0 3px rgba(255,139,46,.55),0 0 0 3px rgba(255,139,46,.12)}
+
+.write-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:10px}
+.write-cell{min-height:42px;border-radius:13px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:var(--ink)}
+.write-cell.active,.write-cell.filled{background:#fff7ed;box-shadow:inset 0 0 0 3px rgba(255,139,46,.55),0 0 0 3px rgba(255,139,46,.12)}
+.write-pad-note{margin:0 0 7px;text-align:center;font-size:12px;font-weight:900;color:var(--muted)}
+
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.choice-btn{min-height:48px;font-size:18px}
+.choice-btn.test-wrong{background:#ffe4e2!important;color:#9b2a2a!important;box-shadow:inset 0 0 0 4px rgba(229,86,86,.42),0 8px 18px rgba(32,48,74,.12);animation:shakeBad .35s ease}
+.choice-btn.test-correct{background:#e5ffef!important;color:#10643a!important;box-shadow:inset 0 0 0 4px rgba(32,184,111,.32),0 8px 18px rgba(32,48,74,.12)}
+.test-solution-table{display:grid;grid-template-columns:minmax(76px,.45fr) minmax(0,1.55fr);gap:5px;margin-bottom:10px}
+.test-solution-cell{min-height:34px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08);display:flex;align-items:center;padding:6px 8px;font-size:12px;font-weight:900;line-height:1.15}
+.test-solution-cell.label{justify-content:center;color:#285bd5;background:#eef3ff;text-align:center}
+.test-solution-cell.empty{color:var(--muted);justify-content:center}
+.test-solution-cell.filled{background:#fff7ed;box-shadow:inset 0 0 0 3px rgba(255,139,46,.45)}
+
+.test-conversion-table{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:0 0 10px;padding:8px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08)}
+.test-conv-cell{min-height:34px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:var(--ink);line-height:1}
+.test-conv-head{background:#eef3ff;color:#285bd5;font-size:12px}
+.test-conv-cell.filled{background:#fff7ed;box-shadow:inset 0 0 0 3px rgba(255,139,46,.45)}
+.big-comma{display:inline-block;margin-left:2px;font-size:32px;line-height:.6;color:#ff6b00;font-weight:900;transform:translateY(5px)}
+.test-explain{margin:0 0 10px;padding:8px 10px;border-radius:14px;background:#fff8dc;color:#755000;font-size:12px;font-weight:900;line-height:1.25;box-shadow:inset 0 0 0 2px rgba(255,216,77,.22)}
+.test-table-title{margin:2px 0 4px;padding:4px 8px;border-radius:999px;background:#fff3df;color:#9c5c0d;font-size:11px;font-weight:900;text-align:center}
+.test-next-row{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+#resetBtn{display:none!important}
+
+.text-pad,.number-pad{
+  display:grid;
+  grid-template-columns:repeat(10,minmax(0,1fr));
+  gap:6px;
+}
+.number-pad{grid-template-columns:repeat(9,minmax(0,1fr));gap:5px}
+.number-pad .pad-btn{min-height:34px;font-size:15px;padding:6px 3px;border-radius:12px}
+.convert-control-row{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;margin:2px 0 10px}
+.result-target{min-height:38px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08);display:flex;align-items:center;justify-content:center;font-weight:900;padding:6px;text-align:center}
+.result-target span{color:var(--muted);font-size:12px;margin-right:6px}
+.result-target.active,.result-target.filled{background:#fff7ed;box-shadow:inset 0 0 0 3px rgba(255,139,46,.55),0 0 0 3px rgba(255,139,46,.12)}
+.pad-btn{
+  min-height:40px;
+  padding:8px 4px;
+  font-size:18px;
+}
+.pad-btn.wide{grid-column:span 2}
+.pad-btn.ok,.action-btn.primary{background:linear-gradient(135deg,var(--green),#39d38a);color:#fff}
+.pad-btn.delete,.action-btn.danger{background:var(--red-soft);color:#a52d2d}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.action-btn{min-height:46px;padding:10px}
+.feedback{
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:#fff6db;
+  color:#7d5a00;
+}
+.feedback.good{background:#e5ffef;color:#10643a}
+.feedback.bad{background:#fff0ef;color:#9b2a2a}
+.map-wrap{
+  position:relative;
+  min-height:0;
+  overflow:hidden;
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 83% 17%,rgba(255,255,255,.85),transparent 12%),
+    linear-gradient(180deg,#7fd7ff 0%,#b9ecff 26%,#ffe0a5 27%,#f9d18a 43%,#55c97b 44%,#2e9f70 68%,#b29262 69%,#6b5b62 100%);
+  box-shadow:inset 0 0 0 2px rgba(61,116,255,.10),0 20px 44px rgba(32,48,74,.14);
+  isolation:isolate;
+}
+.conversion-table.show{display:grid}
+.map-wrap.good{animation:battlePop .45s ease}
+.map-wrap.bad{animation:battleDrop .4s ease}
+.sea{
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(-8deg,rgba(255,255,255,.18) 0 7px,transparent 7px 28px),
+    linear-gradient(160deg,rgba(53,173,230,.45),rgba(35,138,203,.14) 38%,transparent 39%);
+  pointer-events:none;
+}
+.island{
+  position:absolute;
+  inset:7% 4% 7% 4%;
+  border-radius:36px 42px 30px 34px;
+  background:
+    radial-gradient(circle at 15% 22%,#ffe4a0 0 12%,transparent 13%),
+    radial-gradient(circle at 42% 50%,rgba(25,111,61,.34) 0 18%,transparent 19%),
+    radial-gradient(circle at 66% 54%,rgba(51,159,90,.42) 0 18%,transparent 19%),
+    radial-gradient(circle at 84% 78%,rgba(56,49,56,.28) 0 18%,transparent 19%),
+    linear-gradient(145deg,#ffe1a5 0 28%,#55c97b 29% 62%,#b8a26e 63% 78%,#77707c 79%);
+  box-shadow:inset 0 0 0 5px rgba(255,255,255,.28),0 18px 38px rgba(32,48,74,.18);
+}
+.zone-label{
+  position:absolute;
+  z-index:2;
+  padding:5px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.82);
+  color:#31506c;
+  font-size:10px;
+  font-weight:900;
+  box-shadow:0 8px 18px rgba(32,48,74,.10);
+}
+.zone-label.beach{left:8%;top:75%;color:#9b5d16}
+.zone-label.jungle{left:24%;top:35%;color:#167445}
+.zone-label.ruins{left:55%;top:43%;color:#71542f}
+.zone-label.cliff{right:8%;top:18%;color:#51404a}
+.path-layer{position:absolute;inset:0;z-index:4}
+.route-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.route-shadow{fill:none;stroke:rgba(89,57,23,.28);stroke-width:17;stroke-linecap:round;stroke-linejoin:round}
+.route-road{fill:none;stroke:#8a5830;stroke-width:12;stroke-linecap:round;stroke-linejoin:round}
+.route-highlight{fill:none;stroke:#ffcf7a;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 14;animation:pathShine 2.8s linear infinite}
+.trail-marker{
+  position:absolute;
+  width:26px;
+  height:18px;
+  transform:translate(-50%,-50%) rotate(var(--rot,0deg));
+  border-radius:9px 12px 9px 12px;
+  background:linear-gradient(135deg,#f6c878,#b8773b);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.28),0 8px 12px rgba(38,36,30,.18);
+}
+.trail-marker.bridge{height:15px;border-radius:5px;background:linear-gradient(90deg,#8e572d 0 12%,#c9833d 12% 24%,#8e572d 24% 36%,#c9833d 36% 48%,#8e572d 48% 60%,#c9833d 60% 72%,#8e572d 72% 84%,#c9833d 84%)}
+.trail-marker.ruin{height:22px;border-radius:7px;background:linear-gradient(135deg,#d5c08b,#8b806d)}
+.trail-marker.goal-step{background:linear-gradient(135deg,#f5f1e5,#9a93a2)}
+.chest-marker,.treasure-marker{
+  position:absolute;
+  transform:translate(-50%,-58%);
+  display:grid;
+  place-items:center;
+  z-index:6;
+}
+.chest-marker{width:58px;height:48px}
+.treasure-marker{width:88px;height:78px}
+.chest-box,.treasure-box{
+  position:relative;
+  width:100%;
+  height:72%;
+  border-radius:9px 9px 12px 12px;
+  background:linear-gradient(180deg,#ffda4d 0 42%,#b86f24 43% 100%);
+  box-shadow:inset 0 -5px 0 rgba(80,42,12,.25),0 13px 20px rgba(32,48,74,.24);
+}
+.chest-box:before,.treasure-box:before{
+  content:"";
+  position:absolute;
+  inset:-11px 6px auto;
+  height:24px;
+  border-radius:18px 18px 5px 5px;
+  background:linear-gradient(180deg,#ffe86b,#c9832b);
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.55);
+}
+.chest-box:after,.treasure-box:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:35%;
+  width:12px;
+  height:16px;
+  transform:translate(-50%,-50%);
+  border-radius:4px;
+  background:#fff3a8;
+  box-shadow:0 0 0 3px rgba(104,62,16,.45);
+}
+.treasure-box{height:76%;background:linear-gradient(180deg,#fff176 0 38%,#ffb12f 39% 100%)}
+.treasure-box:before{height:31px;inset:-16px 4px auto;background:linear-gradient(180deg,#fff7a4,#ffbf38)}
+.treasure-marker:before,.treasure-marker:after{
+  content:"";
+  position:absolute;
+  width:120%;
+  height:120%;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.95) 0 4%,transparent 5% 100%);
+  animation:treasureSpark 2s linear infinite;
+}
+.treasure-marker:after{animation-delay:.8s;transform:rotate(35deg)}
+.chest-marker.opened .chest-box{animation:chestOpen .8s ease both}
+.chest-marker.opened:after{content:"+5";position:absolute;right:-5px;top:-24px;color:#fff;background:#20b86f;border-radius:999px;padding:4px 7px;font-weight:900;box-shadow:0 8px 16px rgba(32,48,74,.18);animation:coinBurst .9s ease both}
+.chest-marker.stolen{filter:grayscale(.85) saturate(.55);opacity:.68;animation:stolenShake .5s ease}
+.chest-marker.stolen:after{content:"PERDUT";position:absolute;bottom:-12px;color:#fff;background:#e55656;border-radius:999px;padding:3px 6px;font-size:9px;font-weight:900}
+.pawn{
+  position:absolute;
+  z-index:10;
+  width:70px;
+  height:82px;
+  transform:translate(-50%,-80%);
+  filter:drop-shadow(0 14px 14px rgba(32,48,74,.23));
+  transition:left .38s cubic-bezier(.2,.9,.2,1),top .38s cubic-bezier(.2,.9,.2,1),transform .2s ease,filter .2s ease;
+}
+.pawn svg{width:100%;height:100%;display:block}
+.pawn.player{animation:heroIdle 2.4s ease-in-out infinite}
+.pawn.pirate{animation:pirateIdle 2.1s ease-in-out infinite}
+.pawn.pirate.angry{filter:drop-shadow(0 14px 14px rgba(128,31,31,.30))}
+.pawn.pirate.celebrate{animation:pirateCelebrate .65s ease}
+.pawn.jump{transform:translate(-50%,-88%) scale(1.08)}
+.boat{
+  position:absolute;
+  left:5%;
+  bottom:2%;
+  width:190px;
+  height:120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  filter:drop-shadow(0 16px 18px rgba(32,48,74,.24));
+  transition:transform .3s ease;
+  z-index:7;
+}
+.boat svg{width:100%;height:100%;display:block}
+.boat.upgrade{animation:boatUpgrade .9s ease}
+.legend{
+  position:absolute;
+  left:14px;
+  top:14px;
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  z-index:12;
+}
+.legend span{
+  padding:7px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.84);
+  font-size:12px;
+  font-weight:900;
+}
+.duel-overlay,.victory-overlay{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:linear-gradient(135deg,rgba(36,29,61,.70),rgba(116,39,28,.55));
+  backdrop-filter:blur(7px);
+}
+.duel-overlay.show,.victory-overlay.show{display:flex}
+.duel-card,.victory-card{
+  width:min(640px,96%);
+  border-radius:30px;
+  padding:22px;
+  background:linear-gradient(180deg,#fffdf8,#fff2d2);
+  box-shadow:0 28px 80px rgba(32,48,74,.32),inset 0 0 0 3px rgba(255,255,255,.65);
+  text-align:center;
+}
+.duel-title,.victory-title{font-size:38px;line-height:.95;font-weight:900}
+.duel-fighters{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin:12px 0}
+.duel-fighter{min-height:126px;border-radius:24px;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 2px var(--line)}
+.duel-fighter svg{width:96px;height:118px}
+.versus{font-size:26px;font-weight:900;color:#d84c32;text-shadow:0 3px 0 #fff}
+.life-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.life-box{border-radius:22px;background:#fff;padding:12px;box-shadow:inset 0 0 0 2px var(--line)}
+.hearts{margin-top:7px;font-size:25px;letter-spacing:2px;color:#e55656}
+.side-panel{
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:10px;
+}
+.crew-list{display:grid;gap:7px;min-height:0}
+.crew-card{
+  display:grid;
+  grid-template-columns:40px 1fr;
+  gap:8px;
+  align-items:center;
+  padding:8px;
+  border-radius:17px;
+  background:#fff;
+  box-shadow:inset 0 0 0 1px var(--line),0 8px 18px rgba(32,48,74,.08);
+  overflow:hidden;
+}
+.crew-card.revealed{animation:crewReveal .72s ease}
+.crew-card.lost{background:#fff0ef;color:#9b2a2a}
+.crew-icon{
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:#fff3df;
+  font-size:24px;
+}
+.crew-card.mystery .crew-icon{background:#eef3ff;color:#285bd5}
+.crew-name{font-size:13px;font-weight:900;line-height:1.05}
+.crew-state{font-size:11px;color:var(--muted);font-weight:900;margin-top:2px}
+.ship-card,.mini-card{
+  padding:10px;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:inset 0 0 0 1px var(--line),0 8px 18px rgba(32,48,74,.08);
+}
+.ship-card{background:linear-gradient(180deg,#ffffff,#eaf7ff)}
+.ship-view{text-align:center;line-height:1.05;min-height:96px;display:grid;place-items:center}
+.ship-view svg{width:132px;height:92px}
+.ship-name{text-align:center;font-weight:900;font-size:13px}
+.treasure-bar{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+}
+.mini-card .stat-value{font-size:24px}
+.confetti{position:absolute;inset:0;pointer-events:none;z-index:40}
+.spark{position:absolute;width:12px;height:12px;border-radius:50%;opacity:0}
+.coin-spark{width:16px;height:16px;background:#ffd84d!important;border:2px solid #fff2a5;box-shadow:0 4px 8px rgba(32,48,74,.15)}
+.show-spark{animation:sparkFly .85s ease}
+@keyframes sparkFly{0%{opacity:0;transform:translateY(18px) scale(.2)}20%{opacity:1}100%{opacity:0;transform:translateY(-76px) scale(1.25) rotate(220deg)}}
+@keyframes pathShine{to{stroke-dashoffset:-48}}
+@keyframes treasureSpark{0%{opacity:.05;transform:scale(.85) rotate(0)}50%{opacity:.75}100%{opacity:.05;transform:scale(1.08) rotate(360deg)}}
+@keyframes chestOpen{0%{transform:scale(1)}40%{transform:scale(1.14) rotate(-3deg)}100%{transform:scale(1)}}
+@keyframes coinBurst{0%{opacity:0;transform:translateY(16px) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translateY(-38px) scale(1.2)}}
+@keyframes stolenShake{0%,100%{transform:translate(-50%,-58%)}25%{transform:translate(-54%,-58%) rotate(-5deg)}75%{transform:translate(-46%,-58%) rotate(5deg)}}
+@keyframes heroIdle{0%,100%{margin-top:0}50%{margin-top:-3px}}
+@keyframes pirateIdle{0%,100%{margin-top:0}50%{margin-top:2px}}
+@keyframes pirateCelebrate{0%{transform:translate(-50%,-80%) rotate(0)}35%{transform:translate(-50%,-88%) rotate(-7deg) scale(1.08)}70%{transform:translate(-50%,-78%) rotate(6deg)}100%{transform:translate(-50%,-80%) rotate(0)}}
+@keyframes crewReveal{0%{transform:scale(.82);filter:brightness(1.8);opacity:.2}55%{transform:scale(1.08);filter:brightness(1.2);opacity:1}100%{transform:scale(1);filter:brightness(1)}}
+@keyframes pulseGood{0%{transform:scale(1)}40%{transform:scale(1.015)}100%{transform:scale(1)}}
+@keyframes shakeBad{0%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}}
+@keyframes battlePop{0%{transform:scale(.985)}50%{transform:scale(1.012)}100%{transform:scale(1)}}
+@keyframes battleDrop{0%{transform:translateY(0)}35%{transform:translateY(4px)}100%{transform:translateY(0)}}
+@keyframes boatUpgrade{0%{transform:scale(1)}35%{transform:scale(1.18) rotate(-3deg)}70%{transform:scale(1.08) rotate(2deg)}100%{transform:scale(1)}}
+@media (max-width:900px){
+  .app{height:auto;min-height:100dvh;overflow:auto}
+  html,body{overflow:auto}
+  .game{grid-template-columns:1fr}
+  .right-panel{grid-template-columns:1fr;grid-template-rows:520px auto auto}
+  .side-panel{grid-template-columns:1fr;grid-template-rows:auto}
+  .crew-list{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .crew-card{grid-template-columns:1fr;text-align:center}
+  .crew-icon{margin:0 auto}
+}
+@media (max-width:700px){
+  .number-pad{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .number-pad .pad-btn{min-height:32px;font-size:14px}
+  .topbar{grid-template-columns:1fr;align-items:start}
+  .top-stats{grid-column:1/-1;justify-content:stretch}
+  .stat-pill,.route-btn,.game-toggle-btn{flex:1 1 120px}
+  .treasure-bar{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .text-pad{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .choice-grid{grid-template-columns:1fr}
+  .test-selector{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* Ajustes v4: teclado compacto, tabla sin pistas y encaje de pantalla */
+@media (min-width:901px){
+  .app{padding:6px;gap:6px}
+  .topbar{min-height:72px;padding:8px 10px;border-radius:20px}
+  .brand h1{font-size:clamp(24px,3.2vw,38px)}
+  .game{gap:6px}
+  .panel{padding:8px;border-radius:20px}
+  .left-panel{gap:5px}
+  .question-card{min-height:145px;padding:10px}
+  .question-text{min-height:42px;font-size:clamp(18px,2.2vw,28px)}
+  .answer-box{min-height:48px;margin-top:6px;padding:8px}
+  .answer-value{font-size:clamp(20px,2.6vw,30px)}
+  .pad-btn{min-height:34px}
+  .test-btn{min-height:32px;padding:5px 4px}
+  .feedback{min-height:32px}
+}
+
+
+
+/* Ajustes v8: caber en pantalla, cabecera compacta y conversión mejorada */
+.section-row{display:none!important}
+#testModeText{display:none!important}
+.level-row{min-height:0;justify-content:flex-end;margin-top:-2px}
+.left-panel{display:flex!important;flex-direction:column;gap:5px;min-height:0}
+#inputArea{min-height:0;overflow:auto;padding-right:2px}
+.question-card{flex:0 0 auto;min-height:126px;padding:9px;border-radius:18px}
+.question-text{min-height:34px;font-size:clamp(16px,2vw,26px);margin-top:6px}
+.answer-box{min-height:42px;margin-top:5px;padding:7px 8px;border-radius:16px}
+.answer-value{font-size:clamp(18px,2.3vw,28px)}
+.actions{gap:5px}.action-btn{min-height:34px;padding:6px 7px;border-radius:12px;font-size:12px}
+.feedback{min-height:28px;font-size:12px;padding:5px 8px;border-radius:14px}
+.test-selector{gap:4px}.test-btn{min-height:30px;padding:5px 3px;font-size:10px;border-radius:11px}
+.level-btn{min-height:28px;padding:5px 8px;font-size:10px;border-radius:11px}
+.help-note{font-size:10px;padding:6px 8px;border-radius:12px}
+.pad-btn{min-height:31px!important;font-size:13px!important;padding:5px 3px!important;border-radius:10px!important}
+.text-pad{gap:4px}.number-pad{gap:4px}
+.convert-work{gap:6px;margin-bottom:10px}.convert-toggle-row,.convert-control-row{margin:0 0 8px}
+.convert-cell,.write-cell{min-height:32px;font-size:15px;border-radius:10px}
+.convert-head{font-size:11px}.write-grid{gap:4px;margin-bottom:7px}.write-pad-note{font-size:10px;margin-bottom:5px}
+.topbar{min-height:54px;padding:6px 8px;border-radius:18px;gap:7px;display:flex;align-items:center;flex-wrap:nowrap}
+.home-btn{width:38px;height:38px;font-size:20px;border-radius:13px;flex:0 0 auto}
+.brand{min-width:0;flex:1 1 auto}.brand h1{font-size:clamp(18px,2.6vw,30px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}.eyebrow{display:none}
+.top-stats{flex:0 0 auto;display:flex;flex-wrap:nowrap;gap:4px;align-items:center}.route-btn,.game-toggle-btn{min-width:0;padding:8px 9px;font-size:11px;border-radius:12px}.stat-pill{min-width:0;padding:5px 7px;border-radius:12px}.stat-label{font-size:8px}.stat-value{font-size:15px}.coin-bar{font-size:13px;letter-spacing:0;max-width:120px}
+.right-panel{grid-template-columns:1fr 118px;gap:6px}.treasure-bar{gap:5px}.mini-card{padding:6px;border-radius:14px}.mini-card .stat-value{font-size:18px}.ship-card{padding:6px;border-radius:14px}.ship-view{min-height:66px}.ship-view svg{width:96px;height:66px}.ship-name{font-size:11px}.crew-list{gap:4px}.crew-card{padding:5px;grid-template-columns:30px 1fr;border-radius:12px}.crew-icon{width:30px;height:30px;border-radius:10px;font-size:18px}.crew-name{font-size:11px}.crew-state{font-size:9px}.boat{width:145px;height:92px}
+@media (orientation:portrait){
+  .app{padding:5px;gap:5px}.topbar{min-height:42px;padding:4px 5px;gap:4px}.home-btn{width:32px;height:32px;font-size:17px}.brand h1{font-size:15px}.route-btn,.game-toggle-btn{padding:6px 6px;font-size:9px}.stat-pill{padding:4px 5px}.stat-label{display:none}.stat-value{font-size:12px}.coin-bar{font-size:11px;max-width:82px}.top-stats{gap:3px}
+  .game{gap:5px}.panel{padding:6px;border-radius:16px}.question-card{min-height:112px}.test-selector{grid-template-columns:repeat(4,minmax(0,1fr))}.test-btn{font-size:9px}.right-panel{grid-template-columns:1fr;grid-template-rows:420px auto auto}.side-panel{display:grid;grid-template-columns:100px 1fr;grid-template-rows:auto;gap:5px}.crew-list{grid-template-columns:repeat(5,minmax(0,1fr))}.crew-card{grid-template-columns:1fr;text-align:center}.crew-icon{margin:0 auto}.ship-view{min-height:54px}.ship-view svg{width:78px;height:54px}
+}
+@media (min-width:901px){
+  .app{padding:5px;gap:5px}.panel{padding:7px}.game{gap:5px}.map-wrap{border-radius:20px}.pawn{width:60px;height:70px}.treasure-marker{width:74px;height:64px}.chest-marker{width:48px;height:40px}
+}
+
+/* Ajustes v13: distribución Test/Convertir */
+.test-choice-grid{margin:8px 0 12px;}
+.test-helper-block{margin-top:12px;padding-top:10px;border-top:8px solid rgba(255,255,255,.75);}.test-helper-block:empty{display:none;}
+.test-helper-block .test-conversion-table{margin-bottom:12px;}
+.test-helper-block .number-pad{margin-top:10px;}
+.convert-work{margin-top:12px;padding-top:10px;border-top:8px solid rgba(255,255,255,.72);}
+.convert-work .convert-control-row{margin-bottom:10px;}
+.convert-work .convert-grid{margin:8px 0 12px;}
+#inputArea{display:block;}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="eyebrow">LucYago Games · Longitud</div>
+      <h1>El Tresor de les Unitats</h1>
+    </div>
+    <div class="top-stats">
+      <button class="home-btn" id="homeBtn" aria-label="Torna al menu">🏠</button>
+      <button class="game-toggle-btn" id="gameToggleBtn">Joc: S&iacute;</button>
+      <button class="route-btn adventure-stat" id="routeBtn">Ruta 15</button>
+      <div class="stat-pill adventure-stat"><div class="stat-label">Monedes</div><div class="stat-value coin-bar" id="coinsText">🟡░░░░░░░░░</div></div>
+      <div class="stat-pill"><div class="stat-label">Ratxa</div><div class="stat-value" id="streakText">0</div></div>
+      <div class="stat-pill adventure-stat"><div class="stat-label">Millor</div><div class="stat-value" id="bestText">0</div></div>
+    </div>
+  </header>
+
+  <main class="game">
+    <section class="panel left-panel">
+      <div class="section-row">
+        <h2 class="section-title">Repte</h2>
+        <span class="mode-badge" id="modeText">Exploracio</span>
+      </div>
+      <div class="test-selector" id="testSelector">
+        <button class="test-btn mix active" data-test="mix">Mixt</button>
+        <button class="test-btn" data-test="magnitudeDef">Magnituds</button>
+        <button class="test-btn" data-test="nameToAbbr">Nom &rarr; abrev.</button>
+        <button class="test-btn" data-test="abbrToName">Abrev. &rarr; nom</button>
+        <button class="test-btn" data-test="orderScale">Ordenar</button>
+        <button class="test-btn" data-test="writeScale">Escriure</button>
+        <button class="test-btn" data-test="convert">Convertir</button>
+        <button class="test-btn" data-test="testChoice">Test</button>
+      </div>
+      <div class="level-row">
+        <span class="progress-chip" id="testModeText">Mixt</span>
+        <div class="level-toggle" id="abbrLevelToggle">
+          <button class="level-btn active" data-level="easy">F&agrave;cil</button>
+          <button class="level-btn" data-level="hard">Dif&iacute;cil</button>
+        </div>
+      </div>
+      <div class="help-note" id="helpNote"></div>
+      <div class="question-card" id="questionCard">
+        <div class="question-meta">
+          <span class="tag" id="typeText">Abreviatura</span>
+          <span class="tag" id="levelText">Nivell fàcil</span>
+        </div>
+        <div class="question-text" id="questionText">Prem Jugar per començar</div>
+        <div class="answer-box" id="answerBox">
+          <div class="answer-label">La teva resposta</div>
+          <div class="answer-value" id="answerText">_</div>
+        </div>
+      </div>
+
+      <div id="assistArea">
+        <div class="conversion-table" id="unitTable"></div>
+      </div>
+
+      <div id="inputArea"></div>
+
+      <div class="actions">
+        <button class="action-btn" id="startBtn">Jugar</button>
+        <button class="action-btn primary" id="checkBtn">Comprovar</button>
+        <button class="action-btn" id="helpBtn">Ajuda</button>
+        <button class="action-btn danger" id="resetBtn">Reiniciar</button>
+      </div>
+      <div class="feedback" id="feedbackText">Preparat per salpar cap al tresor.</div>
+    </section>
+
+    <section class="panel right-panel">
+      <div class="map-wrap" id="mapWrap">
+        <div class="sea"></div>
+        <div class="island"></div>
+        <div class="zone-label beach">Platja</div>
+        <div class="zone-label jungle">Selva</div>
+        <div class="zone-label ruins">Ru&iuml;nes</div>
+        <div class="zone-label cliff">Tresor</div>
+        <div class="path-layer" id="pathLayer"></div>
+        <div class="legend">
+          <span>Explorador</span>
+          <span>Pirata rival</span>
+        </div>
+        <div class="boat" id="boatView"></div>
+        <div class="pawn player" id="playerPawn"></div>
+        <div class="pawn pirate" id="piratePawn"></div>
+        <div class="confetti" id="confetti"></div>
+        <div class="duel-overlay" id="duelOverlay">
+          <div class="duel-card">
+            <div class="eyebrow">Duel final</div>
+            <div class="duel-title">Explorador vs Pirata</div>
+            <div class="duel-fighters">
+              <div class="duel-fighter" id="duelHero"></div>
+              <div class="versus">VS</div>
+              <div class="duel-fighter" id="duelPirate"></div>
+            </div>
+            <div class="life-row">
+              <div class="life-box"><strong>Explorador</strong><div class="hearts" id="playerLives">&hearts;&hearts;&hearts;&hearts;&hearts;</div></div>
+              <div class="life-box"><strong>Pirata</strong><div class="hearts" id="pirateLives">&hearts;&hearts;&hearts;&hearts;&hearts;</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="victory-overlay" id="victoryOverlay">
+          <div class="victory-card">
+            <div class="eyebrow">Tresor obert</div>
+            <div class="victory-title">Victòria!</div>
+            <p id="victoryCopy">La tripulació completa celebra el botí.</p>
+            <div style="font-size:44px;margin-top:8px">🦜 🐒 🧭 ⚓ 🏴‍☠️</div>
+            <div style="font-size:62px;margin-top:4px">🚢✨💰</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <div class="ship-card">
+          <div class="stat-label">Vaixell</div>
+          <div class="ship-view" id="shipBig"></div>
+          <div class="ship-name" id="shipName">Balsa</div>
+        </div>
+        <div class="crew-list" id="crewList"></div>
+      </aside>
+
+      <div class="treasure-bar">
+        <div class="mini-card"><div class="stat-label">Explorador</div><div class="stat-value" id="playerPosText">0</div></div>
+        <div class="mini-card"><div class="stat-label">Pirata</div><div class="stat-value" id="piratePosText">0</div></div>
+        <div class="mini-card"><div class="stat-label">Cofres</div><div class="stat-value" id="chestsText">0/0</div></div>
+        <div class="mini-card"><div class="stat-label">Botí robat</div><div class="stat-value" id="stolenText">0</div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const STORAGE_KEY="lucyago_tresor_unitats_v1";
+const UNITS=[
+  {abbr:"Km",name:"quil\u00f2metre"},
+  {abbr:"Hm",name:"hect\u00f2metre"},
+  {abbr:"Dam",name:"dec\u00e0metre"},
+  {abbr:"m",name:"metre"},
+  {abbr:"dm",name:"dec\u00edmetre"},
+  {abbr:"cm",name:"cent\u00edmetre"},
+  {abbr:"mm",name:"mil\u00b7l\u00edmetre"}
+];
+const ROUTES={
+  15:[5,10],
+  30:[5,10,15,20,25],
+  40:[5,10,15,20,25,30,35]
+};
+const CREW=[
+  {icon:"🦜",name:"Loro Pep"},
+  {icon:"🐒",name:"Mono Max"},
+  {icon:"🧭",name:"Cartògrafa Clara"},
+  {icon:"⚓",name:"Mestre d'Aixa Toni"},
+  {icon:"🏴‍☠️",name:"Capitana Marina"}
+];
+const SHIPS=[
+  {icon:"🪵",map:"🪵⛵",name:"Balsa"},
+  {icon:"⛵",map:"⛵",name:"Veler"},
+  {icon:"🚤",map:"🚤",name:"Llanxa"},
+  {icon:"⛵",map:"⛵✨",name:"Galeó"},
+  {icon:"🚢",map:"🚢✨",name:"Vaixell llegendari"}
+];
+const LETTERS=["q","w","e","r","t","y","u","i","o","p","a","s","d","f","g","h","j","k","l","z","x","c","v","b","n","m"];
+const TESTS=[
+  {kind:"magnitudeDef",label:"Magnituds"},
+  {kind:"nameToAbbr",label:"Nom \u2192 abrev."},
+  {kind:"abbrToName",label:"Abrev. \u2192 nom"},
+  {kind:"orderScale",label:"Ordenar"},
+  {kind:"writeScale",label:"Escriure"},
+  {kind:"convert",label:"Convertir"},
+  {kind:"testChoice",label:"Test"}
+];
+const MAGNITUDES=[
+  {key:"longitud",name:"Longitud",definition:"La dist\u00e0ncia que hi ha entre dos punts."},
+  {key:"massa",name:"Massa",definition:"El que pesa un objecte o una persona."},
+  {key:"capacitat",name:"Capacitat",definition:"La quantitat de l\u00edquid que cap dins d\u2019un recipient."}
+];
+
+const TEST_QUESTIONS=[
+  {question:"Quina d'aquestes igualtats és la CORRECTA?",options:["4.000 mil·lilitres = 4 litres","2 quilos = 200 grams","60 litres = 6 mil·lilitres","10 grams = 1 quilo"],answer:"4.000 mil·lilitres = 4 litres"},
+  {question:"4 km equivalen a…",options:["400 m","4.000 m","40 m","400 cm"],answer:"4.000 m"},
+  {question:"Quants cm són 26 m?",options:["260 cm","2.600 cm","26 cm","2,6 cm"],answer:"2.600 cm"},
+  {question:"Quants metres són 700 cm?",options:["7 m","70 m","700 m","0,7 m"],answer:"7 m"},
+  {question:"Quants mil·lilitres són 3 L?",options:["30 mL","300 mL","3.000 mL","30.000 mL"],answer:"3.000 mL"},
+  {question:"Quina unitat és més petita?",options:["m","dm","cm","km"],answer:"cm"},
+  {question:"Quants grams són 5 kg?",options:["50.000 g","50 g","500 g","5.000 g"],answer:"5.000 g"},
+  {question:"Quina d'aquestes igualtats és INCORRECTA?",options:["9 quilos = 9.000 grams","2 litres = 2.000 mil·lilitres","5 quilos = 5.000 grams","6 litres = 600 mil·lilitres"],answer:"6 litres = 600 mil·lilitres"},
+  {question:"Quants cm són 8 m?",options:["80 cm","800 cm","8.000 cm","18 cm"],answer:"800 cm"},
+  {question:"Quina és l’abreviatura de quilòmetre?",options:["km","qm","kl","mm"],answer:"km"},
+  {question:"Quants metres són 900 cm?",options:["9 m","90 m","900 m","0,9 m"],answer:"9 m"},
+  {question:"Quants cm són 3 m?",options:["30 cm","300 cm","3.000 cm","33 cm"],answer:"300 cm"},
+  {question:"Quants kg són 4.000 g?",options:["0,004 kg","40 kg","0,4 kg","4 kg"],answer:"4 kg"},
+  {question:"Quina d'aquestes igualtats és la CORRECTA?",options:["3 litres = 30 mil·lilitres","7 quilos = 7.000 grams","500 grams = 5 quilos","1 litre = 100 mil·lilitres"],answer:"7 quilos = 7.000 grams"},
+  {question:"Quants g són 6 kg?",options:["60 g","60.000 g","6.000 g","6 g"],answer:"6.000 g"},
+  {question:"Quants L són 2.000 mL?",options:["2 L","20 L","200 L","0,2 L"],answer:"2 L"},
+  {question:"Quants mL són 5 L?",options:["0,5 mL","50 mL","0,05 mL","5.000 mL"],answer:"5.000 mL"},
+  {question:"Quants dm són 80 cm?",options:["80 dm","0,08 dm","8 dm","0,8 dm"],answer:"8 dm"},
+  {question:"Quina d'aquestes igualtats és INCORRECTA?",options:["10 quilos = 10.000 grams","Mig quilo (½ kg) = 500 grams","3 litres = 300 mil·lilitres","2.000 mil·lilitres = 2 litres"],answer:"3 litres = 300 mil·lilitres"},
+  {question:"Quants dam són 91 dm?",options:["910 dam","0,091 dam","0,91 dam","9.100 dam"],answer:"0,91 dam"},
+  {question:"Quants m són 3.000 mm?",options:["3 m","30 m","300 m","0,3 m"],answer:"3 m"},
+  {question:"Quants mm són 4 hm?",options:["40 mm","0,04 mm","400.000 mm","4 mm"],answer:"400.000 mm"},
+  {question:"Quants hm són 852 m?",options:["8.520 hm","8,52 hm","85,2 hm","0,852 hm"],answer:"8,52 hm"},
+  {question:"Quants hm són 800 m?",options:["8 hm","80 hm","0,8 hm","8.000 hm"],answer:"8 hm"},
+  {question:"Quina d'aquestes unitats utilitzaries per mesurar la quantitat d'aigua que hi ha en una piscina?",options:["El gram (g)","El centilitre (cl)","El litre (l)","El quilogram (kg)"],answer:"El litre (l)"},
+  {question:"Si necessitem mesurar la massa d'una poma, quina unitat és la més adequada?",options:["El litre (l)","El gram (g)","El quilogram (kg)","El mil·límetre (mm)"],answer:"El gram (g)"},
+  {question:"Quants grams hi ha en 3 kg?",options:["30 g","30.000 g","3.000 g","300 g"],answer:"3.000 g"},
+  {question:"Quina d'aquestes igualtats és la CORRECTA?",options:["5 litres = 500 mil·lilitres","1 quilo = 100 grams","8 quilos = 8.000 grams","300 grams = 3 quilos"],answer:"8 quilos = 8.000 grams"},
+  {question:"Què pesa MÉS?",options:["1 quilo de palla","1.000 grams de ferro","500 grams de roques","El quilo de palla i els 1.000 grams de ferro pesen el mateix"],answer:"El quilo de palla i els 1.000 grams de ferro pesen el mateix"},
+  {question:"Hem comprat 2.500 grams de patates. Quants quilos i grams són?",options:["25 quilos","2 quilos i 5 grams","2 quilos i mig (2 kg i 500 g)","250 quilos"],answer:"2 quilos i mig (2 kg i 500 g)"}
+];
+const TEST_CONVERSION_UNITS={
+  length:[{abbr:"km",factor:1000},{abbr:"hm",factor:100},{abbr:"dam",factor:10},{abbr:"m",factor:1},{abbr:"dm",factor:.1},{abbr:"cm",factor:.01},{abbr:"mm",factor:.001}],
+  mass:[{abbr:"kg",factor:1000},{abbr:"hg",factor:100},{abbr:"dag",factor:10},{abbr:"g",factor:1},{abbr:"dg",factor:.1},{abbr:"cg",factor:.01},{abbr:"mg",factor:.001}],
+  capacity:[{abbr:"kL",factor:1000},{abbr:"hL",factor:100},{abbr:"daL",factor:10},{abbr:"L",factor:1},{abbr:"dL",factor:.1},{abbr:"cL",factor:.01},{abbr:"mL",factor:.001}]
+};
+
+const DEFAULT_TEST_KINDS=TESTS.map(test=>test.kind);
+const $=selector=>document.querySelector(selector);
+const $$=selector=>Array.from(document.querySelectorAll(selector));
+const clone=obj=>JSON.parse(JSON.stringify(obj));
+const DEFAULT_SAVE={route:15,bestCoins:0,totalVictories:0,lastCrew:0,selectedTests:DEFAULT_TEST_KINDS,abbrLevel:"easy",convertLevel:"easy",gameOn:true};
+let save=loadSave();
+const LUCYAGO_RETO_PARAMS=new URLSearchParams(location.search);
+const LUCYAGO_RETO_ACTIVE=LUCYAGO_RETO_PARAMS.get('reto')==='1';
+const LUCYAGO_RETO_TARGET=Math.max(1,parseInt(LUCYAGO_RETO_PARAMS.get('preguntas')||'5',10));
+if(LUCYAGO_RETO_ACTIVE){
+  save.route=LUCYAGO_RETO_TARGET;
+  save.gameOn=true;
+  save.selectedTests=cleanSelectedTests(DEFAULT_TEST_KINDS.filter(kind=>kind!=='magnitudeDef'));
+}
+let game=freshGame(save.route);
+let helpTimer=null;
+
+function loadSave(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return clone(DEFAULT_SAVE);
+    const parsed=JSON.parse(raw);
+    return {
+      route:[15,30,40].indexOf(Number(parsed.route))>=0?Number(parsed.route):15,
+      bestCoins:Number(parsed.bestCoins||0),
+      totalVictories:Number(parsed.totalVictories||0),
+      lastCrew:Number(parsed.lastCrew||0),
+      selectedTests:cleanSelectedTests(parsed.selectedTests),
+      abbrLevel:parsed.abbrLevel==="hard"?"hard":"easy",
+      convertLevel:parsed.convertLevel==="hard"?"hard":"easy",
+      gameOn:parsed.gameOn===false?false:true
+    };
+  }catch{return clone(DEFAULT_SAVE)}
+}
+function saveProgress(){
+  save.route=game.route;
+  save.bestCoins=Math.max(save.bestCoins,game.coins);
+  save.lastCrew=Math.max(save.lastCrew,game.crewUnlocked);
+  save.selectedTests=cleanSelectedTests(save.selectedTests);
+  save.convertLevel=save.convertLevel==="hard"?"hard":"easy";
+  save.gameOn=save.gameOn===false?false:true;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+}
+function freshGame(route){
+  return {
+    route,
+    running:false,
+    final:false,
+    won:false,
+    playerPos:0,
+    piratePos:0,
+    coins:0,
+    stolen:0,
+    streak:0,
+    openedChests:[],
+    stolenChests:[],
+    crewUnlocked:0,
+    lastOpenedCrew:null,
+    lastVisualEvent:null,
+    current:null,
+    answer:"",
+    testWrong:null,
+    testChosen:null,
+    testSolved:false,
+    showSolution:false,
+    testDraft:[],
+    testActive:null,
+    testReadyForNext:false,
+    ordered:[],
+    orderPick:null,
+    writeDraft:["","","","","","",""],
+    writeActive:0,
+    playerLives:5,
+    pirateLives:5,
+    selectedTests:LUCYAGO_RETO_ACTIVE?cleanSelectedTests(DEFAULT_TEST_KINDS.filter(kind=>kind!=='magnitudeDef')):cleanSelectedTests(save.selectedTests),
+    abbrLevel:save.abbrLevel==="hard"?"hard":"easy",
+    convertLevel:save.convertLevel==="hard"?"hard":"easy",
+    helpUsed:false,
+    showHelpTable:false,
+    matchPairs:{},
+    matchColors:{},
+    matchWrong:null,
+    matchLeft:null,
+    matchRight:null,
+    convertDraft:["","","","","","",""],
+    convertActive:-1,
+    convertTableVisible:true,
+    lastTone:"neutral",
+    message:"Preparat per salpar cap al tresor."
+  };
+}
+function normalize(text){
+  return String(text||"").toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[·.\s-]/g,"");
+}
+function parseNumberInput(value){
+  let text=String(value||"").trim().replace(/\s/g,"");
+  if(!text)return NaN;
+  const hasComma=text.indexOf(",")>=0;
+  const hasDot=text.indexOf(".")>=0;
+  if(hasComma&&hasDot){
+    text=text.replace(/\./g,"").replace(",",".");
+  }else if(hasComma){
+    text=text.replace(",",".");
+  }else if(hasDot){
+    if(/^\d{1,3}(\.\d{3})+$/.test(text))text=text.replace(/\./g,"");
+  }
+  return Number(text);
+}
+function formatNumber(value){
+  const num=Number(value);
+  if(!Number.isFinite(num))return String(value||"");
+  return num.toLocaleString("es-ES",{maximumFractionDigits:4,useGrouping:true});
+}
+function coinBar(value){
+  const coins=Math.max(0,Number(value)||0);
+  const filled=Math.min(12,coins);
+  const empty=Math.max(0,12-filled);
+  return "🟡".repeat(filled)+"░".repeat(empty)+(coins>12?" +"+(coins-12):"");
+}
+function randint(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function shuffle(list){
+  const copy=list.slice();
+  for(let i=copy.length-1;i>0;i-=1){
+    const j=Math.floor(Math.random()*(i+1));
+    const tmp=copy[i];copy[i]=copy[j];copy[j]=tmp;
+  }
+  return copy;
+}
+function cleanSelectedTests(list){
+  const allowed=DEFAULT_TEST_KINDS;
+  const picked=Array.isArray(list)?list.filter(kind=>allowed.indexOf(kind)>=0):allowed.slice();
+  return picked.length?Array.from(new Set(picked)):allowed.slice();
+}
+function routeChests(){return ROUTES[game.route]||[]}
+function isGameOn(){return save.gameOn!==false}
+function difficulty(){
+  const ratio=game.playerPos/Math.max(1,game.route);
+  if(ratio>.68)return "avancat";
+  if(ratio>.34)return "mitja";
+  return "facil";
+}
+
+function formatTestNumber(value){
+  const rounded=Math.abs(value-Math.round(value))<0.000001?Math.round(value):Number(value.toFixed(3));
+  return rounded.toLocaleString("es-ES",{maximumFractionDigits:3,useGrouping:true});
+}
+function makeWrongTestOptions(correct){
+  const numeric=parseNumberInput(correct.replace(/[A-Za-zÀ-ÿ·()½\s]+/g,""));
+  const suffix=(String(correct).match(/[A-Za-zÀ-ÿ·]+$/)||[""])[0];
+  const vals=[numeric/10,numeric*10,numeric*100,numeric/100].filter(v=>Number.isFinite(v)&&v!==numeric&&v>=0.001).map(v=>formatTestNumber(v)+(suffix?" "+suffix:""));
+  return vals;
+}
+function makeRandomTestQuestion(){
+  const type=randint(1,5);
+  if(type===1){
+    const systems=[TEST_CONVERSION_UNITS.length,TEST_CONVERSION_UNITS.mass,TEST_CONVERSION_UNITS.capacity];
+    const units=systems[randint(0,systems.length-1)];
+    let from=randint(0,units.length-1),to=randint(0,units.length-1);
+    while(to===from)to=randint(0,units.length-1);
+    const value=randint(2,90);
+    const base=value*units[from].factor;
+    const result=base/units[to].factor;
+    const answer=formatTestNumber(result)+" "+units[to].abbr;
+    const question="Quants "+units[to].abbr+" són "+formatTestNumber(value)+" "+units[from].abbr+"?";
+    const wrong=makeWrongTestOptions(answer).slice(0,3);
+    while(wrong.length<3)wrong.push(formatTestNumber(result+randint(1,9))+" "+units[to].abbr);
+    return {kind:"testChoice",title:"Test",level:"Pregunta aleatòria",question,options:shuffle([answer,...wrong]),answer};
+  }
+  if(type===2){
+    const kg=randint(2,9),answer=formatTestNumber(kg*1000)+" g";
+    return {kind:"testChoice",title:"Test",level:"Pregunta aleatòria",question:"Quants grams són "+kg+" kg?",options:shuffle([answer,formatTestNumber(kg*100)+" g",formatTestNumber(kg*10000)+" g",kg+" g"]),answer};
+  }
+  if(type===3){
+    const l=randint(2,9),answer=formatTestNumber(l*1000)+" mL";
+    return {kind:"testChoice",title:"Test",level:"Pregunta aleatòria",question:"Quants mL són "+l+" L?",options:shuffle([answer,formatTestNumber(l*100)+" mL",formatTestNumber(l*10)+" mL",formatTestNumber(l*10000)+" mL"]),answer};
+  }
+  if(type===4){
+    const m=randint(2,30),answer=formatTestNumber(m*100)+" cm";
+    return {kind:"testChoice",title:"Test",level:"Pregunta aleatòria",question:"Quants cm són "+m+" m?",options:shuffle([answer,formatTestNumber(m*10)+" cm",formatTestNumber(m*1000)+" cm",m+" cm"]),answer};
+  }
+  const choices=[
+    {question:"Quina unitat utilitzaries per mesurar la massa d'una motxilla?",options:["El litre (L)","El quilogram (kg)","El mil·límetre (mm)","El centilitre (cL)"],answer:"El quilogram (kg)"},
+    {question:"Quina unitat utilitzaries per mesurar la llargada d'un llapis?",options:["El centímetre (cm)","El litre (L)","El quilogram (kg)","El gram (g)"],answer:"El centímetre (cm)"},
+    {question:"Quina unitat utilitzaries per mesurar l'aigua d'una ampolla?",options:["El litre (L)","El metre (m)","El gram (g)","El quilòmetre (km)"],answer:"El litre (L)"}
+  ];
+  return {...choices[randint(0,choices.length-1)],kind:"testChoice",title:"Test",level:"Pregunta aleatòria"};
+}
+function makeTestQuestion(){
+  if(Math.random()<0.7){
+    const base=TEST_QUESTIONS[randint(0,TEST_QUESTIONS.length-1)];
+    return {...base,kind:"testChoice",title:"Test",level:"Pregunta de prova",options:shuffle(base.options.slice())};
+  }
+  return makeRandomTestQuestion();
+}
+
+function makeQuestion(){
+  const kinds=cleanSelectedTests(game.selectedTests);
+  const kind=kinds[randint(0,kinds.length-1)];
+  if(kind==="testChoice")return makeTestQuestion();
+  if(kind==="magnitudeDef"){
+    return {kind:"magnitudeDef",title:"Magnitud i definici\u00f3",level:"Conceptes",question:"Uneix cada magnitud amb la seva definici\u00f3",answer:"match",names:shuffle(MAGNITUDES.map(item=>item.definition))};
+  }
+  if(kind==="abbrToName"){
+    if(game.abbrLevel==="easy"){
+      const names=shuffle(UNITS.map(u=>u.name));
+      return {kind:"matchAbbr",title:"Abreviatura \u2192 nom",level:"Nivell f\u00e0cil",question:"Uneix cada abreviatura amb el seu nom",answer:"match",names};
+    }
+    const unit=UNITS[randint(0,UNITS.length-1)];
+    return {kind,title:"Abreviatura \u2192 nom",level:"Nivell dif\u00edcil",question:unit.abbr,answer:unit.name,unit:unit.abbr};
+  }
+  if(kind==="nameToAbbr"){
+    const unit=UNITS[randint(0,UNITS.length-1)];
+    return {kind,title:"Nom \u2192 abreviatura",level:"Nivell f\u00e0cil",question:unit.name,answer:unit.abbr,unit:unit.abbr};
+  }
+  if(kind==="orderScale"){
+    return {kind,title:"Ordena l'escala",level:"Escala completa",question:"Arrossega cada unitat al seu lloc",answer:UNITS.map(u=>u.abbr).join(" "),tokens:shuffle(UNITS.map(u=>u.abbr))};
+  }
+  if(kind==="writeScale"){
+    return {kind,title:"Escriu l'escala",level:"Escala completa",question:"Escriu les unitats de gran a petit:",answer:UNITS.map(u=>u.abbr).join(" ")};
+  }
+  return makeConversion();
+}
+function makeConversion(){
+  const diff=difficulty();
+  const level=game.convertLevel==="hard"?"hard":"easy";
+  let minJump=1,maxJump=1;
+  if(diff==="mitja"){minJump=2;maxJump=3}
+  if(diff==="avancat"){minJump=1;maxJump=6}
+  let from,to,jump;
+  for(let tries=0;tries<40;tries+=1){
+    from=randint(0,6);
+    jump=randint(minJump,maxJump);
+    const dir=Math.random()<0.5?-1:1;
+    to=from+(jump*dir);
+    if(to>=0&&to<=6&&to!==from)break;
+  }
+  if(to<0||to>6||to===from){from=randint(0,5);to=from+1}
+  const fromUnit=UNITS[from],toUnit=UNITS[to];
+  const steps=to-from;
+  let value;
+  if(level==="hard"){
+    value=Number((randint(15,985)/10).toFixed(1));
+  }else{
+    value=randint(2,90);
+  }
+  const result=Number((value*Math.pow(10,steps)).toFixed(4));
+  return {
+    kind:"convert",
+    title:"Conversió",
+    level:level==="hard"?"Nivell difícil":(diff==="facil"?"Nivell fàcil":diff==="mitja"?"Nivell mitjà":"Nivell avançat"),
+    question:formatNumber(value)+" "+fromUnit.abbr+" = ? "+toUnit.abbr,
+    answer:formatNumber(result),
+    answerValue:result,
+    value:formatNumber(value),
+    from:fromUnit.abbr,
+    to:toUnit.abbr,
+    fromIndex:from,
+    toIndex:to
+  };
+}
+function startGame(){
+  const selected=cleanSelectedTests(game.selectedTests);
+  game=freshGame(game.route);
+  game.selectedTests=selected;
+  save.selectedTests=selected;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+  game.running=true;
+  setMessage("La cursa pel tresor ha començat.","good");
+  nextQuestion();
+  render();
+}
+function resetGame(){
+  game=freshGame(game.route);
+  setMessage("Partida reiniciada. Tria Jugar quan vulguis salpar.","neutral");
+  render();
+}
+function changeRoute(){
+  const order=[15,30,40];
+  const next=order[(order.indexOf(game.route)+1)%order.length];
+  const selected=cleanSelectedTests(game.selectedTests);
+  game=freshGame(next);
+  game.selectedTests=selected;
+  save.route=next;
+  save.selectedTests=selected;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+  setMessage("Ruta "+next+" preparada.","neutral");
+  render();
+}
+function nextQuestion(){
+  game.current=makeQuestion();
+  game.answer="";
+  game.testWrong=null;
+  game.testChosen=null;
+  game.testSolved=false;
+  game.showSolution=false;
+  game.testDraft=[];
+  game.testActive=null;
+  game.testReadyForNext=false;
+  game.ordered=[];
+  game.orderPick=null;
+  game.writeDraft=["","","","","","",""];
+  game.writeActive=0;
+  game.helpUsed=false;
+  game.showHelpTable=false;
+  game.matchPairs={};
+  game.matchColors={};
+  game.matchWrong=null;
+  game.matchLeft=null;
+  game.matchRight=null;
+  game.convertDraft=["","","","","","",""];
+  game.convertActive=-1;
+  game.convertReady=true;
+  game.convertTableVisible=game.current&&game.current.kind==="convert";
+  hideHelp();
+  render();
+}
+function correctAnswerText(q){
+  if(q.kind==="testChoice")return q.answer;
+  if(q.kind==="matchAbbr"||q.kind==="magnitudeDef")return "totes les parelles correctes";
+  return q.kind==="orderScale"||q.kind==="writeScale"?UNITS.map(u=>u.abbr).join(" "):q.answer;
+}
+function isCorrect(){
+  const q=game.current;
+  if(!q)return false;
+  if(q.kind==="matchAbbr")return Object.keys(game.matchPairs).length===UNITS.length;
+  if(q.kind==="magnitudeDef")return Object.keys(game.matchPairs).length===MAGNITUDES.length;
+  if(q.kind==="orderScale")return game.ordered.join(" ")===q.answer;
+  if(q.kind==="writeScale")return normalize((game.writeDraft||[]).join(" "))===normalize(q.answer);
+  if(q.kind==="convert"){
+    const typed=parseNumberInput(game.answer);
+    const expected=Number(q.answerValue!==undefined?q.answerValue:q.answer);
+    return Number.isFinite(typed)&&Math.abs(typed-expected)<0.000001;
+  }
+  return normalize(game.answer)===normalize(q.answer);
+}
+function checkAnswer(){
+  if(!game.running||!game.current){setMessage("Prem Jugar per començar.","neutral");return}
+  if(!hasAnswer()){setMessage("Primer escriu o ordena una resposta.","bad");return}
+  if(isCorrect())handleCorrect();
+  else handleWrong();
+}
+function hasAnswer(){
+  if(!game.current)return false;
+  if(game.current.kind==="matchAbbr")return Object.keys(game.matchPairs).length===UNITS.length;
+  if(game.current.kind==="magnitudeDef")return Object.keys(game.matchPairs).length===MAGNITUDES.length;
+  if(game.current.kind==="orderScale")return game.ordered.filter(Boolean).length===UNITS.length;
+  if(game.current.kind==="writeScale")return (game.writeDraft||[]).filter(value=>String(value||"").trim().length>0).length===UNITS.length;
+  return game.answer.length>0;
+}
+function handleCorrect(){
+  const q=game.current;
+  if(window.LucYagoReto && !(q&&q._retoCounted)){
+    window.LucYagoReto.record(true);
+    const rp=window.LucYagoReto.progress();
+    if(rp.ok>=window.LucYagoReto.target){return;}
+  }
+  game.streak+=1;
+  if(!isGameOn()){
+    setMessage("Correcte! Seg\u00fcent repte.","good");
+    flash("good");
+    celebrate();
+    saveProgress();
+    setTimeout(nextQuestion,560);
+    render();
+    return;
+  }
+  game.coins+=1;
+  let move=game.streak%5===0?2:1;
+  game.playerPos=Math.min(game.route,game.playerPos+move);
+  openReachedChests("player");
+  setMessage(move===2?"Ratxa de 5! Avances dues caselles.":"Correcte! Avances i guanyes una moneda.","good");
+  flash("good");
+  celebrate();
+  saveProgress();
+  if(game.playerPos>=game.route){startFinalDuel();return}
+  setTimeout(nextQuestion,620);
+  render();
+}
+function handleWrong(){
+  const q=game.current;
+  if(window.LucYagoReto){window.LucYagoReto.record(false);}
+  game.streak=0;
+  if(!isGameOn()){
+    setMessage("Resposta incorrecta. Era: "+correctAnswerText(q)+".","bad");
+    flash("bad");
+    setTimeout(nextQuestion,650);
+    render();
+    return;
+  }
+  game.piratePos=Math.min(game.route,game.piratePos+1);
+  openReachedChests("pirate");
+  setMessage("Resposta incorrecta. Era: "+correctAnswerText(q)+". El pirata avanca.","bad");
+  flash("bad");
+  if(game.piratePos>=game.route)setMessage("El pirata arriba al tresor, pero encara pots guanyar el duel final.","bad");
+  setTimeout(nextQuestion,720);
+  render();
+}
+function openReachedChests(who){
+  routeChests().forEach(pos=>{
+    if(game.openedChests.indexOf(pos)>=0||game.stolenChests.indexOf(pos)>=0)return;
+    if(who==="player"&&game.playerPos>=pos){
+      game.openedChests.push(pos);
+      game.coins+=5;
+      const previousCrew=game.crewUnlocked;
+      game.crewUnlocked=Math.min(CREW.length,game.crewUnlocked+1);
+      game.lastOpenedCrew=previousCrew;
+      game.lastVisualEvent={type:"open",pos};
+      upgradeBoat();
+      setMessage("Cofre obert! +5 monedes i nova tripulació.","good");
+      celebrate();
+    }
+    if(who==="pirate"&&game.piratePos>=pos){
+      game.stolenChests.push(pos);
+      game.stolen+=3;
+      game.lastVisualEvent={type:"stolen",pos};
+      setMessage("El pirata ha robat part del premi d'un cofre.","bad");
+    }
+  });
+}
+function startFinalDuel(){
+  game.final=true;
+  game.playerLives=5;
+  game.pirateLives=5;
+  setMessage("Duel final activat. Cada resposta correcta fa perdre una vida al pirata.","neutral");
+  nextQuestion();
+  render();
+}
+function handleFinalAnswer(){
+  if(!game.final||!game.current)return;
+  if(!hasAnswer()){setMessage("Respon per atacar en el duel.","bad");return}
+  if(isCorrect()){
+    game.pirateLives=Math.max(0,game.pirateLives-1);
+    setMessage("Cop directe! El pirata perd una vida.","good");
+    flash("good");
+    celebrate();
+    if(game.pirateLives<=0){winGame();return}
+  }else{
+    game.playerLives=Math.max(0,game.playerLives-1);
+    setMessage("El pirata contraataca. La resposta era: "+correctAnswerText(game.current)+".","bad");
+    flash("bad");
+    if(game.playerLives<=0){
+      game.playerLives=5;
+      setMessage("Respira fondo: el duel es reinicia amb 5 vides.","bad");
+    }
+  }
+  setTimeout(nextQuestion,720);
+  render();
+}
+function winGame(){
+  game.won=true;
+  game.running=false;
+  game.final=false;
+  game.crewUnlocked=CREW.length;
+  game.coins+=20;
+  save.totalVictories+=1;
+  saveProgress();
+  setMessage("Victòria! El gran tresor s'ha obert.","good");
+  celebrate();
+  render();
+}
+function toggleTest(kind){
+  if(kind==="mix")game.selectedTests=DEFAULT_TEST_KINDS.slice();
+  else game.selectedTests=[kind];
+  save.selectedTests=cleanSelectedTests(game.selectedTests);
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+  startGame();
+}
+function testLabel(kind){
+  const found=TESTS.find(test=>test.kind===kind);
+  return found?found.label:"Mixt";
+}
+function applyHelpPenalty(){
+  if(!game.running||game.helpUsed)return;
+  game.helpUsed=true;
+  game.streak=0;
+  game.showHelpTable=true;
+  if(game.final)game.playerLives=Math.max(0,game.playerLives-2);
+  else if(isGameOn()){
+    game.piratePos=Math.min(game.route,game.piratePos+2);
+    openReachedChests("pirate");
+  }
+  flash("bad");
+}
+function helpText(){
+  const q=game.current;
+  if(!q)return "Tria una prova i prem Jugar. En mode Mixt apareixen tots els tipus.";
+  if(q.kind==="magnitudeDef")return "Pista: Longitud parla de dist\u00e0ncia; Massa de mat\u00e8ria; Capacitat de l\u00edquid dins un recipient.";
+  if(q.kind==="matchAbbr")return "Pista: Km \u00e9s quil\u00f2metre, Hm hect\u00f2metre, Dam dec\u00e0metre, m metre, dm dec\u00edmetre, cm cent\u00edmetre i mm mil\u00b7l\u00edmetre.";
+  if(q.kind==="abbrToName")return "Pista: mira la taula. Escriu el nom complet de " + q.question + ".";
+  if(q.kind==="nameToAbbr")return "Pista: busca a la taula el nom " + q.question + " i toca la seva abreviatura.";
+  if(q.kind==="orderScale")return "Pista: l'escala de gran a petit \u00e9s Km, Hm, Dam, m, dm, cm, mm.";
+  if(q.kind==="writeScale")return "Pista: escriu l'escala completa de gran a petit: Km Hm Dam m dm cm mm.";
+  if(q.kind==="convert")return "Pista: cada salt cap a la dreta multiplica per 10. Cada salt cap a l'esquerra divideix per 10.";
+  if(q.kind==="testChoice")return "Toca Solució per veure la resposta correcta i una explicació.";
+  return "Mira la taula d'unitats i compara posicions.";
+}
+function explainTestQuestion(q){
+  if(!q)return "";
+  const a=String(q.answer||"");
+  const question=String(q.question||"");
+  if(question.includes("INCORRECTA"))return "Compara cada igualtat amb l'escala d'unitats i busca la que no respecta els salts de 10 o de 1.000.";
+  if(question.includes("CORRECTA"))return "Compara cada opció i queda't amb l'única equivalència correcta.";
+  if(/[0-9]/.test(question)&&(/[cm]|[mL]|[kg]|[g]|[L]|[hm]|[dam]|[mm]/i.test(question)))return "Fes servir l'escala: cada pas cap a una unitat més petita multiplica; cap a una unitat més gran divideix.";
+  if(question.includes("abreviatura"))return "Recorda l'abreviatura correcta de cada unitat.";
+  if(question.includes("unitat utilitzaries"))return "Tria la magnitud adequada: longitud, massa o capacitat.";
+  if(question.includes("pesa"))return "Compara totes les quantitats en la mateixa unitat.";
+  return "Llegeix la pregunta, elimina les opcions impossibles i comprova la unitat.";
+}
+
+function normalizeUnitToken(text){
+  const raw=String(text||"").trim();
+  const low=raw.toLowerCase().replace(/\./g,"");
+  const map={
+    "quilometres":"km","quilometre":"km","kilometres":"km","kilometre":"km","km":"km",
+    "hectometres":"hm","hectometre":"hm","hm":"hm",
+    "decametres":"dam","decametre":"dam","dam":"dam",
+    "metres":"m","metre":"m","m":"m",
+    "decimetres":"dm","decimetre":"dm","dm":"dm",
+    "centimetres":"cm","centimetre":"cm","cm":"cm",
+    "milimetres":"mm","milimetre":"mm","mm":"mm",
+    "quilos":"kg","quilo":"kg","quilograms":"kg","quilogram":"kg","kg":"kg",
+    "hectograms":"hg","hectogram":"hg","hg":"hg",
+    "decagrams":"dag","decagram":"dag","dag":"dag",
+    "grams":"g","gram":"g","g":"g",
+    "decigrams":"dg","decigram":"dg","dg":"dg",
+    "centigrams":"cg","centigram":"cg","cg":"cg",
+    "miligrams":"mg","miligram":"mg","mg":"mg",
+    "quilolitres":"kl","quilolitre":"kl","kilolitres":"kl","kilolitre":"kl","kl":"kl",
+    "hectolitres":"hl","hectolitre":"hl","hl":"hl",
+    "decalitres":"dal","decalitre":"dal","dal":"dal",
+    "litres":"l","litre":"l","l":"l",
+    "decilitres":"dl","decilitre":"dl","dl":"dl",
+    "centilitres":"cl","centilitre":"cl","cl":"cl",
+    "mililitres":"ml","mililitre":"ml","ml":"ml"
+  };
+  const norm=normalize(low).replace(/[^a-z]/g,"");
+  return map[norm]||map[low]||raw;
+}
+function unitsForSystem(system){
+  if(system==="mass")return TEST_CONVERSION_UNITS.mass;
+  if(system==="capacity")return TEST_CONVERSION_UNITS.capacity;
+  return TEST_CONVERSION_UNITS.length;
+}
+function systemForUnit(unit){
+  const u=normalizeUnitToken(unit).toLowerCase();
+  for(const system of ["length","mass","capacity"]){
+    const units=unitsForSystem(system);
+    if(units.some(item=>item.abbr.toLowerCase()===u))return system;
+  }
+  return null;
+}
+function findUnitIndex(units,unit){
+  const u=normalizeUnitToken(unit).toLowerCase();
+  return units.findIndex(item=>item.abbr.toLowerCase()===u);
+}
+function extractValueUnit(text){
+  const re=/([0-9]+(?:[\.][0-9]{3})*(?:,[0-9]+)?|[0-9]+(?:\.[0-9]+)?)\s*(quilòmetres|quilometres|kilometres|km|hectòmetres|hectometres|hm|decàmetres|decametres|dam|metres|m|decímetres|decimetres|dm|centímetres|centimetres|cm|mil·límetres|milimetres|mm|quilos|quilograms|kg|hectograms|hg|decagrams|dag|grams|g|decigrams|dg|centigrams|cg|mil·ligrams|miligrams|mg|quilolitres|kilolitres|kl|hectolitres|hl|decalitres|dal|litres|l|decilitres|dl|centilitres|cl|mil·lilitres|mililitres|ml)/i;
+  const m=String(text||"").match(re);
+  if(!m)return null;
+  return {value:m[1],unit:normalizeUnitToken(m[2])};
+}
+function targetUnitFromQuestion(q){
+  const s=String(q.question||"");
+  let m=s.match(/Quants?\s+(quilòmetres|quilometres|kilometres|km|hectòmetres|hectometres|hm|decàmetres|decametres|dam|metres|m|decímetres|decimetres|dm|centímetres|centimetres|cm|mil·límetres|milimetres|mm|quilos|quilograms|kg|hectograms|hg|decagrams|dag|grams|g|decigrams|dg|centigrams|cg|mil·ligrams|miligrams|mg|quilolitres|kilolitres|kl|hectolitres|hl|decalitres|dal|litres|l|decilitres|dl|centilitres|cl|mil·lilitres|mililitres|ml)\s+s[oó]n/i);
+  if(m)return normalizeUnitToken(m[1]);
+  // "4 km equivalen a..." -> target comes from the answer
+  const au=String(q.answer||"").match(/(km|hm|dam|m|dm|cm|mm|kg|hg|dag|g|dg|cg|mg|kL|kl|hL|hl|daL|dal|L|l|dL|dl|cL|cl|mL|ml)\b/i);
+  return au?normalizeUnitToken(au[1]):null;
+}
+function conversionInfoForTest(q){
+  if(!q||q.kind!=="testChoice")return null;
+  const question=String(q.question||"");
+  if(!(/^Quants?/i.test(question)||/equivalen/i.test(question)))return null;
+  const source=extractValueUnit(question);
+  const targetUnit=targetUnitFromQuestion(q);
+  if(!source||!targetUnit)return null;
+  return conversionInfoFromParts(source.value,source.unit,targetUnit,q.answer);
+}
+function conversionInfoFromParts(value,fromUnit,toUnit,label){
+  const system=systemForUnit(fromUnit);
+  if(!system||systemForUnit(toUnit)!==system)return null;
+  const units=unitsForSystem(system);
+  const fromIndex=findUnitIndex(units,fromUnit);
+  const toIndex=findUnitIndex(units,toUnit);
+  if(fromIndex<0||toIndex<0||fromIndex===toIndex)return null;
+  return {system,units,fromIndex,toIndex,value:String(value),from:units[fromIndex].abbr,to:units[toIndex].abbr,label:label||""};
+}
+function extractAllValueUnits(text){
+  const re=/([0-9]+(?:[\.][0-9]{3})*(?:,[0-9]+)?|[0-9]+(?:\.[0-9]+)?)\s*(quilòmetres|quilometres|kilometres|km|hectòmetres|hectometres|hm|decàmetres|decametres|dam|metres|m|decímetres|decimetres|dm|centímetres|centimetres|cm|mil·límetres|milimetres|mm|quilos|quilograms|kg|hectograms|hg|decagrams|dag|grams|g|decigrams|dg|centigrams|cg|mil·ligrams|miligrams|mg|quilolitres|kilolitres|kl|hectolitres|hl|decalitres|dal|litres|l|decilitres|dl|centilitres|cl|mil·lilitres|mililitres|ml)/ig;
+  const out=[];
+  let m;
+  while((m=re.exec(String(text||"")))!==null){out.push({value:m[1],unit:normalizeUnitToken(m[2])});}
+  return out;
+}
+function conversionInfosForTest(q){
+  if(!q||q.kind!=="testChoice")return [];
+  const infos=[];
+  const direct=conversionInfoForTest(q);
+  if(direct)infos.push(direct);
+  const optionList=Array.isArray(q.options)?q.options:[];
+  optionList.forEach(option=>{
+    if(String(option).indexOf("=")<0)return;
+    const parts=String(option).split("=");
+    const left=extractAllValueUnits(parts[0])[0];
+    const right=extractAllValueUnits(parts.slice(1).join("="))[0];
+    if(!left||!right)return;
+    const info=conversionInfoFromParts(left.value,left.unit,right.unit,option);
+    if(info)infos.push(info);
+  });
+  const unique=[];
+  const seen=new Set();
+  infos.forEach(info=>{
+    const key=[info.system,info.fromIndex,info.toIndex,info.value,info.label].join("|");
+    if(!seen.has(key)){seen.add(key);unique.push(info);}
+  });
+  return unique;
+}
+function tableDigitsForConversion(info){
+  const cells=Array.from({length:7},()=>({text:"",comma:false}));
+  if(!info)return cells;
+  let s=String(info.value||"").trim().replace(/\s/g,"").replace(/\./g,"");
+  const parts=s.split(",");
+  const intPart=(parts[0]||"").replace(/\D/g,"")||"0";
+  const decPart=(parts[1]||"").replace(/\D/g,"");
+  const positions={};
+  for(let i=0;i<intPart.length;i+=1){
+    const idx=info.fromIndex-(intPart.length-1-i);
+    if(idx>=0&&idx<7)positions[idx]=(positions[idx]||"")+intPart[i];
+  }
+  for(let i=0;i<decPart.length;i+=1){
+    const idx=info.fromIndex+1+i;
+    if(idx>=0&&idx<7)positions[idx]=(positions[idx]||"")+decPart[i];
+  }
+  const used=Object.keys(positions).map(Number);
+  let min=used.length?Math.min(...used):info.fromIndex;
+  let max=used.length?Math.max(...used):info.fromIndex;
+  if(info.toIndex>max){for(let i=max+1;i<=info.toIndex;i+=1)positions[i]="0";}
+  if(info.toIndex<min){for(let i=info.toIndex;i<min;i+=1)positions[i]=positions[i]||"0";}
+  Object.keys(positions).forEach(k=>{cells[Number(k)].text=positions[k];});
+  if(info.toIndex<info.fromIndex){cells[info.toIndex].comma=true;}
+  return cells;
+}
+function ensureTestDraft(rows){
+  if(!Array.isArray(game.testDraft))game.testDraft=[];
+  while(game.testDraft.length<rows)game.testDraft.push(["","","","","","",""]);
+  game.testDraft=game.testDraft.slice(0,rows);
+}
+function renderConversionHelperTable(infos,showFilled){
+  infos=Array.isArray(infos)?infos:[infos];
+  if(!infos.length)return document.createDocumentFragment();
+  const frag=document.createDocumentFragment();
+  const bySystem={};
+  infos.forEach((info,idx)=>{(bySystem[info.system]||(bySystem[info.system]=[])).push({info,idx});});
+  Object.keys(bySystem).forEach(system=>{
+    const group=bySystem[system];
+    const title=document.createElement("div");
+    title.className="test-table-title";
+    title.textContent=system==="mass"?"Taula de massa":system==="capacity"?"Taula de capacitat":"Taula de longitud";
+    frag.appendChild(title);
+    const table=document.createElement("div");
+    table.className="test-conversion-table";
+    group[0].info.units.forEach(u=>{
+      const head=document.createElement("div");
+      head.className="test-conv-cell test-conv-head";
+      head.textContent=u.abbr;
+      table.appendChild(head);
+    });
+    group.forEach(({info,idx})=>{
+      const solutionCells=tableDigitsForConversion(info);
+      const draft=(game.testDraft&&game.testDraft[idx])||["","","","","","",""];
+      const cells=showFilled?solutionCells:draft.map(v=>({text:v,comma:false}));
+      cells.forEach((c,cellIndex)=>{
+        const cell=document.createElement("button");
+        cell.className="test-conv-cell"+((c.text||c.comma)?" filled":"")+(!showFilled&&game.testActive&&game.testActive.row===idx&&game.testActive.cell===cellIndex?" active":"");
+        cell.innerHTML=(c.text||"")+(c.comma?"<span class='big-comma'>,</span>":"");
+        cell.addEventListener("click",()=>{ if(!showFilled){ game.testActive={row:idx,cell:cellIndex}; renderInputArea(); }});
+        table.appendChild(cell);
+      });
+    });
+    frag.appendChild(table);
+  });
+  return frag;
+}
+function renderTestNumberPad(){
+  const pad=document.createElement("div");
+  pad.className="number-pad";
+  ["1","2","3","4","5","6","7","8","9","0",",","."].forEach(ch=>pad.appendChild(makeButton(ch,"pad-btn",()=>inputTestTableNumber(ch))));
+  pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteTestTableNumber));
+  return pad;
+}
+function inputTestTableNumber(ch){
+  if(!game.current||game.current.kind!=="testChoice")return;
+  const infos=conversionInfosForTest(game.current);
+  if(!infos.length)return;
+  ensureTestDraft(infos.length);
+  if(!game.testActive)game.testActive={row:0,cell:0};
+  const r=Math.max(0,Math.min(game.testDraft.length-1,game.testActive.row));
+  const c=Math.max(0,Math.min(6,game.testActive.cell));
+  game.testDraft[r][c]=(game.testDraft[r][c]||"")+ch;
+  renderInputArea();
+}
+function deleteTestTableNumber(){
+  if(!game.current||game.current.kind!=="testChoice"||!game.testActive)return;
+  ensureTestDraft(conversionInfosForTest(game.current).length||1);
+  const r=game.testActive.row,c=game.testActive.cell;
+  if(game.testDraft[r])game.testDraft[r][c]=(game.testDraft[r][c]||"").slice(0,-1);
+  renderInputArea();
+}
+function renderTestSolutionTable(q){
+  const frag=document.createDocumentFragment();
+  const infos=conversionInfosForTest(q);
+  if(infos.length){
+    ensureTestDraft(infos.length);
+    frag.appendChild(renderConversionHelperTable(infos, !!(game.showSolution||game.testSolved)));
+    if(!(game.showSolution||game.testSolved))frag.appendChild(renderTestNumberPad());
+  }
+  if(game.showSolution||game.testSolved){
+    const exp=document.createElement("div");
+    exp.className="test-explain";
+    exp.textContent="Resposta correcta: "+q.answer+". "+explainTestQuestion(q);
+    frag.appendChild(exp);
+    const row=document.createElement("div");
+    row.className="test-next-row";
+    row.appendChild(makeButton("OK, següent","pad-btn ok",()=>handleCorrect()));
+    frag.appendChild(row);
+  }
+  return frag;
+}
+function showTestSolution(){
+  if(!game.current||game.current.kind!=="testChoice")return false;
+  game.showSolution=true;
+  game.testReadyForNext=true;
+  setMessage("Solució: "+correctAnswerText(game.current)+". Prem OK per continuar.","neutral");
+  renderInputArea();
+  renderAnswer();
+  return true;
+}
+function showHelp(){
+  if(showTestSolution())return;
+  const box=$("#helpNote");
+  if(box&&box.classList.contains("show")){
+    hideHelp();
+    return;
+  }
+  applyHelpPenalty();
+  box.textContent=helpText();
+  box.classList.add("show");
+  if(helpTimer)clearTimeout(helpTimer);
+  helpTimer=setTimeout(hideHelp,10000);
+  renderUnitTable();
+  renderStats();
+  setMessage("Ajuda oberta 10 segons: penalitza com 2 fallos.","bad");
+}
+function hideHelp(){
+  const box=$("#helpNote");
+  if(!box)return;
+  box.classList.remove("show");
+  if(helpTimer){clearTimeout(helpTimer);helpTimer=null;}
+}
+function setMessage(text,tone){
+  game.message=text;
+  game.lastTone=tone||"neutral";
+  const box=$("#feedbackText");
+  if(box){
+    box.textContent=text;
+    box.className="feedback "+(tone||"neutral");
+  }
+}
+function flash(tone){
+  const q=$("#questionCard"),m=$("#mapWrap");
+  [q,m].forEach(el=>{
+    el.classList.remove("good","bad");
+    void el.offsetWidth;
+    el.classList.add(tone);
+  });
+  const ids=tone==="good"?["playerPawn"]:["piratePawn"];
+  ids.forEach(id=>{
+    const el=$("#"+id);
+    el.classList.add("jump");
+    setTimeout(()=>el.classList.remove("jump"),320);
+  });
+}
+function upgradeBoat(){
+  const boat=$("#boatView");
+  if(!boat)return;
+  boat.classList.remove("upgrade");
+  void boat.offsetWidth;
+  boat.classList.add("upgrade");
+}
+function inputChar(char){
+  if(!game.running||!game.current||game.current.kind==="orderScale"||game.current.kind==="matchAbbr"||game.current.kind==="magnitudeDef")return;
+  if(game.current.kind==="writeScale"){
+    if(!Array.isArray(game.writeDraft)||game.writeDraft.length<UNITS.length)game.writeDraft=["","","","","","",""];
+    const idx=Math.max(0,Math.min(UNITS.length-1,game.writeActive||0));
+    if(char===" "){
+      game.writeActive=Math.min(UNITS.length-1,idx+1);
+    }else if((game.writeDraft[idx]||"").length<4){
+      game.writeDraft[idx]=(game.writeDraft[idx]||"")+char;
+      const expected=UNITS[idx]&&UNITS[idx].abbr;
+      if(normalize(game.writeDraft[idx])===normalize(expected)&&idx<UNITS.length-1)game.writeActive=idx+1;
+    }
+    game.answer=(game.writeDraft||[]).join(" ");
+    renderInputArea();
+    renderAnswer();
+    return;
+  }
+  if(game.answer.length>=24)return;
+  game.answer+=char;
+  renderAnswer();
+}
+function deleteChar(){
+  if(!game.running)return;
+  if(game.current&&game.current.kind==="orderScale"){game.ordered.pop();game.orderPick=null;}
+  else if(game.current&&game.current.kind==="writeScale"){
+    const idx=Math.max(0,Math.min(UNITS.length-1,game.writeActive||0));
+    if(!Array.isArray(game.writeDraft)||game.writeDraft.length<UNITS.length)game.writeDraft=["","","","","","",""];
+    if(game.writeDraft[idx])game.writeDraft[idx]=game.writeDraft[idx].slice(0,-1);
+    else if(idx>0){game.writeActive=idx-1;game.writeDraft[game.writeActive]=(game.writeDraft[game.writeActive]||"").slice(0,-1);}
+    game.answer=(game.writeDraft||[]).join(" ");
+  }
+  else if(game.current&&game.current.kind==="convert"&&game.convertActive>=0)game.convertDraft[game.convertActive]=(game.convertDraft[game.convertActive]||"").slice(0,-1);
+  else game.answer=game.answer.slice(0,-1);
+  renderAnswer();
+  renderInputArea();
+}
+function checkChoiceAnswer(choice){
+  if(!game.running||!game.current)return;
+  if(game.current.kind!=="testChoice"){
+    game.answer=choice;
+    renderAnswer();
+    if(choice===game.current.answer)handleCorrect();
+    else handleWrong();
+    return;
+  }
+  if(game.testSolved)return;
+  game.answer=choice;
+  game.testChosen=choice;
+  if(choice===game.current.answer){
+    if(window.LucYagoReto){
+      window.LucYagoReto.record(true);
+      const rp=window.LucYagoReto.progress();
+      if(game.current) game.current._retoCounted=true;
+      if(rp.ok>=window.LucYagoReto.target){return;}
+    }
+    game.testSolved=true;
+    game.showSolution=true;
+    game.testReadyForNext=true;
+    setMessage("Correcte! Mira la solució i prem OK per continuar.","good");
+    renderInputArea();
+    renderAnswer();
+  }else{
+    if(window.LucYagoReto){window.LucYagoReto.record(false);}
+    game.testWrong=choice;
+    game.streak=0;
+    if(game.final){game.playerLives=Math.max(0,game.playerLives-1);}
+    else if(isGameOn()){
+      game.piratePos=Math.min(game.route,game.piratePos+1);
+      openReachedChests("pirate");
+    }
+    setMessage("No és correcte. Torna-ho a provar.","bad");
+    flash("bad");
+    renderInputArea();
+    renderStats();
+    renderMap();
+    setTimeout(()=>{game.testWrong=null;renderInputArea();},520);
+  }
+}
+function chooseToken(token){
+  if(!game.running||!game.current||game.current.kind!=="orderScale")return;
+  if(game.ordered.indexOf(token)>=0)return;
+  game.orderPick=token;
+  setMessage("Toca la casella on vols posar "+token+".","neutral");
+  renderInputArea();
+}
+function chooseOrderSlot(token,index){
+  token=token||game.orderPick;
+  if(!game.running||!game.current||game.current.kind!=="orderScale"||!token)return;
+  if(game.ordered.length<UNITS.length)game.ordered=Array.from({length:UNITS.length},(_,i)=>game.ordered[i]||"");
+  const old=game.ordered.indexOf(token);
+  if(old>=0)game.ordered[old]="";
+  game.ordered[index]=token;
+  game.orderPick=null;
+  renderAnswer();
+  renderInputArea();
+}
+function renderUnitTable(){
+  const table=$("#unitTable");
+  table.innerHTML="";
+  const q=game.current||{};
+  table.classList.toggle("show",!!game.showHelpTable);
+  UNITS.forEach(unit=>{
+    const cell=document.createElement("div");
+    cell.className="unit-cell";
+    cell.innerHTML="<strong>"+unit.abbr+"</strong><span>"+unit.name+"</span>";
+    table.appendChild(cell);
+  });
+}
+function renderInputArea(){
+  const area=$("#inputArea");
+  area.innerHTML="";
+  const q=game.current;
+  if(!q){
+    area.innerHTML="<div class='order-area'>El teclat apareixer\u00e0 quan comenci la partida.</div>";
+    return;
+  }
+  if(q.kind==="testChoice"){
+    const grid=document.createElement("div");
+    grid.className="choice-grid test-choice-grid";
+    q.options.forEach(choice=>{
+      let cls="choice-btn";
+      if(game.testWrong===choice)cls+=" test-wrong";
+      if((game.testSolved||game.showSolution)&&choice===q.answer)cls+=" test-correct";
+      grid.appendChild(makeButton(choice,cls,()=>checkChoiceAnswer(choice)));
+    });
+    area.appendChild(grid);
+    const helper=document.createElement("div");
+    helper.className="test-helper-block";
+    helper.appendChild(renderTestSolutionTable(q));
+    area.appendChild(helper);
+    return;
+  }
+  if(q.kind==="matchAbbr"||q.kind==="magnitudeDef"){
+    const leftItems=q.kind==="matchAbbr"
+      ?UNITS.map(u=>({key:u.abbr,label:u.abbr,answer:u.name}))
+      :MAGNITUDES.map(item=>({key:item.key,label:item.name,answer:item.definition}));
+    const total=leftItems.length;
+    const wrap=document.createElement("div");
+    wrap.className="match-grid";
+    const left=document.createElement("div");
+    left.className="match-column";
+    const right=document.createElement("div");
+    right.className="match-column";
+    leftItems.forEach(item=>{
+      const color=game.matchColors[item.key];
+      const wrong=game.matchWrong&&game.matchWrong.left===item.key;
+      const b=makeButton(item.label,"match-card"+(color!==undefined?" done pair-"+color:"")+(wrong?" wrong":"")+(game.matchLeft===item.key?" selected":""),()=>chooseMatchLeft(item.key));
+      left.appendChild(b);
+    });
+    q.names.forEach(name=>{
+      const pairedKey=Object.keys(game.matchPairs).find(key=>game.matchPairs[key]===name);
+      const color=pairedKey?game.matchColors[pairedKey]:undefined;
+      const wrong=game.matchWrong&&game.matchWrong.right===name;
+      const b=makeButton(name,"match-card"+(color!==undefined?" done pair-"+color:"")+(wrong?" wrong":"")+(game.matchRight===name?" selected":""),()=>chooseMatchRight(name));
+      right.appendChild(b);
+    });
+    wrap.appendChild(left);
+    wrap.appendChild(right);
+    area.appendChild(wrap);
+    const status=document.createElement("div");
+    status.className="match-status";
+    status.textContent=Object.keys(game.matchPairs).length+" / "+total+" parelles";
+    area.appendChild(status);
+    return;
+  }
+  if(q.kind==="abbrToName"){
+    const pad=document.createElement("div");
+    pad.className="text-pad";
+    LETTERS.forEach(letter=>{
+      const b=document.createElement("button");
+      b.className="pad-btn";
+      b.textContent=letter;
+      b.addEventListener("click",()=>inputChar(letter));
+      pad.appendChild(b);
+    });
+    pad.appendChild(makeButton("Espai","pad-btn wide",()=>inputChar(" ")));
+    pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteChar));
+    area.appendChild(pad);
+    return;
+  }
+  if(q.kind==="nameToAbbr"){
+    const grid=document.createElement("div");
+    grid.className="choice-grid";
+    shuffle(shuffle(UNITS.map(u=>u.abbr).filter(value=>value!==q.answer)).slice(0,3).concat(q.answer)).forEach(choice=>{
+      grid.appendChild(makeButton(choice,"choice-btn",()=>checkChoiceAnswer(choice)));
+    });
+    area.appendChild(grid);
+    return;
+  }
+  if(q.kind==="orderScale"){
+    if(game.ordered.length<UNITS.length)game.ordered=Array.from({length:UNITS.length},(_,i)=>game.ordered[i]||"");
+    const slots=document.createElement("div");
+    slots.className="order-slots";
+    for(let i=0;i<UNITS.length;i+=1){
+      const token=game.ordered[i]||"";
+      const slot=makeButton(token,"order-slot"+(token?" filled":""),()=>{if(game.orderPick)chooseOrderSlot(game.orderPick,i);else if(token){game.ordered[i]="";renderAnswer();renderInputArea();}});
+      slot.addEventListener("dragover",event=>event.preventDefault());
+      slot.addEventListener("drop",event=>{event.preventDefault();chooseOrderSlot(event.dataTransfer.getData("text/plain"),i)});
+      slots.appendChild(slot);
+    }
+    area.appendChild(slots);
+    const pool=document.createElement("div");
+    pool.className="order-pool";
+    q.tokens.forEach(token=>{
+      const used=game.ordered.indexOf(token)>=0;
+      const b=makeButton(token,"unit-token"+(used||game.orderPick===token?" selected":""),()=>chooseToken(token));
+      b.draggable=!used;
+      b.addEventListener("dragstart",event=>event.dataTransfer.setData("text/plain",token));
+      pool.appendChild(b);
+    });
+    pool.appendChild(makeButton("Borrar","pad-btn delete",deleteChar));
+    area.appendChild(pool);
+    return;
+  }
+  if(q.kind==="writeScale"){
+    if(!Array.isArray(game.writeDraft)||game.writeDraft.length<UNITS.length)game.writeDraft=["","","","","","",""];
+    const grid=document.createElement("div");
+    grid.className="write-grid";
+    for(let i=0;i<UNITS.length;i+=1){
+      const value=game.writeDraft[i]||"";
+      const cell=makeButton(value||"", "write-cell"+(game.writeActive===i?" active":"")+(value?" filled":""), ()=>{
+        game.writeActive=i;
+        renderInputArea();
+        renderAnswer();
+      });
+      grid.appendChild(cell);
+    }
+    area.appendChild(grid);
+    const note=document.createElement("div");
+    note.className="write-pad-note";
+    note.textContent="Toca un recuadre i escriu la unitat.";
+    area.appendChild(note);
+    const pad=document.createElement("div");
+    pad.className="text-pad";
+    LETTERS.forEach(ch=>pad.appendChild(makeButton(ch,"pad-btn",()=>inputChar(ch))));
+    pad.appendChild(makeButton("Espai","pad-btn wide",()=>inputChar(" ")));
+    pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteChar));
+    area.appendChild(pad);
+    return;
+  }
+  if(q.kind==="convert"){
+    const work=document.createElement("div");
+    work.className="convert-work";
+    const controls=document.createElement("div");
+    controls.className="convert-control-row";
+    controls.appendChild(makeButton(game.convertTableVisible?"Taula visible":"Taula amagada","pad-btn",()=>{game.convertTableVisible=!game.convertTableVisible;renderInputArea()}));
+    work.appendChild(controls);
+    const grid=document.createElement("div");
+    grid.className="convert-grid";
+    UNITS.forEach(u=>{
+      const head=document.createElement("div");
+      head.className="convert-cell convert-head";
+      head.textContent=u.abbr;
+      grid.appendChild(head);
+    });
+    UNITS.forEach((u,index)=>{
+      const cls="convert-cell"+(game.convertActive===index?" active":"")+((game.convertDraft[index]||"").length?" filled":"");
+      const cell=makeButton(game.convertDraft[index]||"",cls,()=>{game.convertActive=index;game.convertReady=false;renderInputArea();renderAnswer();});
+      grid.appendChild(cell);
+    });
+    if(game.convertTableVisible)work.appendChild(grid);
+    area.appendChild(work);
+  }
+  const pad=document.createElement("div");
+  pad.className="number-pad";
+  ["1","2","3","4","5","6","7","8","9","0",",","."].forEach(ch=>{
+    pad.appendChild(makeButton(ch,"pad-btn",()=>inputConvertOrAnswer(ch)));
+  });
+  pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteChar));
+  pad.appendChild(makeButton("OK","pad-btn ok wide",()=>game.final?handleFinalAnswer():checkAnswer()));
+  area.appendChild(pad);
+}
+function selectResultTarget(){
+  if(!game.current||game.current.kind!=="convert")return;
+  game.convertActive=-1;
+  game.convertReady=true;
+  renderInputArea();
+  renderAnswer();
+}
+function inputConvertOrAnswer(ch){
+  if(game.current&&game.current.kind==="convert"&&game.convertActive>=0){
+    game.convertDraft[game.convertActive]=(game.convertDraft[game.convertActive]||"")+ch;
+    renderInputArea();
+    renderAnswer();
+    return;
+  }
+  inputChar(ch);
+}
+function chooseMatchLeft(abbr){
+  if(!game.running||!game.current||(game.current.kind!=="matchAbbr"&&game.current.kind!=="magnitudeDef")||game.matchPairs[abbr])return;
+  game.matchLeft=abbr;
+  tryResolveMatch();
+  renderAnswer();
+  renderInputArea();
+}
+function chooseMatchRight(name){
+  if(!game.running||!game.current||(game.current.kind!=="matchAbbr"&&game.current.kind!=="magnitudeDef")||Object.values(game.matchPairs).indexOf(name)>=0)return;
+  game.matchRight=name;
+  tryResolveMatch();
+  renderAnswer();
+  renderInputArea();
+}
+function tryResolveMatch(){
+  if(!game.matchLeft||!game.matchRight)return;
+  const q=game.current;
+  const item=q.kind==="matchAbbr"?UNITS.find(u=>u.abbr===game.matchLeft):MAGNITUDES.find(m=>m.key===game.matchLeft);
+  const ok=item&&(q.kind==="matchAbbr"?item.name:item.definition)===game.matchRight;
+  if(ok){
+    const color=Object.keys(game.matchPairs).length%7;
+    game.matchPairs[game.matchLeft]=game.matchRight;
+    game.matchColors[game.matchLeft]=color;
+    game.matchLeft=null;
+    game.matchRight=null;
+    game.matchWrong=null;
+    rewardPairCorrect();
+    const target=q.kind==="matchAbbr"?UNITS.length:MAGNITUDES.length;
+    if(Object.keys(game.matchPairs).length===target){
+      if(window.LucYagoReto){
+        window.LucYagoReto.record(true);
+        const rp=window.LucYagoReto.progress();
+        if(rp.ok>=window.LucYagoReto.target){return;}
+      }
+      setMessage("Totes les parelles fetes. Seg\u00fcent repte!","good");
+      setTimeout(nextQuestion,650);
+    }
+  }else{
+    game.matchWrong={left:game.matchLeft,right:game.matchRight};
+    punishPairWrong();
+    game.matchRight=null;
+    setTimeout(()=>{game.matchWrong=null;renderInputArea()},430);
+  }
+}
+function rewardPairCorrect(){
+  if(game.final){
+    game.pirateLives=Math.max(0,game.pirateLives-1);
+    setMessage("Parella correcta! El pirata perd una vida.","good");
+    flash("good");
+    celebrate();
+    if(game.pirateLives<=0){winGame();return}
+    renderStats();
+    return;
+  }
+  game.streak+=1;
+  if(!isGameOn()){
+    setMessage("Parella correcta!","good");
+    flash("good");
+    celebrate();
+    saveProgress();
+    renderStats();
+    return;
+  }
+  game.coins+=1;
+  game.playerPos=Math.min(game.route,game.playerPos+1);
+  openReachedChests("player");
+  setMessage("Parella correcta! Avances una casella.","good");
+  flash("good");
+  celebrate();
+  saveProgress();
+  if(game.playerPos>=game.route){startFinalDuel();return}
+  renderStats();
+  renderMap();
+}
+function punishPairWrong(){
+  if(window.LucYagoReto){window.LucYagoReto.record(false);}
+  if(game.final){
+    game.playerLives=Math.max(0,game.playerLives-1);
+    setMessage("Parella incorrecta. Perds una vida.","bad");
+    if(game.playerLives<=0){
+      game.playerLives=5;
+      setMessage("Respira fondo: el duel es reinicia amb 5 vides.","bad");
+    }
+    flash("bad");
+    renderStats();
+    return;
+  }
+  game.streak=0;
+  if(!isGameOn()){
+    setMessage("Parella incorrecta.","bad");
+    flash("bad");
+    renderStats();
+    return;
+  }
+  game.piratePos=Math.min(game.route,game.piratePos+1);
+  openReachedChests("pirate");
+  setMessage("Parella incorrecta. El pirata avan\u00e7a.","bad");
+  flash("bad");
+  renderStats();
+  renderMap();
+}
+function makeButton(text,className,handler){
+  const b=document.createElement("button");
+  b.className=className;
+  b.textContent=text;
+  b.addEventListener("click",handler);
+  return b;
+}
+function explorerSvg(){
+  return "<svg viewBox='0 0 90 110' aria-hidden='true'><path d='M28 95h34l-5-32H33z' fill='#2f8f67'/><path d='M29 95h13v11H27zM49 95h13v11H47z' fill='#5b3927'/><path d='M24 52c-8 12-9 23-4 27 5 3 12-4 16-16z' fill='#f6b25a'/><path d='M66 52c8 12 9 23 4 27-5 3-12-4-16-16z' fill='#f6b25a'/><path d='M31 48h28c8 8 9 28 3 41H27c-6-13-4-33 4-41z' fill='#4dbb7c'/><path d='M32 58h25v8H32z' fill='#ffd84d'/><circle cx='45' cy='34' r='19' fill='#f6c28b'/><path d='M25 29c8-15 32-17 42-1-6-1-13 1-21-6-5 6-13 5-21 7z' fill='#6b442b'/><path d='M25 23h40l-7-11H32z' fill='#d98a35'/><path d='M18 24h54v9H18z' rx='5' fill='#f2b84a'/><circle cx='38' cy='36' r='3' fill='#20304a'/><circle cx='53' cy='36' r='3' fill='#20304a'/><path d='M38 45c5 4 10 4 15 0' stroke='#8b3a2f' stroke-width='3' fill='none' stroke-linecap='round'/><path d='M59 28l17-8 5 8-17 8z' fill='#223b5a'/><circle cx='77' cy='24' r='7' fill='none' stroke='#223b5a' stroke-width='4'/><path d='M18 58h13v27H18z' rx='7' fill='#7b5131'/></svg>";
+}
+function pirateSvg(state){
+  const mouth=state==="angry"?"M36 51c6-5 13-5 19 0":"M36 49c6 5 13 5 19 0";
+  return "<svg viewBox='0 0 90 110' aria-hidden='true'><path d='M29 95h15v11H27z' fill='#5b3927'/><path d='M55 92l8 6-8 9-7-5z' fill='#6b442b'/><path d='M27 55h36c8 11 7 26 2 39H25c-6-14-5-29 2-39z' fill='#9b2a2a'/><path d='M31 63h28v8H31z' fill='#ffd84d'/><circle cx='45' cy='36' r='20' fill='#c98253'/><path d='M26 25c9-13 31-14 39 1v9H26z' fill='#34202a'/><path d='M18 22h54v9H18z' rx='5' fill='#1f1620'/><path d='M42 20l7-11 7 11z' fill='#fff'/><circle cx='37' cy='37' r='3' fill='#111'/><path d='M50 35h12' stroke='#111' stroke-width='4' stroke-linecap='round'/><path d='M56 31l-8 8M48 31l8 8' stroke='#fff' stroke-width='2.5' stroke-linecap='round'/><path d='"+mouth+"' stroke='#421a18' stroke-width='3' fill='none' stroke-linecap='round'/><path d='M33 52c8 9 20 9 28 0 0 15-28 15-28 0z' fill='#4b251e'/><path d='M24 62c-10 9-11 18-6 21 5 4 11-4 15-14z' fill='#c98253'/><path d='M66 62c10 8 12 17 7 21-5 4-12-4-16-14z' fill='#c98253'/></svg>";
+}
+function shipSvg(level,big){
+  const sail=level===0?"#e6d2a1":level===1?"#fff":level===2?"#58d0ff":level===3?"#fff4c4":"#fff176";
+  const hull=level===0?"#8a5830":level===1?"#b86f24":level===2?"#e55656":level===3?"#6f3e28":"#5535d5";
+  const mast=level>=2?"<path d='M48 20v54' stroke='#5b3927' stroke-width='5' stroke-linecap='round'/>":"<path d='M45 22v52' stroke='#5b3927' stroke-width='5' stroke-linecap='round'/>";
+  const flag=level>=3?"<path d='M50 18h24l-8 9 8 9H50z' fill='#1f1620'/><circle cx='61' cy='27' r='3' fill='#fff'/>":"";
+  const extra=level===4?"<path d='M20 73c14 10 50 10 64 0' stroke='#ffd84d' stroke-width='4' fill='none'/><circle cx='73' cy='57' r='5' fill='#ffd84d'/>":"";
+  return "<svg viewBox='0 0 110 90' aria-hidden='true'><path d='M12 72c18 8 68 8 88 0v7c-24 10-64 10-88 0z' fill='#55c7e8' opacity='.55'/>"+mast+"<path d='M49 23c18 7 26 20 29 37H49z' fill='"+sail+"'/><path d='M45 27C31 34 24 45 21 60h24z' fill='"+sail+"' opacity='.92'/>"+flag+"<path d='M13 61h84c-4 17-18 24-42 24S18 78 13 61z' fill='"+hull+"'/><path d='M25 65h58' stroke='rgba(255,255,255,.32)' stroke-width='4' stroke-linecap='round'/>"+extra+"</svg>";
+}
+function renderMap(){
+  const layer=$("#pathLayer");
+  layer.innerHTML="";
+  const points=pathPoints(game.route);
+  drawRoute(layer,points);
+  points.forEach((point,index)=>{
+    const pos=index+1;
+    const isChest=routeChests().indexOf(pos)>=0;
+    if(pos===game.route){
+      const treasure=document.createElement("div");
+      treasure.className="treasure-marker";
+      treasure.style.left=point.x+"%";
+      treasure.style.top=point.y+"%";
+      treasure.innerHTML="<div class='treasure-box'></div>";
+      layer.appendChild(treasure);
+      return;
+    }
+    if(isChest){
+      const chest=document.createElement("div");
+      const opened=game.openedChests.indexOf(pos)>=0;
+      const stolen=game.stolenChests.indexOf(pos)>=0;
+      chest.className="chest-marker"+(opened?" opened":"")+(stolen?" stolen":"");
+      chest.style.left=point.x+"%";
+      chest.style.top=point.y+"%";
+      chest.innerHTML="<div class='chest-box'></div>";
+      layer.appendChild(chest);
+      return;
+    }
+    const marker=document.createElement("div");
+    const zoneClass=pos<game.route*.28?"bridge":pos>game.route*.55&&pos<game.route*.82?"ruin":pos>game.route*.82?"goal-step":"";
+    marker.className="trail-marker "+zoneClass;
+    marker.style.left=point.x+"%";
+    marker.style.top=point.y+"%";
+    marker.style.setProperty("--rot",((index%5)-2)*7+"deg");
+    layer.appendChild(marker);
+  });
+  const playerStart={x:18,y:96};
+  const pirateStart={x:6,y:96};
+  const playerPoint=game.playerPos<=0 ? playerStart : (points[Math.min(points.length-1,game.playerPos-1)]||playerStart);
+  const piratePoint=game.piratePos<=0 ? pirateStart : (points[Math.min(points.length-1,game.piratePos-1)]||pirateStart);
+  placePawn("playerPawn",playerPoint,-3);
+  placePawn("piratePawn",piratePoint,5);
+  $("#playerPawn").innerHTML=explorerSvg();
+  const pirate=$("#piratePawn");
+  pirate.classList.toggle("celebrate",game.lastVisualEvent&&game.lastVisualEvent.type==="stolen");
+  pirate.classList.toggle("angry",game.piratePos>=game.playerPos&&game.running);
+  pirate.innerHTML=pirateSvg(game.piratePos>=game.playerPos?"angry":"competitive");
+}
+function pathPoints(total){
+  const rows=5;
+  const perRow=Math.ceil(total/rows);
+  const points=[];
+  for(let i=0;i<total;i+=1){
+    const row=Math.floor(i/perRow);
+    const col=i%perRow;
+    const colsInRow=Math.min(perRow,total-row*perRow);
+    const t=colsInRow===1 ? .5 : col/(colsInRow-1);
+    const forward=row%2===0?t:1-t;
+    points.push({
+      x:12+forward*76,
+      y:18+row*(66/(rows-1))+Math.sin(t*Math.PI)*4
+    });
+  }
+  return points;
+}
+function drawRoute(layer,points){
+  const d=points.map((p,i)=>(i?"L":"M")+p.x+" "+p.y).join(" ");
+  const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 100 100");
+  svg.setAttribute("preserveAspectRatio","none");
+  svg.classList.add("route-svg");
+  ["route-shadow","route-road","route-highlight"].forEach(cls=>{
+    const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+    path.setAttribute("d",d);
+    path.setAttribute("class",cls);
+    path.setAttribute("vector-effect","non-scaling-stroke");
+    svg.appendChild(path);
+  });
+  layer.appendChild(svg);
+}
+function placePawn(id,point,offset){
+  const el=$("#"+id);
+  el.style.left=point.x+"%";
+  el.style.top=(point.y+offset)+"%";
+}
+function renderCrew(){
+  const list=$("#crewList");
+  list.innerHTML="";
+  const slots=Math.max(routeChests().length,game.crewUnlocked,1);
+  for(let index=0;index<slots;index+=1){
+    const crew=CREW[index];
+    const unlocked=crew&&index<game.crewUnlocked;
+    const lost=index<game.stolenChests.length&&!unlocked;
+    const card=document.createElement("div");
+    card.className="crew-card "+(unlocked?"revealed":lost?"lost":"mystery");
+    if(unlocked){
+      card.innerHTML="<div class='crew-icon'>"+crew.icon+"</div><div><div class='crew-name'>"+crew.name+"</div><div class='crew-state'>A bord</div></div>";
+    }else if(lost){
+      card.innerHTML="<div class='crew-icon'>!</div><div><div class='crew-name'>Recompensa perduda</div><div class='crew-state'>El pirata l'ha robat</div></div>";
+    }else{
+      card.innerHTML="<div class='crew-icon'>?</div><div><div class='crew-name'>Sorpresa</div><div class='crew-state'>Dins un cofre</div></div>";
+    }
+    list.appendChild(card);
+  }
+}
+function renderShip(){
+  const level=game.won?4:Math.max(0,Math.min(4,game.crewUnlocked));
+  $("#shipBig").innerHTML=shipSvg(level,true);
+  $("#shipName").textContent=SHIPS[level].name;
+  $("#boatView").innerHTML=shipSvg(level,false);
+  const duelHero=$("#duelHero"),duelPirate=$("#duelPirate");
+  if(duelHero)duelHero.innerHTML=explorerSvg();
+  if(duelPirate)duelPirate.innerHTML=pirateSvg("angry");
+}
+function renderQuestion(){
+  const q=game.current;
+  $("#modeText").textContent=game.final?"Duel final":game.running?"Exploracio":"Preparacio";
+  $("#testModeText").textContent=cleanSelectedTests(game.selectedTests).length===DEFAULT_TEST_KINDS.length?"Mixt":testLabel(cleanSelectedTests(game.selectedTests)[0]);
+  $("#typeText").textContent=q?q.title:"Longitud";
+  $("#levelText").textContent=q?q.level:"V1";
+  $("#questionText").textContent=q?q.question:"Prem Jugar per començar";
+  const helpBtn=$("#helpBtn");
+  if(helpBtn)helpBtn.textContent=q&&q.kind==="testChoice"?"Solució":"Ajuda";
+  renderAnswer();
+  renderUnitTable();
+  renderInputArea();
+}
+function renderAnswer(){
+  const box=$("#answerBox");
+  if(box){
+    const isConvert=game.current&&game.current.kind==="convert";
+    box.classList.toggle("active",!!(isConvert&&game.convertActive===-1));
+    box.classList.toggle("filled",!!(isConvert&&game.answer));
+  }
+  if(game.current&&game.current.kind==="magnitudeDef")$("#answerText").textContent=Object.keys(game.matchPairs).length+" / "+MAGNITUDES.length;
+  else if(game.current&&game.current.kind==="matchAbbr")$("#answerText").textContent=Object.keys(game.matchPairs).length+" / "+UNITS.length;
+  else if(game.current&&game.current.kind==="orderScale")$("#answerText").textContent=game.ordered.filter(Boolean).length?game.ordered.filter(Boolean).join(" "):"_";
+  else if(game.current&&game.current.kind==="writeScale")$("#answerText").textContent=(game.writeDraft||[]).filter(Boolean).length?(game.writeDraft||[]).join(" "):"_";
+  else $("#answerText").textContent=game.answer||"_";
+}
+function renderLevelToggle(){
+  const selected=cleanSelectedTests(game.selectedTests);
+  const one=selected.length===1?selected[0]:"";
+  const visible=one==="abbrToName"||one==="convert";
+  const toggle=$("#abbrLevelToggle");
+  toggle.style.visibility=visible?"visible":"hidden";
+  toggle.style.display=visible?"flex":"none";
+  const activeLevel=one==="convert"?(game.convertLevel||"easy"):(game.abbrLevel||"easy");
+  $$("#abbrLevelToggle .level-btn").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.level===activeLevel);
+    btn.disabled=false;
+  });
+}
+function setAbbrLevel(level){
+  const selected=cleanSelectedTests(game.selectedTests);
+  const one=selected.length===1?selected[0]:"";
+  if(one==="convert"){
+    game.convertLevel=level==="hard"?"hard":"easy";
+    save.convertLevel=game.convertLevel;
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+    if(game.running)startGame(); else renderLevelToggle();
+    return;
+  }
+  game.abbrLevel=level==="hard"?"hard":"easy";
+  save.abbrLevel=game.abbrLevel;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+  if(game.running&&one==="abbrToName")startGame();
+  else renderLevelToggle();
+}
+function renderTestSelector(){
+  const selected=cleanSelectedTests(game.selectedTests);
+  const isMix=selected.length===DEFAULT_TEST_KINDS.length;
+  $$("#testSelector .test-btn").forEach(btn=>{
+    const kind=btn.dataset.test;
+    btn.classList.toggle("active",kind==="mix"?isMix:(!isMix&&selected.indexOf(kind)>=0));
+    btn.disabled=false;
+  });
+}
+function toggleGameMode(){
+  save.gameOn=!isGameOn();
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+  setMessage(isGameOn()?"Aventura activada.":"Mode pr\u00e0ctica: sense ruta ni pirata.","neutral");
+  render();
+}
+function renderGameMode(){
+  const on=isGameOn();
+  document.body.classList.toggle("no-adventure",!on);
+  const btn=$("#gameToggleBtn");
+  if(btn){
+    btn.textContent=on?"Joc: S\u00ed":"Joc: No";
+    btn.classList.toggle("off",!on);
+  }
+  if(!on){
+    $("#modeText").textContent="Pr\u00e0ctica";
+    $("#duelOverlay").classList.remove("show");
+    $("#victoryOverlay").classList.remove("show");
+  }
+}
+function renderStats(){
+  renderGameMode();
+  $("#routeBtn").textContent="Ruta "+game.route;
+  $("#coinsText").textContent=coinBar(game.coins);
+  $("#streakText").textContent=game.streak;
+  $("#bestText").textContent=Math.max(save.bestCoins,game.coins);
+  $("#playerPosText").textContent=game.playerPos+"/"+game.route;
+  $("#piratePosText").textContent=game.piratePos+"/"+game.route;
+  $("#chestsText").textContent=game.openedChests.length+"/"+routeChests().length;
+  $("#stolenText").textContent=game.stolen;
+  $("#playerLives").textContent="\u2665".repeat(game.playerLives)+"\u2661".repeat(5-game.playerLives);
+  $("#pirateLives").textContent="\u2665".repeat(game.pirateLives)+"\u2661".repeat(5-game.pirateLives);
+  $("#duelOverlay").classList.toggle("show",game.final&&isGameOn());
+  $("#victoryOverlay").classList.toggle("show",game.won&&isGameOn());
+  $("#checkBtn").disabled=!game.running;
+  $("#helpBtn").disabled=false;
+  renderTestSelector();
+  renderLevelToggle();
+}
+function render(){
+  renderQuestion();
+  renderMap();
+  renderCrew();
+  renderShip();
+  renderStats();
+  setMessage(game.message,game.lastTone);
+}
+function celebrate(){
+  const confetti=$("#confetti");
+  for(let i=0;i<18;i+=1){
+    const spark=document.createElement("span");
+    spark.className="spark show-spark";
+    spark.style.left=randint(18,82)+"%";
+    spark.style.top=randint(22,78)+"%";
+    spark.style.background=["#ffd84d","#ff7b2c","#20b86f","#3d74ff","#e55656"][i%5];
+    confetti.appendChild(spark);
+    setTimeout(()=>spark.remove(),760);
+  }
+}
+$("#homeBtn").addEventListener("click",()=>{window.location.href="../index.html"});
+$("#routeBtn").addEventListener("click",changeRoute);
+$("#gameToggleBtn").addEventListener("click",toggleGameMode);
+$("#startBtn").addEventListener("click",startGame);
+$("#resetBtn").addEventListener("click",resetGame);
+$("#helpBtn").addEventListener("click",showHelp);
+$$("#testSelector .test-btn").forEach(btn=>btn.addEventListener("click",()=>toggleTest(btn.dataset.test)));
+$$("#abbrLevelToggle .level-btn").forEach(btn=>btn.addEventListener("click",()=>setAbbrLevel(btn.dataset.level)));
+$("#checkBtn").addEventListener("click",()=>game.final?handleFinalAnswer():checkAnswer());
+$("#answerBox").addEventListener("click",selectResultTarget);
+$("#answerBox").addEventListener("pointerdown",selectResultTarget);
+window.addEventListener("keydown",event=>{
+  if(event.key==="Enter"){game.final?handleFinalAnswer():checkAnswer();return}
+  if(event.key==="Backspace"){deleteChar();return}
+  if(/^[a-zA-Z0-9., ]$/.test(event.key)){
+    const ch=event.key.toLowerCase();
+    if(game.current&&game.current.kind==="convert")inputConvertOrAnswer(ch);
+    else inputChar(ch);
+  }
+});
+
+function lucyagoApplyDefaultStart(){
+  const params=new URLSearchParams(location.search);
+  const reto=params.get('reto')==='1';
+  const noMagnituds=reto || params.get('sinMagnituds')==='1';
+  const mixKinds=DEFAULT_TEST_KINDS.filter(k=>!(noMagnituds && k==='magnitudeDef'));
+  game.selectedTests=mixKinds.slice();
+  save.selectedTests=mixKinds.slice();
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(save));
+  $$('#testSelector .test-btn').forEach(btn=>{
+    const k=btn.dataset.test;
+    if(k==='mix') btn.classList.add('active');
+    else btn.classList.toggle('active', mixKinds.includes(k));
+    if(noMagnituds && k==='magnitudeDef') btn.disabled=true;
+  });
+  startGame();
+}
+render();
+setTimeout(lucyagoApplyDefaultStart,80);
+
+  
+</script>
+
+<script id="lucyago-reto-common">
+/* LucYagoReto Common v1 */
+(function(){
+  const params=new URLSearchParams(location.search);
+  const active=params.get('reto')==='1';
+  if(!active) return;
+  const game=params.get('game')||document.title||'juego';
+  const target=Math.max(1,parseInt(params.get('preguntas')||'10',10));
+  const returnUrl=params.get('return')||'../reto_mixto.html';
+  const sessionKey=params.get('session')||'lucyago_reto_session';
+  let locked=false;
+  function getSession(){try{return JSON.parse(localStorage.getItem(sessionKey)||'{}')}catch(e){return {}}}
+  function setSession(s){localStorage.setItem(sessionKey,JSON.stringify(s));}
+  function ensureGame(s){
+    s.results=s.results||{};
+    if(!s.results[game]) s.results[game]={ok:0,bad:0,total:target,target:target,done:false,name:game};
+    s.results[game].total=target; s.results[game].target=target;
+    return s.results[game];
+  }
+  function total(r){return (r.ok||0)+(r.bad||0)}
+  function paint(){
+    const s=getSession(), r=ensureGame(s);
+    let bar=document.getElementById('lucyagoRetoBar');
+    if(!bar){
+      bar=document.createElement('div');bar.id='lucyagoRetoBar';
+      bar.style.cssText='position:fixed;left:10px;right:10px;bottom:10px;z-index:999999;background:#fffdf8;color:#21314c;border:3px solid #ffd84d;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:8px 12px;font-family:Arial,sans-serif;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:8px;';
+      document.body.appendChild(bar);
+    }
+    const done=Math.min(target,(r.ok||0));
+    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
+    setSession(s);
+  }
+  function finish(){
+    if(locked) return; locked=true;
+    const s=getSession(), r=ensureGame(s); r.done=true; s.lastFinished=game; setSession(s);
+    paint();
+    setTimeout(()=>{location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);},450);
+  }
+  window.LucYagoReto={
+    active:true, game, target, sessionKey,
+    record:function(ok){
+      if(locked) return;
+      const s=getSession(), r=ensureGame(s);
+      if((r.ok||0)>=target) {finish(); return;}
+      if(ok) r.ok=(r.ok||0)+1; else r.bad=(r.bad||0)+1;
+      setSession(s); paint();
+      if((r.ok||0)>=target) finish();
+    },
+    finish:finish,
+    progress:function(){const s=getSession(), r=ensureGame(s); return {ok:r.ok||0,bad:r.bad||0,total:target,done:total(r)}}
+  };
+  window.addEventListener('load',()=>setTimeout(paint,250));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+word,correct,syllables,type,accent,accentChar,accentSide,rule
+camion,camión,ca-mi-ón,aguda,true,ó,agudo,es aguda y termina en n: lleva tilde.
+casa,casa,ca-sa,llana,false,,none,es llana y termina en vocal: no lleva tilde.
+frances,francés,fran-cés,aguda,true,é,agudo,es aguda y termina en s: lleva tilde.

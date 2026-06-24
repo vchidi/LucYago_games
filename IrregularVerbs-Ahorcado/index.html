@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4f8cff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Irregular Verbs">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Yago - Irregular Verbs Game</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{--bg1:#fff8e8;--bg2:#eaf7ff;--ink:#1f2a44;--muted:#667085;--blue:#4f8cff;--green:#28a745;--red:#e74c3c;--yellow:#ffcc4d;--pink:#ff6fb5;--teal:#10b7c4;--shadow:0 12px 30px rgba(31,42,68,.12)}
+*{box-sizing:border-box}
+html,body{margin:0;background:linear-gradient(135deg,var(--bg1),var(--bg2));min-height:100%}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:calc(8px + env(safe-area-inset-top)) 12px calc(10px + env(safe-area-inset-bottom))}
+.hero,.card{background:rgba(255,255,255,.95);border-radius:22px;box-shadow:var(--shadow)}
+.hero{padding:12px 14px}
+.card{padding:14px}
+.grid{margin-top:10px;display:block}
+.title{margin:0;font-size:clamp(22px,3vw,32px);font-weight:800}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.stat{background:#fff;border-radius:14px;padding:6px 10px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);min-width:96px}
+.label{font-size:10px;color:var(--muted)}
+.value{font-size:16px;font-weight:800;margin-top:2px}
+.mode-buttons,.play-buttons,.bottom-tools{display:flex;flex-wrap:nowrap;gap:8px}
+.mode-wrap{margin-top:10px}
+button,.file-label{border:0;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;white-space:nowrap}
+.primary{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.secondary{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.warn{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.danger{background:#ffe0dc;color:#8f2d22}
+.success{background:#dff7e7;color:#126b2d}
+.solution-ok{background:#c9f7d7;color:#126b2d;box-shadow:inset 0 0 0 2px rgba(18,107,45,.10)}
+.solution-ok.hidden{display:none!important}
+.small-btn,.small-file{padding:8px 12px;font-size:13px}
+input[type=file]{display:none}
+.mode-btn.active,.filter-btn.active,#shuffleTopBtn.active{outline:3px solid rgba(79,140,255,.25)}
+
+.mode-btn.active,.filter-btn.active,#shuffleTopBtn.active{background:var(--blue)!important;color:#fff!important;box-shadow:none!important}
+
+.base{text-align:center;margin-bottom:10px}
+.base .word{font-size:clamp(28px,5vw,46px);font-weight:900;margin-top:4px}
+.prompt{border-radius:18px;padding:12px;margin-bottom:10px;border:3px solid transparent;background:#f7fbff}
+.prompt.active{border-color:var(--blue)}
+.prompt.good{background:#e9f9ef;border-color:#8ad4a0}
+.prompt.bad{background:#fff0ed;border-color:#f2a39a}
+.row-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.row-title{font-size:16px;font-weight:800}
+.status-pill{font-size:12px;padding:5px 8px;border-radius:999px;background:#eef2ff;color:#475467;min-width:78px;text-align:center}
+.letters{display:flex;flex-wrap:wrap;gap:2px;align-items:center;justify-content:center}
+.char{width:auto;height:auto;border-radius:0;display:flex;align-items:center;justify-content:center;font-size:clamp(28px,5vw,46px);font-weight:900;font-family:Arial,Helvetica,sans-serif;background:transparent;box-shadow:none;line-height:1;padding:0 1px}
+.char.fixed{background:transparent;color:#344054}
+.char.blank{background:transparent;border:0;box-shadow:none;color:#d6a300;min-width:.6em}
+.char.blank.filled{background:transparent;border:0;color:var(--ink)}
+.char.slash{width:auto;background:transparent;box-shadow:none;padding:0 2px}
+.hangman-box{margin:-2px 0 10px;background:linear-gradient(135deg,#fffdf7,#f6fbff 54%,#fff6fd);border:2px solid #e8eefc;border-radius:24px;padding:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.75)}
+.hangman-box.off{background:#fff;box-shadow:none}
+.hangman-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hangman-title{font-size:14px;font-weight:900;color:#364152;letter-spacing:.02em;text-transform:uppercase}
+.hangman-stats{display:flex;gap:8px;flex-wrap:wrap}
+.hangman-stat{background:#fff;border-radius:16px;padding:8px 12px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);min-width:110px}
+.hangman-caption{font-size:11px;color:var(--muted);font-weight:700}
+.hangman-value{font-size:20px;font-weight:900;margin-top:2px}
+.hangman-stage{position:relative;height:300px;border-radius:22px;overflow:hidden;background:radial-gradient(circle at 20% 18%,rgba(255,255,255,.96),rgba(255,255,255,0) 28%),radial-gradient(circle at 80% 22%,rgba(255,204,77,.22),rgba(255,204,77,0) 24%),linear-gradient(180deg,#eaf7ff 0%,#f8fbff 62%,#fffaf0 100%)}
+.hangman-box.off .hangman-stage{background:#fff}
+.hangman-box.off .hangman-title,.hangman-box.off .hangman-stats,.hangman-box.off .hangman-sun,.hangman-box.off .hangman-cloud,.hangman-box.off .hangman-ground,.hangman-box.off .hangman-part{display:none}
+.hangman-sun{position:absolute;top:22px;right:26px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffde9,#ffd85d 60%,#ffb300 100%);box-shadow:0 0 0 10px rgba(255,216,93,.14)}
+.hangman-cloud{position:absolute;height:20px;border-radius:999px;background:rgba(255,255,255,.82);box-shadow:24px 0 0 rgba(255,255,255,.82),12px -8px 0 3px rgba(255,255,255,.82)}
+.hangman-cloud.one{top:48px;left:34px;width:42px}
+.hangman-cloud.two{top:84px;right:108px;width:34px;transform:scale(.92)}
+.hangman-ground{position:absolute;left:26px;right:26px;bottom:28px;height:3px;border-radius:999px;background:linear-gradient(90deg,rgba(148,163,184,.15),rgba(100,116,139,.42),rgba(148,163,184,.15))}
+.hangman-result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;pointer-events:none;opacity:0;transform:scale(.94);transition:opacity .25s ease,transform .25s ease}
+.hangman-result.visible{opacity:1;transform:scale(1)}
+.hangman-result-card{padding:18px 22px;border-radius:22px;font-weight:900;letter-spacing:.04em;box-shadow:0 20px 36px rgba(31,42,68,.18);backdrop-filter:blur(4px)}
+.hangman-result.win .hangman-result-card{background:linear-gradient(135deg,#fff6b2,#ffe36d,#fffbe6);color:#7a5200;border:2px solid rgba(255,204,77,.55)}
+.hangman-result.lose .hangman-result-card{background:linear-gradient(135deg,#ffe2ea,#ff9fbc,#fff0f4);color:#8d2049;border:2px solid rgba(255,111,181,.45)}
+.hangman-result-title{font-size:clamp(30px,5vw,46px);line-height:1}
+.hangman-result-text{margin-top:8px;font-size:14px;letter-spacing:.01em}
+.hangman-part{position:absolute;opacity:.12;transform-origin:center center;transition:opacity .28s ease,transform .28s ease;filter:drop-shadow(0 6px 10px rgba(31,42,68,.15))}
+.hangman-part.visible{opacity:1}
+.hangman-part.base{left:36px;bottom:42px;width:132px;height:12px;border-radius:999px;background:linear-gradient(90deg,#8a5a2b,#c08445)}
+.hangman-part.pole{left:78px;bottom:50px;width:14px;height:186px;border-radius:999px;background:linear-gradient(180deg,#8c5729,#d3954e)}
+.hangman-part.beam{left:78px;top:44px;width:144px;height:12px;border-radius:999px;background:linear-gradient(90deg,#9d6331,#dda45b)}
+.hangman-part.brace{left:88px;top:76px;width:86px;height:10px;border-radius:999px;background:linear-gradient(90deg,#bd7a3f,#efb26d);transform:rotate(-44deg);transform-origin:left center}
+.hangman-part.rope{left:210px;top:56px;width:8px;height:34px;border-radius:999px;background:linear-gradient(180deg,#ffd37a,#f2aa21)}
+.hangman-part.head{left:183px;top:88px;width:54px;height:54px;border-radius:50%;border:6px solid var(--pink);background:rgba(255,255,255,.22)}
+.hangman-part.neck{left:205px;top:142px;width:10px;height:14px;border-radius:999px;background:linear-gradient(180deg,#ff91c7,#ff6fb5)}
+.hangman-part.bodyTop{left:205px;top:154px;width:10px;height:44px;border-radius:999px;background:linear-gradient(180deg,var(--teal),#1786c6)}
+.hangman-part.bodyBottom{left:205px;top:196px;width:10px;height:40px;border-radius:999px;background:linear-gradient(180deg,#1786c6,#5dd0de)}
+.hangman-part.leftArm{left:165px;top:170px;width:46px;height:8px;border-radius:999px;background:linear-gradient(90deg,#4f8cff,#7bb8ff);transform:rotate(-34deg)}
+.hangman-part.rightArm{left:208px;top:170px;width:46px;height:8px;border-radius:999px;background:linear-gradient(90deg,#7bb8ff,#4f8cff);transform:rotate(34deg)}
+.hangman-part.leftForearm{left:151px;top:193px;width:38px;height:8px;border-radius:999px;background:linear-gradient(90deg,#53a0ff,#9dd0ff);transform:rotate(22deg)}
+.hangman-part.rightForearm{left:229px;top:193px;width:38px;height:8px;border-radius:999px;background:linear-gradient(90deg,#9dd0ff,#53a0ff);transform:rotate(-22deg)}
+.hangman-part.leftLeg{left:170px;top:236px;width:50px;height:8px;border-radius:999px;background:linear-gradient(90deg,#28a745,#8fdf85);transform:rotate(40deg)}
+.hangman-part.rightLeg{left:202px;top:236px;width:50px;height:8px;border-radius:999px;background:linear-gradient(90deg,#8fdf85,#28a745);transform:rotate(-40deg)}
+.message{min-height:48px;border-radius:16px;padding:10px 12px;background:#fffdf2;color:#694d00;font-weight:700;line-height:1.25;margin-top:10px;font-size:14px}
+.help,.study-note{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.25}
+.ipad-input{position:fixed;top:1px;left:1px;width:2px;height:2px;opacity:.01;border:0;background:transparent;color:transparent;font-size:16px;z-index:99999}
+.study-card{background:#fffdf7;border:2px solid #f0ead7;border-radius:20px;padding:14px}
+.study-top-forms{font-family:"Courier New",monospace;font-size:28px;font-weight:900;text-align:center;background:#fff;border-radius:16px;padding:12px;margin-bottom:10px;line-height:1.25}
+.study-visual{font-size:22px;font-weight:900;text-align:center;margin:10px 0;padding:12px;background:#f7fbff;border-radius:16px}
+.study-hint{font-size:16px;line-height:1.3;background:#fff;border-radius:16px;padding:12px}
+.study-stack{margin-top:10px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.study-word{font-family:"Courier New",monospace;font-size:24px;font-weight:900;background:#fff;border-radius:16px;padding:10px 12px;box-shadow:inset 0 0 0 2px #eef2ff;white-space:pre}
+.red{color:var(--red)}
+.green{color:var(--green)}
+.study-arrow{color:var(--muted);font-weight:900}
+@media (display-mode:standalone){body{min-height:100dvh}}
+@media (max-width:900px){.mode-buttons,.play-buttons,.bottom-tools{flex-wrap:wrap}}
+@media (max-width:640px){
+  .wrap{padding-left:10px;padding-right:10px}
+  .hero,.card{border-radius:18px}
+  .card{padding:12px}
+  .mode-buttons,.play-buttons,.bottom-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex-wrap:wrap;gap:6px}
+  .play-buttons button,.bottom-tools button,.bottom-tools label,.mode-buttons button{width:100%}
+  .char{font-size:clamp(28px,5vw,46px)}
+  .message{min-height:44px}
+  .study-top-forms{font-size:22px}
+  .study-word{font-size:20px}
+  .hangman-stage{height:250px}
+  .hangman-stat{min-width:96px}
+}
+
+
+/* === ULTRA-COMPACT iPad keyboard mode overrides === */
+:root{--shadow:0 6px 16px rgba(31,42,68,.10)}
+html,body{height:100%;overflow:hidden}
+.wrap{max-width:1040px;padding:4px 8px;margin:0 auto}
+.hero,.card{border-radius:16px}
+.hero{padding:7px 9px}
+.card{padding:8px}
+.grid{margin-top:6px}
+.title{font-size:clamp(16px,2.2vw,24px);line-height:1.05}
+.stats{gap:4px;margin-top:5px}
+.stat{border-radius:10px;padding:3px 6px;min-width:66px}
+.label{font-size:8px;line-height:1.05}
+.value{font-size:12px;margin-top:0;line-height:1.05}
+.mode-wrap{margin-top:5px}
+.mode-buttons,.play-buttons,.bottom-tools{gap:4px;flex-wrap:nowrap}
+button,.file-label{padding:5px 7px;font-size:10.5px;line-height:1;border-radius:999px}
+.small-btn,.small-file{padding:5px 7px;font-size:10.5px}
+.play-buttons{margin-bottom:7px!important}
+.base{margin-bottom:4px}
+.base .word{font-size:clamp(24px,4vw,36px);line-height:1;margin-top:0}
+.prompt{border-radius:13px;padding:6px 8px;margin-bottom:5px;border-width:2px}
+.row-top{margin-bottom:3px;gap:6px}
+.row-title{font-size:12px;line-height:1}
+.status-pill{font-size:9px;padding:3px 6px;min-width:58px;line-height:1}
+.letters{gap:1px}
+.char{font-size:clamp(22px,4vw,32px);line-height:.95;padding:0 .5px}
+.char.blank{min-width:.48em}
+.hangman-box{margin:0 0 5px;border-radius:16px;padding:7px;border-width:1px}
+.hangman-top{margin-bottom:4px;gap:5px}
+.hangman-title{font-size:10px;line-height:1}
+.hangman-stats{gap:4px}
+.hangman-stat{border-radius:10px;padding:4px 7px;min-width:76px}
+.hangman-caption{font-size:8px;line-height:1}
+.hangman-value{font-size:13px;margin-top:0;line-height:1}
+.hangman-stage{height:218px;border-radius:14px}
+.hangman-sun{top:12px;right:16px;width:34px;height:34px;box-shadow:0 0 0 6px rgba(255,216,93,.12)}
+.hangman-cloud.one{top:28px;left:25px;transform:scale(.7);transform-origin:left top}
+.hangman-cloud.two{top:48px;right:78px;transform:scale(.62);transform-origin:right top}
+.hangman-ground{left:18px;right:18px;bottom:18px;height:2px}
+.hangman-result-card{padding:10px 14px;border-radius:16px}
+.hangman-result-title{font-size:clamp(22px,4vw,34px)}
+.hangman-result-text{margin-top:4px;font-size:11px}
+/* Compact iPad gallows: taller, with the completed body clearly hanging above the base. */
+.hangman-part.base{left:24px;bottom:24px;width:112px;height:9px}
+.hangman-part.pole{left:56px;bottom:31px;width:10px;height:176px}
+.hangman-part.beam{left:56px;top:13px;width:132px;height:9px}
+.hangman-part.brace{left:64px;top:38px;width:50px;height:7px;transform:rotate(-36deg);transform-origin:left center}
+.hangman-part.rope{left:181px;top:22px;width:6px;height:34px}
+.hangman-part.head{left:161px;top:56px;width:42px;height:42px;border-width:5px}
+.hangman-part.neck{left:179px;top:97px;width:7px;height:8px}
+.hangman-part.bodyTop{left:179px;top:104px;width:7px;height:31px}
+.hangman-part.bodyBottom{left:179px;top:134px;width:7px;height:28px}
+.hangman-part.leftArm{left:149px;top:117px;width:35px;height:6px;transform:rotate(-34deg)}
+.hangman-part.rightArm{left:182px;top:117px;width:35px;height:6px;transform:rotate(34deg)}
+.hangman-part.leftForearm{left:139px;top:135px;width:29px;height:6px;transform:rotate(22deg)}
+.hangman-part.rightForearm{left:199px;top:135px;width:29px;height:6px;transform:rotate(-22deg)}
+.hangman-part.leftLeg{left:151px;top:158px;width:42px;height:6px;transform:rotate(40deg)}
+.hangman-part.rightLeg{left:177px;top:158px;width:42px;height:6px;transform:rotate(-40deg)}
+.message{min-height:28px;border-radius:11px;padding:6px 8px;margin-top:5px;font-size:11px;line-height:1.15}
+.help,.study-note{display:none}
+.bottom-tools{margin-top:5px}
+.study-card{padding:8px;border-radius:14px}
+.study-top-forms{font-size:20px;padding:8px;margin-bottom:6px;line-height:1.1}
+.study-visual{font-size:17px;margin:6px 0;padding:8px;border-radius:12px}
+.study-hint{font-size:13px;padding:8px;border-radius:12px;line-height:1.2}
+.study-stack{margin-top:6px;gap:5px}
+.study-word{font-size:18px;padding:6px 8px;border-radius:12px}
+@media (max-width:900px){
+  .mode-buttons,.play-buttons,.bottom-tools{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+  .play-buttons{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .bottom-tools{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .mode-buttons button,.play-buttons button,.bottom-tools button,.bottom-tools label{width:100%;padding-left:3px;padding-right:3px}
+}
+@media (max-width:640px){
+  .wrap{padding:3px 6px}
+  .hero{padding:6px 7px}
+  .card{padding:7px}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stat{min-width:0;text-align:center}
+  .mode-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .play-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .bottom-tools{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hangman-stage{height:198px}
+}
+@media (max-height:620px){
+  .title{display:none}
+  .stats{margin-top:0}
+  .hangman-top{display:none}
+  .hangman-box{padding:5px}
+  .hangman-stage{height:204px}
+  .message{min-height:24px;font-size:10.5px;padding:5px 7px}
+  .base .word{font-size:clamp(22px,3.5vw,31px)}
+  .char{font-size:clamp(20px,3.5vw,29px)}
+  .prompt{padding:5px 7px;margin-bottom:4px}
+  button,.file-label{font-size:10px;padding:4px 5px}
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+  <h1 class="title">Irregular Verbs Game for Yago</h1>
+  <div class="stats">
+    <div class="stat"><div class="label">Aciertos</div><div class="value" id="scoreGood">0</div></div>
+    <div class="stat"><div class="label">Errores</div><div class="value" id="scoreBad">0</div></div>
+    <div class="stat"><div class="label">Verbo</div><div class="value"><span id="currentIndex">1</span>/<span id="totalCount">0</span></div></div>
+    <div class="stat"><div class="label">Conjunto cargado</div><div class="value" style="font-size:14px" id="datasetName">Inicial</div></div>
+  </div>
+  <div class="mode-wrap">
+    <div class="mode-buttons">
+      <button class="secondary" id="menuBtn">🏠</button><button class="primary filter-btn active" id="filterToBeBtn">To be studied</button><button class="secondary filter-btn" id="filterStudiedBtn">Already Studied</button><button class="secondary filter-btn" id="filterAllBtn">All irregular verbs</button><button class="secondary" id="shuffleTopBtn">Mezclar Verbos</button><button class="primary mode-btn active" id="modeTrickyBtn">Tricky letters</button>
+      <button class="warn mode-btn" id="modeBlindBtn">Blind</button>
+      <button class="success mode-btn" id="modeStudyBtn">Estudio</button>
+      <button class="secondary filter-btn" id="hangmanToggleBtn">Ahorcado: si</button>
+    </div>
+  </div>
+</section>
+<section class="grid">
+  <div class="card" id="gameCard">
+    <input id="ipadInput" class="ipad-input" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="play-buttons" style="margin-bottom:18px">
+      <button class="success" id="revealBtn">Solucion</button>
+      <button class="solution-ok hidden" id="solutionOkBtn">OK</button>
+      <button class="secondary" id="nextBtn">Siguiente</button>
+      <button class="danger" id="tryAgainBtn">Intentar otra vez</button>
+      <button class="secondary" id="restartGameBtn">Re-empezar la partida</button>
+    </div>
+    <div id="gameView">
+      <div class="base">
+        <div class="label">Base form</div>
+        <div class="word" id="baseWord">write</div>
+      </div>
+      <div class="prompt active" id="psCard">
+        <div class="row-top">
+          <div class="row-title">Past simple</div>
+          <div class="status-pill" id="psStatus">Pendiente</div>
+        </div>
+        <div class="letters" id="psLetters"></div>
+      </div>
+      <div class="prompt" id="ppCard">
+        <div class="row-top">
+          <div class="row-title">Past participle</div>
+          <div class="status-pill" id="ppStatus">Pendiente</div>
+        </div>
+        <div class="letters" id="ppLetters"></div>
+      </div>
+      <div class="hangman-box" id="hangmanBox">
+        <div class="hangman-top">
+          <div class="hangman-title">Ahorcado</div>
+          <div class="hangman-stats">
+            <div class="hangman-stat">
+              <div class="hangman-caption">Vidas acumuladas</div>
+              <div class="hangman-value" id="hangmanLives">0</div>
+            </div>
+            <div class="hangman-stat">
+              <div class="hangman-caption">Partes visibles</div>
+              <div class="hangman-value"><span id="hangmanDamage">0</span>/<span id="hangmanTotal">10</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="hangman-stage" id="hangmanStage">
+          <div class="hangman-sun"></div>
+          <div class="hangman-cloud one"></div>
+          <div class="hangman-cloud two"></div>
+          <div class="hangman-ground"></div>
+          <div class="hangman-result" id="hangmanResult">
+            <div class="hangman-result-card">
+              <div class="hangman-result-title" id="hangmanResultTitle"></div>
+              <div class="hangman-result-text" id="hangmanResultText"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="message" id="messageBox">Escribe con el teclado del iPad.</div>
+      <div class="bottom-tools">
+        <button class="secondary" id="deleteBtn">Borrar ultima</button>
+        <button class="secondary" id="restartVerbBtn">Reiniciar verbo</button>
+        <label class="file-label secondary small-file">Importar Excel<input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm,.json"></label>
+        <button class="secondary small-btn" id="exportJsonBtn">Exportar</button>
+      </div>
+      <div class="help">Toca sobre el juego si necesitas volver a abrir el teclado del iPad. Importa tu Excel o JSON y el dispositivo recordara el ultimo conjunto cargado.</div>
+    </div>
+    <div id="studyView" style="display:none">
+      <div class="base">
+        <div class="label">Estudio</div>
+        <div class="word" id="studyBaseWord">write</div>
+      </div>
+      <div class="study-card">
+        <div class="study-top-forms" id="studyTopForms"></div>
+        <div class="study-visual" id="studyVisual">i -&gt; a -&gt; i+n</div>
+        <div class="study-hint" id="studyHint">Aqui aparecera una ayuda visual.</div>
+        <div class="study-stack">
+          <div class="study-word" id="studyBaseAligned"></div>
+          <div class="study-word" id="studyPSAligned"></div>
+          <div class="study-word" id="studyPPAligned"></div>
+        </div>
+        <div class="study-note">Puedes enriquecer el estudio con studyHint y studyVisual en el Excel.</div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script>
+const D=[{"baseForm":"write","pastSimple":"wrote","pastSimplePattern":"wr_te","pastParticiple":"written","pastParticiplePattern":"writ_e_","studyVisual":"i → o → i+t+n","studyHint":"Piensa en WRITE con la i atrapada. La i cambia a o en wrote, y en written vuelve el sonido i y aparecen dos t + en.","psHighlight":"o","ppHighlight":"tn","isNew":"new_studied"},{"baseForm":"give","pastSimple":"gave","pastSimplePattern":"g_ve","pastParticiple":"given","pastParticiplePattern":"give_","studyVisual":"i → a → i+n","studyHint":"En GIVE, la i salta a una a en gave. Después vuelve la i en given y se añade -n.","psHighlight":"a","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"see","pastSimple":"saw","pastSimplePattern":"s__","pastParticiple":"seen","pastParticiplePattern":"see_","studyVisual":"ee → aw → ee+n","studyHint":"SEE se abre mucho y aparece una a en saw. Luego vuelve el ee largo y se pega una n: seen.","psHighlight":"aw","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"break","pastSimple":"broke","pastSimplePattern":"br___","pastParticiple":"broken","pastParticiplePattern":"br____","studyVisual":"ea → o → o+n","studyHint":"BREAK se rompe: ea cambia a o en broke. Luego a broke se le añade -n para formar broken.","psHighlight":"o","ppHighlight":"on","isNew":"new_studied"},{"baseForm":"be","pastSimple":"was/were","pastSimplePattern":"w__/w___","pastParticiple":"been","pastParticiplePattern":"be__","studyVisual":"be → was/were → bee+n","studyHint":"BE es especial: en pasado puede ser was o were. En participio se queda been, con bee + n.","psHighlight":"was/were","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"eat","pastSimple":"ate","pastSimplePattern":"___","pastParticiple":"eaten","pastParticiplePattern":"eat__","studyVisual":"eat → ate → eat+en","studyHint":"EAT pierde la e inicial larga y queda ate. Luego vuelve eat y se añade -en: eaten.","psHighlight":"ate","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"drink","pastSimple":"drank","pastSimplePattern":"dr_nk","pastParticiple":"drunk","pastParticiplePattern":"dr_nk","studyVisual":"i → a → u","studyHint":"DRINK cambia i por a en drank. Después la a se convierte en u en drunk.","psHighlight":"a","ppHighlight":"u","isNew":"new_studied"},{"baseForm":"go","pastSimple":"went","pastSimplePattern":"w___","pastParticiple":"gone","pastParticiplePattern":"go__","studyVisual":"go → went → go+n","studyHint":"GO desaparece y aparece WENT. Luego vuelve GO y se añade una n.","psHighlight":"went","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"do","pastSimple":"did","pastSimplePattern":"d__","pastParticiple":"done","pastParticiplePattern":"do__","studyVisual":"do → did → do+ne","studyHint":"DO cambia la o por i en DID. Luego vuelve DO y se añade -ne.","psHighlight":"id","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"come","pastSimple":"came","pastSimplePattern":"c_me","pastParticiple":"come","pastParticiplePattern":"c_me","studyVisual":"o → a → o","studyHint":"COME cambia la o por a en CAME. Luego vuelve a COME igual.","psHighlight":"a","ppHighlight":"","isNew":"old_studied"},{"baseForm":"take","pastSimple":"took","pastSimplePattern":"t___","pastParticiple":"taken","pastParticiplePattern":"take_","studyVisual":"a → oo → a+en","studyHint":"TAKE cambia a por oo en TOOK. Luego vuelve la a y se añade -en.","psHighlight":"oo","ppHighlight":"en","isNew":"old_studied"},{"baseForm":"have","pastSimple":"had","pastSimplePattern":"ha_","pastParticiple":"had","pastParticiplePattern":"ha_","studyVisual":"ve → d → d","studyHint":"HAVE se corta: desaparece ve y queda HAD, igual en participio.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"make","pastSimple":"made","pastSimplePattern":"ma_e","pastParticiple":"made","pastParticiplePattern":"ma_e","studyVisual":"k → d → d","studyHint":"MAKE cambia la k por d en MADE, y se mantiene igual después.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"say","pastSimple":"said","pastSimplePattern":"sa__","pastParticiple":"said","pastParticiplePattern":"sa__","studyVisual":"y → id → id","studyHint":"SAY cambia la y por id en SAID y ya no cambia más.","psHighlight":"id","ppHighlight":"id","isNew":"old_studied"},{"baseForm":"begin","pastSimple":"began","pastSimplePattern":"beg_n","pastParticiple":"begun","pastParticiplePattern":"beg_n","studyVisual":"i → a → u","studyHint":"BEGIN cambia i por a en began y luego por u en begun.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"become","pastSimple":"became","pastSimplePattern":"bec_me","pastParticiple":"become","pastParticiplePattern":"bec_me","studyVisual":"o → a → o","studyHint":"BECOME cambia o por a en became y luego vuelve a become.","psHighlight":"a","ppHighlight":"","isNew":"not_studied"},{"baseForm":"bring","pastSimple":"brought","pastSimplePattern":"br_____","pastParticiple":"brought","pastParticiplePattern":"br_____","studyVisual":"ing → ought","studyHint":"BRING cambia completamente a brought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"build","pastSimple":"built","pastSimplePattern":"buil_","pastParticiple":"built","pastParticiplePattern":"buil_","studyVisual":"d → t","studyHint":"BUILD pierde la i y aparece ui en built.","psHighlight":"ui","ppHighlight":"ui","isNew":"not_studied"},{"baseForm":"buy","pastSimple":"bought","pastSimplePattern":"b_____","pastParticiple":"bought","pastParticiplePattern":"b_____","studyVisual":"uy → ought","studyHint":"BUY cambia a bought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"catch","pastSimple":"caught","pastSimplePattern":"c_____","pastParticiple":"caught","pastParticiplePattern":"c_____","studyVisual":"atch → aught","studyHint":"CATCH cambia a caught y se mantiene igual.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"choose","pastSimple":"chose","pastSimplePattern":"ch__s","pastParticiple":"chosen","pastParticiplePattern":"ch__se","studyVisual":"oo → o → o+en","studyHint":"CHOOSE pierde una o en chose y añade -en en chosen.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"cut","pastSimple":"cut","pastSimplePattern":"c_t","pastParticiple":"cut","pastParticiplePattern":"c_t","studyVisual":"igual","studyHint":"CUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"draw","pastSimple":"drew","pastSimplePattern":"dr_w","pastParticiple":"drawn","pastParticiplePattern":"draw_","studyVisual":"aw → ew → aw+n","studyHint":"DRAW cambia a drew y luego añade n en drawn.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"drive","pastSimple":"drove","pastSimplePattern":"dr_ve","pastParticiple":"driven","pastParticiplePattern":"drive_","studyVisual":"i → o → i+n","studyHint":"DRIVE cambia i por o y luego vuelve i con n.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"fall","pastSimple":"fell","pastSimplePattern":"f_ll","pastParticiple":"fallen","pastParticiplePattern":"fall__","studyVisual":"a → e → a+en","studyHint":"FALL cambia a e en fell y luego añade -en.","psHighlight":"e","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"feel","pastSimple":"felt","pastSimplePattern":"f___","pastParticiple":"felt","pastParticiplePattern":"f___","studyVisual":"eel → elt","studyHint":"FEEL pierde una e y queda felt.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"find","pastSimple":"found","pastSimplePattern":"f__nd","pastParticiple":"found","pastParticiplePattern":"f__nd","studyVisual":"i → ou","studyHint":"FIND cambia i por ou en found.","psHighlight":"ou","ppHighlight":"ou","isNew":"not_studied"},{"baseForm":"fly","pastSimple":"flew","pastSimplePattern":"fl__","pastParticiple":"flown","pastParticiplePattern":"fl___","studyVisual":"y → ew → ow+n","studyHint":"FLY cambia a flew y luego a flown.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"forget","pastSimple":"forgot","pastSimplePattern":"forg_t","pastParticiple":"forgotten","pastParticiplePattern":"forg_t___","studyVisual":"e → o → o+ten","studyHint":"FORGET cambia e por o y luego añade -ten.","psHighlight":"o","ppHighlight":"tten","isNew":"not_studied"},{"baseForm":"get","pastSimple":"got","pastSimplePattern":"g_t","pastParticiple":"got/gotten","pastParticiplePattern":"g_t/g_t___","studyVisual":"e → o → o / o+ten","studyHint":"GET cambia e por o.","psHighlight":"o","ppHighlight":"otten","isNew":"not_studied"},{"baseForm":"grow","pastSimple":"grew","pastSimplePattern":"gr_w","pastParticiple":"grown","pastParticiplePattern":"grow_","studyVisual":"o → e → ow+n","studyHint":"GROW cambia a grew y luego añade n.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"hear","pastSimple":"heard","pastSimplePattern":"hear_","pastParticiple":"heard","pastParticiplePattern":"hear_","studyVisual":"r → rd","studyHint":"HEAR cambia a heard y se mantiene.","psHighlight":"ear","ppHighlight":"ear","isNew":"not_studied"},{"baseForm":"hide","pastSimple":"hid","pastSimplePattern":"h_d","pastParticiple":"hidden","pastParticiplePattern":"hid___","studyVisual":"ide → id → id+den","studyHint":"HIDE se acorta a hid y luego añade -den.","psHighlight":"i","ppHighlight":"den","isNew":"not_studied"},{"baseForm":"hold","pastSimple":"held","pastSimplePattern":"h_ld","pastParticiple":"held","pastParticiplePattern":"h_ld","studyVisual":"o → e","studyHint":"HOLD cambia o por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"keep","pastSimple":"kept","pastSimplePattern":"ke__","pastParticiple":"kept","pastParticiplePattern":"ke__","studyVisual":"ee → ept","studyHint":"KEEP pierde una e en kept.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"know","pastSimple":"knew","pastSimplePattern":"kn_w","pastParticiple":"known","pastParticiplePattern":"kno__","studyVisual":"o → e → ow+n","studyHint":"KNOW cambia a knew y luego añade n.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"leave","pastSimple":"left","pastSimplePattern":"le__","pastParticiple":"left","pastParticiplePattern":"le__","studyVisual":"eave → eft","studyHint":"LEAVE cambia ea por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"lose","pastSimple":"lost","pastSimplePattern":"los_","pastParticiple":"lost","pastParticiplePattern":"los_","studyVisual":"e → t","studyHint":"LOSE cambia a lost.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"meet","pastSimple":"met","pastSimplePattern":"m_t","pastParticiple":"met","pastParticiplePattern":"m_t","studyVisual":"ee → e","studyHint":"MEET pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"pay","pastSimple":"paid","pastSimplePattern":"pa__","pastParticiple":"paid","pastParticiplePattern":"pa__","studyVisual":"y → id","studyHint":"PAY cambia y por i.","psHighlight":"i","ppHighlight":"i","isNew":"not_studied"},{"baseForm":"put","pastSimple":"put","pastSimplePattern":"p_t","pastParticiple":"put","pastParticiplePattern":"p_t","studyVisual":"igual","studyHint":"PUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"read","pastSimple":"read","pastSimplePattern":"r__d","pastParticiple":"read","pastParticiplePattern":"r__d","studyVisual":"ea pronunciación","studyHint":"READ se escribe igual pero cambia la pronunciación.","psHighlight":"ea","ppHighlight":"ea","isNew":"not_studied"},{"baseForm":"ride","pastSimple":"rode","pastSimplePattern":"r_de","pastParticiple":"ridden","pastParticiplePattern":"ri__e_","studyVisual":"i → o → i+den","studyHint":"RIDE cambia i por o y luego añade -den.","psHighlight":"o","ppHighlight":"dden","isNew":"not_studied"},{"baseForm":"ring","pastSimple":"rang","pastSimplePattern":"r_ng","pastParticiple":"rung","pastParticiplePattern":"r_ng","studyVisual":"i → a → u","studyHint":"RING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"run","pastSimple":"ran","pastSimplePattern":"r_n","pastParticiple":"run","pastParticiplePattern":"r_n","studyVisual":"u → a → u","studyHint":"RUN cambia a ran y vuelve a run.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sell","pastSimple":"sold","pastSimplePattern":"s___","pastParticiple":"sold","pastParticiplePattern":"s___","studyVisual":"ell → old","studyHint":"SELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"send","pastSimple":"sent","pastSimplePattern":"sen_","pastParticiple":"sent","pastParticiplePattern":"sen_","studyVisual":"d → t","studyHint":"SEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"sing","pastSimple":"sang","pastSimplePattern":"s_ng","pastParticiple":"sung","pastParticiplePattern":"s_ng","studyVisual":"i → a → u","studyHint":"SING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sit","pastSimple":"sat","pastSimplePattern":"s_t","pastParticiple":"sat","pastParticiplePattern":"s_t","studyVisual":"i → a","studyHint":"SIT cambia i por a.","psHighlight":"a","ppHighlight":"a","isNew":"not_studied"},{"baseForm":"sleep","pastSimple":"slept","pastSimplePattern":"sl___","pastParticiple":"slept","pastParticiplePattern":"sl___","studyVisual":"eep → ept","studyHint":"SLEEP pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"speak","pastSimple":"spoke","pastSimplePattern":"sp_k_","pastParticiple":"spoken","pastParticiplePattern":"sp_k__","studyVisual":"ea → o+e → o+en","studyHint":"SPEAK cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"on","isNew":"not_studied"},{"baseForm":"spend","pastSimple":"spent","pastSimplePattern":"spen_","pastParticiple":"spent","pastParticiplePattern":"spen_","studyVisual":"d → t","studyHint":"SPEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"stand","pastSimple":"stood","pastSimplePattern":"st__d","pastParticiple":"stood","pastParticiplePattern":"st__d","studyVisual":"an → oo","studyHint":"STAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"steal","pastSimple":"stole","pastSimplePattern":"st_l_","pastParticiple":"stolen","pastParticiplePattern":"st_l__","studyVisual":"eal → ole → ole+n","studyHint":"STEAL cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"swim","pastSimple":"swam","pastSimplePattern":"sw_m","pastParticiple":"swum","pastParticiplePattern":"sw_m","studyVisual":"i → a → u","studyHint":"SWIM cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"tell","pastSimple":"told","pastSimplePattern":"t___","pastParticiple":"told","pastParticiplePattern":"t___","studyVisual":"ell → old","studyHint":"TELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"think","pastSimple":"thought","pastSimplePattern":"th_____","pastParticiple":"thought","pastParticiplePattern":"th_____","studyVisual":"ink → ought","studyHint":"THINK cambia a thought.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"understand","pastSimple":"understood","pastSimplePattern":"underst__d","pastParticiple":"understood","pastParticiplePattern":"underst__d","studyVisual":"an → oo","studyHint":"UNDERSTAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"wear","pastSimple":"wore","pastSimplePattern":"w___","pastParticiple":"worn","pastParticiplePattern":"w___","studyVisual":"ea → ore → ore+n","studyHint":"WEAR cambia a wore y luego a worn.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"win","pastSimple":"won","pastSimplePattern":"w_n","pastParticiple":"won","pastParticiplePattern":"w_n","studyVisual":"i → o","studyHint":"WIN cambia i por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"wake","pastSimple":"woke","pastSimplePattern":"w_ke","pastParticiple":"woken","pastParticiplePattern":"w_ken","studyVisual":"a → o → o+n","studyHint":"WAKE cambia a woke y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"}];
+const HANGMAN_PARTS=["base","pole","beam","brace","rope","head","neck","bodyTop","bodyBottom","leftArm","rightArm","leftForearm","rightForearm","leftLeg","rightLeg"];
+const START_DAMAGE=4;
+let dataset=[...D],datasetName="irregular_verbs_full_list",index=0,activeTarget="pastSimple",score={good:0,bad:0},currentMode="tricky",studyFilter="to_be",hangmanEnabled=true,hangman={damage:START_DAMAGE,lives:0,status:"playing"};
+let autoNextTimer=null,solutionPending=null;
+const K="yago_irregular_verbs_saved_data_v4_full",NK="yago_irregular_verbs_saved_name_v4_full",$=s=>document.querySelector(s);
+function saveData(n){try{localStorage.setItem(K,JSON.stringify(D));localStorage.setItem(NK,n||"Excel guardado")}catch{}}
+function loadData(){try{const r=localStorage.getItem(K);if(!r)return false;const p=JSON.parse(r);if(!Array.isArray(p)||!p.length)return false;D.length=0;p.forEach(x=>D.push(x));datasetName=localStorage.getItem(NK)||"Excel guardado";return true}catch{return false}}
+function norm(a,p){p=String(p||a||"").trim();a=String(a||"").trim();if(!a)return p;if(!p)return a;if(p.length>a.length)p=p.slice(0,a.length);if(p.length<a.length)p+=a.slice(p.length);return p}
+function clean(e){const c={baseForm:String(e.baseForm||"").trim(),pastSimple:String(e.pastSimple||"").trim(),pastSimplePattern:String(e.pastSimplePattern||e.pastSimple||"").trim(),pastParticiple:String(e.pastParticiple||"").trim(),pastParticiplePattern:String(e.pastParticiplePattern||e.pastParticiple||"").trim(),studyVisual:String(e.studyVisual||"").trim(),studyHint:String(e.studyHint||"").trim(),psHighlight:String(e.psHighlight||"").trim(),ppHighlight:String(e.ppHighlight||"").trim(),isNew:String(e.isNew||"").trim().toLowerCase()};if(!c.baseForm||!c.pastSimple||!c.pastParticiple)return null;c.pastSimplePattern=norm(c.pastSimple,c.pastSimplePattern);c.pastParticiplePattern=norm(c.pastParticiple,c.pastParticiplePattern);return c}
+function filtered(){let b=D.map(clean).filter(Boolean);if(studyFilter==="to_be")b=b.filter(x=>x.isNew==="new_studied");else if(studyFilter==="studied")b=b.filter(x=>["new_studied","old_studied"].includes(x.isNew));return b}
+function modePattern(item,key){return currentMode==="blind"?item[key].split("").map(ch=>ch==="/" ? "/" : "_").join(""):(key==="pastSimple"?item.pastSimplePattern:item.pastParticiplePattern)}
+function makeState(answer,pattern){return{answer,pattern,guessed:[...pattern].map(ch=>ch==="_"?"":ch),ok:null}}
+function rebuild(){dataset=filtered();if(index>=dataset.length)index=0;dataset.forEach(item=>{item.state={pastSimple:makeState(item.pastSimple,modePattern(item,"pastSimple")),pastParticiple:makeState(item.pastParticiple,modePattern(item,"pastParticiple"))};item.meta={finished:false,revealed:false,pastSimple_scored:false,pastParticiple_scored:false}})}
+function item(){return dataset[index]}
+function nextBlank(s){return s.pattern.split("").findIndex((ch,i)=>ch==="_"&&(!s.guessed[i]||s.guessed[i]==="_"))}
+function lastFilled(s){for(let i=s.guessed.length-1;i>=0;i--)if(s.pattern[i]==="_"&&s.guessed[i])return i;return -1}
+function chars(s){return s.answer.split("").map((ch,i)=>ch==="/"?{t:"slash",v:"/"}:s.pattern[i]==="_"?{t:s.guessed[i]?"filled":"blank",v:s.guessed[i]||"_"}:{t:"fixed",v:ch})}
+function renderWord(el,s){el.innerHTML="";chars(s).forEach(it=>{const d=document.createElement("div");d.className="char "+(it.t==="filled"?"blank filled":it.t);d.textContent=it.v;el.appendChild(d)})}
+function focusInput(){const input=$("#ipadInput");if(!input||currentMode==="study")return;input.focus({preventScroll:true});input.click()}
+function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextTimer=null}}
+function stats(){$("#scoreGood").textContent=score.good;$("#scoreBad").textContent=score.bad;$("#currentIndex").textContent=dataset.length?index+1:0;$("#totalCount").textContent=dataset.length;$("#datasetName").textContent=studyFilter==="to_be"?"To be studied":studyFilter==="studied"?"Studied":"All irregular verbs";$("#hangmanToggleBtn").textContent=`Ahorcado: ${hangmanEnabled?"si":"no"}`}
+function msg(t){$("#messageBox").textContent=t}
+function setActive(t){activeTarget=t;$("#psCard").classList.toggle("active",t==="pastSimple");$("#ppCard").classList.toggle("active",t==="pastParticiple")}
+function statuses(){if(!dataset.length)return;["pastSimple","pastParticiple"].forEach(k=>{const card=$(k==="pastSimple"?"#psCard":"#ppCard"),st=$(k==="pastSimple"?"#psStatus":"#ppStatus"),s=item().state[k];card.classList.remove("good","bad");if(s.ok===true){card.classList.add("good");st.textContent="Bien"}else if(s.ok===false){card.classList.add("bad");st.textContent="Mal"}else st.textContent="Pendiente"})}
+function updateFinished(it){it.meta.finished=it.state.pastSimple.ok===true&&it.state.pastParticiple.ok===true}
+function queueNextVerb(){clearAutoNext();if(currentMode==="study"||!dataset.length)return;autoNextTimer=setTimeout(()=>{autoNextTimer=null;if(currentMode==="study"||!dataset.length)return;next()},1000)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function hi(w,t,cls){if(!t)return esc(w);const i=w.toLowerCase().indexOf(t.toLowerCase());if(i===-1)return esc(w);return `${esc(w.slice(0,i))}<span class="${cls}">${esc(w.slice(i,i+t.length))}</span>${esc(w.slice(i+t.length))}`}
+function colorizeStudyVisual(visual,psH,ppH){
+  const raw=String(visual||"");
+  const arrow=raw.includes("->")?"->":(raw.includes("→")?"→":null);
+  if(!arrow){return hi(hi(raw,psH,"red"),ppH,"green")}
+  const parts=raw.split(arrow);
+  if(parts.length>=3){
+    const first=esc(parts[0]);
+    const middle=hi(parts[1],psH,"red");
+    const last=hi(parts.slice(2).join(arrow),ppH,"green");
+    return `${first}<span class="study-arrow"> ${arrow} </span>${middle}<span class="study-arrow"> ${arrow} </span>${last}`;
+  }
+  return hi(hi(raw,psH,"red"),ppH,"green");
+}
+function renderStudy(){if(!dataset.length)return;const it=item();$("#studyBaseWord").textContent=it.baseForm;$("#studyTopForms").innerHTML=`${esc(it.baseForm)}&nbsp;&nbsp;${hi(it.pastSimple,it.psHighlight,"red")}&nbsp;&nbsp;${hi(it.pastParticiple,it.ppHighlight,"green")}`;const visual=it.studyVisual||`${it.baseForm} -> ${it.pastSimple} -> ${it.pastParticiple}`;$("#studyVisual").innerHTML=colorizeStudyVisual(visual,it.psHighlight,it.ppHighlight);$("#studyHint").textContent=it.studyHint||"Anade studyHint en el Excel.";$("#studyBaseAligned").innerHTML=esc(it.baseForm);$("#studyPSAligned").innerHTML=hi(it.pastSimple,it.psHighlight,"red");$("#studyPPAligned").innerHTML=hi(it.pastParticiple,it.ppHighlight,"green")}
+function resetHangman(){hangman={damage:START_DAMAGE,lives:0,status:"playing"}}
+function clampHangman(){hangman.damage=Math.max(0,Math.min(hangman.damage,HANGMAN_PARTS.length));hangman.lives=Math.max(0,hangman.lives)}
+function evaluateHangmanState(){clampHangman();if(hangman.damage===0){hangman.status="won";return"GANASTE! Has desmontado todo el ahorcado."}if(hangman.damage>=HANGMAN_PARTS.length){hangman.status="lost";return"PERDISTE! El ahorcado se completo."}hangman.status="playing";return""}
+function applyHangmanSuccess(){if(hangman.status!=="playing")return"";if(hangman.damage>0){hangman.damage--;const end=evaluateHangmanState();return end||"Bien. Has quitado la ultima linea del ahorcado."}hangman.lives++;clampHangman();return"Bien. Has ganado una vida extra."}
+function applyHangmanFailure(){if(hangman.status!=="playing")return"";if(hangman.lives>0){hangman.lives--;clampHangman();return"Fallo, pero una vida acumulada ha anulado ese error."}hangman.damage++;const end=evaluateHangmanState();return end||"Fallo. Se anade una nueva linea al ahorcado."}
+function renderHangman(){const box=$("#hangmanBox"),stage=$("#hangmanStage"),result=$("#hangmanResult");if(!stage.querySelector(".hangman-part")){HANGMAN_PARTS.forEach(part=>{const piece=document.createElement("div");piece.className=`hangman-part ${part}`;piece.dataset.part=part;stage.appendChild(piece)})}box.classList.toggle("off",!hangmanEnabled&&hangman.status==="playing");HANGMAN_PARTS.forEach((part,i)=>{const node=stage.querySelector(`[data-part="${part}"]`);node.classList.toggle("visible",i<hangman.damage)});$("#hangmanLives").textContent=hangman.lives;$("#hangmanDamage").textContent=hangman.damage;$("#hangmanTotal").textContent=HANGMAN_PARTS.length;const won=hangman.status==="won",lost=hangman.status==="lost";result.className=`hangman-result${won?" visible win":lost?" visible lose":""}`;$("#hangmanResultTitle").textContent=won?"GANASTE!":lost?"PERDISTE!":"";$("#hangmanResultText").textContent=won?"Te has quedado sin piezas del ahorcado.":"Se construyo entero. Re-empezar la partida para volver a jugar."}
+function render(){if(!dataset.length){$("#baseWord").textContent="Sin datos";$("#psLetters").innerHTML="";$("#ppLetters").innerHTML="";$("#gameView").style.display=currentMode==="study"?"none":"block";$("#studyView").style.display=currentMode==="study"?"block":"none";renderHangman();stats();return}const it=item();$("#baseWord").textContent=it.baseForm;renderWord($("#psLetters"),it.state.pastSimple);renderWord($("#ppLetters"),it.state.pastParticiple);statuses();renderStudy();renderHangman();stats();const study=currentMode==="study";$("#gameView").style.display=study?"none":"block";$("#studyView").style.display=study?"block":"none";if(!study)setTimeout(focusInput,0)}
+function scoreOnce(it,k,ok){const mk=k+"_scored";if(it.meta[mk]||currentMode==="study")return;ok?score.good++:score.bad++;it.meta[mk]=true}
+function handleResolvedAnswer(ok,target){if(window.LucYagoReto) window.LucYagoReto.record(ok);const result=ok?applyHangmanSuccess():applyHangmanFailure();const other=target==="pastSimple"?"pastParticiple":"pastSimple";const current=item();if(current&&current.state.pastSimple.ok===true&&current.state.pastParticiple.ok===true){queueNextVerb();return `${result} Pasando al siguiente verbo...`}if(target==="pastSimple"){setActive("pastParticiple");return `${result} Sigue con el otro verbo.`}if(ok&&hangman.status==="playing"){setActive(other);return `${result} Sigue con el otro verbo.`}return result||(!ok?"Fallo.":"Bien.")}
+function insert(letter){if(currentMode==="study"||!dataset.length)return;const it=item();const t=activeTarget,s=it.state[t],i=nextBlank(s);if(i===-1){msg("Ese recuadro ya esta completo. Pulsa borrar para corregirlo o toca el otro verbo.");return}s.guessed[i]=letter;const done=s.pattern.split("").every((ch,j)=>ch!=="_"||(s.guessed[j]&&s.guessed[j]!=="_"));if(done){const guess=s.answer.split("").map((ch,j)=>s.pattern[j]==="_"?(s.guessed[j]||""):ch).join("").toLowerCase(),ok=guess===String(it[t]||"").toLowerCase();s.ok=ok;scoreOnce(it,t,ok);if(!it.meta.revealed)msg(handleResolvedAnswer(ok,t));}else s.ok=null;updateFinished(it);render()}
+function del(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();const it=item(),s=it.state[activeTarget],i=lastFilled(s);if(i!==-1){s.guessed[i]="";s.ok=null;it.meta.revealed=false;it.meta[activeTarget+"_scored"]=false;updateFinished(it);render();msg("Ultima letra borrada.");return}msg("No hay letras para borrar en el verbo seleccionado.")}
+function resetOne(it){it.state={pastSimple:makeState(it.pastSimple,modePattern(it,"pastSimple")),pastParticiple:makeState(it.pastParticiple,modePattern(it,"pastParticiple"))};it.meta={finished:false,revealed:false,pastSimple_scored:false,pastParticiple_scored:false}}
+function showSolutionOk(show){const b=$("#solutionOkBtn");if(b)b.classList.toggle("hidden",!show)}
+function reveal(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();const it=item(),hadError=it.state.pastSimple.ok===false||it.state.pastParticiple.ok===false;["pastSimple","pastParticiple"].forEach(k=>{const s=it.state[k];s.answer.split("").forEach((ch,i)=>{if(s.pattern[i]==="_")s.guessed[i]=ch});s.ok=true});it.meta.finished=true;it.meta.revealed=true;solutionPending={repeat:hadError};render();showSolutionOk(true);msg(hadError?"Solucion mostrada. Pulsa OK y se repetira este mismo verbo hasta hacerlo bien.":"Solucion mostrada. Pulsa OK para continuar.");focusInput()}
+function solutionOk(){if(!solutionPending)return;const repeat=solutionPending.repeat;solutionPending=null;showSolutionOk(false);if(repeat){resetOne(item());setActive("pastSimple");render();msg("Repite este mismo verbo hasta hacerlo bien.")}else next();focusInput()}
+function restart(){if(currentMode==="study"||!dataset.length)return;clearAutoNext();solutionPending=null;showSolutionOk(false);resetOne(item());setActive("pastSimple");render();msg("Puedes volver a intentarlo.")}
+function next(){clearAutoNext();solutionPending=null;showSolutionOk(false);if(!dataset.length)return;index=(index+1)%dataset.length;resetOne(item());setActive("pastSimple");render();msg("Nuevo verbo.")}
+function shuffle(){clearAutoNext();solutionPending=null;showSolutionOk(false);if(!dataset.length)return;dataset=dataset.sort(()=>Math.random()-.5);dataset.forEach(resetOne);index=0;setActive("pastSimple");render();msg("Verbos mezclados.")}
+function restartGame(){clearAutoNext();solutionPending=null;showSolutionOk(false);score={good:0,bad:0};index=0;rebuild();setActive("pastSimple");resetHangman();render();msg("Partida re-empezada.")}
+function setMode(m){clearAutoNext();solutionPending=null;showSolutionOk(false);currentMode=m;$("#modeTrickyBtn").classList.toggle("active",m==="tricky");$("#modeBlindBtn").classList.toggle("active",m==="blind");$("#modeStudyBtn").classList.toggle("active",m==="study");rebuild();setActive("pastSimple");render();msg(m==="study"?"Modo Estudio.":m==="blind"?"Modo Blind: todas las letras ocultas.":"Modo Tricky letters.")}
+function setStudyFilter(f){clearAutoNext();solutionPending=null;showSolutionOk(false);studyFilter=f;$("#filterToBeBtn").classList.toggle("active",f==="to_be");$("#filterStudiedBtn").classList.toggle("active",f==="studied");$("#filterAllBtn").classList.toggle("active",f==="all");rebuild();index=0;setActive("pastSimple");render();msg(f==="to_be"?"To be studied: solo new_studied.":f==="studied"?"Already Studied: new_studied + old_studied.":"All irregular verbs: todos los verbos.")}
+function toggleHangman(){hangmanEnabled=!hangmanEnabled;$("#hangmanToggleBtn").classList.toggle("active",hangmanEnabled);render();msg(hangmanEnabled?"Ahorcado visible.":"Ahorcado oculto.")}
+function parseRows(rows){if(!rows.length)return[];const h=rows[0].map(v=>String(v||"").trim()),need=["baseForm","pastSimple","pastSimplePattern","pastParticiple","pastParticiplePattern"];if(!need.every(x=>h.includes(x)))return[];return rows.slice(1).map(r=>{const o={};h.forEach((x,i)=>o[x]=r[i]);return clean(o)}).filter(Boolean)}
+function importJson(text,name){clearAutoNext();const parsed=JSON.parse(text),rows=Array.isArray(parsed)?parsed.map(clean).filter(Boolean):[];if(!rows.length)throw new Error("El archivo no tiene verbos validos.");for(let i=0;i<D.length;i++)D[i]=rows[i]||D[i];while(D.length>rows.length)D.pop();datasetName=name||"JSON";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Datos importados y guardados.")}
+function importWorkbook(buf,name){clearAutoNext();const wb=XLSX.read(buf,{type:"array"}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:""}),parsed=parseRows(rows);if(!parsed.length)throw new Error("No he encontrado el formato esperado en el Excel.");D.length=0;parsed.forEach(x=>D.push(x));datasetName=name||"Excel";saveData(datasetName);score={good:0,bad:0};index=0;rebuild();resetHangman();render();msg("Excel importado y guardado.")}
+function exportJson(){const blob=new Blob([JSON.stringify(D,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="irregular_verbs_data.json";a.click();URL.revokeObjectURL(url)}
+$("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");$("#solutionOkBtn").addEventListener("click",solutionOk);$("#deleteBtn").addEventListener("click",del);$("#restartVerbBtn").addEventListener("click",restart);$("#revealBtn").addEventListener("click",reveal);$("#nextBtn").addEventListener("click",next);$("#tryAgainBtn").addEventListener("click",restart);$("#shuffleTopBtn").addEventListener("click",shuffle);$("#restartGameBtn").addEventListener("click",restartGame);$("#exportJsonBtn").addEventListener("click",exportJson);$("#modeTrickyBtn").addEventListener("click",()=>setMode("tricky"));$("#modeBlindBtn").addEventListener("click",()=>setMode("blind"));$("#modeStudyBtn").addEventListener("click",()=>setMode("study"));$("#filterToBeBtn").addEventListener("click",()=>setStudyFilter("to_be"));$("#filterStudiedBtn").addEventListener("click",()=>setStudyFilter("studied"));$("#filterAllBtn").addEventListener("click",()=>setStudyFilter("all"));$("#hangmanToggleBtn").addEventListener("click",toggleHangman);
+$("#psCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastSimple");render();focusInput()});
+$("#ppCard").addEventListener("click",()=>{if(currentMode==="study")return;setActive("pastParticiple");render();focusInput()});
+
+$("#ipadInput").addEventListener("input",e=>{const value=e.target.value.toLowerCase().replace(/[^a-z]/g,"");if(value){[...value].forEach(insert)}e.target.value=""});
+$("#fileInput").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{if(f.name.toLowerCase().endsWith(".json"))importJson(await f.text(),f.name);else importWorkbook(await f.arrayBuffer(),f.name)}catch(err){msg("Error al importar: "+err.message)}finally{e.target.value=""}});
+addEventListener("keydown",e=>{if(currentMode==="study")return;if(e.key==="Backspace"){e.preventDefault();del()}});
+document.addEventListener("touchend",e=>{if(currentMode==="study")return;if(e.target.closest("input[type=file]"))return;focusInput()},{passive:true});
+document.addEventListener("click",e=>{if(currentMode==="study")return;if(e.target.closest("input[type=file]"))return;focusInput()});
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+addEventListener("load",()=>setTimeout(focusInput,500));
+loadData();rebuild();render();
+</script>
+
+<!-- Valentina iPad final patch: teclado, viewport y Safari -->
+<script id="valentina-ios-viewport-fix">
+(function(){
+  function setVH(){
+    var vv=window.visualViewport;
+    var h=vv?vv.height:window.innerHeight;
+    document.documentElement.style.setProperty('--ios-vh',h+'px');
+    if(vv){
+      var kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);
+      document.documentElement.style.setProperty('--ios-keyboard',Math.round(kb)+'px');
+      document.body.classList.toggle('keyboard-open',kb>80);
+    }
+  }
+  setVH();
+  window.addEventListener('resize',setVH,{passive:true});
+  window.addEventListener('orientationchange',function(){setTimeout(setVH,80);setTimeout(setVH,350);},{passive:true});
+  if(window.visualViewport){visualViewport.addEventListener('resize',setVH,{passive:true});visualViewport.addEventListener('scroll',setVH,{passive:true});}
+})();
+</script>
+
+
+<style id="valentina-verbs-ipad-final-css">
+html,body{min-height:var(--ios-vh,100dvh);overscroll-behavior:none;-webkit-text-size-adjust:100%;}
+.ipad-input{position:fixed!important;left:10px!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;top:auto!important;width:32px!important;height:32px!important;opacity:.02!important;font-size:16px!important;z-index:2147483647!important;}
+@media (pointer:coarse) and (orientation:landscape){.wrap{height:var(--ios-vh,100dvh)!important;overflow:hidden!important;padding:6px!important}.hero{padding:7px 9px!important}.title{font-size:20px!important}.stats{margin-top:5px!important}.stat{padding:4px 7px!important}.label{font-size:8px!important}.value{font-size:14px!important}.mode-wrap{margin-top:5px!important}.mode-buttons,.play-buttons,.bottom-tools{gap:5px!important}button,.file-label{padding:6px 8px!important;font-size:10px!important}.card{padding:8px!important}.base .word{font-size:28px!important}.prompt{padding:7px!important;margin-bottom:6px!important}.char{font-size:30px!important}.message{min-height:32px!important;padding:7px 9px!important;font-size:12px!important}.hangman-box{padding:7px!important;margin:0 0 6px!important}.hangman-stage{height:calc(var(--ios-vh,100dvh) - 245px)!important;min-height:250px!important}.hangman-part.base{bottom:30px!important}.study-top-forms{font-size:21px!important;padding:8px!important}.study-visual{font-size:18px!important;padding:8px!important}.study-hint{font-size:13px!important}}
+body.keyboard-open .wrap{height:calc(var(--ios-vh,100dvh))!important;overflow:hidden!important}body.keyboard-open .hero{padding:5px 7px!important}body.keyboard-open .title{font-size:18px!important}body.keyboard-open .hangman-stage{height:calc(var(--ios-vh,100dvh) - 215px)!important;min-height:185px!important}
+</style>
+<script id="valentina-verbs-ipad-final-focus">
+(function(){
+  var input=document.getElementById('ipadInput'); if(!input) return;
+  input.setAttribute('inputmode','text'); input.setAttribute('enterkeyhint','done');
+  function interactive(el){return !!(el&&el.closest&&el.closest('button,label,select,input[type=file],textarea,a'));}
+  function open(e){if(interactive(e.target)) return; if(window.currentMode==='study') return; try{input.focus({preventScroll:true});input.setSelectionRange(input.value.length,input.value.length);}catch(_){try{input.focus();}catch(__){}}}
+  document.addEventListener('touchstart',open,{capture:true,passive:true});
+  document.addEventListener('pointerdown',open,{capture:true,passive:true});
+  document.addEventListener('click',open,{capture:true});
+})();
+</script>
+
+
+<script id="lucyago-reto-common">
+/* LucYagoReto Common v1 */
+(function(){
+  const params=new URLSearchParams(location.search);
+  const active=params.get('reto')==='1';
+  if(!active) return;
+  const game=params.get('game')||document.title||'juego';
+  const target=Math.max(1,parseInt(params.get('preguntas')||'10',10));
+  const returnUrl=params.get('return')||'../reto_mixto.html';
+  const sessionKey=params.get('session')||'lucyago_reto_session';
+  let locked=false;
+  function getSession(){try{return JSON.parse(localStorage.getItem(sessionKey)||'{}')}catch(e){return {}}}
+  function setSession(s){localStorage.setItem(sessionKey,JSON.stringify(s));}
+  function ensureGame(s){
+    s.results=s.results||{};
+    if(!s.results[game]) s.results[game]={ok:0,bad:0,total:target,target:target,done:false,name:game};
+    s.results[game].total=target; s.results[game].target=target;
+    return s.results[game];
+  }
+  function total(r){return (r.ok||0)+(r.bad||0)}
+  function paint(){
+    const s=getSession(), r=ensureGame(s);
+    let bar=document.getElementById('lucyagoRetoBar');
+    if(!bar){
+      bar=document.createElement('div');bar.id='lucyagoRetoBar';
+      bar.style.cssText='position:fixed;left:10px;right:10px;bottom:10px;z-index:999999;background:#fffdf8;color:#21314c;border:3px solid #ffd84d;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:8px 12px;font-family:Arial,sans-serif;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:8px;';
+      document.body.appendChild(bar);
+    }
+    const done=Math.min(target,(r.ok||0));
+    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
+    setSession(s);
+  }
+  function finish(){
+    if(locked) return; locked=true;
+    const s=getSession(), r=ensureGame(s); r.done=true; s.lastFinished=game; setSession(s);
+    paint();
+    setTimeout(()=>{location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);},450);
+  }
+  window.LucYagoReto={
+    active:true, game, target, sessionKey,
+    record:function(ok){
+      if(locked) return;
+      const s=getSession(), r=ensureGame(s);
+      if((r.ok||0)>=target) {finish(); return;}
+      if(ok) r.ok=(r.ok||0)+1; else r.bad=(r.bad||0)+1;
+      setSession(s); paint();
+      if((r.ok||0)>=target) finish();
+    },
+    finish:finish,
+    progress:function(){const s=getSession(), r=ensureGame(s); return {ok:r.ok||0,bad:r.bad||0,total:target,done:total(r)}}
+  };
+  window.addEventListener('load',()=>setTimeout(paint,250));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+{
+  "version": "atletic_roster_v1",
+  "rules": {
+    "team_mode": "fixed_atletic_names_random_lineup",
+    "atletic_team_name": "Atletic",
+    "always_include_player": "Yago",
+    "yago_is_best": true,
+    "never_mix_atletic_and_rivals": true,
+    "rival_team_name_mode": "random_from_list",
+    "rival_players_mode": "random_from_list"
+  },
+  "atletic_players": [
+    {
+      "name": "Yago",
+      "role": "crack total",
+      "gk": 9,
+      "def": 9,
+      "mid": 8,
+      "att": 9,
+      "pass": 9,
+      "save": 9,
+      "speed": 8,
+      "must_play": true,
+      "special": "best_everything"
+    },
+    {
+      "name": "Nico"
+    },
+    {
+      "name": "Adam"
+    },
+    {
+      "name": "Jin Hao"
+    },
+    {
+      "name": "Jorge"
+    },
+    {
+      "name": "Matteo"
+    },
+    {
+      "name": "Sasha"
+    },
+    {
+      "name": "Kyle"
+    },
+    {
+      "name": "Juan Martín"
+    },
+    {
+      "name": "Bosco"
+    },
+    {
+      "name": "Felix"
+    },
+    {
+      "name": "Alex"
+    },
+    {
+      "name": "Pau"
+    },
+    {
+      "name": "Arnau"
+    },
+    {
+      "name": "Edu"
+    },
+    {
+      "name": "Dani"
+    },
+    {
+      "name": "Mario"
+    },
+    {
+      "name": "Khaled"
+    }
+  ],
+  "default_stats_for_atletic_random_players": {
+    "role": "jugador Atletic",
+    "gk_range": [
+      3,
+      8
+    ],
+    "def_range": [
+      5,
+      9
+    ],
+    "mid_range": [
+      5,
+      9
+    ],
+    "att_range": [
+      5,
+      9
+    ],
+    "pass_range": [
+      5,
+      9
+    ],
+    "save_range": [
+      2,
+      7
+    ],
+    "speed_range": [
+      5,
+      9
+    ]
+  },
+  "rival_team_names": [
+    "Tigres Rojos",
+    "Dragones FC",
+    "Lobos United",
+    "Rayos Azules",
+    "Panteras Negras",
+    "Halcones City",
+    "Leones del Norte",
+    "Tormenta FC",
+    "Cóndores Club",
+    "Titanes Junior",
+    "Piratas FC",
+    "Águilas Rápidas"
+  ],
+  "rival_players": [
+    "Lucas",
+    "Thiago",
+    "Bruno",
+    "Hugo",
+    "Leo",
+    "Max",
+    "Gonzalo",
+    "Iker",
+    "Martín",
+    "Enzo",
+    "Álvaro",
+    "Nil",
+    "Biel",
+    "Guillem",
+    "Omar",
+    "Rayan",
+    "Noah",
+    "Liam",
+    "Gael",
+    "Ian",
+    "Joel",
+    "Eric",
+    "Marc",
+    "Pol",
+    "Unai",
+    "Axel",
+    "Teo",
+    "Raúl",
+    "Adrián",
+    "Sergi"
+  ],
+  "default_stats_for_rivals": {
+    "role": "rival",
+    "gk_range": [
+      3,
+      8
+    ],
+    "def_range": [
+      4,
+      8
+    ],
+    "mid_range": [
+      4,
+      8
+    ],
+    "att_range": [
+      4,
+      8
+    ],
+    "pass_range": [
+      4,
+      8
+    ],
+    "save_range": [
+      2,
+      7
+    ],
+    "speed_range": [
+      4,
+      8
+    ]
+  },
+  "prompt_for_game_logic": "Crea cada partido con dos equipos separados. El Atletic usa solo nombres de atletic_players. Yago debe aparecer siempre en el Atletic y debe tener 10 en todas las habilidades. El resto de jugadores del Atletic se eligen aleatoriamente desde atletic_players sin repetir. El rival debe usar un nombre aleatorio desde rival_team_names y jugadores aleatorios desde rival_players. Nunca mezcles jugadores del Atletic en el rival ni rivales en el Atletic. Regenerar equipos debe elegir otra combinación aleatoria manteniendo siempre a Yago."
+}
