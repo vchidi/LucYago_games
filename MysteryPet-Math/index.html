@@ -1251,6 +1251,30 @@ button:disabled{
 @keyframes celebrationDot{0%{opacity:0;transform:rotate(var(--a)) translateY(0) scale(.4)}16%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateY(-52vh) scale(1.25)}}
 
 </style>
+<style id="ipad-no-overlap-final">
+@media (min-width:700px) and (max-width:800px){
+  html,body{width:100%;height:100%;overflow:hidden!important}
+  #app{height:100vh!important;min-height:0!important;padding:5px!important;gap:5px!important;overflow:hidden!important}
+  .topbar{padding:5px!important;gap:4px!important;min-height:0!important}
+  .brand{font-size:15px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .topControls{max-height:58px!important;overflow:hidden!important;gap:3px!important}
+  .topControls button,.topControls label{font-size:8.8px!important;padding:3px 4px!important}
+  .main{display:grid!important;grid-template-columns:minmax(390px,1.2fr) minmax(300px,.8fr)!important;grid-template-rows:1fr!important;gap:5px!important;min-height:0!important;overflow:hidden!important}
+  .left,.right{min-height:0!important;overflow:hidden!important}
+  .workArea{height:100%!important;min-height:0!important;padding:8px 6px 62px 8px!important;overflow:hidden!important}
+  .verticalWrap{transform:scale(.72)!important;transform-origin:top left!important;margin-left:4px!important}
+  .keypad{bottom:5px!important;gap:3px!important;padding:4px!important}
+  .keypad button{width:26px!important;height:26px!important;font-size:12px!important}
+  .keypad button.wide{width:36px!important}
+  .right{display:grid!important;grid-template-columns:1fr!important;grid-template-rows:minmax(0,42%) minmax(0,58%)!important;gap:5px!important}
+  .rightPhotoPanel,.draftPanel{min-height:0!important;overflow:hidden!important;padding:5px!important}
+  .photoStage.petStage{min-height:0!important;height:100%!important}
+  .petCreature{width:clamp(145px,52%,200px)!important;height:clamp(145px,52%,200px)!important;top:63%!important}
+  .petProblems{top:104px!important}
+  .petMoodBubble{left:8px!important;right:8px!important;font-size:11px!important}
+  .petEnergyWrap{left:8px!important;right:8px!important;top:74px!important;font-size:8px!important}
+}
+</style>
 </head>
 <body>
 <div id="app">
