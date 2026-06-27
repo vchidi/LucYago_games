@@ -223,6 +223,15 @@ svg.fracSvg.small{
   .resultInput{font-size:30px;padding:8px 10px;width:120px}
 }
 
+
+.topMenu{display:flex;overflow-x:auto;gap:8px;align-items:center;padding:8px;margin-top:0}
+.topMenu button{width:auto;min-width:max-content;margin-bottom:0}
+.main{grid-template-columns:1fr!important}
+@media (min-width:700px){
+ .topMenu{min-height:60px}
+ .panel{margin-top:4px}
+}
+
 </style>
 </head>
 <body>
@@ -232,8 +241,7 @@ svg.fracSvg.small{
     <div class="stats">⭐ <span id="stars">0</span> | ❌ <span id="fails">0</span> | Estado: <span id="stateTxt">Construyendo</span></div>
   </div>
 
-  <div class="main">
-    <nav class="menu">
+  <nav class="menu topMenu">
       <button class="homeBtn" onclick="goHome()">🏠</button>
       <button class="active" onclick="setMode('all',this)">🎲 Todo</button>
       <button onclick="setMode('compare',this)">⚖️ Comparacions</button>
@@ -243,6 +251,7 @@ svg.fracSvg.small{
       <button onclick="resetCafe()">↺ Reset</button>
     </nav>
 
+  <div class="main">
     <section class="panel">
       <div class="exerciseBox">
         <div class="modeTitle">
