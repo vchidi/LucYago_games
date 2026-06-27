@@ -1293,6 +1293,28 @@ button{font-family:inherit}
   .town-flower{font-size:14px !important}
 }
 
+
+/* --- ajuste v19: cajas proporcionales y sin superposicion real --- */
+.townItem{
+  width:var(--town-box-w, 34px) !important;
+  height:var(--town-box-h, 34px) !important;
+  display:flex !important;
+  align-items:flex-end !important;
+  justify-content:center !important;
+  font-size:var(--town-size, 20px) !important;
+  line-height:1 !important;
+  text-align:center !important;
+  transform-origin:50% 100% !important;
+  overflow:visible !important;
+}
+
+@media(max-width:900px){
+  .townItem{
+    width:calc(var(--town-box-w, 34px) * .86) !important;
+    height:calc(var(--town-box-h, 34px) * .86) !important;
+    font-size:calc(var(--town-size, 20px) * .86) !important;
+  }
+}
 </style>
 </head>
 
@@ -2015,103 +2037,137 @@ function renderVillage(){
   if(!zone) return;
   zone.innerHTML = "";
   villageItems.forEach(item=>{
+    const metrics = villageMetrics(item.kind);
     const el = document.createElement("div");
     el.className = "townItem town-" + item.kind;
     el.textContent = item.emoji;
     el.style.left = item.x + "%";
     el.style.bottom = item.y + "%";
     el.style.zIndex = String(20 + Math.round(item.y));
+    el.style.setProperty("--town-size", metrics.font + "px");
+    el.style.setProperty("--town-box-w", metrics.boxW + "px");
+    el.style.setProperty("--town-box-h", metrics.boxH + "px");
     zone.appendChild(el);
   });
   $("eventPill").textContent = "pueblo: " + villageItems.length;
 }
 
+function villageMetrics(kind){
+  const metrics = {
+    building:{font:31, boxW:42, boxH:40, w:8.4, h:17},
+    special:{font:30, boxW:40, boxH:39, w:8.0, h:16},
+    rare:{font:29, boxW:39, boxH:38, w:7.8, h:16},
+    house:{font:25, boxW:36, boxH:34, w:6.8, h:14},
+    tree:{font:24, boxW:35, boxH:36, w:6.8, h:15},
+    car:{font:20, boxW:36, boxH:25, w:7.2, h:10},
+    bench:{font:16, boxW:30, boxH:24, w:5.8, h:10},
+    lamp:{font:16, boxW:26, boxH:29, w:5.2, h:12},
+    person:{font:14, boxW:25, boxH:27, w:4.8, h:11},
+    animal:{font:14, boxW:27, boxH:24, w:5.2, h:10},
+    dog:{font:14, boxW:27, boxH:24, w:5.2, h:10},
+    flower:{font:13, boxW:23, boxH:24, w:4.2, h:9}  };
+  return metrics[kind] || {font:18, boxW:32, boxH:30, w:6, h:15};
+}
+
+function itemBox(item, extraGap=0){
+  const metrics = villageMetrics(item.kind);
+  return {
+    left:item.x - metrics.w / 2 - extraGap,
+    right:item.x + metrics.w / 2 + extraGap,
+    top:item.y - metrics.h - extraGap,
+    bottom:item.y + extraGap
+  };
+}
+
+function boxesOverlap(a,b){
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
+
+function overlapArea(a,b){
+  const x = Math.max(0, Math.min(a.right,b.right) - Math.max(a.left,b.left));
+  const y = Math.max(0, Math.min(a.bottom,b.bottom) - Math.max(a.top,b.top));
+  return x * y;
+}
 
 function itemSize(kind){
-  if(kind==="building" || kind==="special") return 32;
-  if(kind==="rare") return 30;
-  if(kind==="house") return 26;
-  if(kind==="tree") return 22;
-  if(kind==="car") return 18;
-  if(kind==="bench" || kind==="lamp") return 15;
-  if(kind==="person" || kind==="animal" || kind==="dog" || kind==="flower") return 14;
-  return 16;
+  const metrics = villageMetrics(kind);
+  return Math.max(metrics.w, metrics.h);
 }
 
 function randomPositionForKind(kind){
-  const p = { x: 4 + Math.random()*92, y: Math.random()*72 };
+  const metrics = villageMetrics(kind);
+  const halfW = metrics.w / 2;
+  const minX = Math.max(5, halfW + 2);
+  const maxX = Math.min(95, 98 - halfW);
+  const minY = metrics.h + 1;
+  let p = { x: minX + Math.random()*(maxX-minX), y: minY + Math.random()*(72-minY) };
 
-  // zonas: izquierda, prado bajo delante del volcán, derecha
+  // zonas: izquierda, prado bajo delante del volcan, derecha
   const zoneRoll = Math.random();
-
   if(zoneRoll < 0.36){
-    p.x = 4 + Math.random()*32;
+    p.x = minX + Math.random()*Math.max(4, 32 - halfW);
   }else if(zoneRoll < 0.70){
-    p.x = 38 + Math.random()*32;
+    p.x = Math.max(38, minX) + Math.random()*Math.max(4, Math.min(72, maxX) - Math.max(38, minX));
   }else{
-    p.x = 76 + Math.random()*20;
+    p.x = Math.max(76, minX) + Math.random()*Math.max(4, maxX - Math.max(76, minX));
   }
 
-  if(kind === "house") p.y = Math.random()*22;
-  else if(kind === "building" || kind === "special") p.y = Math.random()*16;
-  else if(kind === "person" || kind === "animal" || kind === "dog" || kind === "flower" || kind === "lamp") p.y = 4 + Math.random()*40;
-  else if(kind === "tree") p.y = 6 + Math.random()*48;
-  else if(kind === "rare") p.y = 8 + Math.random()*30;
-  else p.y = Math.random()*56;
+  if(kind === "house") p.y = minY + Math.random()*16;
+  else if(kind === "building" || kind === "special") p.y = minY + Math.random()*10;
+  else if(kind === "person" || kind === "animal" || kind === "dog" || kind === "flower" || kind === "lamp") p.y = minY + Math.random()*34;
+  else if(kind === "tree") p.y = minY + Math.random()*36;
+  else if(kind === "rare") p.y = minY + Math.random()*18;
+  else p.y = minY + Math.random()*40;
 
-  // Delante del volcán sí, encima del cono no.
+  // Delante del volcan si, encima del cono no.
   if(p.x > 38 && p.x < 74){
-    p.y = Math.min(p.y, 18);
+    p.y = Math.min(p.y, Math.max(minY, 20));
   }
 
+  p.x = Math.max(minX, Math.min(maxX, p.x));
+  p.y = Math.max(minY, Math.min(74, p.y));
   return p;
 }
 
 function overlapsVolcanoZone(item){
-  // Bloquea la zona del cono; permite iconos abajo, delante del volcán.
-  if(item.x > 43 && item.x < 81 && item.y > 21) return true;
-  if((item.kind==="building" || item.kind==="special" || item.kind==="rare" || item.kind==="house") && item.x > 40 && item.x < 84 && item.y > 14) return true;
+  const box = itemBox(item, .4);
+  if(box.right > 43 && box.left < 81 && box.top < 70 && box.bottom > 21) return true;
+  if((item.kind==="building" || item.kind==="special" || item.kind==="rare" || item.kind==="house") && box.right > 40 && box.left < 84 && box.bottom > 18) return true;
   return false;
 }
 
 function tooCloseToOther(a,b){
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  const dist = Math.sqrt(dx*dx + dy*dy);
-  return dist < (itemSize(a.kind) + itemSize(b.kind) + 7);
+  return boxesOverlap(itemBox(a, 1.8), itemBox(b, 1.8));
 }
 
 function assignPositionNoOverlap(placed){
   let best = null;
   let bestScore = -Infinity;
 
-  for(let tries=0; tries<360; tries++){
+  for(let tries=0; tries<700; tries++){
     const p = randomPositionForKind(placed.kind);
     placed.x = p.x;
     placed.y = p.y;
 
-    let ok = true;
-    let nearest = 999;
+    let ok = !overlapsVolcanoZone(placed);
+    let score = ok ? 500 : -500;
+    const placedBox = itemBox(placed, 1.8);
 
     for(const other of villageItems){
+      const otherBox = itemBox(other, 1.8);
+      const overlap = overlapArea(placedBox, otherBox);
+      if(overlap > 0){
+        ok = false;
+        score -= overlap * 100;
+      }
       const dx = placed.x - other.x;
       const dy = placed.y - other.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      nearest = Math.min(nearest, dist);
-      if(tooCloseToOther(placed, other)){
-        ok = false;
-        break;
-      }
-    }
-
-    if(overlapsVolcanoZone(placed)){
-      ok = false;
+      score += Math.min(50, Math.sqrt(dx*dx + dy*dy));
     }
 
     if(ok) return true;
-
-    if(nearest > bestScore){
-      bestScore = nearest;
+    if(score > bestScore){
+      bestScore = score;
       best = {x: placed.x, y: placed.y};
     }
   }
@@ -2122,7 +2178,6 @@ function assignPositionNoOverlap(placed){
   }
   return false;
 }
-
 function addVillageItem(forceKind){
   const kinds = [
     {kind:"house", emoji:"🏠", weight:18},
@@ -2211,29 +2266,36 @@ function addVillageItem(forceKind){
     {kind:"rare", emoji:"🚁", weight:1},
       ];
 
-  let choice;
-  if(forceKind === "house"){
-    choice = Math.random() > .5 ? {kind:"house", emoji:"🏠"} : {kind:"house", emoji:"🏡"};
-  }else{
+  function pickChoice(){
+    if(forceKind === "house"){
+      const houseChoices = kinds.filter(k=>k.kind==="house").slice(0,2);
+      return houseChoices[Math.floor(Math.random()*houseChoices.length)];
+    }
     const bag = [];
     kinds.forEach(k=>{ for(let i=0;i<k.weight;i++) bag.push(k); });
-    choice = bag[Math.floor(Math.random()*bag.length)];
+    return bag[Math.floor(Math.random()*bag.length)];
   }
 
-  const placed = {
-    id: nextVillageId++,
-    kind: choice.kind,
-    emoji: choice.emoji,
-    x: 0,
-    y: 0
-  };
+  const attempts = forceKind ? 1 : 90;
+  for(let attempt=0; attempt<attempts; attempt++){
+    const choice = pickChoice();
+    const placed = {
+      id: nextVillageId++,
+      kind: choice.kind,
+      emoji: choice.emoji,
+      x: 0,
+      y: 0
+    };
 
-  assignPositionNoOverlap(placed);
+    if(assignPositionNoOverlap(placed)){
+      villageItems.push(placed);
+      renderVillage();
+      return;
+    }
+  }
 
-  villageItems.push(placed);
-  renderVillage();
+  eventText("el pueblo necesita espacio");
 }
-
 function destroyVillageItem(){
   if(!villageItems.length) return;
   const houses = villageItems.filter(i=>i.kind==="house");
