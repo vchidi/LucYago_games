@@ -232,6 +232,101 @@ svg.fracSvg.small{
  .panel{margin-top:4px}
 }
 
+
+/* ===== Ajuste v20: operaciones priorizadas + iPad + café sin recortes ===== */
+:root{--cafeH:clamp(210px,26vh,270px)}
+.panel{
+  grid-template-rows:minmax(0,1fr) var(--cafeH) !important;
+}
+.bottomGame{
+  height:var(--cafeH) !important;
+  min-height:var(--cafeH) !important;
+  border-width:3px !important;
+}
+.exerciseBox{
+  grid-template-rows:auto minmax(0,1fr) minmax(34px,auto) !important;
+}
+.workGrid{
+  grid-template-columns:minmax(0,1.95fr) minmax(180px,.55fr) !important;
+  gap:8px !important;
+}
+.leftExercise{
+  align-items:center !important;
+  justify-content:center !important;
+  padding:14px !important;
+  overflow:auto !important;
+}
+.leftExercise > div{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.helpPane{
+  padding:6px !important;
+  font-size:13px !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.helpEmpty{font-size:13px !important;line-height:1.2 !important}
+.textHelp{font-size:13px !important;line-height:1.22 !important;font-weight:650 !important}
+.drawHelpBtn{padding:7px 9px !important;font-size:13px !important;margin-top:6px !important}
+.helpPane .multiVisual{gap:4px !important}
+.helpPane svg.fracSvg{width:clamp(90px,14vh,145px) !important;height:clamp(90px,14vh,145px) !important;max-width:100% !important;max-height:18vh !important}
+.helpPane svg.fracSvg.small{width:clamp(78px,12vh,120px) !important;height:clamp(78px,12vh,120px) !important;max-height:15vh !important}
+.mathLine{font-size:clamp(34px,4.6vh,46px) !important;gap:14px !important;justify-content:center !important}
+.fraction .num,.fraction .den{font-size:clamp(32px,4.4vh,44px) !important}
+.resultInput{font-size:clamp(30px,4vh,40px) !important;width:clamp(98px,12vw,130px) !important;padding:8px 10px !important}
+.inputFracBox .resultInput{width:clamp(78px,9vw,105px) !important}
+.numPad{grid-template-columns:repeat(6,clamp(48px,6.2vw,64px)) !important;gap:8px !important;margin-top:14px !important}
+.numPad button{font-size:22px !important;padding:11px 0 !important}
+.signBtns{max-width:390px !important;gap:10px !important;margin-top:16px !important}
+.signBtns button{font-size:36px !important;padding:16px 0 !important}
+.choiceGrid{width:min(100%,560px) !important;grid-template-columns:repeat(2,minmax(170px,1fr)) !important;gap:10px !important}
+.choiceGrid button{font-size:20px !important;padding:15px 10px !important}
+.cafeScene{transform:translateX(-50%) scale(.92) !important;transform-origin:bottom center !important;bottom:6px !important}
+.layerItem{max-width:120px;white-space:nowrap}
+.badBubble{font-size:13px !important;padding:4px 7px !important}
+.badClient{font-size:42px !important}
+.closed{font-size:32px !important;padding:10px 20px !important}
+
+@media (min-width:700px) and (max-width:1199px){
+  :root{--cafeH:clamp(200px,24vh,250px)}
+  .app{padding:6px !important;gap:6px !important}
+  .top{height:44px !important;min-height:44px !important;padding:5px 10px !important}
+  .title{font-size:18px !important}.stats{font-size:12px !important;gap:7px !important}
+  .topMenu{min-height:48px !important;padding:5px !important;gap:6px !important;border-radius:14px !important}
+  .topMenu button{font-size:14px !important;padding:8px 9px !important}
+  .homeBtn{font-size:22px !important;min-width:40px !important}
+  .panel{padding:7px !important;gap:6px !important;margin-top:0 !important}
+  .modeTitle{min-height:34px !important}
+  .promptTitle{font-size:16px !important;padding:6px 9px !important}
+  .actionRow button{font-size:14px !important;padding:7px 9px !important}
+  .feedback{height:34px !important;min-height:34px !important;font-size:12px !important;padding:6px 8px !important}
+  .workGrid{grid-template-columns:minmax(0,2.25fr) minmax(160px,.48fr) !important;gap:6px !important}
+  .leftExercise{padding:10px !important}
+  .helpPane{padding:5px !important;border-radius:14px !important}
+  .mathLine{font-size:clamp(32px,4.2vh,42px) !important;gap:10px !important}
+  .fraction .num,.fraction .den{font-size:clamp(31px,4vh,40px) !important}
+  .numPad{grid-template-columns:repeat(6,clamp(44px,5.7vw,58px)) !important;gap:7px !important}
+  .numPad button{font-size:20px !important;padding:9px 0 !important}
+  .bottomGame{border-radius:18px !important}
+  .gameHud{font-size:12px !important;left:8px !important;top:8px !important;padding:5px 8px !important}
+  .cafeScene{transform:translateX(-50%) scale(.82) !important;bottom:5px !important}
+}
+
+@media (min-width:900px) and (max-width:1199px){
+  :root{--cafeH:clamp(215px,25vh,270px)}
+  .workGrid{grid-template-columns:minmax(0,2.35fr) minmax(190px,.5fr) !important}
+  .cafeScene{transform:translateX(-50%) scale(.92) !important}
+}
+
+@media (max-width:699px){
+  :root{--cafeH:clamp(175px,30vh,220px)}
+  .workGrid{grid-template-columns:1fr !important;grid-template-rows:minmax(145px,1fr) minmax(72px,.34fr) !important}
+  .helpPane{min-height:72px !important}
+  .mathLine{font-size:26px !important;gap:6px !important}
+  .fraction .num,.fraction .den{font-size:25px !important}
+  .numPad{grid-template-columns:repeat(6,42px) !important;gap:5px !important}
+  .numPad button{font-size:18px !important;padding:7px 0 !important}
+  .cafeScene{transform:translateX(-50%) scale(.62) !important;bottom:4px !important}
+}
+
 </style>
 </head>
 <body>
