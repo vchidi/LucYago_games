@@ -1,16 +1,5 @@
 <!doctype html>
 <html lang="es">
-
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BNGNRXSWHY"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-
-gtag('config', 'G-BNGNRXSWHY');
-</script>
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -35,6 +24,7 @@ gtag('config', 'G-BNGNRXSWHY');
   --orange-deep:#d85d16;
   --blue:#3177ff;
   --green:#1ea86f;
+  --purple:#7f5cff;
   --line:rgba(34,48,74,.08);
   --shadow:0 22px 60px rgba(34,48,74,.14);
 }
@@ -114,7 +104,7 @@ h1{
 .games{
   margin-top:0;
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:10px;
   flex:1;
   min-height:0;
@@ -153,9 +143,11 @@ h1{
 }
 .icon.verbs{background:linear-gradient(135deg,#ffdb78,#ff9c3f)}
 .icon.math{background:linear-gradient(135deg,#75d8ff,#3f78ff)}
+.icon.mix{background:linear-gradient(135deg,#ffd84d,#ff8a3d)}
 .icon.football{background:linear-gradient(135deg,#68e879,#1b8f4a)}
 .icon.accent{background:linear-gradient(135deg,#ffb36b,#ff4d4d)}
 .icon.fractions{background:linear-gradient(135deg,#ff9ad5,#ffcf6b)}
+.icon.mystery{background:linear-gradient(135deg,#c5a3ff,#57d7ff)}
 .pill{
   padding:6px 8px;
   border-radius:999px;
@@ -176,19 +168,6 @@ h1{
   font-size:14px;
   line-height:1.25;
 }
-.features{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-.feature{
-  padding:6px 8px;
-  border-radius:14px;
-  background:#fff;
-  font-size:12px;
-  font-weight:800;
-  box-shadow:inset 0 0 0 1px var(--line);
-}
 .cta{
   margin-top:auto;
   display:flex;
@@ -203,6 +182,7 @@ h1{
 .cta.verbs{background:linear-gradient(135deg,#ff9c3f,#ff6c3a)}
 .cta.math{background:linear-gradient(135deg,#3f78ff,#1dba9c)}
 .cta.football{background:linear-gradient(135deg,#22b455,#117a3a)}
+.cta.mystery{background:linear-gradient(135deg,var(--purple),#24c0ff)}
 .footer-note{
   margin:0;
   text-align:center;
@@ -211,12 +191,11 @@ h1{
 }
 @media (max-width:900px){
   .app{max-width:100%;}
-  .games{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .games{grid-template-columns:repeat(4,minmax(0,1fr));}
   .hero,.game-card{border-radius:24px}
   .game-card{padding:12px;gap:8px}
   .game-title{font-size:21px}
   .game-copy{font-size:13px}
-  .feature{font-size:11px;padding:5px 7px}
   .pill{font-size:11px;padding:6px 8px}
 }
 @media (max-width:620px){
@@ -236,8 +215,6 @@ h1{
   .icon{width:44px;height:44px;border-radius:15px;font-size:24px}
   .game-title{font-size:19px}
   .game-copy{font-size:12px;line-height:1.18}
-  .features{gap:5px}
-  .feature{font-size:10px;padding:4px 6px;border-radius:10px}
   .cta{padding:8px 10px;border-radius:16px;font-size:13px}
   .footer-note{font-size:10px}
 }
@@ -252,8 +229,14 @@ h1{
 
   <section class="games" aria-label="Menu de juegos">
     <a class="game-card challenge" href="./reto_mixto.html">
-      <div class="game-top"><div class="icon mix">🎯</div></div>
-      <div><div class="pill" style="display:inline-flex;margin-bottom:8px">Juego por defecto · 20–30 min</div><h2 class="game-title">Reto mixto LucYago</h2><p class="game-copy">Mapa de retos: Yago elige el orden. Empieza con 5 aciertos objetivo por juego.</p><div class="features"><span class="feature">🐠 Pecera</span><span class="feature">🐾 Mascota</span><span class="feature">🌋 Volcán</span><span class="feature">🏴‍☠️ Pirata</span><span class="feature">⚽ Fútbol</span></div></div>
+      <div class="game-top">
+        <div class="icon mix">🎯</div>
+        <div class="pill">Juego por defecto · 20-30 min</div>
+      </div>
+      <div>
+        <h2 class="game-title">Reto mixto LucYago</h2>
+        <p class="game-copy">Mapa de retos: Yago elige el orden. Empieza con 5 aciertos objetivo por juego.</p>
+      </div>
       <div class="cta math"><span>Empezar reto</span><span>➡️</span></div>
     </a>
 
@@ -265,11 +248,6 @@ h1{
       <div>
         <h2 class="game-title">Irregular Verbs</h2>
         <p class="game-copy">Entrena base form, past simple y past participle.</p>
-      </div>
-      <div class="features">
-        <span class="feature">&#9997;&#65039; Tricky letters</span>
-        <span class="feature">&#129504; Blind mode</span>
-        <span class="feature">&#128229; Import Excel</span>
       </div>
       <div class="cta verbs">
         <span>Open game</span>
@@ -286,16 +264,26 @@ h1{
         <h2 class="game-title">Multiplicaciones</h2>
         <p class="game-copy">Practica tablas y mejora tu rapidez.</p>
       </div>
-      <div class="features">
-        <span class="feature">&#9201;&#65039; Errors control</span>
-        <span class="feature">&#11088; Progress saved</span>
-      </div>
       <div class="cta math">
         <span>Open game</span>
         <span>&#10145;&#65039;</span>
       </div>
     </a>
 
+    <a class="game-card" href="./MysteryPet-Math/index.html">
+      <div class="game-top">
+        <div class="icon mystery">🐾</div>
+        <div class="pill">Maths</div>
+      </div>
+      <div>
+        <h2 class="game-title">Mystery Pet</h2>
+        <p class="game-copy">Resuelve retos de mates para cuidar y descubrir tu mascota misteriosa.</p>
+      </div>
+      <div class="cta mystery">
+        <span>Open game</span>
+        <span>&#10145;&#65039;</span>
+      </div>
+    </a>
 
     <a class="game-card" href="./Spelling-Football/index.html">
       <div class="game-top">
@@ -305,11 +293,6 @@ h1{
       <div>
         <h2 class="game-title">Spelling Football</h2>
         <p class="game-copy">Acierta el spelling y haz avanzar la jugada en Football 7.</p>
-      </div>
-      <div class="features">
-        <span class="feature">&#9917; Football 7</span>
-        <span class="feature">&#128266; Audio</span>
-        <span class="feature">&#128229; Import Excel</span>
       </div>
       <div class="cta football">
         <span>Open game</span>
@@ -325,11 +308,6 @@ h1{
       <div>
         <h2 class="game-title">Sweet Fractions Café</h2>
         <p class="game-copy">Aprende fracciones mientras construyes y salvas una cafetería de postres.</p>
-      </div>
-      <div class="features">
-        <span class="feature">🍕 Comparaciones</span>
-        <span class="feature">🎂 Mixtos</span>
-        <span class="feature">🧁 Cafetería viva</span>
       </div>
       <div class="cta math">
         <span>Open game</span>
@@ -347,11 +325,6 @@ h1{
         <h2 class="game-title">Acentos Volcán</h2>
         <p class="game-copy">Clasifica palabras, descubre la sílaba tónica y salva la isla del volcán.</p>
       </div>
-      <div class="features">
-        <span class="feature">🧠 Aguda/Llana</span>
-        <span class="feature">🔥 Volcán dinámico</span>
-        <span class="feature">📚 Banco editable</span>
-      </div>
       <div class="cta football">
         <span>Open game</span>
         <span>&#10145;&#65039;</span>
@@ -366,11 +339,6 @@ h1{
       <div>
         <h2 class="game-title">El Tresor de les Unitats</h2>
         <p class="game-copy">Aprèn longitud, massa i capacitat mentre competeixes contra un pirata pel tresor.</p>
-      </div>
-      <div class="features">
-        <span class="feature">📏 Longitud</span>
-        <span class="feature">⚖️ Massa</span>
-        <span class="feature">🧪 Capacitat</span>
       </div>
       <div class="cta math">
         <span>Open game</span>
