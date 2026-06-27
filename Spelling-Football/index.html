@@ -1,10 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#8fdcff">
-<title>Acierta el spelling correcto</title>
+<title>Football Spelling</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -61,7 +61,7 @@ input[type=file]{display:none}
 @media (max-width:920px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.football-panel{grid-template-columns:1fr}.football-field{min-height:560px}.football-score-value{font-size:40px}.football-team{font-size:18px}.football-editor-row{grid-template-columns:minmax(150px,1.3fr) repeat(7,minmax(60px,1fr));overflow-x:auto}}
 @media (max-width:640px){.wrap{padding:10px}.hero,.panel{border-radius:22px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.controls{gap:6px}.controls button,label.btn,select.select-pill{flex:0 0 auto;padding:9px 10px;font-size:12px}.tile{min-width:38px;height:50px;font-size:28px}.spanish{font-size:42px}.football-field{min-height:500px;padding:16px}.football-player{width:60px;height:60px}.football-player-mark{font-size:20px}.football-player-name{min-width:84px;font-size:12px}.football-ball{width:34px;height:34px;margin-left:-17px;margin-top:-17px}.side-big{font-size:32px}.football-status .v{font-size:24px}.football-banner-title{font-size:42px}.football-banner-text{font-size:16px}.football-editor-row{grid-template-columns:minmax(180px,1.2fr) repeat(7,minmax(54px,.7fr))}}
 
-/* === Animaciones de partido realista añadidas === */
+/* === Animaciones de partido realista aÃ±adidas === */
 .football-field{perspective:900px;isolation:isolate}
 .football-field.match-shake{animation:matchShake .42s ease-in-out 1}
 .football-field.match-zoom{animation:matchZoom .7s ease-in-out 1}
@@ -99,7 +99,7 @@ body::before{display:none}.wrap{height:var(--compact-vh);max-width:none;width:10
 body.keyboard-open{--hero-h:48px}body.keyboard-open .hero{padding:5px 8px}body.keyboard-open .badge,body.keyboard-open .stats,body.keyboard-open #modeClassicBtn,body.keyboard-open #modeBlindBtn,body.keyboard-open #commentaryBtn,body.keyboard-open #restartBtn,body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect,body.keyboard-open #regenTeamsBtn{display:inline-flex!important}body.keyboard-open .title{font-size:18px}body.keyboard-open .controls{position:absolute;right:10px;top:8px;margin:0;max-width:46%;justify-content:flex-end}body.keyboard-open .controls button{padding:6px 8px;font-size:10px}body.keyboard-open .panel{padding:5px}body.keyboard-open .game-grid{grid-template-columns:minmax(270px,.8fr) minmax(330px,1.2fr);gap:5px}body.keyboard-open .clue-card{padding:7px}body.keyboard-open .spanish{font-size:clamp(22px,3.5vw,32px)}body.keyboard-open .word-zone{margin-top:5px;padding:7px}body.keyboard-open .tile{min-width:26px;height:31px;font-size:19px;border-radius:8px}body.keyboard-open .word-head{margin-bottom:4px}body.keyboard-open .word-title{font-size:12px}body.keyboard-open .progress{height:6px;margin-top:5px}body.keyboard-open .actions{margin-top:5px}body.keyboard-open .actions button{padding:6px 7px;font-size:10px}body.keyboard-open .message{margin-top:5px;min-height:30px;padding:6px 8px;font-size:11px}body.keyboard-open .football-score{padding:5px 8px}body.keyboard-open .football-score-value{font-size:22px}body.keyboard-open .football-team{font-size:11px}body.keyboard-open .football-panel{grid-template-columns:minmax(0,1fr) 132px;gap:5px}body.keyboard-open .football-field{min-height:190px;border-radius:18px;padding:8px}body.keyboard-open .football-player{width:39px;height:39px}body.keyboard-open .football-player-name{min-width:54px;font-size:8px;padding:3px 5px}body.keyboard-open .football-player-mark{font-size:13px}body.keyboard-open .football-player-role{display:none}body.keyboard-open .football-ball{width:24px;height:24px;margin-left:-12px;margin-top:-12px}body.keyboard-open .football-status{padding:5px 7px}body.keyboard-open .football-status .v{font-size:14px}body.keyboard-open .panel-mini{display:none}body.keyboard-open .football-status-grid .football-status:nth-child(n+3){display:none}
 @media (max-width:760px){.game-grid,body.keyboard-open .game-grid{grid-template-columns:1fr}.match-stage{display:none}.hero{height:96px}.stats{grid-template-columns:repeat(5,1fr)}.controls{display:none}.tile{min-width:30px;height:36px;font-size:22px}}
 
-/* === Claridad de juego: muñecos, campo limpio y explicación de duelos === */
+/* === Claridad de juego: muÃ±ecos, campo limpio y explicaciÃ³n de duelos === */
 .football-banner{display:none!important}
 .football-band-label{display:none!important}
 .football-player{border-radius:42% 42% 46% 46%;overflow:visible}
@@ -120,11 +120,11 @@ body.keyboard-open .football-duel-bars{display:none}
 </style>
 
 <style id="football-doll-layout-fixes">
-/* Boceto nuevo: panel de partido a la izquierda y campo más ancho */
+/* Boceto nuevo: panel de partido a la izquierda y campo mÃ¡s ancho */
 .football-panel{grid-template-columns:230px minmax(0,1fr)!important;align-items:stretch}
 .football-status-grid{order:1}.football-field{order:2}
 .football-field .football-banner{display:none!important}
-/* Muñecos dibujados, dos equipos diferenciados y sin etiqueta tipo pestaña */
+/* MuÃ±ecos dibujados, dos equipos diferenciados y sin etiqueta tipo pestaÃ±a */
 .football-player-wrap{gap:1px!important;z-index:3}
 .football-player{border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important;width:54px!important;height:64px!important}
 .football-player.has-ball{transform:none!important;box-shadow:none!important}.football-player::after{display:none!important}
@@ -144,7 +144,7 @@ body.keyboard-open .football-duel-bars{display:none}
 @keyframes dollRun{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-5px) rotate(2deg)}}
 @keyframes dollCelebrate{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-13px) scale(1.08)}70%{transform:rotate(-8deg)}}
 @keyframes dollDefend{50%{transform:scale(1.12) translateX(-4px)}}
-/* Balón sin rotación ni efecto raro; nunca debajo del jugador */
+/* BalÃ³n sin rotaciÃ³n ni efecto raro; nunca debajo del jugador */
 .football-ball.pass,.football-ball.shot,.football-ball.goal,.football-ball.save,.football-ball.steal{animation:none!important}
 .football-ball.moving{transform:translateY(-8px) scale(1.08)!important}
 /* Panel izquierdo compacto para iPad */
@@ -157,7 +157,7 @@ body.keyboard-open #builderEvent{font-size:9px!important;line-height:1.08!import
 </style>
 
 <style id="requested-football-v2-overrides">
-/* Ajustes solicitados: bloque de partido a la izquierda, campo más ancho, sin texto encima del campo */
+/* Ajustes solicitados: bloque de partido a la izquierda, campo mÃ¡s ancho, sin texto encima del campo */
 .clue-card > .label{display:none!important}
 .clue-card .football-status-grid{margin-top:8px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;overflow:hidden;max-height:190px}
 .clue-card .football-status{padding:7px 8px;border-radius:12px}
@@ -200,7 +200,7 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
 </style>
 
 <style id="ipad-top-buttons-final-overrides">
-/* iPad: botones arriba, bajo el título y antes de estadísticas */
+/* iPad: botones arriba, bajo el tÃ­tulo y antes de estadÃ­sticas */
 @media (pointer:coarse) and (min-width:761px){
   :root{--hero-h:116px;--field-h:calc(100dvh - var(--hero-h) - 22px)}
   .hero{height:var(--hero-h)!important;padding:6px 8px!important;overflow:hidden!important}
@@ -221,7 +221,7 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
   .football-field{min-height:220px!important;height:100%!important;max-height:var(--field-h)!important}
   #togglePlayersEditorBtn,.football-editor-panel{display:none!important}
 }
-/* Al abrir teclado en iPad, no mandes los botones a la derecha: siguen bajo el título */
+/* Al abrir teclado en iPad, no mandes los botones a la derecha: siguen bajo el tÃ­tulo */
 @media (pointer:coarse) and (min-width:761px){
   body.keyboard-open{--hero-h:100px!important}
   body.keyboard-open .hero{height:var(--hero-h)!important;padding:5px 7px!important}
@@ -250,27 +250,27 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
     <div class="topline">
       <div>
         <div class="badge">Football words</div>
-        <h1 class="title">Acierta el spelling correcto</h1>
+        <h1 class="title">Football Spelling</h1>
         <p class="subtitle">Escucha la palabra, completa las letras que faltan y haz avanzar la jugada sin distracciones.</p>
       </div>
     </div>
     <div class="controls">
-      <button id="menuBtn" class="icon-btn" title="Volver al menú">🏠</button>
+      <button id="menuBtn" class="icon-btn" title="Volver al menÃº">ðŸ </button>
       <button id="modeClassicBtn" class="primary active">Tricky letters</button>
       <button id="modeBlindBtn" class="violet">Blind</button>
-      <button id="autoAudioBtn">Audio Spelling: sí</button>
-      <button id="commentaryBtn">Audio Partido: sí</button>
+      <button id="autoAudioBtn">Audio Spelling: sÃ­</button>
+      <button id="commentaryBtn">Audio Partido: sÃ­</button>
       <button id="repeatAudioBtn" class="amber">Repetir audio</button>
-      <button id="shuffleVerbsBtn" class="icon-btn" title="Mezclar verbos">🔀 Verbos</button>
+      <button id="shuffleVerbsBtn" class="icon-btn" title="Mezclar verbos">ðŸ”€ Verbos</button>
       <button id="restartBtn">Reiniciar partida</button>
-      <button id="noGameBtn">⚽ Partido: sí</button>
+      <button id="noGameBtn">âš½ Partido: sÃ­</button>
       <select id="formationSelect" class="select-pill tactic-hidden-select" aria-hidden="true" tabindex="-1">
-        <option value="1-2-2-1">Formación 1-2-2-1</option>
-        <option value="1-3-1-1">Formación 1-3-1-1</option>
-        <option value="1-2-1-2">Formación 1-2-1-2</option>
-        <option value="1-1-3-1">Formación 1-1-3-1</option>
+        <option value="1-2-2-1">FormaciÃ³n 1-2-2-1</option>
+        <option value="1-3-1-1">FormaciÃ³n 1-3-1-1</option>
+        <option value="1-2-1-2">FormaciÃ³n 1-2-1-2</option>
+        <option value="1-1-3-1">FormaciÃ³n 1-1-3-1</option>
       </select>
-      <button id="formationCycleBtn" class="select-pill" type="button">Formación 1-2-2-1</button>
+      <button id="formationCycleBtn" class="select-pill" type="button">FormaciÃ³n 1-2-2-1</button>
       <select id="yagoRoleSelect" class="select-pill tactic-hidden-select" aria-hidden="true" tabindex="-1">
         <option value="goalkeeper">Yago portero</option>
         <option value="defense">Yago defensa</option>
@@ -279,8 +279,8 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
       </select>
       <button id="yagoRoleCycleBtn" class="select-pill" type="button">Yago medio</button>
       <button id="regenTeamsBtn">Regenerar equipos</button>
-      <button id="importPlayersTopBtn" title="Importar Excel o JSON de jugadores">📥 Jugadores</button>
-      <button id="exportPlayersTopBtn" title="Descargar plantilla de jugadores">📤 Plantilla Atletic</button>
+      <button id="importPlayersTopBtn" title="Importar Excel o JSON de jugadores">ðŸ“¥ Jugadores</button>
+      <button id="exportPlayersTopBtn" title="Descargar plantilla de jugadores">ðŸ“¤ Plantilla Atletic</button>
     </div>
     <div class="stats">
       <div class="stat"><div class="k">Aciertos</div><div class="v" id="goodCount">0</div></div>
@@ -292,10 +292,10 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
 
   </section>
   <section class="panel">
-    <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
+    <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autofocus autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
     <div class="game-grid" id="gameGrid">
       <div class="card clue-card">
-        <div class="label">Pista en español</div>
+        <div class="label">Pista en espaÃ±ol</div>
         <div class="spanish" id="spanishWord">arriba</div>
         <div class="smallnote" id="modeExplain">Completa solo las letras que faltan.</div>
         <div class="word-zone">
@@ -307,9 +307,10 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
           <div class="progress"><div class="bar" id="progressBar"></div></div>
         </div>
         <div class="actions">
-          <button id="deleteBtn">Borrar última</button>
+          <button id="repeatWordActionBtn" class="amber" type="button" title="Repetir audio de la palabra" aria-label="Repetir audio de la palabra"></button>
+          <button id="deleteBtn">Borrar Ãºltima</button>
           <button id="retryBtn">Intentar otra vez</button>
-          <button id="revealBtn" class="red">Ver solución</button>
+          <button id="revealBtn" class="red">Ver soluciÃ³n</button>
           <button id="nextBtn">Siguiente</button>
         </div>
         <div class="message" id="messageBox">Toca cualquier parte de la pantalla para abrir el teclado del iPhone o iPad.</div>
@@ -331,15 +332,15 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
               <div class="football-banner" id="footballBanner"><div class="football-banner-box"><div class="football-banner-title" id="footballBannerTitle"></div><div class="football-banner-text" id="footballBannerText"></div></div></div>
             </div>
             <div class="football-status-grid">
-              <div class="football-status"><div class="k">Posesión</div><div class="v" id="footballPossession">Yago</div></div>
+              <div class="football-status"><div class="k">PosesiÃ³n</div><div class="v" id="footballPossession">Yago</div></div>
               <div class="football-status"><div class="k">Zona</div><div class="v" id="footballZone">Defensa</div></div>
               <div class="panel-mini">
-                <div class="side-title">Por qué pasó</div>
+                <div class="side-title">Por quÃ© pasÃ³</div>
                 <div class="football-why" id="builderEvent">Acierto = oportunidad. Luego hay duelo: tu jugada contra defensa rival.</div>
               </div>
               <div class="panel-mini">
-                <div class="side-title">Posesión y línea</div>
-                <div class="smallnote"><strong id="livesLabel">Yago</strong> · <span id="goalLabel">Defensa</span></div>
+                <div class="side-title">PosesiÃ³n y lÃ­nea</div>
+                <div class="smallnote"><strong id="livesLabel">Yago</strong> Â· <span id="goalLabel">Defensa</span></div>
               </div>
               <div class="panel-mini">
                 <div class="side-title">Log del partido</div>
@@ -372,17 +373,17 @@ body.keyboard-open #autoAudioBtn,body.keyboard-open #commentaryBtn{display:inlin
   </section>
 </div>
 <script>
-const DEFAULT_DATA = [{"english": "up", "pattern": "_p", "spanish": "arriba"}, {"english": "about", "pattern": "ab_ut", "spanish": "sobre"}, {"english": "me", "pattern": "m_", "spanish": "yo"}, {"english": "my", "pattern": "m_", "spanish": "mi"}, {"english": "make", "pattern": "m_ke", "spanish": "hacer"}, {"english": "like", "pattern": "l_ke", "spanish": "gustar / como"}, {"english": "time", "pattern": "t_me", "spanish": "tiempo / vez"}, {"english": "just", "pattern": "j_st", "spanish": "solo / justo"}, {"english": "know", "pattern": "kn_w", "spanish": "saber / conocer"}, {"english": "take", "pattern": "t_ke", "spanish": "tomar / coger"}, {"english": "people", "pattern": "p__ple", "spanish": "gente / personas"}, {"english": "into", "pattern": "_nto", "spanish": "dentro de"}, {"english": "year", "pattern": "y__r", "spanish": "año"}, {"english": "your", "pattern": "y__r", "spanish": "tu / vuestro"}, {"english": "good", "pattern": "g__d", "spanish": "bueno"}, {"english": "some", "pattern": "s_me", "spanish": "algunos / algo de"}, {"english": "could", "pattern": "c__ld", "spanish": "podría / podían"}, {"english": "them", "pattern": "th_m", "spanish": "ellos / ellas / los / las"}, {"english": "see", "pattern": "s__", "spanish": "ver"}, {"english": "other", "pattern": "_th_r", "spanish": "otro"}, {"english": "than", "pattern": "th_n", "spanish": "que"}, {"english": "then", "pattern": "th_n", "spanish": "entonces"}, {"english": "now", "pattern": "n_w", "spanish": "ahora"}, {"english": "look", "pattern": "l__k", "spanish": "mirar"}, {"english": "only", "pattern": "_nly", "spanish": "solo / solamente"}, {"english": "come", "pattern": "c_me", "spanish": "venir"}, {"english": "think", "pattern": "th_nk", "spanish": "pensar / creer"}, {"english": "also", "pattern": "_ls_", "spanish": "también"}, {"english": "back", "pattern": "b_ck", "spanish": "atrás / de vuelta"}, {"english": "use", "pattern": "_se", "spanish": "usar"}, {"english": "one / two / three", "pattern": "_ne / tw_ / thr__", "spanish": "uno / dos / tres"}, {"english": "how", "pattern": "h_w", "spanish": "cómo"}, {"english": "our", "pattern": "__r", "spanish": "nuestro"}, {"english": "work", "pattern": "w__k", "spanish": "trabajo / trabajar"}, {"english": "first", "pattern": "f_rst", "spanish": "primero"}, {"english": "well", "pattern": "w_ll", "spanish": "bien"}, {"english": "way", "pattern": "w_y", "spanish": "manera / camino"}, {"english": "want", "pattern": "w_nt", "spanish": "querer"}, {"english": "because", "pattern": "beca_se", "spanish": "porque"}, {"english": "any", "pattern": "_ny", "spanish": "alguno / ninguno"}, {"english": "1= this / muchos = these", "pattern": "th_s / th_se", "spanish": "este / estos"}, {"english": "give", "pattern": "g_ve", "spanish": "dar"}, {"english": "day", "pattern": "d_y", "spanish": "día"}, {"english": "us", "pattern": "_s", "spanish": "nosotros / nos"}, {"english": "are", "pattern": "_r_", "spanish": "son / estamos"}, {"english": "was", "pattern": "w_s", "spanish": "era / estaba"}, {"english": "were", "pattern": "w_r_", "spanish": "eran / estaban"}, {"english": "been", "pattern": "b_en", "spanish": "sido / estado"}, {"english": "does", "pattern": "d_es", "spanish": "hace"}, {"english": "shall", "pattern": "sh_ll", "spanish": "(deber / futuro formal)"}, {"english": "should", "pattern": "sh__ld", "spanish": "debería"}, {"english": "may", "pattern": "m_y", "spanish": "puede / podría"}, {"english": "must", "pattern": "m_st", "spanish": "deber"}, {"english": "those", "pattern": "th_se", "spanish": "esos / aquellos"}, {"english": "many", "pattern": "m_ny", "spanish": "muchos"}, {"english": "much", "pattern": "m_ch", "spanish": "mucho"}, {"english": "every", "pattern": "ev_ry", "spanish": "cada"}, {"english": "each", "pattern": "__ch", "spanish": "cada uno"}, {"english": "very", "pattern": "v_ry", "spanish": "muy"}, {"english": "here", "pattern": "h__r_", "spanish": "aquí"}, {"english": "there", "pattern": "th__r_", "spanish": "allí / ahí"}, {"english": "again", "pattern": "_g__n", "spanish": "otra vez"}, {"english": "never", "pattern": "n_v_r", "spanish": "nunca"}, {"english": "always", "pattern": "_lw_ys", "spanish": "siempre"}, {"english": "sometimes", "pattern": "s_met_mes", "spanish": "a veces"}, {"english": "often", "pattern": "_ft_n", "spanish": "a menudo"}, {"english": "usually", "pattern": "_s__lly", "spanish": "normalmente"}, {"english": "even", "pattern": "_v_n", "spanish": "incluso"}, {"english": "might", "pattern": "m_ght", "spanish": "podría"}, {"english": "soon", "pattern": "s__n", "spanish": "pronto"}, {"english": "late", "pattern": "l_te", "spanish": "tarde"}, {"english": "early", "pattern": "__rly", "spanish": "temprano"}, {"english": "around", "pattern": "_r__nd", "spanish": "alrededor de"}, {"english": "through", "pattern": "thr__gh", "spanish": "a través de"}, {"english": "between", "pattern": "betw__n", "spanish": "entre"}, {"english": "under", "pattern": "_nd_r", "spanish": "debajo de"}, {"english": "above", "pattern": "_b__v_", "spanish": "encima de"}, {"english": "before", "pattern": "bef_r_", "spanish": "antes"}, {"english": "without", "pattern": "w_th__t", "spanish": "sin"}, {"english": "within", "pattern": "w_th_n", "spanish": "dentro de"}, {"english": "across", "pattern": "_cr_ss", "spanish": "a través de / al otro lado de"}, {"english": "against", "pattern": "_g__nst", "spanish": "contra"}, {"english": "towards", "pattern": "t_w_rds", "spanish": "hacia"}, {"english": "another", "pattern": "_n_th_r", "spanish": "otro"}, {"english": "few", "pattern": "f_w", "spanish": "pocos"}, {"english": "more", "pattern": "m_r_", "spanish": "más"}, {"english": "less", "pattern": "l_ss", "spanish": "menos"}, {"english": "same", "pattern": "s_me", "spanish": "mismo"}, {"english": "different", "pattern": "d_ff_r_nt", "spanish": "diferente"}, {"english": "own", "pattern": "_wn", "spanish": "propio"}, {"english": "better", "pattern": "b_tt_r", "spanish": "mejor"}, {"english": "worse", "pattern": "w_rs_", "spanish": "peor"}, {"english": "short", "pattern": "sh_rt", "spanish": "corto"}, {"english": "high", "pattern": "h_gh", "spanish": "alto"}, {"english": "low", "pattern": "l_w", "spanish": "bajo"}, {"english": "young", "pattern": "y__ng", "spanish": "joven"}, {"english": "new", "pattern": "n_w", "spanish": "nuevo"}, {"english": "great", "pattern": "gr__t", "spanish": "genial / grande"}, {"english": "little", "pattern": "l_tt_l_", "spanish": "pequeño"}, {"english": "right", "pattern": "r_ght", "spanish": "correcto / derecha"}, {"english": "same", "pattern": "s_me", "spanish": "mismo"}, {"english": "name", "pattern": "n_me", "spanish": "nombre"}, {"english": "place", "pattern": "pl_ce", "spanish": "lugar"}, {"english": "thing", "pattern": "th_ng", "spanish": "cosa"}, {"english": "number", "pattern": "n_mb_r", "spanish": "número"}, {"english": "man", "pattern": "m_n", "spanish": "hombre"}, {"english": "woman", "pattern": "w_m_n", "spanish": "mujer"}, {"english": "child", "pattern": "ch_ld", "spanish": "niño"}, {"english": "family", "pattern": "f_m_ly", "spanish": "familia"}, {"english": "friend", "pattern": "fr__nd", "spanish": "amigo"}, {"english": "school", "pattern": "sch__l", "spanish": "colegio"}, {"english": "home", "pattern": "h_me", "spanish": "casa / hogar"}, {"english": "house", "pattern": "h__s_", "spanish": "casa"}, {"english": "room", "pattern": "r__m", "spanish": "habitación"}, {"english": "water", "pattern": "w_t_r", "spanish": "agua"}, {"english": "food", "pattern": "f__d", "spanish": "comida"}, {"english": "book", "pattern": "b__k", "spanish": "libro"}, {"english": "tree", "pattern": "tr__", "spanish": "árbol"}, {"english": "sun", "pattern": "s_n", "spanish": "sol"}, {"english": "moon", "pattern": "m__n", "spanish": "luna"}, {"english": "light", "pattern": "l_ght", "spanish": "luz"}, {"english": "dark", "pattern": "d_rk", "spanish": "oscuro"}];
+const DEFAULT_DATA = [{"english": "up", "pattern": "_p", "spanish": "arriba"}, {"english": "about", "pattern": "ab_ut", "spanish": "sobre"}, {"english": "me", "pattern": "m_", "spanish": "yo"}, {"english": "my", "pattern": "m_", "spanish": "mi"}, {"english": "make", "pattern": "m_ke", "spanish": "hacer"}, {"english": "like", "pattern": "l_ke", "spanish": "gustar / como"}, {"english": "time", "pattern": "t_me", "spanish": "tiempo / vez"}, {"english": "just", "pattern": "j_st", "spanish": "solo / justo"}, {"english": "know", "pattern": "kn_w", "spanish": "saber / conocer"}, {"english": "take", "pattern": "t_ke", "spanish": "tomar / coger"}, {"english": "people", "pattern": "p__ple", "spanish": "gente / personas"}, {"english": "into", "pattern": "_nto", "spanish": "dentro de"}, {"english": "year", "pattern": "y__r", "spanish": "aÃ±o"}, {"english": "your", "pattern": "y__r", "spanish": "tu / vuestro"}, {"english": "good", "pattern": "g__d", "spanish": "bueno"}, {"english": "some", "pattern": "s_me", "spanish": "algunos / algo de"}, {"english": "could", "pattern": "c__ld", "spanish": "podrÃ­a / podÃ­an"}, {"english": "them", "pattern": "th_m", "spanish": "ellos / ellas / los / las"}, {"english": "see", "pattern": "s__", "spanish": "ver"}, {"english": "other", "pattern": "_th_r", "spanish": "otro"}, {"english": "than", "pattern": "th_n", "spanish": "que"}, {"english": "then", "pattern": "th_n", "spanish": "entonces"}, {"english": "now", "pattern": "n_w", "spanish": "ahora"}, {"english": "look", "pattern": "l__k", "spanish": "mirar"}, {"english": "only", "pattern": "_nly", "spanish": "solo / solamente"}, {"english": "come", "pattern": "c_me", "spanish": "venir"}, {"english": "think", "pattern": "th_nk", "spanish": "pensar / creer"}, {"english": "also", "pattern": "_ls_", "spanish": "tambiÃ©n"}, {"english": "back", "pattern": "b_ck", "spanish": "atrÃ¡s / de vuelta"}, {"english": "use", "pattern": "_se", "spanish": "usar"}, {"english": "one / two / three", "pattern": "_ne / tw_ / thr__", "spanish": "uno / dos / tres"}, {"english": "how", "pattern": "h_w", "spanish": "cÃ³mo"}, {"english": "our", "pattern": "__r", "spanish": "nuestro"}, {"english": "work", "pattern": "w__k", "spanish": "trabajo / trabajar"}, {"english": "first", "pattern": "f_rst", "spanish": "primero"}, {"english": "well", "pattern": "w_ll", "spanish": "bien"}, {"english": "way", "pattern": "w_y", "spanish": "manera / camino"}, {"english": "want", "pattern": "w_nt", "spanish": "querer"}, {"english": "because", "pattern": "beca_se", "spanish": "porque"}, {"english": "any", "pattern": "_ny", "spanish": "alguno / ninguno"}, {"english": "1= this / muchos = these", "pattern": "th_s / th_se", "spanish": "este / estos"}, {"english": "give", "pattern": "g_ve", "spanish": "dar"}, {"english": "day", "pattern": "d_y", "spanish": "dÃ­a"}, {"english": "us", "pattern": "_s", "spanish": "nosotros / nos"}, {"english": "are", "pattern": "_r_", "spanish": "son / estamos"}, {"english": "was", "pattern": "w_s", "spanish": "era / estaba"}, {"english": "were", "pattern": "w_r_", "spanish": "eran / estaban"}, {"english": "been", "pattern": "b_en", "spanish": "sido / estado"}, {"english": "does", "pattern": "d_es", "spanish": "hace"}, {"english": "shall", "pattern": "sh_ll", "spanish": "(deber / futuro formal)"}, {"english": "should", "pattern": "sh__ld", "spanish": "deberÃ­a"}, {"english": "may", "pattern": "m_y", "spanish": "puede / podrÃ­a"}, {"english": "must", "pattern": "m_st", "spanish": "deber"}, {"english": "those", "pattern": "th_se", "spanish": "esos / aquellos"}, {"english": "many", "pattern": "m_ny", "spanish": "muchos"}, {"english": "much", "pattern": "m_ch", "spanish": "mucho"}, {"english": "every", "pattern": "ev_ry", "spanish": "cada"}, {"english": "each", "pattern": "__ch", "spanish": "cada uno"}, {"english": "very", "pattern": "v_ry", "spanish": "muy"}, {"english": "here", "pattern": "h__r_", "spanish": "aquÃ­"}, {"english": "there", "pattern": "th__r_", "spanish": "allÃ­ / ahÃ­"}, {"english": "again", "pattern": "_g__n", "spanish": "otra vez"}, {"english": "never", "pattern": "n_v_r", "spanish": "nunca"}, {"english": "always", "pattern": "_lw_ys", "spanish": "siempre"}, {"english": "sometimes", "pattern": "s_met_mes", "spanish": "a veces"}, {"english": "often", "pattern": "_ft_n", "spanish": "a menudo"}, {"english": "usually", "pattern": "_s__lly", "spanish": "normalmente"}, {"english": "even", "pattern": "_v_n", "spanish": "incluso"}, {"english": "might", "pattern": "m_ght", "spanish": "podrÃ­a"}, {"english": "soon", "pattern": "s__n", "spanish": "pronto"}, {"english": "late", "pattern": "l_te", "spanish": "tarde"}, {"english": "early", "pattern": "__rly", "spanish": "temprano"}, {"english": "around", "pattern": "_r__nd", "spanish": "alrededor de"}, {"english": "through", "pattern": "thr__gh", "spanish": "a travÃ©s de"}, {"english": "between", "pattern": "betw__n", "spanish": "entre"}, {"english": "under", "pattern": "_nd_r", "spanish": "debajo de"}, {"english": "above", "pattern": "_b__v_", "spanish": "encima de"}, {"english": "before", "pattern": "bef_r_", "spanish": "antes"}, {"english": "without", "pattern": "w_th__t", "spanish": "sin"}, {"english": "within", "pattern": "w_th_n", "spanish": "dentro de"}, {"english": "across", "pattern": "_cr_ss", "spanish": "a travÃ©s de / al otro lado de"}, {"english": "against", "pattern": "_g__nst", "spanish": "contra"}, {"english": "towards", "pattern": "t_w_rds", "spanish": "hacia"}, {"english": "another", "pattern": "_n_th_r", "spanish": "otro"}, {"english": "few", "pattern": "f_w", "spanish": "pocos"}, {"english": "more", "pattern": "m_r_", "spanish": "mÃ¡s"}, {"english": "less", "pattern": "l_ss", "spanish": "menos"}, {"english": "same", "pattern": "s_me", "spanish": "mismo"}, {"english": "different", "pattern": "d_ff_r_nt", "spanish": "diferente"}, {"english": "own", "pattern": "_wn", "spanish": "propio"}, {"english": "better", "pattern": "b_tt_r", "spanish": "mejor"}, {"english": "worse", "pattern": "w_rs_", "spanish": "peor"}, {"english": "short", "pattern": "sh_rt", "spanish": "corto"}, {"english": "high", "pattern": "h_gh", "spanish": "alto"}, {"english": "low", "pattern": "l_w", "spanish": "bajo"}, {"english": "young", "pattern": "y__ng", "spanish": "joven"}, {"english": "new", "pattern": "n_w", "spanish": "nuevo"}, {"english": "great", "pattern": "gr__t", "spanish": "genial / grande"}, {"english": "little", "pattern": "l_tt_l_", "spanish": "pequeÃ±o"}, {"english": "right", "pattern": "r_ght", "spanish": "correcto / derecha"}, {"english": "same", "pattern": "s_me", "spanish": "mismo"}, {"english": "name", "pattern": "n_me", "spanish": "nombre"}, {"english": "place", "pattern": "pl_ce", "spanish": "lugar"}, {"english": "thing", "pattern": "th_ng", "spanish": "cosa"}, {"english": "number", "pattern": "n_mb_r", "spanish": "nÃºmero"}, {"english": "man", "pattern": "m_n", "spanish": "hombre"}, {"english": "woman", "pattern": "w_m_n", "spanish": "mujer"}, {"english": "child", "pattern": "ch_ld", "spanish": "niÃ±o"}, {"english": "family", "pattern": "f_m_ly", "spanish": "familia"}, {"english": "friend", "pattern": "fr__nd", "spanish": "amigo"}, {"english": "school", "pattern": "sch__l", "spanish": "colegio"}, {"english": "home", "pattern": "h_me", "spanish": "casa / hogar"}, {"english": "house", "pattern": "h__s_", "spanish": "casa"}, {"english": "room", "pattern": "r__m", "spanish": "habitaciÃ³n"}, {"english": "water", "pattern": "w_t_r", "spanish": "agua"}, {"english": "food", "pattern": "f__d", "spanish": "comida"}, {"english": "book", "pattern": "b__k", "spanish": "libro"}, {"english": "tree", "pattern": "tr__", "spanish": "Ã¡rbol"}, {"english": "sun", "pattern": "s_n", "spanish": "sol"}, {"english": "moon", "pattern": "m__n", "spanish": "luna"}, {"english": "light", "pattern": "l_ght", "spanish": "luz"}, {"english": "dark", "pattern": "d_rk", "spanish": "oscuro"}];
 const DEFAULT_PLAYER_POOL=[
   {id:1,name:'Yago',photo:'yago.png',role:'todoterreno',gk:9,def:8,mid:7,att:7,pass:8,save:8,speed:8,special:'hero',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
-  {id:2,name:'Nico',photo:'nico.png',role:'delantero móvil',gk:4,def:8,mid:8,att:9,pass:8,save:4,speed:9,special:'finisher',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
+  {id:2,name:'Nico',photo:'nico.png',role:'delantero mÃ³vil',gk:4,def:8,mid:8,att:9,pass:8,save:4,speed:9,special:'finisher',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:3,name:'Leo',photo:'leo.png',role:'portero',gk:10,def:7,mid:5,att:3,pass:7,save:10,speed:5,special:'wall',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:4,name:'Teo',photo:'teo.png',role:'medio creativo',gk:3,def:6,mid:9,att:7,pass:9,save:3,speed:8,special:'vision',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:5,name:'Gael',photo:'gael.png',role:'interior',gk:3,def:6,mid:8,att:7,pass:8,save:3,speed:8,special:'engine',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:6,name:'Hugo',photo:'hugo.png',role:'punta',gk:2,def:4,mid:7,att:9,pass:7,save:2,speed:9,special:'shot',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:7,name:'Marc',photo:'marc.png',role:'defensa central',gk:3,def:9,mid:6,att:4,pass:7,save:2,speed:6,special:'lock',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
-  {id:8,name:'Jan',photo:'jan.png',role:'lateral rápido',gk:2,def:8,mid:7,att:5,pass:7,save:2,speed:9,special:'run',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
-  {id:9,name:'Pol',photo:'pol.png',role:'portero ágil',gk:9,def:6,mid:4,att:3,pass:6,save:9,speed:6,special:'cat',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
+  {id:8,name:'Jan',photo:'jan.png',role:'lateral rÃ¡pido',gk:2,def:8,mid:7,att:5,pass:7,save:2,speed:9,special:'run',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
+  {id:9,name:'Pol',photo:'pol.png',role:'portero Ã¡gil',gk:9,def:6,mid:4,att:3,pass:6,save:9,speed:6,special:'cat',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:10,name:'Eric',photo:'eric.png',role:'medio mixto',gk:3,def:7,mid:8,att:6,pass:8,save:3,speed:7,special:'tempo',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:11,name:'Bruno',photo:'bruno.png',role:'portero',gk:9,def:6,mid:4,att:2,pass:6,save:9,speed:5,special:'reflejos',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
   {id:12,name:'Raul',photo:'raul.png',role:'defensa',gk:2,def:8,mid:6,att:4,pass:7,save:2,speed:7,special:'cierre',fixed_gk:1,fixed_def:1,fixed_mid:1,fixed_att:1,fixed_pass:1,fixed_save:1,fixed_speed:1,lock_profile:1},
@@ -405,9 +406,9 @@ let rawData=JSON.parse(JSON.stringify(DEFAULT_DATA));
 let datasetName='yago_common_english_words';
 let playersData=JSON.parse(JSON.stringify(DEFAULT_PLAYER_POOL));
 let playersDatasetName='atletic_players_random.json';
-let atleticPlayerNames=['Yago','Nico','Adam','Jin Hao','Jorge','Matteo','Sasha','Kyle','Juan Martín','Bosco','Felix','Alex','Pau','Arnau','Edu','Dani','Mario','Khaled'];
-let rivalPlayerNames=['Lucas','Thiago','Bruno','Hugo','Leo','Max','Gonzalo','Iker','Martín','Enzo','Álvaro','Nil','Biel','Guillem','Omar','Rayan','Noah','Liam','Gael','Ian','Joel','Eric','Marc','Pol','Unai','Axel','Teo','Raúl','Adrián','Sergi'];
-let rivalTeamNames=['Tigres Rojos','Dragones FC','Lobos United','Rayos Azules','Panteras Negras','Halcones City','Leones del Norte','Tormenta FC','Cóndores Club','Titanes Junior','Piratas FC','Águilas Rápidas'];
+let atleticPlayerNames=['Yago','Nico','Adam','Jin Hao','Jorge','Matteo','Sasha','Kyle','Juan MartÃ­n','Bosco','Felix','Alex','Pau','Arnau','Edu','Dani','Mario','Khaled'];
+let rivalPlayerNames=['Lucas','Thiago','Bruno','Hugo','Leo','Max','Gonzalo','Iker','MartÃ­n','Enzo','Ãlvaro','Nil','Biel','Guillem','Omar','Rayan','Noah','Liam','Gael','Ian','Joel','Eric','Marc','Pol','Unai','Axel','Teo','RaÃºl','AdriÃ¡n','Sergi'];
+let rivalTeamNames=['Tigres Rojos','Dragones FC','Lobos United','Rayos Azules','Panteras Negras','Halcones City','Leones del Norte','Tormenta FC','CÃ³ndores Club','Titanes Junior','Piratas FC','Ãguilas RÃ¡pidas'];
 let currentRivalTeamName='Rival';
 let mode='classic';
 let autoAudio=true;
@@ -436,7 +437,7 @@ const FORMATIONS={
 const PLAYER_REQUIRED_FIELDS=['name','gk','def','mid','att','pass','save','speed'];
 function normalizeText(s){return String(s||'').trim().toLowerCase()}
 function normalizePattern(answer,pattern){answer=normalizeText(answer);pattern=normalizeText(pattern||answer);if(!pattern) pattern=answer;if(pattern.length>answer.length) pattern=pattern.slice(0,answer.length);if(pattern.length<answer.length) pattern+=answer.slice(pattern.length);return pattern;}
-function cleanEntry(d){const english=normalizeText(d.english||d.baseForm);const pattern=normalizePattern(english,d.pattern||d['tricky letters']);const spanish=String(d.spanish||d['español']||d['español']||'').trim();if(!english||!spanish) return null;return {english,pattern,spanish};}
+function cleanEntry(d){const english=normalizeText(d.english||d.baseForm);const pattern=normalizePattern(english,d.pattern||d['tricky letters']);const spanish=String(d.spanish||d['espaÃ±ol']||d['espaÃ±ol']||'').trim();if(!english||!spanish) return null;return {english,pattern,spanish};}
 function toNumber(value,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback}
 function toFlag(value,fallback=1){if(value===''||value===null||value===undefined) return fallback; return Number(value)?1:0}
 function clampStat(value){return Math.max(1,Math.min(10,Math.round(toNumber(value,5))))}
@@ -560,7 +561,7 @@ function loadSaved(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){con
 function saveData(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(rawData));localStorage.setItem(STORAGE_NAME,datasetName);localStorage.setItem(PLAYERS_STORAGE_KEY,JSON.stringify(playersData));localStorage.setItem(PLAYERS_STORAGE_NAME,playersDatasetName);localStorage.setItem(ATLETIC_NAMES_STORAGE_KEY,JSON.stringify(atleticPlayerNames));localStorage.setItem(RIVAL_NAMES_STORAGE_KEY,JSON.stringify(rivalPlayerNames));localStorage.setItem(RIVAL_TEAM_NAMES_STORAGE_KEY,JSON.stringify(rivalTeamNames));localStorage.setItem(FORMATION_STORAGE_KEY,formationKey);localStorage.setItem(YAGO_POSITION_STORAGE_KEY,preferredYagoLine);}catch{}}
 function buildDataset(){const cleaned=rawData.map(cleanEntry).filter(Boolean);window.datasetStates=cleaned.map(makeState);if(index>=window.datasetStates.length) index=0;}
 function current(){return window.datasetStates[index]}
-function visibleCells(state){return state.english.split('').map((ch,i)=>{if(ch===' ') return {type:'space',value:''};if(state.pattern[i]==='_'){const value=state.guess[i]||'•';const wrong=!!state.guess[i]&&state.guess[i]!==ch&&!state.revealed;return {type:wrong?'wrong':(state.guess[i]?'filled':'blank'),value};}return {type:'fixed',value:ch};});}
+function visibleCells(state){return state.english.split('').map((ch,i)=>{if(ch===' ') return {type:'space',value:''};if(state.pattern[i]==='_'){const value=state.guess[i]||'â€¢';const wrong=!!state.guess[i]&&state.guess[i]!==ch&&!state.revealed;return {type:wrong?'wrong':(state.guess[i]?'filled':'blank'),value};}return {type:'fixed',value:ch};});}
 function nextBlank(state){return state.pattern.split('').findIndex((ch,i)=>ch==='_'&&!state.guess[i])}
 function lastFilled(state){for(let i=state.guess.length-1;i>=0;i--) if(state.pattern[i]==='_'&&state.guess[i]) return i; return -1}
 function guessedWord(state){return state.english.split('').map((ch,i)=>state.pattern[i]==='_'?(state.guess[i]||''):ch).join('')}
@@ -579,10 +580,10 @@ function renderPlayersEditor(){
   const row=document.createElement('div');
   row.className='football-editor-row';
   row.style.gridTemplateColumns='1fr';
-  row.innerHTML=`<div class="football-editor-name"><strong>Atletic:</strong> ${atleticPlayerNames.join(', ')}<br><small>Yago sale en todos los partidos y tiene 10 en todo. Regenerar equipos elige compañeros y rival nuevos.</small></div>`;
+  row.innerHTML=`<div class="football-editor-name"><strong>Atletic:</strong> ${atleticPlayerNames.join(', ')}<br><small>Yago sale en todos los partidos y tiene 10 en todo. Regenerar equipos elige compaÃ±eros y rival nuevos.</small></div>`;
   editor.appendChild(row);
-  $('#playersEditorInfo').textContent=`${playersDatasetName} · ${atleticPlayerNames.length} jugadores Atletic`;
-  $('#playersDatasetName').textContent=`Atletic: ${atleticPlayerNames.length} · Rival: ${currentRivalTeamName||'aleatorio'}`;
+  $('#playersEditorInfo').textContent=`${playersDatasetName} Â· ${atleticPlayerNames.length} jugadores Atletic`;
+  $('#playersDatasetName').textContent=`Atletic: ${atleticPlayerNames.length} Â· Rival: ${currentRivalTeamName||'aleatorio'}`;
 }
 function renderLetters(){const el=$('#letters');el.innerHTML='';const s=current();if(!s) return;visibleCells(s).forEach(c=>{const d=document.createElement('div');let cls=c.type==='filled'?'blank filled':c.type==='wrong'?'blank filled wrong':c.type;d.className='tile '+cls+(s.revealed&&c.type!=='space'?' solution':'');d.textContent=c.value;el.appendChild(d);});}
 function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
@@ -624,7 +625,7 @@ function forceSpeakWordNow(force=false){
 }
 function flushSpeechQueue(){
   if(!window.speechSynthesis||!speechUnlocked||activeSpeech||window.speechSynthesis.speaking) return;
-  // La narración del partido tiene prioridad para que GOL/PARADA se oiga justo después del chut.
+  // La narraciÃ³n del partido tiene prioridad para que GOL/PARADA se oiga justo despuÃ©s del chut.
   if(commentaryEnabled&&pendingCommentarySpeech){
     activeSpeech=buildSpeechUtterance(pendingCommentarySpeech,'es-','es-ES','Google|Monica|Paulina|Jorge|Luciana|Helena',1,1.05);
     pendingCommentarySpeech=null;
@@ -666,7 +667,7 @@ const footballEngine=(()=>{
   const lineShort={goalkeeper:'POR',defense:'DEF',midfield:'MED',attack:'ATA'};
   const lineY={goalkeeper:{yago:86,rival:14},defense:{yago:68,rival:32},midfield:{yago:50,rival:50},attack:{yago:24,rival:76}};
   const xMap={one:[50],two:[36,64],three:[24,50,76]};
-  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,bannerTimer:null,eventTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
+  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,bannerTimer:null,eventTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. DespuÃ©s se compara tu jugada con la defensa rival.'};
   const refs={};
 
   function firstRivalWord(name){
@@ -839,10 +840,10 @@ const footballEngine=(()=>{
   }
 
   function getPlayerEmoji(player){
-    if(player.line==='goalkeeper') return '🧤';
-    if(player.teamId==='rival') return '🏃';
-    if(normalizeText(player.name)==='yago') return '🧒';
-    return '🏃';
+    if(player.line==='goalkeeper') return 'ðŸ§¤';
+    if(player.teamId==='rival') return 'ðŸƒ';
+    if(normalizeText(player.name)==='yago') return 'ðŸ§’';
+    return 'ðŸƒ';
   }
 
   function getNearbyPlayers(teamId,primaryLine,secondaryLine=null){
@@ -902,10 +903,10 @@ const footballEngine=(()=>{
         bannerText:`${attacker.name} gana el duelo.`,
         bannerTone:teamId==='yago'?'good':'bad',
         eventKind:'pass',
-        explanation:makeDuelExplanation('Has acertado: eso da una oportunidad y un bonus. Ahora se resuelve el duelo de fútbol.',attacker.name,defender.name,duel,true),
+        explanation:makeDuelExplanation('Has acertado: eso da una oportunidad y un bonus. Ahora se resuelve el duelo de fÃºtbol.',attacker.name,defender.name,duel,true),
         commentaryText:targetLine==='attack'
-          ?randomFrom([`${getTeamLabel(teamId)} pisa área con ${attacker.name}.`,`${attacker.name} rompe líneas y llega el peligro.`,`¡Ojo que ${getTeamLabel(teamId)} ya está en ataque!`])
-          :randomFrom([`${attacker.name} encuentra el pase bueno.`,`Buena combinación de ${getTeamLabel(teamId)}.`,`${attacker.name} supera la presión y avanza.`,`Jugada limpia: ${attacker.name} gana metros.`])
+          ?randomFrom([`${getTeamLabel(teamId)} pisa Ã¡rea con ${attacker.name}.`,`${attacker.name} rompe lÃ­neas y llega el peligro.`,`Â¡Ojo que ${getTeamLabel(teamId)} ya estÃ¡ en ataque!`])
+          :randomFrom([`${attacker.name} encuentra el pase bueno.`,`Buena combinaciÃ³n de ${getTeamLabel(teamId)}.`,`${attacker.name} supera la presiÃ³n y avanza.`,`Jugada limpia: ${attacker.name} gana metros.`])
       });
     }
     return moveBallTo(opponentId,targetLine,{
@@ -915,8 +916,8 @@ const footballEngine=(()=>{
       bannerText:`${defender.name} gana el duelo.`,
       bannerTone:teamId==='yago'?'bad':'good',
       eventKind:'steal',
-      explanation:makeDuelExplanation('Has acertado, pero no siempre avanzas: el acierto crea la jugada; el defensor puede ganar si su defensa sale más alta.',attacker.name,defender.name,duel,false),
-      commentaryText:randomFrom([`Robo de ${getTeamLabel(opponentId)}.`,`La defensa se anticipa y recupera ${getTeamLabel(opponentId)}.`,`Corte importante: balón para ${getTeamLabel(opponentId)}.`])
+      explanation:makeDuelExplanation('Has acertado, pero no siempre avanzas: el acierto crea la jugada; el defensor puede ganar si su defensa sale mÃ¡s alta.',attacker.name,defender.name,duel,false),
+      commentaryText:randomFrom([`Robo de ${getTeamLabel(opponentId)}.`,`La defensa se anticipa y recupera ${getTeamLabel(opponentId)}.`,`Corte importante: balÃ³n para ${getTeamLabel(opponentId)}.`])
     });
   }
 
@@ -926,7 +927,7 @@ const footballEngine=(()=>{
     const lineKey=state.line;
     const recoverer=pickRecoveryPlayer(teamId,lineKey);
     const carrier=ballOwner||pickZoneDefender(opponentId,lineKey);
-    const duel=resolveContest(getRecoveryPower(recoverer,lineKey),getRetentionPower(carrier,lineKey),'robo/presión','control del balón',bonus);
+    const duel=resolveContest(getRecoveryPower(recoverer,lineKey),getRetentionPower(carrier,lineKey),'robo/presiÃ³n','control del balÃ³n',bonus);
     if(duel.attackerWins){
       return moveBallTo(teamId,lineKey,{
         playerId:recoverer.id,
@@ -936,18 +937,18 @@ const footballEngine=(()=>{
         bannerTone:teamId==='yago'?'good':'bad',
         eventKind:'steal',
         explanation:makeDuelExplanation(teamId==='yago'?'Has acertado mientras atacaba el rival: eso da bonus para recuperar.':'Error: el rival recibe bonus para presionar y robar.',recoverer.name,carrier.name,duel,true),
-        commentaryText:randomFrom([`Robo de ${getTeamLabel(teamId)}.`,`Presión perfecta de ${getTeamLabel(teamId)}.`,`Recupera ${getTeamLabel(teamId)} tras una buena presión.`])
+        commentaryText:randomFrom([`Robo de ${getTeamLabel(teamId)}.`,`PresiÃ³n perfecta de ${getTeamLabel(teamId)}.`,`Recupera ${getTeamLabel(teamId)} tras una buena presiÃ³n.`])
       });
     }
     return moveBallTo(opponentId,lineKey,{
       playerId:carrier.id,
-      logText:`${carrier.name} aguanta el balón ${duel.defenseScore}-${duel.attackScore} y mantiene la posesión.`,
+      logText:`${carrier.name} aguanta el balÃ³n ${duel.defenseScore}-${duel.attackScore} y mantiene la posesiÃ³n.`,
       bannerTitle:'DUELO',
-      bannerText:`${carrier.name} resiste la presión.`,
+      bannerText:`${carrier.name} resiste la presiÃ³n.`,
       bannerTone:teamId==='yago'?'bad':'good',
       eventKind:'pass',
-      explanation:makeDuelExplanation(teamId==='yago'?'Has intentado recuperar, pero el rival protegió mejor el balón.':'El rival intentó robar, pero tu jugador protegió el balón.',recoverer.name,carrier.name,duel,false),
-      commentaryText:randomFrom([`${getTeamLabel(opponentId)} protege la pelota.`,`No hay robo: ${getTeamLabel(opponentId)} conserva el balón.`,`Aguanta bien ${getTeamLabel(opponentId)} y sigue la jugada.`])
+      explanation:makeDuelExplanation(teamId==='yago'?'Has intentado recuperar, pero el rival protegiÃ³ mejor el balÃ³n.':'El rival intentÃ³ robar, pero tu jugador protegiÃ³ el balÃ³n.',recoverer.name,carrier.name,duel,false),
+      commentaryText:randomFrom([`${getTeamLabel(opponentId)} protege la pelota.`,`No hay robo: ${getTeamLabel(opponentId)} conserva el balÃ³n.`,`Aguanta bien ${getTeamLabel(opponentId)} y sigue la jugada.`])
     });
   }
 
@@ -957,15 +958,31 @@ const footballEngine=(()=>{
     const goalkeeper=pickZoneDefender(getOpponentId(teamId),'goalkeeper');
     pendingWordSpeech=null;
     const duel=resolveContest(getShotPower(attacker)+3,getSavePower(goalkeeper)*0.82,'tiro','parada',isYago?2:4);
+    if(duel.attackerWins && (state.interactionsSinceGoal||0)<6){
+      const saveY=isYago?28:72;
+      const saveX=Math.max(22,Math.min(78,getX(goalkeeper)+(Math.random()>.5?8:-8)));
+      return moveBallTo(getOpponentId(teamId),'goalkeeper',{
+        playerId:goalkeeper.id,
+        ballTarget:{x:saveX,y:saveY},
+        logText:`${goalkeeper.name} bloquea el tiro: hacen falta 6 interacciones antes de marcar.`,
+        bannerTitle:'JUGADA',
+        bannerText:`Van ${state.interactionsSinceGoal||0}/6 interacciones antes de gol.`,
+        bannerTone:isYago?'good':'bad',
+        eventKind:'save',
+        keeperId:goalkeeper.id,
+        explanation:makeDuelExplanation('Necesitas 6 interacciones de spelling antes de que un tiro pueda acabar en gol. Esta jugada cuenta, pero el marcador espera.',attacker.name,goalkeeper.name,duel,false),
+        commentaryText:randomFrom([`Todavia no puede haber gol: faltan jugadas de spelling.`,`El portero frena la jugada; hacen falta seis interacciones antes del gol.`,`Buena llegada, pero el partido pide seis interacciones antes de marcar.`])
+      });
+    }
     if(duel.attackerWins){
       state.score[teamId]+=1;
       addLog(`${attacker.name} chuta ${duel.attackScore}-${duel.defenseScore} y marca para ${getTeamLabel(teamId)}.`);
       state.ballTarget={x:50,y:isYago?4:96};
       state.lastExplanation=makeDuelExplanation('Tiro a puerta: se compara el tiro del atacante con la parada del portero.',attacker.name,goalkeeper.name,duel,true);
-      showBanner('¡GOOOL!','Disparo potente y la pelota entra.',isYago?'good':'bad',1600,'goal');
+      showBanner('Â¡GOOOL!','Disparo potente y la pelota entra.',isYago?'good':'bad',1600,'goal');
       if(state.lastEvent) state.lastEvent.keeperId=goalkeeper.id;
       const scoreText=`${state.score.yago} a ${state.score.rival}`;
-      const goalVoice=randomFrom([`¡Goooooooool de ${getTeamLabel(teamId)}! ¡Marca ${attacker.name}! Atención, marcador: ${scoreText}.`,`¡Gol, gol, gol! ${attacker.name} la manda dentro para ${getTeamLabel(teamId)}. El partido va ${scoreText}.`,`¡Goooooooool! ${getTeamLabel(teamId)} suma uno con ${attacker.name}. Marcador actualizado: ${scoreText}.`]);
+      const goalVoice=randomFrom([`Â¡Goooooooool de ${getTeamLabel(teamId)}! Â¡Marca ${attacker.name}! AtenciÃ³n, marcador: ${scoreText}.`,`Â¡Gol, gol, gol! ${attacker.name} la manda dentro para ${getTeamLabel(teamId)}. El partido va ${scoreText}.`,`Â¡Goooooooool! ${getTeamLabel(teamId)} suma uno con ${attacker.name}. Marcador actualizado: ${scoreText}.`]);
       speakCommentary(goalVoice,true);
       render();
       return setTimeout(()=>resetAfterGoal(getOpponentId(teamId)),950);
@@ -976,13 +993,13 @@ const footballEngine=(()=>{
       playerId:goalkeeper.id,
       ballTarget:{x:saveX,y:saveY},
       logText:`${goalkeeper.name} para el tiro ${duel.defenseScore}-${duel.attackScore} de ${attacker.name}.`,
-      bannerTitle:'¡PARADA!',
+      bannerTitle:'Â¡PARADA!',
       bannerText:`${goalkeeper.name} gana el duelo bajo palos.`,
       bannerTone:isYago?'bad':'good',
       eventKind:'save',
       keeperId:goalkeeper.id,
-      explanation:makeDuelExplanation('Tiro a puerta: si la parada supera al tiro, el balón se queda dentro del campo, delante del portero.',attacker.name,goalkeeper.name,duel,false),
-      commentaryText:randomFrom([`¡Paradón de ${goalkeeper.name}! El balón queda vivo dentro del campo.`,`¡Qué parada de ${goalkeeper.name}! Evita el gol y se queda con la pelota.`,`¡Mano salvadora de ${goalkeeper.name}! No entra, sigue el partido.`])
+      explanation:makeDuelExplanation('Tiro a puerta: si la parada supera al tiro, el balÃ³n se queda dentro del campo, delante del portero.',attacker.name,goalkeeper.name,duel,false),
+      commentaryText:randomFrom([`Â¡ParadÃ³n de ${goalkeeper.name}! El balÃ³n queda vivo dentro del campo.`,`Â¡QuÃ© parada de ${goalkeeper.name}! Evita el gol y se queda con la pelota.`,`Â¡Mano salvadora de ${goalkeeper.name}! No entra, sigue el partido.`])
     });
   }
 
@@ -1003,7 +1020,7 @@ const footballEngine=(()=>{
       bannerTone:teamId==='yago'?'good':'bad',
       eventKind:'pass',
       explanation:reasonText||'Si fallas mientras el rival tiene la pelota, no hay robo de Atletic: el rival conserva y avanza.',
-      commentaryText:randomFrom([`${getTeamLabel(teamId)} conserva la pelota y avanza.`,`${actor.name} sigue conduciendo para ${getTeamLabel(teamId)}.`,`${getTeamLabel(teamId)} progresa con el balón controlado.`])
+      commentaryText:randomFrom([`${getTeamLabel(teamId)} conserva la pelota y avanza.`,`${actor.name} sigue conduciendo para ${getTeamLabel(teamId)}.`,`${getTeamLabel(teamId)} progresa con el balÃ³n controlado.`])
     });
   }
 
@@ -1022,7 +1039,7 @@ const footballEngine=(()=>{
       return attemptRecovery('rival',12);
     }
     if(state.line==='attack') return resolveShot('rival');
-    return forceAdvanceForTeam('rival','Has fallado mientras el rival tenía la pelota: el rival no la pierde, conserva y avanza hacia la portería.');
+    return forceAdvanceForTeam('rival','Has fallado mientras el rival tenÃ­a la pelota: el rival no la pierde, conserva y avanza hacia la porterÃ­a.');
   }
 
   function resetAfterGoal(kickoffTeam){
@@ -1183,34 +1200,34 @@ const footballEngine=(()=>{
   return {init,render,reset,onSpellingSuccess,onSpellingFail,getScoreText,getPossessionText,getZoneText};
 })();
 function updateStats(){$('#goodCount').textContent=stats.good;$('#badCount').textContent=stats.bad;$('#streakCount').textContent=stats.streak;$('#stepCount').textContent=footballEngine.getScoreText();$('#livesLabel').textContent=footballEngine.getPossessionText();$('#goalLabel').textContent=footballEngine.getZoneText();$('#currentIndex').textContent=window.datasetStates.length?index+1:0;$('#totalCount').textContent=window.datasetStates.length;$('#datasetName').textContent=datasetName;$('#playersDatasetName').textContent=`Jugadores: ${playersDatasetName}`;}
-function render(){const s=current();if(!s){$('#spanishWord').textContent='Sin datos';$('#statusPill').textContent='Vacío';$('#letters').innerHTML='';updateStats();footballEngine.render();renderPlayersEditor();return;}$('#spanishWord').textContent=s.spanish;$('#modeExplain').textContent=mode==='blind'?'Blind: solo te guías por la palabra en español y por el audio si quieres usarlo.':'Tricky letters: algunas letras ya están y tú completas solo las que faltan.';$('#statusPill').textContent=s.revealed?'Solución':s.solved?'¡Bien!':s.checked?'Revisa :-) ':'Pendiente';const total=blanksTotal(s),done=blanksDone(s),pct=total?Math.round(done*100/total):100;$('#progressBar').style.width=pct+'%';$('#statusPill').style.background=s.checked&&!s.solved?'#fff1d6':'#effbf1';$('#statusPill').style.color=s.checked&&!s.solved?'#8a5800':'#2c7a4b';renderLetters();footballEngine.render();renderPlayersEditor();updateStats();setButtons();}
+function render(){const s=current();if(!s){$('#spanishWord').textContent='Sin datos';$('#statusPill').textContent='VacÃ­o';$('#letters').innerHTML='';updateStats();footballEngine.render();renderPlayersEditor();return;}$('#spanishWord').textContent=s.spanish;$('#modeExplain').textContent=mode==='blind'?'Blind: solo te guÃ­as por la palabra en espaÃ±ol y por el audio si quieres usarlo.':'Tricky letters: algunas letras ya estÃ¡n y tÃº completas solo las que faltan.';$('#statusPill').textContent=s.revealed?'SoluciÃ³n':s.solved?'Â¡Bien!':s.checked?'Revisa :-) ':'Pendiente';const total=blanksTotal(s),done=blanksDone(s),pct=total?Math.round(done*100/total):100;$('#progressBar').style.width=pct+'%';$('#statusPill').style.background=s.checked&&!s.solved?'#fff1d6':'#effbf1';$('#statusPill').style.color=s.checked&&!s.solved?'#8a5800':'#2c7a4b';renderLetters();footballEngine.render();renderPlayersEditor();updateStats();setButtons();}
 function setButtons(){
   $('#modeClassicBtn').classList.toggle('active',mode==='classic');
   $('#modeBlindBtn').classList.toggle('active',mode==='blind');
-  $('#autoAudioBtn').textContent=autoAudio?'Audio Spelling: sí':'Audio Spelling: no';
+  $('#autoAudioBtn').textContent=autoAudio?'Audio Spelling: sÃ­':'Audio Spelling: no';
   $('#autoAudioBtn').classList.toggle('active',autoAudio);
-  $('#commentaryBtn').textContent=commentaryEnabled?'Audio Partido: sí':'Audio Partido: no';
+  $('#commentaryBtn').textContent=commentaryEnabled?'Audio Partido: sÃ­':'Audio Partido: no';
   $('#commentaryBtn').classList.toggle('active',commentaryEnabled);
-  $('#noGameBtn').textContent=gameEnabled?'⚽ Partido: sí':'⚽ Partido: no';
+  $('#noGameBtn').textContent=gameEnabled?'âš½ Partido: sÃ­':'âš½ Partido: no';
   $('#noGameBtn').classList.toggle('active',!gameEnabled);
   if($('#formationSelect')) $('#formationSelect').value=formationKey;
   if($('#yagoRoleSelect')) $('#yagoRoleSelect').value=preferredYagoLine;
 }
 function speakCurrent(force=false){const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
-function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la soluciÃ³n: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
 function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
-function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Última letra borrada.');}
+function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Ãšltima letra borrada.');}
 function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
 function revealCurrent(){evaluateWord(true)}
-function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseño la solución y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
+function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseÃ±o la soluciÃ³n y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
 function shuffleWords(){clearAutoNext();for(let i=rawData.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rawData[i],rawData[j]]=[rawData[j],rawData[i]];}index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Partido mezclado y listo otra vez.':'Palabras mezcladas sin juego.';setMessage('Palabras mezcladas.');}
 function restartGame(){clearAutoNext();stats={good:0,bad:0,streak:0};index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Empieza un partido nuevo.':'Juego sin minijuego activado.';setMessage('Partida reiniciada.');}
 function toggleNoGame(){gameEnabled=!gameEnabled;if(!gameEnabled) pendingCommentarySpeech=null;if(gameEnabled) footballEngine.reset();render();setButtons();setMessage(gameEnabled?'Partido activado.':'Partido desactivado: solo spelling.');}
 function setMode(nextMode){clearAutoNext();mode=nextMode;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'El partido vuelve a empezar con el nuevo modo.':'Modo cambiado sin juego.';setMessage(mode==='blind'?'Modo Blind activado.':'Modo Tricky letters activado.');}
 function exportJson(){const blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='yago_common_words_game.json';a.click();URL.revokeObjectURL(url);}
 function exportAtleticTemplate(){const data={version:'atletic_roster_v1',rules:{team_mode:'fixed_atletic_names_random_lineup',atletic_team_name:'Atletic',always_include_player:'Yago',yago_is_best:false,yago_is_strong:true,never_mix_atletic_and_rivals:true,rival_team_name_mode:'random_from_list',rival_players_mode:'random_from_list'},atletic_players:atleticPlayerNames.map(name=>normalizeText(name)==='yago'?{name,role:'crack total',gk:9,def:9,mid:8,att:9,pass:9,save:9,speed:8,must_play:true,special:'best_everything'}:{name}),rival_team_names:rivalTeamNames,rival_players:rivalPlayerNames,prompt_for_game_logic:'Atletic usa solo atletic_players. Yago siempre juega y tiene 8-9 en todo. Rival usa rival_players y rival_team_names. Nunca se mezclan.'};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='atletic_players_random.json';a.click();URL.revokeObjectURL(url);}
-function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>String(v||'').trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/español|español|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return [];return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
+function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>String(v||'').trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/espaÃ±ol|espaÃ±ol|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return [];return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
 function parsePlayerRows(rows){
   if(!rows.length) return [];
   const headers=rows[0].map(v=>normalizeText(v).replace(/\s+/g,'_'));
@@ -1240,7 +1257,7 @@ function parsePlayerRows(rows){
     lock_profile:idx('lock_profile')===-1?1:row[idx('lock_profile')]
   },rowIndex));
 }
-async function importFile(file){clearAutoNext();if(file.name.toLowerCase().endsWith('.json')){const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.length) throw new Error('El JSON no tiene datos válidos.');rawData=parsed.map(cleanEntry).filter(Boolean);}else{const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''});const parsed=parseRows(rows);if(!parsed.length) throw new Error('No encuentro columnas de inglés, patrón y español.');rawData=parsed;}datasetName=file.name;saveData();restartGame();}
+async function importFile(file){clearAutoNext();if(file.name.toLowerCase().endsWith('.json')){const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.length) throw new Error('El JSON no tiene datos vÃ¡lidos.');rawData=parsed.map(cleanEntry).filter(Boolean);}else{const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''});const parsed=parseRows(rows);if(!parsed.length) throw new Error('No encuentro columnas de inglÃ©s, patrÃ³n y espaÃ±ol.');rawData=parsed;}datasetName=file.name;saveData();restartGame();}
 function extractNamesFromRows(rows){
   if(!rows.length) return [];
   const headers=rows[0].map(v=>normalizeText(v).replace(/\\s+/g,'_'));
@@ -1284,18 +1301,18 @@ function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextT
 function showSolutionThenNext(){const s=current();if(!s) return;clearAutoNext();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});s.revealed=true;render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra. Sigue la jugada.');},2000);}
 function speakCurrent(force=false){const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
-function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la soluciÃ³n: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
 function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
-function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Última letra borrada.');}
+function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Ãšltima letra borrada.');}
 function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
 function revealCurrent(){evaluateWord(true)}
-function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseño la solución y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
+function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseÃ±o la soluciÃ³n y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
 function shuffleWords(){clearAutoNext();for(let i=rawData.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rawData[i],rawData[j]]=[rawData[j],rawData[i]];}index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Partido mezclado y listo otra vez.':'Palabras mezcladas sin juego.';setMessage('Palabras mezcladas.');}
 function restartGame(){clearAutoNext();stats={good:0,bad:0,streak:0};index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Empieza un partido nuevo.':'Juego sin minijuego activado.';setMessage('Partida reiniciada.');}
 function toggleNoGame(){gameEnabled=!gameEnabled;if(!gameEnabled) pendingCommentarySpeech=null;if(gameEnabled) footballEngine.reset();render();setButtons();setMessage(gameEnabled?'Partido activado.':'Partido desactivado: solo spelling.');}
 function setMode(nextMode){clearAutoNext();mode=nextMode;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'El partido vuelve a empezar con el nuevo modo.':'Modo cambiado sin juego.';setMessage(mode==='blind'?'Modo Blind activado.':'Modo Tricky letters activado.');}
 function exportJson(){const blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='yago_common_words_game.json';a.click();URL.revokeObjectURL(url);}
-function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>String(v||'').trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/español|español|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return [];return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
+function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>String(v||'').trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/espaÃ±ol|espaÃ±ol|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return [];return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
 function parsePlayerRows(rows){
   if(!rows.length) return [];
   const headers=rows[0].map(v=>normalizeText(v).replace(/\s+/g,'_'));
@@ -1325,7 +1342,7 @@ function parsePlayerRows(rows){
     lock_profile:idx('lock_profile')===-1?1:row[idx('lock_profile')]
   },rowIndex));
 }
-async function importFile(file){clearAutoNext();if(file.name.toLowerCase().endsWith('.json')){const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.length) throw new Error('El JSON no tiene datos válidos.');rawData=parsed.map(cleanEntry).filter(Boolean);}else{const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''});const parsed=parseRows(rows);if(!parsed.length) throw new Error('No encuentro columnas de inglés, patrón y español.');rawData=parsed;}datasetName=file.name;saveData();restartGame();}
+async function importFile(file){clearAutoNext();if(file.name.toLowerCase().endsWith('.json')){const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed)||!parsed.length) throw new Error('El JSON no tiene datos vÃ¡lidos.');rawData=parsed.map(cleanEntry).filter(Boolean);}else{const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''});const parsed=parseRows(rows);if(!parsed.length) throw new Error('No encuentro columnas de inglÃ©s, patrÃ³n y espaÃ±ol.');rawData=parsed;}datasetName=file.name;saveData();restartGame();}
 async function importPlayersFile(file){
   if(file.name.toLowerCase().endsWith('.json')){
     const parsed=JSON.parse(await file.text());
@@ -1368,7 +1385,7 @@ document.addEventListener('pointerdown',userActivate,{capture:true,passive:true}
 document.addEventListener('click',e=>{unlockSpeech();if(!isInteractiveTarget(e.target)) focusInput();},{capture:true});
 $('#hiddenInput').addEventListener('input',e=>{const value=e.target.value.toLowerCase().replace(/[^a-z]/g,'');if(value) [...value].forEach(insertLetter);e.target.value='';});
 document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();deleteLast();}});
-$('#menuBtn').addEventListener('click',()=>window.location.href='../index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{unlockSpeech();autoAudio=!autoAudio;if(!autoAudio){pendingWordSpeech=null;}setButtons();setMessage(autoAudio?'Audio de la palabra activado.':'Audio de la palabra desactivado.');if(autoAudio){if(IS_IOS){forceSpeakWordNow();}else{speakCurrent();}}});$('#commentaryBtn').addEventListener('click',()=>{unlockSpeech();commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled){pendingCommentarySpeech=null;}setButtons();setMessage(commentaryEnabled?'Audio del partido activado.':'Audio del partido desactivado.');});$('#repeatAudioBtn').addEventListener('click',()=>{unlockSpeech();if(IS_IOS){forceSpeakWordNow(true);}else{speakCurrent(true);}});$('#shuffleVerbsBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);if($('#exportPlayersTopBtn')) $('#exportPlayersTopBtn').addEventListener('click',exportAtleticTemplate);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuración.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Formación actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Posición preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
+$('#menuBtn').addEventListener('click',()=>window.location.href='../index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{unlockSpeech();autoAudio=!autoAudio;if(!autoAudio){pendingWordSpeech=null;}setButtons();setMessage(autoAudio?'Audio de la palabra activado.':'Audio de la palabra desactivado.');if(autoAudio){if(IS_IOS){forceSpeakWordNow();}else{speakCurrent();}}});$('#commentaryBtn').addEventListener('click',()=>{unlockSpeech();commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled){pendingCommentarySpeech=null;}setButtons();setMessage(commentaryEnabled?'Audio del partido activado.':'Audio del partido desactivado.');});$('#repeatAudioBtn').addEventListener('click',()=>{unlockSpeech();if(IS_IOS){forceSpeakWordNow(true);}else{speakCurrent(true);}});$('#shuffleVerbsBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);if($('#exportPlayersTopBtn')) $('#exportPlayersTopBtn').addEventListener('click',exportAtleticTemplate);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuraciÃ³n.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('FormaciÃ³n actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('PosiciÃ³n preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
 $('#playersEditor').addEventListener('change',e=>{});
 
 function relocateFootballInfoPanel(){
@@ -1436,7 +1453,7 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
     var low=t.toLowerCase();
     var team=low.indexOf('rival')!==-1?'Rival':'Atletic';
     if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
-    if(/parad|parada|mano salvadora|evita el gol/.test(low)) return t.match(/de ([^.!?]+)/i)?'Paradón de '+t.match(/de ([^.!?]+)/i)[1].replace(/\s*(el balón|no entra|evita).*$/i,'')+'.':'Paradón.';
+    if(/parad|parada|mano salvadora|evita el gol/.test(low)) return t.match(/de ([^.!?]+)/i)?'ParadÃ³n de '+t.match(/de ([^.!?]+)/i)[1].replace(/\s*(el balÃ³n|no entra|evita).*$/i,'')+'.':'ParadÃ³n.';
     if(/chuta|dispara/.test(low)) return t.replace(/\..*$/,'').replace(/Atletic/g,'Atletic')+'.';
     if(/robo|recupera|corte/.test(low)) return 'Recupera '+team+'.';
     if(/saca/.test(low)) return 'Saca '+team+'.';
@@ -1447,7 +1464,7 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
   function makeUtterance(item){
     var u=new SpeechSynthesisUtterance(item.type==='commentary'?shortenFootballSpeech(item.text):item.text);
     if(item.type==='commentary'){
-      var es=pickVoice('es','Google|Monica|Paulina|Jorge|Luciana|Helena|Mónica');
+      var es=pickVoice('es','Google|Monica|Paulina|Jorge|Luciana|Helena|MÃ³nica');
       if(es) u.voice=es;
       u.lang=(es&&es.lang)||'es-ES';
       u.rate=1.08;
@@ -1477,7 +1494,7 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
     speechBusy=true;
     currentUtterance=makeUtterance(speechQueue.shift());
     try{
-      // Limpia estados fantasma de Safari sin cancelar una locución activa nuestra.
+      // Limpia estados fantasma de Safari sin cancelar una locuciÃ³n activa nuestra.
       window.speechSynthesis.cancel();
       window.speechSynthesis.resume();
       window.speechSynthesis.speak(currentUtterance);
@@ -1605,7 +1622,7 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
 
 
 <style id="valentina-ipad-final-fixes">
-/* iPad: botones a la derecha del título y siempre accesibles */
+/* iPad: botones a la derecha del tÃ­tulo y siempre accesibles */
 .hero{height:auto!important;min-height:112px!important;overflow:visible!important;position:relative!important}
 .topline{display:grid!important;grid-template-columns:minmax(230px,0.85fr) minmax(520px,1.6fr)!important;align-items:start!important;gap:8px!important}
 .hero .controls{grid-column:2!important;grid-row:1!important;margin-top:0!important;display:flex!important;flex-wrap:wrap!important;overflow:visible!important;justify-content:flex-end!important;align-content:flex-start!important;gap:5px!important;max-height:74px!important}
@@ -1614,14 +1631,14 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
 .title{font-size:clamp(20px,2.55vw,30px)!important;line-height:1.03!important;max-width:100%!important}.badge{font-size:8.5px!important}.stats{margin-top:4px!important}
 :root{--hero-h:128px!important;--field-h:calc(var(--compact-vh) - var(--hero-h) - 28px)!important}
 
-/* Botón Partido: si está en no, desaparece todo el bloque de fútbol */
+/* BotÃ³n Partido: si estÃ¡ en no, desaparece todo el bloque de fÃºtbol */
 body.no-football .match-stage,
 body.no-football .side-game-card,
 body.no-football .clue-card .football-status-grid,
 body.no-football .clue-card .football-editor-panel{display:none!important;visibility:hidden!important;opacity:0!important}
 .game-grid.no-game{grid-template-columns:1fr!important}
 
-/* Editor abajo a la izquierda, compacto y con botón para mostrar/ocultar */
+/* Editor abajo a la izquierda, compacto y con botÃ³n para mostrar/ocultar */
 .clue-card{position:relative!important}.clue-card .football-editor-panel{display:none!important;position:absolute!important;left:10px!important;bottom:10px!important;width:min(540px,calc(100% - 20px))!important;max-height:38vh!important;z-index:25!important;background:rgba(255,255,255,.97)!important;box-shadow:0 12px 28px rgba(20,69,75,.18)!important;overflow:hidden!important}.clue-card.editor-open .football-editor-panel{display:block!important}.clue-card .football-editor-grid{max-height:calc(38vh - 64px)!important}.clue-card .football-editor-row{grid-template-columns:minmax(92px,1.35fr) repeat(7,minmax(35px,.45fr)) repeat(8,minmax(28px,.32fr))!important;font-size:9px!important}.clue-card .football-editor-toolbar label.btn{padding:5px 6px!important;font-size:9px!important}
 
 body.keyboard-open .hero .controls{position:static!important;max-width:none!important;display:flex!important;justify-content:flex-end!important}body.keyboard-open #togglePlayersEditorBtn,body.keyboard-open #noGameBtn,body.keyboard-open #repeatAudioBtn,body.keyboard-open #autoAudioBtn,body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}body.keyboard-open .topline{grid-template-columns:minmax(180px,.7fr) minmax(450px,1.6fr)!important}body.keyboard-open .clue-card .football-editor-panel{max-height:30vh!important}.game-grid.no-game{grid-template-columns:1fr!important}
@@ -1633,7 +1650,7 @@ body.keyboard-open .hero .controls{position:static!important;max-width:none!impo
   function preferMaleVoice(prefix){
     var list=[];try{list=window.speechSynthesis.getVoices()||[]}catch(e){}
     var male=/\b(Daniel|Alex|Fred|Tom|Thomas|Arthur|Oliver|Aaron|Ralph|George|Jorge|Diego|Carlos|Google UK English Male|Microsoft.*(David|Mark|George|Ryan|James|Guy))\b/i;
-    var female=/\b(Samantha|Serena|Karen|Moira|Tessa|Susan|Zira|Hazel|Mónica|Monica|Paulina|Luciana|Helena)\b/i;
+    var female=/\b(Samantha|Serena|Karen|Moira|Tessa|Susan|Zira|Hazel|MÃ³nica|Monica|Paulina|Luciana|Helena)\b/i;
     return list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&male.test(v.name)})||
            list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&!female.test(v.name)})||
            list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0})||null;
@@ -1663,7 +1680,7 @@ body.keyboard-open .hero .controls{position:static!important;max-width:none!impo
     var btn=byId('togglePlayersEditorBtn');var clue=document.querySelector('.clue-card');
     if(!btn||!clue) return;
     var open=clue.classList.contains('editor-open');
-    btn.textContent=open?'Editor jugadores: sí':'Editor jugadores: no';
+    btn.textContent=open?'Editor jugadores: sÃ­':'Editor jugadores: no';
     btn.classList.toggle('active',open);
   }
   function toggleEditor(e){e&&e.preventDefault();var clue=document.querySelector('.clue-card');if(!clue) return;clue.classList.toggle('editor-open');setEditorButton();}
@@ -1690,7 +1707,7 @@ body.keyboard-open .hero .controls{position:static!important;max-width:none!impo
 </script>
 
 <style id="valentina-requested-final-overrides">
-/* Cambios solicitados: un solo botón de mezcla, Partido sí/no real y campo oculto en Partido:no */
+/* Cambios solicitados: un solo botÃ³n de mezcla, Partido sÃ­/no real y campo oculto en Partido:no */
 #shuffleBtn{display:none!important}
 body.no-football .match-stage,
 body.no-football .side-game-card,
@@ -1713,7 +1730,7 @@ body.no-football .football-editor-panel{display:none!important;visibility:hidden
     if(stage) stage.classList.toggle('hidden',no);
     if(card) card.classList.toggle('hidden',no);
     var btn=byId('noGameBtn');
-    if(btn){btn.textContent=no?'⚽ Partido: no':'⚽ Partido: sí';btn.classList.toggle('active',no);}
+    if(btn){btn.textContent=no?'âš½ Partido: no':'âš½ Partido: sÃ­';btn.classList.toggle('active',no);}
   }
   function updateFieldFromSelectors(message){
     var f=byId('formationSelect'), y=byId('yagoRoleSelect');
@@ -1727,7 +1744,7 @@ body.no-football .football-editor-panel{display:none!important;visibility:hidden
   }
   window.addEventListener('load',function(){
     var shuffle=byId('shuffleVerbsBtn');
-    if(shuffle){shuffle.textContent='🔀 Verbos';shuffle.title='Mezclar verbos';}
+    if(shuffle){shuffle.textContent='ðŸ”€ Verbos';shuffle.title='Mezclar verbos';}
     var noBtn=byId('noGameBtn');
     if(noBtn){
       var fresh=noBtn.cloneNode(true);
@@ -1746,21 +1763,21 @@ body.no-football .football-editor-panel{display:none!important;visibility:hidden
     var f=byId('formationSelect');
     if(f){
       var freshF=f.cloneNode(true); f.parentNode.replaceChild(freshF,f); freshF.value=formationKey;
-      freshF.addEventListener('change',function(){updateFieldFromSelectors('Formación actualizada.');});
+      freshF.addEventListener('change',function(){updateFieldFromSelectors('FormaciÃ³n actualizada.');});
     }
     var y=byId('yagoRoleSelect');
     if(y){
       var freshY=y.cloneNode(true); y.parentNode.replaceChild(freshY,y); freshY.value=preferredYagoLine;
-      freshY.addEventListener('change',function(){updateFieldFromSelectors('Posición de Yago actualizada.');});
+      freshY.addEventListener('change',function(){updateFieldFromSelectors('PosiciÃ³n de Yago actualizada.');});
     }
     applyPartidoVisibility();
   });
 })();
 </script>
 
-<!-- PATCH FINAL: selects tácticos accesibles en iPad -->
+<!-- PATCH FINAL: selects tÃ¡cticos accesibles en iPad -->
 <style id="valentina-selects-ipad-fix">
-/* Los estilos compactos anteriores escondían estos controles cuando el teclado estaba abierto. */
+/* Los estilos compactos anteriores escondÃ­an estos controles cuando el teclado estaba abierto. */
 body.keyboard-open #formationSelect,
 body.keyboard-open #yagoRoleSelect,
 body.keyboard-open #regenTeamsBtn{
@@ -1815,20 +1832,20 @@ body.keyboard-open #regenTeamsBtn{
       f.dataset.tacticChangeFixed='1';
       f.addEventListener('change',function(){
         formationKey=f.value;
-        resetTeams('Formación actualizada: '+f.options[f.selectedIndex].text+'.');
+        resetTeams('FormaciÃ³n actualizada: '+f.options[f.selectedIndex].text+'.');
       });
     }
     if(y && !y.dataset.tacticChangeFixed){
       y.dataset.tacticChangeFixed='1';
       y.addEventListener('change',function(){
         preferredYagoLine=y.value;
-        resetTeams('Posición de Yago actualizada: '+y.options[y.selectedIndex].text+'.');
+        resetTeams('PosiciÃ³n de Yago actualizada: '+y.options[y.selectedIndex].text+'.');
       });
     }
     if(r && !r.dataset.regenExplainedFixed){
       r.dataset.regenExplainedFixed='1';
       r.addEventListener('click',function(){
-        resetTeams('Equipos regenerados: se vuelven a escoger y colocar jugadores según la formación y la posición de Yago.');
+        resetTeams('Equipos regenerados: se vuelven a escoger y colocar jugadores segÃºn la formaciÃ³n y la posiciÃ³n de Yago.');
       });
     }
   }
@@ -1887,7 +1904,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect,body.keyb
 </style>
 
 
-<!-- PATCH: botones tácticos sin desplegable para iPad -->
+<!-- PATCH: botones tÃ¡cticos sin desplegable para iPad -->
 <style id="valentina-tactic-cycle-buttons">
 .tactic-hidden-select{display:none!important;visibility:hidden!important;position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 #formationCycleBtn,#yagoRoleCycleBtn{display:inline-flex!important;align-items:center;justify-content:center;gap:4px;white-space:nowrap;pointer-events:auto!important;touch-action:manipulation!important;position:relative!important;z-index:10000!important}
@@ -1897,10 +1914,10 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
 <script id="valentina-tactic-cycle-buttons-script">
 (function(){
   var formationOptions=[
-    {value:'1-2-2-1',label:'Formación 1-2-2-1'},
-    {value:'1-3-1-1',label:'Formación 1-3-1-1'},
-    {value:'1-2-1-2',label:'Formación 1-2-1-2'},
-    {value:'1-1-3-1',label:'Formación 1-1-3-1'}
+    {value:'1-2-2-1',label:'FormaciÃ³n 1-2-2-1'},
+    {value:'1-3-1-1',label:'FormaciÃ³n 1-3-1-1'},
+    {value:'1-2-1-2',label:'FormaciÃ³n 1-2-1-2'},
+    {value:'1-1-3-1',label:'FormaciÃ³n 1-1-3-1'}
   ];
   var yagoOptions=[
     {value:'goalkeeper',label:'Yago portero'},
@@ -1940,7 +1957,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
         e.preventDefault(); e.stopPropagation(); safeBlurHidden();
         var i=getIdx(formationOptions,formationKey);
         formationKey=formationOptions[(i+1)%formationOptions.length].value;
-        applyTactics('Formación actualizada: '+formationOptions[getIdx(formationOptions,formationKey)].label+'.');
+        applyTactics('FormaciÃ³n actualizada: '+formationOptions[getIdx(formationOptions,formationKey)].label+'.');
       });
     }
     if(yb && !yb.dataset.ready){
@@ -1949,7 +1966,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
         e.preventDefault(); e.stopPropagation(); safeBlurHidden();
         var i=getIdx(yagoOptions,preferredYagoLine);
         preferredYagoLine=yagoOptions[(i+1)%yagoOptions.length].value;
-        applyTactics('Posición de Yago actualizada: '+yagoOptions[getIdx(yagoOptions,preferredYagoLine)].label+'.');
+        applyTactics('PosiciÃ³n de Yago actualizada: '+yagoOptions[getIdx(yagoOptions,preferredYagoLine)].label+'.');
       });
     }
     var oldSetButtons=window.setButtons;
@@ -2049,7 +2066,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
   .football-ball{width:25px!important;height:25px!important;margin-left:-12.5px!important;margin-top:-12.5px!important;}
 }
 
-/* Cuando el teclado está activado: comprimir todo por encima del teclado y mantener campo a la derecha */
+/* Cuando el teclado estÃ¡ activado: comprimir todo por encima del teclado y mantener campo a la derecha */
 @media (min-width:761px) and (max-width:1180px){
   body.keyboard-open{--hero-h:52px;}
   body.keyboard-open .wrap{height:var(--usable-h)!important;max-height:var(--usable-h)!important;}
@@ -2163,7 +2180,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
 
 
 
-<!-- PATCH FINAL AUDIO: partido primero, palabra después, sin interrupciones -->
+<!-- PATCH FINAL AUDIO: partido primero, palabra despuÃ©s, sin interrupciones -->
 <script id="valentina-audio-partido-antes-palabra-final">
 (function(){
   var q=[];
@@ -2176,13 +2193,13 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
   function pickVoice(prefix, malePreferred){
     var list=voices();
     var male=/\b(Daniel|Alex|Fred|Tom|Thomas|Arthur|Oliver|Aaron|Ralph|George|Jorge|Diego|Carlos|Google UK English Male|Microsoft.*(David|Mark|George|Ryan|James|Guy))\b/i;
-    var female=/\b(Samantha|Serena|Karen|Moira|Tessa|Susan|Zira|Hazel|Mónica|Monica|Paulina|Luciana|Helena)\b/i;
+    var female=/\b(Samantha|Serena|Karen|Moira|Tessa|Susan|Zira|Hazel|MÃ³nica|Monica|Paulina|Luciana|Helena)\b/i;
     if(malePreferred){
       return list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&male.test(v.name)})||
              list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&!female.test(v.name)})||
              list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0})||null;
     }
-    return list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&/Google|Monica|Mónica|Paulina|Jorge|Diego|Carlos|Luciana|Helena/i.test(v.name)})||
+    return list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&/Google|Monica|MÃ³nica|Paulina|Jorge|Diego|Carlos|Luciana|Helena/i.test(v.name)})||
            list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0})||null;
   }
   function shortFootball(text){
@@ -2190,7 +2207,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
     var low=t.toLowerCase();
     var team=low.indexOf('rival')!==-1?'Rival':'Atletic';
     if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
-    if(/parad|parada|mano salvadora|evita el gol/.test(low)) return t.match(/de ([^.!?]+)/i)?'Paradón de '+t.match(/de ([^.!?]+)/i)[1].replace(/\s*(el balón|no entra|evita).*$/i,'')+'.':'Paradón.';
+    if(/parad|parada|mano salvadora|evita el gol/.test(low)) return t.match(/de ([^.!?]+)/i)?'ParadÃ³n de '+t.match(/de ([^.!?]+)/i)[1].replace(/\s*(el balÃ³n|no entra|evita).*$/i,'')+'.':'ParadÃ³n.';
     if(/chuta|dispara/.test(low)) return t.split(/[.!?]/)[0]+'.';
     if(/robo|recupera|corte/.test(low)) return 'Recupera '+team+'.';
     if(/saca/.test(low)) return 'Saca '+team+'.';
@@ -2248,13 +2265,13 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
   window.speakCommentary=function(text,urgent){
     if(typeof commentaryEnabled!=='undefined'&&!commentaryEnabled) return;
     if(typeof gameEnabled!=='undefined'&&!gameEnabled) return;
-    // No se cancela la palabra actual: la locución de partido queda en cola y se respeta el orden.
+    // No se cancela la palabra actual: la locuciÃ³n de partido queda en cola y se respeta el orden.
     enqueue(text,'commentary',false);
   };
   window.speakCurrent=function(force){
     var s=(typeof current==='function')?current():null;
     if(!s) return;
-    // La palabra se añade después de cualquier locución de partido pendiente.
+    // La palabra se aÃ±ade despuÃ©s de cualquier locuciÃ³n de partido pendiente.
     enqueue(s.english,'word',!!force);
     if(force&&typeof setMessage==='function') setMessage('Escucha y completa la palabra.');
   };
@@ -2271,8 +2288,8 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
   function qs(id){return document.getElementById(id)}
   function syncAudioButtons(){
     var w=qs('autoAudioBtn'), f=qs('commentaryBtn'), e=qs('togglePlayersEditorBtn');
-    if(w){w.textContent=(typeof autoAudio==='undefined'||autoAudio)?'Audio Spelling: sí':'🔤 Audio Spelling: no';w.classList.toggle('active',typeof autoAudio!=='undefined'&&!!autoAudio);}
-    if(f){f.style.display='inline-flex';f.textContent=(typeof commentaryEnabled==='undefined'||commentaryEnabled)?'Audio Partido: sí':'Audio Partido: no';f.classList.toggle('active',typeof commentaryEnabled!=='undefined'&&!!commentaryEnabled);}
+    if(w){w.textContent=(typeof autoAudio==='undefined'||autoAudio)?'Audio Spelling: sÃ­':'ðŸ”¤ Audio Spelling: no';w.classList.toggle('active',typeof autoAudio!=='undefined'&&!!autoAudio);}
+    if(f){f.style.display='inline-flex';f.textContent=(typeof commentaryEnabled==='undefined'||commentaryEnabled)?'Audio Partido: sÃ­':'Audio Partido: no';f.classList.toggle('active',typeof commentaryEnabled!=='undefined'&&!!commentaryEnabled);}
     if(e) e.remove();
     document.querySelectorAll('.football-editor-panel').forEach(function(x){x.remove();});
   }
@@ -2345,7 +2362,7 @@ body.keyboard-open .wrap{height:var(--ios-vh,100dvh)!important;max-height:var(--
 
 <!-- === Valentina iPad football fixes v3 === -->
 <style id="valentina-football-ipad-v3">
-/* 1) Bloque superior: todos los botones visibles en una o dos líneas, vertical y horizontal */
+/* 1) Bloque superior: todos los botones visibles en una o dos lÃ­neas, vertical y horizontal */
 .hero{min-height:0!important;height:auto!important;overflow:visible!important;padding:6px 8px!important}
 .topline{display:grid!important;grid-template-columns:minmax(160px,.42fr) minmax(0,1fr)!important;gap:6px!important;align-items:start!important}
 .title{font-size:clamp(17px,2.1vw,26px)!important;line-height:1!important;margin:1px 0 0!important}
@@ -2369,7 +2386,7 @@ body.keyboard-open{--hero-h:58px!important}.keyboard-open .stats,.keyboard-open 
 }
 @media (max-width:760px){.controls{display:flex!important}.match-stage{display:grid!important}.game-grid,.game-grid.no-game{grid-template-columns:1fr!important;overflow:auto!important}}
 
-/* 2) Log del partido visible: sin corte y con scroll cómodo */
+/* 2) Log del partido visible: sin corte y con scroll cÃ³modo */
 .football-status-grid{overflow:visible!important;grid-auto-rows:min-content!important}
 .panel-mini{display:block!important;min-height:0!important;overflow:visible!important}
 .football-log{display:block!important;max-height:clamp(120px,24vh,260px)!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;padding-right:2px!important}
@@ -2378,7 +2395,7 @@ body.keyboard-open .panel-mini{display:block!important}
 body.keyboard-open .football-log{max-height:72px!important}
 @media (orientation:portrait){.football-panel{grid-template-columns:1fr!important}.football-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.panel-mini{grid-column:1/-1!important}.football-log{max-height:150px!important}}
 
-/* 3) Nombre de jugadores al lado, pequeño, sin tapar al jugador */
+/* 3) Nombre de jugadores al lado, pequeÃ±o, sin tapar al jugador */
 .football-player-wrap{overflow:visible!important;z-index:4!important}
 .football-player-name{position:absolute!important;left:calc(100% + 3px)!important;top:50%!important;transform:translateY(-50%)!important;margin:0!important;min-width:0!important;max-width:72px!important;padding:2px 5px!important;border-radius:999px!important;background:rgba(255,255,255,.92)!important;color:#173b2d!important;text-shadow:none!important;box-shadow:0 2px 7px rgba(0,0,0,.12)!important;font-size:9px!important;line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;pointer-events:none!important}
 .football-player.has-ball + .football-player-name{font-weight:900!important;background:rgba(255,246,168,.96)!important;color:#513b00!important}
@@ -2395,7 +2412,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     if(rival && rival!=='Rival' && new RegExp(cleanTeamName(rival),'i').test(t)) return rival;
     if(/\brival\b|contrario|oponente/.test(low)) return rival||'Rival';
     if(/\bAtletic\b/i.test(t)) return 'Atletic';
-    // Si habla de robo/recuperación y la posesión visible no es Atletic, usa el equipo visible.
+    // Si habla de robo/recuperaciÃ³n y la posesiÃ³n visible no es Atletic, usa el equipo visible.
     var poss=document.getElementById('footballPossession');
     var p=poss?poss.textContent.trim():'';
     if(p && p!=='Atletic') return p;
@@ -2408,7 +2425,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var first=t.split(/[.!?]/)[0];
     if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
     if(/parad|parada|mano salvadora|evita el gol/.test(low)) return first.replace(/Atletic/g,'Atletic').slice(0,75)+'.';
-    if(/robo|recupera|corte|presión perfecta|presion perfecta/.test(low)) return 'Recupera '+team+'.';
+    if(/robo|recupera|corte|presiÃ³n perfecta|presion perfecta/.test(low)) return 'Recupera '+team+'.';
     if(/saca/.test(low)) return 'Saca '+team+'.';
     if(/chuta|dispara/.test(low)) return first.slice(0,70)+'.';
     if(/pase|avanza|oportunidad|aguanta|protege/.test(low)) return first.slice(0,70)+'.';
@@ -2419,7 +2436,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var fixed=shortFootball(text);
     if(typeof oldSpeak==='function') return oldSpeak(fixed,urgent);
   };
-  // Mantiene el log siempre scrolleado arriba para ver el último evento completo.
+  // Mantiene el log siempre scrolleado arriba para ver el Ãºltimo evento completo.
   var oldRender=window.render;
   if(typeof oldRender==='function'){
     window.render=function(){
@@ -2482,7 +2499,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     if(rv && rv!=='Rival' && t.toLowerCase().indexOf(rv.toLowerCase())!==-1) return rv;
     if(/\brival\b|contrario|oponente/.test(low)) return rv;
     if(/\batletic\b/i.test(t)) return 'Atletic';
-    if(/robo|recupera|corte|se anticipa|presión perfecta|presion perfecta/.test(low)){
+    if(/robo|recupera|corte|se anticipa|presiÃ³n perfecta|presion perfecta/.test(low)){
       var p=visiblePossession();
       return p||rv;
     }
@@ -2499,7 +2516,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var first=t.split(/[.!?]/)[0];
     if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
     if(/saca/.test(low)) return 'Saca '+team+' desde el centro.';
-    if(/robo|recupera|corte|se anticipa|presión perfecta|presion perfecta/.test(low)) return 'Recupera '+team+'.';
+    if(/robo|recupera|corte|se anticipa|presiÃ³n perfecta|presion perfecta/.test(low)) return 'Recupera '+team+'.';
     if(/parad|parada|mano salvadora|evita el gol/.test(low)) return first.slice(0,75)+'.';
     if(/chuta|dispara/.test(low)) return first.slice(0,70)+'.';
     return first.slice(0,70)+'.';
@@ -2529,7 +2546,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
 
 
 
-<!-- PATCH VALENTINA 13-05-2026: locución partido, solución sin audio, botones y estabilidad iPad -->
+<!-- PATCH VALENTINA 13-05-2026: locuciÃ³n partido, soluciÃ³n sin audio, botones y estabilidad iPad -->
 <style id="valentina-1305-final-layout-fixes">
 /* Mantener medidas estables en iPad: no refluye el bloque al tocar botones ni al mantener teclado */
 @media (pointer:coarse) and (min-width:761px){
@@ -2578,19 +2595,19 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   var recoverySyn=[
     function(team){return 'Recupera '+team+'.';},
     function(team){return team+' roba la pelota.';},
-    function(team){return 'Balón para '+team+'.';},
+    function(team){return 'BalÃ³n para '+team+'.';},
     function(team){return team+' se anticipa.';}
   ];
   var keepSyn=[
     function(team){return team+' conserva la pelota.';},
-    function(team){return team+' sigue con el balón.';},
-    function(team){return 'La jugada continúa para '+team+'.';},
-    function(team){return team+' aguanta la posesión.';}
+    function(team){return team+' sigue con el balÃ³n.';},
+    function(team){return 'La jugada continÃºa para '+team+'.';},
+    function(team){return team+' aguanta la posesiÃ³n.';}
   ];
   var playSyn=[
     function(first){return first+'.';},
     function(first){return first.replace(/encuentra el pase bueno/i,'mueve bien la pelota')+'.';},
-    function(first){return first.replace(/Buena combinación/i,'Buena jugada')+'.';}
+    function(first){return first.replace(/Buena combinaciÃ³n/i,'Buena jugada')+'.';}
   ];
   function next(arr,arg){var fn=arr[synonymIndex++%arr.length];return fn(arg);}
   function shortFootball(text){
@@ -2601,7 +2618,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var current=visiblePossession();
     if(/gol|goool|marca/.test(low)) { lastPossession=current; return 'Gol de '+team+'.'; }
     if(/saca/.test(low)) { lastPossession=current; return 'Saca '+current+' desde el centro.'; }
-    if(/robo|recupera|corte|se anticipa|presión perfecta|presion perfecta/.test(low)){
+    if(/robo|recupera|corte|se anticipa|presiÃ³n perfecta|presion perfecta/.test(low)){
       var changed=(current!==lastPossession);
       lastPossession=current;
       return changed ? next(recoverySyn,current) : next(keepSyn,current);
@@ -2610,18 +2627,18 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var first=t.split(/[.!?]/)[0].replace(/\s+/g,' ').trim();
     if(/parad|parada|mano salvadora|evita el gol/.test(low)) return first.slice(0,74)+'.';
     if(/chuta|dispara/.test(low)) return first.slice(0,68)+'.';
-    if(/pase|avanza|oportunidad|aguanta|protege|combinación|combinacion/.test(low)) return next(playSyn,first.slice(0,68));
+    if(/pase|avanza|oportunidad|aguanta|protege|combinaciÃ³n|combinacion/.test(low)) return next(playSyn,first.slice(0,68));
     return first.slice(0,68)+'.';
   }
 
-  /* Cola de audio final: no dice Rival, respeta el nombre real y no interrumpe la palabra salvo botón Repetir. */
+  /* Cola de audio final: no dice Rival, respeta el nombre real y no interrumpe la palabra salvo botÃ³n Repetir. */
   var q=[], busy=false, currentUtt=null, timer=null;
   function voices(){try{return speechSynthesis.getVoices()||[]}catch(e){return []}}
   function pick(prefix,male){
     var list=voices();
     var maleRe=/Daniel|Alex|Fred|Tom|Thomas|Arthur|Oliver|Aaron|Ralph|George|Jorge|Diego|Carlos|David|Mark|Ryan|James|Guy/i;
     if(male) return list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&maleRe.test(v.name)})||list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0})||null;
-    return list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&/Google|Jorge|Diego|Carlos|Monica|Mónica|Paulina|Luciana|Helena/i.test(v.name)})||list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0})||null;
+    return list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0&&/Google|Jorge|Diego|Carlos|Monica|MÃ³nica|Paulina|Luciana|Helena/i.test(v.name)})||list.find(function(v){return v.lang&&v.lang.indexOf(prefix)===0})||null;
   }
   function finish(){busy=false;currentUtt=null;if(timer){clearTimeout(timer);timer=null;}setTimeout(play,90)}
   function make(item){
@@ -2659,14 +2676,14 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   window.forceSpeakWordNow=function(force){window.speakCurrent(!!force)};
   window.unlockSpeech=function(){try{speechSynthesis.resume()}catch(e){} play();};
 
-  /* Ver solución: muestra la solución, repite la misma palabra, pero NO relocuta automáticamente. */
+  /* Ver soluciÃ³n: muestra la soluciÃ³n, repite la misma palabra, pero NO relocuta automÃ¡ticamente. */
   window.revealCurrent=function(){
     var s=(typeof current==='function')?current():null; if(!s) return;
     if(typeof clearAutoNext==='function') clearAutoNext();
     s.checked=true; s.solved=false; s.revealed=true;
     s.english.split('').forEach(function(ch,i){if(s.pattern[i]==='_') s.guess[i]=ch;});
     if(typeof render==='function') render();
-    if(typeof setMessage==='function') setMessage('Mira la solución. No cuenta para el partido. Repetimos esta misma palabra.');
+    if(typeof setMessage==='function') setMessage('Mira la soluciÃ³n. No cuenta para el partido. Repetimos esta misma palabra.');
     if(typeof autoNextTimer!=='undefined') autoNextTimer=setTimeout(function(){
       autoNextTimer=null;
       s.pattern=(typeof mode!=='undefined'&&mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);
@@ -2677,7 +2694,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     },2000);
   };
 
-  /* Botones bajo el verbo: delegación robusta para web e iPad, aunque otros scripts clonen botones. */
+  /* Botones bajo el verbo: delegaciÃ³n robusta para web e iPad, aunque otros scripts clonen botones. */
   function actionClick(e){
     var b=e.target&&e.target.closest&&e.target.closest('#deleteBtn,#retryBtn,#revealBtn,#nextBtn');
     if(!b) return;
@@ -2704,7 +2721,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
 
 
 
-<!-- PATCH VALENTINA 14-05-2026: estabilidad web, botones, camiseta Atletic y lógica de solución/fallo -->
+<!-- PATCH VALENTINA 14-05-2026: estabilidad web, botones, camiseta Atletic y lÃ³gica de soluciÃ³n/fallo -->
 <style id="valentina-1405-web-ipad-football-fix">
 /* Web: no aplicar los modos compactos de teclado al ordenador. Evita el salto visual y el desajuste del click. */
 @media (pointer:fine){
@@ -2720,13 +2737,13 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   body.keyboard-open .football-status-grid .football-status:nth-child(n+3){display:block!important;}
   html,body,.wrap,.panel{overflow:visible!important;height:auto!important;min-height:100%!important;}
 }
-/* Botones bajo el verbo: área de click real, encima de cualquier capa y sin desplazamiento. */
+/* Botones bajo el verbo: Ã¡rea de click real, encima de cualquier capa y sin desplazamiento. */
 .actions{position:relative!important;z-index:2147480!important;pointer-events:auto!important;transform:none!important;}
 .actions button{position:relative!important;z-index:2147481!important;pointer-events:auto!important;touch-action:manipulation!important;transform:none!important;min-height:38px!important;}
 #hiddenInput.hidden-input{pointer-events:none!important;}
 .football-field,.football-player-wrap,.football-ball{transform-style:flat!important;}
 .football-field.match-shake,.football-field.match-zoom{animation:none!important;transform:none!important;}
-/* Camiseta Atletic: rayas verticales turquesa/amarillo, pantalón turquesa, calcetines amarillos. */
+/* Camiseta Atletic: rayas verticales turquesa/amarillo, pantalÃ³n turquesa, calcetines amarillos. */
 .football-player.yago .player-doll .body{
   background:repeating-linear-gradient(90deg,#23c7d6 0 6px,#23c7d6 6px,#ffe45c 6px,#ffe45c 12px)!important;
   border-color:rgba(0,78,108,.35)!important;
@@ -2739,7 +2756,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   .football-log{max-height:clamp(86px,18vh,210px)!important;overflow-y:auto!important;padding-bottom:10px!important;scroll-padding-bottom:10px!important;}
   .football-log-item:last-child{margin-bottom:10px!important;}
 }
-/* iPad: los 4 botones pedidos en la parte derecha de la frase/título. */
+/* iPad: los 4 botones pedidos en la parte derecha de la frase/tÃ­tulo. */
 @media (pointer:coarse) and (min-width:761px){
   .topline{display:grid!important;grid-template-columns:minmax(250px,.62fr) minmax(360px,1fr)!important;align-items:start!important;}
   .hero .controls{grid-column:2!important;grid-row:1!important;justify-content:flex-end!important;align-content:flex-start!important;}
@@ -2769,7 +2786,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     },true);
   }
 
-  /* Delegación por pointerdown: los botones bajo el verbo responden aunque el click visual venga desplazado por Safari/Chrome. */
+  /* DelegaciÃ³n por pointerdown: los botones bajo el verbo responden aunque el click visual venga desplazado por Safari/Chrome. */
   function runActionButton(e){
     var b=e.target&&e.target.closest&&e.target.closest('#deleteBtn,#retryBtn,#revealBtn,#nextBtn');
     if(!b) return;
@@ -2783,7 +2800,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   document.addEventListener('pointerdown',runActionButton,true);
   document.addEventListener('touchstart',runActionButton,true);
 
-  /* Pedir solución = fallo: pierde la pelota y se repite la palabra sin volver a locutarla automáticamente. */
+  /* Pedir soluciÃ³n = fallo: pierde la pelota y se repite la palabra sin volver a locutarla automÃ¡ticamente. */
   window.revealCurrent=function(){
     var s=(typeof current==='function')?current():null; if(!s) return;
     if(typeof clearAutoNext==='function') clearAutoNext();
@@ -2792,7 +2809,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     if(typeof gameEnabled!=='undefined' && gameEnabled && typeof footballEngine!=='undefined' && footballEngine.onSpellingFail) footballEngine.onSpellingFail();
     s.english.split('').forEach(function(ch,i){if(s.pattern[i]==='_') s.guess[i]=ch;});
     if(typeof render==='function') render();
-    if(typeof setMessage==='function') setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');
+    if(typeof setMessage==='function') setMessage('Has pedido la soluciÃ³n: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');
     if(typeof autoNextTimer!=='undefined') autoNextTimer=setTimeout(function(){
       autoNextTimer=null;
       s.pattern=(typeof mode!=='undefined'&&mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);
@@ -2803,7 +2820,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     },1700);
   };
 
-  /* Locución de goles: forzar frase limpia y con el nombre real del rival si toca. */
+  /* LocuciÃ³n de goles: forzar frase limpia y con el nombre real del rival si toca. */
   var previousSpeak=window.speakCommentary;
   window.speakCommentary=function(text,urgent){
     var t=String(text||'').replace(/\bRival\b/gi,currentRival()).replace(/\boponente\b/gi,currentRival()).replace(/\bcontrario\b/gi,currentRival());
@@ -2873,7 +2890,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
       document.body.appendChild(bar);
     }
     const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
+    bar.innerHTML='<span>ðŸŽ¯ Reto mixto Â· '+game+' Â· âœ… '+done+'/'+target+'</span><span>Errores: âŒ '+(r.bad||0)+'</span>';
     setSession(s);
   }
   function finish(){
@@ -2898,5 +2915,234 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   window.addEventListener('load',()=>setTimeout(paint,250));
 })();
 </script>
+<style id="football-spelling-stable-keyboard-final">
+/* Final layout: teclado activo desde el inicio, sin salto visual al enfocarse. */
+html,body{height:100dvh!important;min-height:0!important;overflow:hidden!important}
+body{touch-action:manipulation}
+body.keyboard-open{--hero-h:96px!important}
+.wrap{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;padding:5px!important;gap:5px!important}
+.hero{height:96px!important;min-height:96px!important;max-height:96px!important;padding:5px 7px!important;overflow:hidden!important;flex:0 0 96px!important}
+.panel{height:calc(100dvh - 106px)!important;min-height:0!important;overflow:hidden!important;padding:5px!important;flex:1 1 auto!important}
+.topline,body.keyboard-open .topline{display:grid!important;grid-template-columns:minmax(185px,.34fr) minmax(0,1fr)!important;gap:6px!important;align-items:start!important}
+.badge,.subtitle{display:none!important}
+.title,body.keyboard-open .title{font-size:clamp(18px,2.25vw,26px)!important;line-height:1!important;margin:0!important;white-space:nowrap!important}
+.controls,body.keyboard-open .controls{position:static!important;grid-column:2!important;grid-row:1!important;display:flex!important;flex-wrap:nowrap!important;justify-content:flex-start!important;align-items:center!important;gap:4px!important;max-width:none!important;width:100%!important;margin:0!important;overflow-x:auto!important;overflow-y:hidden!important;padding:0 0 2px!important;scrollbar-width:none!important}
+.controls::-webkit-scrollbar{display:none!important}
+.controls button,.controls label.btn,.controls select.select-pill,body.keyboard-open .controls button,body.keyboard-open .controls label.btn,body.keyboard-open .controls select.select-pill{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:24px!important;padding:4px 6px!important;border-radius:9px!important;font-size:9px!important;line-height:1!important;white-space:nowrap!important;box-shadow:none!important}
+#menuBtn{order:0!important;min-width:30px!important;font-size:0!important}
+#menuBtn::before{content:"ðŸ ";font-size:15px!important;line-height:1}
+#autoAudioBtn{order:1!important;font-size:0!important;min-width:31px!important;width:31px!important;padding:4px!important}
+#autoAudioBtn::before{content:"ðŸŽ™ï¸";font-size:15px!important;line-height:1}
+#commentaryBtn{order:2!important;font-size:0!important;min-width:31px!important;width:31px!important;padding:4px!important}
+#commentaryBtn::before{content:"ðŸŽ¤";font-size:15px!important;line-height:1}
+#repeatAudioBtn{order:3!important;font-size:0!important;min-width:31px!important;width:31px!important;padding:4px!important}
+#repeatAudioBtn::before{content:"ðŸ”";font-size:15px!important;line-height:1}
+#modeClassicBtn{order:4!important}#modeBlindBtn{order:5!important}#shuffleVerbsBtn{order:6!important}#restartBtn{order:7!important}#noGameBtn{order:8!important}#formationCycleBtn{order:9!important}#yagoRoleCycleBtn{order:10!important}#regenTeamsBtn{order:11!important}#importPlayersTopBtn{order:12!important}#exportPlayersTopBtn{order:13!important}
+.stats,body.keyboard-open .stats{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;margin-top:5px!important}
+.stat,body.keyboard-open .stat{padding:3px 5px!important;border-radius:9px!important}.stat .k,.k{font-size:7px!important;line-height:1!important}.stat .v,.v{font-size:13px!important;line-height:1!important;margin-top:1px!important}
+.game-grid,body.keyboard-open .game-grid{height:100%!important;min-height:0!important;grid-template-columns:minmax(285px,.62fr) minmax(430px,1.38fr)!important;gap:5px!important;align-items:stretch!important;overflow:hidden!important}
+.clue-card,body.keyboard-open .clue-card{height:100%!important;min-height:0!important;padding:7px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+.spanish,body.keyboard-open .spanish{font-size:clamp(22px,3.05vw,32px)!important;line-height:.95!important;margin-top:1px!important}
+.smallnote,body.keyboard-open .smallnote{display:none!important}
+.word-zone,body.keyboard-open .word-zone{margin-top:6px!important;padding:9px!important;border-radius:16px!important;background:linear-gradient(180deg,#fffdf1,#f7fbff)!important;border:3px solid #ffd166!important;box-shadow:0 0 0 3px rgba(89,184,255,.18),0 8px 18px rgba(31,74,58,.08)!important}
+.word-head,body.keyboard-open .word-head{margin-bottom:6px!important}.word-title,body.keyboard-open .word-title{font-size:13px!important;color:#083560!important}.status,body.keyboard-open .status{font-size:9px!important;padding:4px 7px!important}
+.letters,body.keyboard-open .letters{gap:5px!important}.tile,body.keyboard-open .tile{min-width:28px!important;height:34px!important;border-radius:10px!important;font-size:21px!important}.tile.blank{background:#fff7dc!important;border:2px dashed #e1a900!important}.tile.blank.filled{background:#fff!important;border:2px solid #59b8ff!important}
+.progress,body.keyboard-open .progress{height:7px!important;margin-top:7px!important}
+.actions,body.keyboard-open .actions{margin-top:7px!important;gap:5px!important;padding-bottom:12px!important;border-bottom:10px solid transparent!important}
+.actions button,body.keyboard-open .actions button{min-height:30px!important;padding:6px 8px!important;font-size:10px!important;border-radius:10px!important}
+#nextBtn{margin-right:0!important}.message,body.keyboard-open .message{margin-top:0!important;min-height:30px!important;padding:6px 8px!important;font-size:11px!important;line-height:1.15!important}.mini{display:none!important}
+.match-stage,body.keyboard-open .match-stage{display:grid!important;height:100%!important;min-height:0!important;margin:0!important;overflow:hidden!important}.side-game-card,body.keyboard-open .side-game-card{height:100%!important;min-height:0!important;padding:5px!important;gap:4px!important;overflow:hidden!important}.football-field,body.keyboard-open .football-field{height:100%!important;min-height:230px!important;max-height:none!important;border-radius:16px!important;padding:7px!important}
+#hiddenInput.hidden-input{position:fixed!important;left:1px!important;bottom:1px!important;width:1px!important;height:1px!important;opacity:.01!important;pointer-events:auto!important;z-index:2147483647!important}
+@media (max-width:760px){.game-grid,body.keyboard-open .game-grid{grid-template-columns:1fr!important}.match-stage{display:none!important}.controls{display:flex!important}.hero{height:104px!important;min-height:104px!important;flex-basis:104px!important}.panel{height:calc(100dvh - 114px)!important}}
+</style>
+<script id="football-spelling-stable-keyboard-final">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function keepKeyboardState(){
+    document.body.classList.add('keyboard-open');
+    var input=byId('hiddenInput');
+    if(input){
+      input.setAttribute('autofocus','autofocus');
+      input.setAttribute('inputmode','text');
+      try{ if(document.activeElement!==input) input.focus({preventScroll:true}); }catch(e){ try{input.focus();}catch(_){} }
+    }
+  }
+  function labelAudioButtons(){
+    var word=byId('autoAudioBtn'), match=byId('commentaryBtn'), repeat=byId('repeatAudioBtn'), home=byId('menuBtn');
+    if(home){home.setAttribute('aria-label','Inicio');home.title='Inicio';}
+    if(word){word.textContent='';word.setAttribute('aria-label','Audio spelling');word.title='Audio spelling';}
+    if(match){match.textContent='';match.setAttribute('aria-label','Audio partido');match.title='Audio partido';}
+    if(repeat){repeat.textContent='';repeat.setAttribute('aria-label','Repetir audio');repeat.title='Repetir audio';}
+  }
+  function applyText(){
+    document.title='Football Spelling';
+    var title=document.querySelector('.title'); if(title) title.textContent='Football Spelling';
+    var msg=byId('messageBox'); if(msg && /teclado/i.test(msg.textContent||'')) msg.textContent='Escribe con el teclado para completar el spelling.';
+  }
+  function settle(){keepKeyboardState();labelAudioButtons();applyText();}
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(settle,0);setTimeout(settle,120);},true);});
+  ['pointerdown','touchstart','click','focusin','blur'].forEach(function(ev){document.addEventListener(ev,function(){setTimeout(settle,0);},true);});
+  var oldRender=window.render;
+  if(typeof oldRender==='function') window.render=function(){var out=oldRender.apply(this,arguments);setTimeout(settle,0);return out;};
+  settle();
+  setInterval(settle,900);
+})();
+</script>
+<style id="football-spelling-no-vibrate-audio-log-final">
+/* Sin vibraciones ni reajustes al pulsar botones. */
+button,button:active,button:focus,.controls button,.actions button,label.btn,select.select-pill{
+  transform:none!important;
+  transition:none!important;
+  animation:none!important;
+  will-change:auto!important;
+}
+button:active,.controls button:active,.actions button:active{filter:brightness(.98)!important;box-shadow:0 0 0 2px rgba(8,53,96,.10)!important}
+.hero,.panel,.wrap,.game-grid,.clue-card,.word-zone,.match-stage,.side-game-card,.football-panel,.football-field,.stats,.controls,.actions,.title,.message{
+  transition:none!important;
+  animation:none!important;
+  transform:none!important;
+  will-change:auto!important;
+}
+.football-field.match-shake,.football-field.match-zoom,.football-banner.visible .football-banner-box,.football-player-wrap.near-ball,.football-player-wrap.celebrate,.football-player-wrap.defend,.football-player-wrap.keeper-dive-left,.football-player-wrap.keeper-dive-right,.player-doll,.football-speedline.visible,.football-confetti i{
+  animation:none!important;
+  transform:none!important;
+}
+.football-ball,.football-player-wrap{transition:left .35s linear,top .35s linear!important;animation:none!important}
+/* Audio: icono + estado muy claro. */
+#audioStateLegend{display:none!important}
+#autoAudioBtn,#commentaryBtn{
+  position:relative!important;
+  border:2px solid #94a3b8!important;
+  background:#f8fafc!important;
+  color:#0f172a!important;
+}
+#autoAudioBtn.audio-on,#commentaryBtn.audio-on{
+  background:#dcfce7!important;
+  border-color:#16a34a!important;
+  box-shadow:inset 0 -3px 0 rgba(22,163,74,.22)!important;
+}
+#autoAudioBtn.audio-off,#commentaryBtn.audio-off{
+  background:#fee2e2!important;
+  border-color:#ef4444!important;
+  box-shadow:inset 0 -3px 0 rgba(239,68,68,.22)!important;
+}
+#autoAudioBtn::after,#commentaryBtn::after{
+  content:"";
+  position:absolute;
+  right:2px;
+  top:2px;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ef4444;
+  border:1px solid #fff;
+}
+#autoAudioBtn.audio-on::after,#commentaryBtn.audio-on::after{background:#16a34a}
+#autoAudioBtn.audio-off::before,#commentaryBtn.audio-off::before{opacity:.45!important}
+/* Quitar el bloque POR QUE PASO. */
+.panel-mini:has(#builderEvent),.hide-why-panel{display:none!important}
+/* Log del partido: solo dos lineas visibles y letra menor. */
+.football-log,body.keyboard-open .football-log{
+  display:block!important;
+  max-height:43px!important;
+  min-height:43px!important;
+  overflow:hidden!important;
+  padding-right:0!important;
+}
+.football-log-item{
+  font-size:8.5px!important;
+  line-height:1.08!important;
+  padding:3px 5px!important;
+  border-radius:7px!important;
+  margin:0 0 3px!important;
+  font-weight:750!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.football-log-item:nth-child(n+3){display:none!important}
+.clue-card .football-status-grid{gap:4px!important}
+</style>
+<script id="football-spelling-no-vibrate-audio-log-final">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function markAudio(){
+    var word=byId('autoAudioBtn'), match=byId('commentaryBtn');
+    var wordOn=(typeof window.autoAudio==='undefined') ? true : !!window.autoAudio;
+    var matchOn=(typeof window.commentaryEnabled==='undefined') ? true : !!window.commentaryEnabled;
+    [[word,wordOn,'Audio spelling'],[match,matchOn,'Audio partido']].forEach(function(row){
+      var el=row[0], on=row[1], label=row[2]; if(!el) return;
+      el.classList.toggle('audio-on',on); el.classList.toggle('audio-off',!on);
+      el.setAttribute('aria-label',label+(on?' activo':' apagado'));
+      el.title=label+(on?' activo':' apagado');
+      el.textContent='';
+    });
+  }
+  function hideWhyAndTrimLog(){
+    var why=byId('builderEvent');
+    if(why && why.closest){var panel=why.closest('.panel-mini'); if(panel) panel.classList.add('hide-why-panel');}
+    var log=byId('footballLog');
+    if(log){Array.from(log.children).forEach(function(el,i){el.style.display=i<2?'':'none';}); log.scrollTop=0;}
+  }
+  function settle(){markAudio();hideWhyAndTrimLog();document.body.classList.add('keyboard-open');}
+  ['DOMContentLoaded','load','pageshow','click','pointerdown','touchstart','resize'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(settle,0);setTimeout(settle,80);},true);
+    document.addEventListener(ev,function(){setTimeout(settle,0);},true);
+  });
+  var oldRender=window.render;
+  if(typeof oldRender==='function') window.render=function(){var out=oldRender.apply(this,arguments);setTimeout(settle,0);return out;};
+  settle();
+  setInterval(settle,700);
+})();
+</script>
+<style id="football-spelling-left-rail-final">
+/* Peticion: controles a la izquierda y campo fijo/maximo sobre teclado. */
+html,body{height:100dvh!important;min-height:0!important;overflow:hidden!important;overscroll-behavior:none!important}
+.wrap{height:100dvh!important;max-height:100dvh!important;max-width:none!important;width:100%!important;display:flex!important;flex-direction:column!important;padding:4px!important;gap:4px!important;overflow:hidden!important}
+.hero{height:30px!important;min-height:30px!important;flex:0 0 30px!important;padding:3px 8px!important;overflow:hidden!important;border-radius:14px!important}
+.hero .badge,.hero .subtitle,.hero .stats{display:none!important}.hero .topline{display:block!important}.hero .title{margin:0!important;font-size:19px!important;line-height:1.2!important;white-space:nowrap!important;letter-spacing:0!important}
+.panel,body.keyboard-open .panel{height:calc(100dvh - 38px)!important;min-height:0!important;flex:1 1 auto!important;margin:0!important;padding:4px!important;overflow:hidden!important;border-radius:14px!important}
+.game-grid,body.keyboard-open .game-grid{height:100%!important;min-height:0!important;display:grid!important;grid-template-columns:minmax(238px,.40fr) minmax(560px,1.60fr)!important;gap:5px!important;align-items:stretch!important;overflow:hidden!important}
+.clue-card{height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;gap:4px!important;padding:5px!important;overflow:hidden!important;border-radius:14px!important}
+.left-tools-rail{order:-10!important;display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:3px!important;width:100%!important;margin:0!important;padding:0!important;overflow:hidden!important;flex:0 0 auto!important}
+.left-tools-rail button,.left-tools-rail label.btn,.left-tools-rail select.select-pill{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:0!important;width:100%!important;min-height:20px!important;padding:2px 3px!important;border-radius:7px!important;font-size:0!important;line-height:1!important;box-shadow:none!important;overflow:hidden!important;white-space:nowrap!important}
+.left-tools-rail button::before,.left-tools-rail label.btn::before,.left-tools-rail select.select-pill::before{font-size:12px!important;line-height:1!important}
+#menuBtn::before{content:"\2302"!important}#modeClassicBtn::before{content:"TR"!important}#modeBlindBtn::before{content:"BL"!important}#autoAudioBtn::before{content:"\1F399"!important}#commentaryBtn::before{content:"\1F50A"!important}#repeatAudioBtn::before{content:"\1F50A"!important}#shuffleVerbsBtn::before{content:"\21C4"!important}#restartBtn::before{content:"\21BB"!important}#noGameBtn::before{content:"\26BD"!important}#formationCycleBtn::before{content:"FOR"!important}#yagoRoleCycleBtn::before{content:"Y"!important}#regenTeamsBtn::before{content:"EQ"!important}#importPlayersTopBtn::before{content:"IMP"!important}#exportPlayersTopBtn::before{content:"EXP"!important}
+.left-tools-rail #formationSelect,.left-tools-rail #yagoRoleSelect{display:none!important}.left-tools-rail #menuBtn{order:-20!important}.left-tools-rail #repeatAudioBtn{order:3!important}.left-tools-rail #autoAudioBtn.audio-on,.left-tools-rail #commentaryBtn.audio-on{background:#dcfce7!important;border-color:#16a34a!important}.left-tools-rail #autoAudioBtn.audio-off,.left-tools-rail #commentaryBtn.audio-off{background:#fee2e2!important;border-color:#ef4444!important}
+.spanish{font-size:clamp(20px,2.8vw,30px)!important;line-height:1!important;margin:0!important}.smallnote{font-size:10px!important;line-height:1.1!important;margin:0!important}.word-zone{margin-top:0!important;padding:6px!important;border-radius:12px!important}.word-head{margin-bottom:3px!important}.word-title{font-size:12px!important}.status{font-size:9px!important;padding:3px 6px!important}.letters{gap:3px!important}.tile{min-width:24px!important;height:29px!important;font-size:18px!important;border-radius:8px!important}.progress{height:5px!important;margin-top:4px!important}.message{margin-top:0!important;min-height:24px!important;padding:5px 6px!important;font-size:10px!important;line-height:1.1!important}.mini{display:none!important}
+.actions{display:flex!important;flex-wrap:nowrap!important;gap:3px!important;margin-top:0!important;min-height:26px!important}.actions button{flex:1 1 0!important;min-width:0!important;min-height:26px!important;padding:4px 5px!important;font-size:9px!important;border-radius:8px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}#repeatWordActionBtn{order:0!important;flex:0 0 30px!important;width:30px!important;font-size:0!important;padding:4px 0!important}#repeatWordActionBtn::before{content:"\1F50A"!important;font-size:15px!important;line-height:1!important}#deleteBtn{order:1!important}#retryBtn{order:2!important}#revealBtn{order:3!important}#nextBtn{order:4!important}
+.match-stage,body.keyboard-open .match-stage{height:100%!important;min-height:0!important;display:grid!important;margin:0!important;overflow:hidden!important}.side-game-card,body.keyboard-open .side-game-card{height:100%!important;min-height:0!important;display:grid!important;grid-template-rows:auto minmax(0,1fr)!important;padding:4px!important;gap:3px!important;overflow:hidden!important;border-radius:14px!important}.side-game-card>.side-title,.side-game-card>.side-big,.football-score{display:none!important}
+.football-panel,body.keyboard-open .football-panel{height:100%!important;min-height:0!important;display:grid!important;grid-template-columns:70px minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:4px!important;margin:0!important;overflow:hidden!important}.football-panel>.football-status-grid{order:1!important;display:grid!important;grid-template-columns:1fr!important;grid-auto-rows:min-content!important;align-content:start!important;gap:3px!important;height:100%!important;min-height:0!important;overflow:hidden!important}.football-field,body.keyboard-open .football-field{order:2!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;border-radius:16px!important;padding:7px!important}.football-status,.football-panel .panel-mini{padding:3px!important;border-radius:7px!important;min-width:0!important}.football-status .k,.football-panel .side-title{font-size:6.5px!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}.football-status .v{font-size:9px!important;line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}.football-panel .panel-mini:not(.hide-why-panel){max-height:48px!important;overflow:hidden!important}
+@media (max-width:760px){.game-grid,body.keyboard-open .game-grid{grid-template-columns:1fr!important}.match-stage{display:none!important}.hero{height:30px!important}.panel{height:calc(100dvh - 38px)!important}}
+</style>
+<script id="football-spelling-left-rail-final">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function moveTools(){
+    var controls=document.querySelector('.hero .controls')||document.querySelector('.left-tools-rail');
+    var clue=document.querySelector('.clue-card');
+    if(controls&&clue&&controls.parentElement!==clue){controls.classList.add('left-tools-rail');clue.insertBefore(controls,clue.firstChild)}
+    var repeat=byId('repeatWordActionBtn'), del=byId('deleteBtn');
+    if(!repeat&&del){repeat=document.createElement('button');repeat.id='repeatWordActionBtn';repeat.className='amber';repeat.type='button';repeat.title='Repetir audio de la palabra';repeat.setAttribute('aria-label','Repetir audio de la palabra');del.parentElement.insertBefore(repeat,del)}
+    if(repeat&&del&&repeat.nextElementSibling!==del){del.parentElement.insertBefore(repeat,del)}
+    document.body.classList.add('keyboard-open');
+    var h=byId('hiddenInput'); if(h&&document.activeElement!==h){try{h.focus({preventScroll:true})}catch(_){try{h.focus()}catch(__){}}}
+  }
+  function repeatWord(e){
+    var b=e.target&&e.target.closest&&e.target.closest('#repeatWordActionBtn');
+    if(!b) return;
+    e.preventDefault(); e.stopPropagation();
+    if(typeof unlockSpeech==='function') unlockSpeech();
+    if(typeof forceSpeakWordNow==='function') forceSpeakWordNow(true); else if(typeof speakCurrent==='function') speakCurrent(true);
+    setTimeout(moveTools,30);
+  }
+  document.addEventListener('pointerdown',repeatWord,true);
+  document.addEventListener('click',repeatWord,true);
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(moveTools,0);setTimeout(moveTools,120);},true)});
+  document.addEventListener('click',function(){setTimeout(moveTools,0)},true);
+  moveTools(); setInterval(moveTools,900);
+})();
+</script>
 </body>
 </html>
+
