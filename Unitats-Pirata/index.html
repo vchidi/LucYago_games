@@ -675,6 +675,36 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 #inputArea{display:block;}
 
 </style>
+<style id="ipad-no-scroll-final">
+@media (min-width:700px) and (max-width:900px){
+  html,body{height:100%;overflow:hidden!important}
+  .app{height:100dvh!important;min-height:0!important;overflow:hidden!important;padding:5px!important;gap:5px!important}
+  .topbar{min-height:42px!important;padding:4px 5px!important;gap:4px!important}
+  .home-btn{width:32px!important;height:32px!important;font-size:17px!important}
+  .brand h1{font-size:15px!important}
+  .route-btn,.game-toggle-btn{padding:6px 6px!important;font-size:9px!important}
+  .stat-pill{padding:4px 5px!important}
+  .stat-label{display:none!important}
+  .stat-value{font-size:12px!important}
+  .coin-bar{font-size:11px!important;max-width:82px!important}
+  .top-stats{gap:3px!important}
+  .game{grid-template-columns:minmax(330px,.9fr) minmax(360px,1.1fr)!important;gap:5px!important;min-height:0!important;overflow:hidden!important}
+  .panel{padding:6px!important;border-radius:16px!important}
+  .left-panel{min-height:0!important;overflow:hidden!important}
+  .question-card{min-height:112px!important}
+  .test-selector{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .test-btn{font-size:9px!important}
+  .right-panel{grid-template-columns:1fr!important;grid-template-rows:minmax(0,1fr) auto auto!important;gap:5px!important;min-height:0!important}
+  .map-wrap{min-height:0!important}
+  .side-panel{display:grid!important;grid-template-columns:92px minmax(0,1fr)!important;grid-template-rows:auto!important;gap:5px!important}
+  .crew-list{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important}
+  .crew-card{grid-template-columns:1fr!important;text-align:center!important;padding:4px!important}
+  .crew-icon{margin:0 auto!important;width:28px!important;height:28px!important;font-size:17px!important}
+  .ship-view{min-height:50px!important}
+  .ship-view svg{width:74px!important;height:50px!important}
+  #inputArea{overflow:auto!important}
+}
+</style>
 </head>
 <body>
 <div class="app">
