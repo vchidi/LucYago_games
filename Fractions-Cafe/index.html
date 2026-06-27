@@ -203,6 +203,26 @@ svg.fracSvg.small{
   .mixInput{width:110px}
 }
 
+/* iPad keeps the same desktop layout language, only tightening widths enough for portrait. */
+@media (min-width:700px) and (max-width:1199px){
+  .app{padding:8px;gap:8px}
+  .top{height:50px;min-height:50px;padding:7px 12px}
+  .title{font-size:21px}.stats{font-size:14px;gap:10px}
+  .main{grid-template-columns:minmax(180px,210px) 1fr;gap:8px}
+  .menu{padding:8px}
+  .menu button{padding:11px 10px;font-size:16px;margin-bottom:8px}
+  .panel{padding:10px;grid-template-rows:minmax(0,1fr) clamp(260px,32vh,330px) !important;gap:8px}
+  .bottomGame{height:clamp(260px,32vh,330px) !important;min-height:clamp(260px,32vh,330px) !important}
+  .cafeScene{transform:translateX(-50%) scale(1.02) !important}
+  .workGrid{grid-template-columns:minmax(300px,.78fr) minmax(270px,1.22fr) !important;gap:8px !important}
+  .modeTitle{min-height:42px}
+  .promptTitle{font-size:20px;padding:9px 12px}
+  .actionRow{gap:8px}.actionRow button{padding:10px 12px;font-size:16px}
+  .feedback{height:48px;min-height:48px;font-size:14px;padding:10px 12px}
+  .leftExercise,.helpPane{padding:8px!important;border-radius:18px}
+  .resultInput{font-size:30px;padding:8px 10px;width:120px}
+}
+
 </style>
 </head>
 <body>
