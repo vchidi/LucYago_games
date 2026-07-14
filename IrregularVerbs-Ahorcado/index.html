@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -174,7 +174,7 @@ body:before{
 .learn-right{align-self:stretch!important;}
 .photo-card{width:100%!important;height:100%!important;min-height:0!important;flex:1 1 auto!important;}
 .photo-frame{flex:0 0 clamp(230px,34vh,390px)!important;height:clamp(230px,34vh,390px)!important;min-height:230px!important;background:#fffaf0!important;}
-.photo-image{background-size:contain!important;background-repeat:no-repeat!important;background-position:center 28%!important;background-color:#fffaf0!important;}
+.photo-image{background-size:cover!important;background-repeat:no-repeat!important;background-position:center 28%!important;background-color:#fffaf0!important;}
 /* La cubierta ya no es negra: son bloques opacos de cartulina sin huecos entre ellos. */
 .photo-mask{gap:0!important;padding:0!important;background:#efe0b7!important;}
 .tile{border-radius:0!important;box-shadow:none!important;outline:0!important;background:#efe0b7!important;transition:opacity .18s ease,transform .18s ease!important;}
@@ -188,125 +188,363 @@ body:before{
 @media (max-width:760px){.learn-layout{display:flex!important;flex-direction:column!important}.photo-frame{flex:0 0 150px!important;height:150px!important;min-height:150px!important}.photo-image{background-size:cover!important}}
 </style>
 
-<style id="valentina-guess-icons-hangman-fix">
-/* Ahorcado: base horizontal siempre visible y piezas proporcionadas */
-.stage::after{
-  content:"";
-  position:absolute;
-  left:24px;
-  bottom:20px;
-  width:160px;
-  height:11px;
-  border-radius:999px;
-  background:linear-gradient(90deg,#8a5a2b,#c08445,#8a5a2b);
-  box-shadow:0 7px 10px rgba(31,42,68,.16), inset 0 1px 0 rgba(255,255,255,.25);
-  z-index:1;
-}
-.part{z-index:2}
-.result{z-index:8}
+<style id="final-gallows-and-icons-patch">
+/* Horca: medidas fijas y proporcionales. Se evita top+bottom simultáneo,
+   que era lo que estiraba el palo vertical según la altura disponible. */
 .part.base{
-  left:26px!important;
-  bottom:24px!important;
-  width:156px!important;
-  height:12px!important;
-  background:linear-gradient(90deg,#7a4a22,#c08445,#7a4a22)!important;
+  left:34px!important; top:242px!important; bottom:auto!important;
+  width:150px!important; height:14px!important;
+  display:block!important; opacity:.12;
+  z-index:3!important;
 }
-.part.pole{bottom:34px!important;}
-/* Foto oculta: siempre hay un icono/imagen debajo; los bloques son opacos y sin huecos */
+.part.base.visible{opacity:1!important}
+.part.pole{
+  left:78px!important; top:34px!important; bottom:auto!important;
+  width:15px!important; height:215px!important;
+  display:block!important;
+}
+.part.beam{left:78px!important;top:34px!important;width:158px!important;height:15px!important}
+.part.brace{left:89px!important;top:68px!important;width:84px!important;height:10px!important}
+@media(max-width:760px){
+  .part.base{left:22px!important;top:150px!important;width:94px!important;height:9px!important}
+  .part.pole{left:49px!important;top:21px!important;height:134px!important;width:10px!important}
+  .part.beam{left:49px!important;top:21px!important;width:99px!important;height:10px!important}
+  .part.brace{left:56px!important;top:43px!important;width:53px!important;height:7px!important}
+}
+/* Sustituye la fotografía por un gran icono/emoticono oculto por bloques. */
 .photo-frame{
-  background:linear-gradient(135deg,#fff8e1,#f7fbff)!important;
+  background:linear-gradient(180deg,#fffdf6,#fff2c8)!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
 }
 .photo-image{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  font-size:clamp(110px,18vw,220px)!important;
+  line-height:1!important;
+  filter:drop-shadow(0 12px 8px rgba(40,44,70,.16));
+}
+
+</style>
+
+
+<style id="controls-clickability-fix">
+.top,.main,.view,.learn-layout,.learn-left,.learn-right,.photo-controls,.nav{position:relative}
+.nav,.photo-controls,.actions,.tools,.guess-panel,.learn-table{z-index:20}
+button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:relative;z-index:21}
+.main:before,.main:after,.top:before,.photo-frame:before,.photo-frame:after{pointer-events:none!important}
+</style>
+
+
+<style id="direct-icons-and-word-fit-fix">
+/* Las palabras siempre permanecen en una sola línea y reducen su tamaño según su longitud. */
+.letters{
+  flex-wrap:nowrap!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  width:100%!important;
+  min-width:0!important;
+  container-type:inline-size;
+}
+.letters .char{
+  flex:0 1 auto!important;
+  min-width:0!important;
+  font-size:clamp(12px,calc(92cqw / var(--char-count,8)),34px)!important;
+  line-height:1.05!important;
+}
+.cell,.prompt{min-width:0!important;overflow:hidden!important}
+.cell.ref{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
+/* El icono es texto Unicode directo, sin imágenes, fondos, rutas ni carpetas. */
+.photo-image{
+  background:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+  font-size:clamp(100px,18vw,220px)!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+</style>
+
+
+<style id="final-equal-type-and-real-icon-system">
+:root{
+  --learn-word-size:22px;
+}
+/* Todas las palabras de Aprendizaje usan exactamente el mismo tamaño. */
+.learn-table .cell.ref,
+.learn-table .letters .char{
+  font-size:var(--learn-word-size)!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-weight:950!important;
+  line-height:1.25!important;
+  letter-spacing:-.015em!important;
+}
+.learn-table .cell{
+  min-width:0!important;
+  min-height:62px!important;
+  height:62px!important;
+  padding:9px 5px 10px!important;
+  overflow:visible!important;
+}
+.learn-table .cell.ref{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+.learn-table .letters{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  padding:1px 0 2px!important;
+}
+.learn-table .letters .char{
+  flex:0 1 auto!important;
+  min-width:0!important;
+  padding:0 1px!important;
+  white-space:nowrap!important;
+}
+/* Icono Unicode real, con capas claramente ordenadas. */
+.photo-frame{
+  isolation:isolate!important;
+}
+.photo-image{
+  position:absolute!important;
+  inset:0!important;
   z-index:1!important;
-  background-size:contain!important;
-  background-repeat:no-repeat!important;
-  background-position:center!important;
-  background-color:#fff8e1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:visible!important;
+  background:none!important;
+}
+.icon-glyph{
+  display:block!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+  font-size:clamp(110px,18vw,220px)!important;
+  line-height:1!important;
+  text-align:center!important;
+  transform:translateY(2px);
+  filter:drop-shadow(0 12px 10px rgba(40,44,70,.16));
 }
 .photo-mask{
-  z-index:3!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+}
+.photo-frame:before{z-index:3!important}
+.photo-frame:after{z-index:4!important;pointer-events:none!important}
+
+@media(max-width:760px){
+  :root{--learn-word-size:17px}
+  .learn-table .cell{
+    min-height:48px!important;
+    height:48px!important;
+    padding:6px 3px 7px!important;
+  }
+  .icon-glyph{font-size:clamp(84px,24vw,145px)!important}
+}
+@media(min-width:761px) and (max-height:760px){
+  :root{--learn-word-size:19px}
+  .learn-table .cell{
+    min-height:52px!important;
+    height:52px!important;
+    padding:7px 4px 8px!important;
+  }
+}
+</style>
+<style id="hidden-icon-clean-system">
+/* Sistema limpio y definitivo para el icono oculto: sin fotos, sin rutas, sin fondos externos. */
+#photoCard{display:flex!important;}
+#photoCard.off{display:none!important;}
+#photoFrame.photo-frame{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  background:linear-gradient(180deg,#fffdf6,#fff2c8)!important;
+}
+#photoImage.photo-image{
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  opacity:1!important;
+  visibility:visible!important;
+  color:#182033!important;
+  background:transparent!important;
+  transform:none!important;
+  text-indent:0!important;
+}
+#iconGlyph.icon-glyph{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  opacity:1!important;
+  visibility:visible!important;
+  color:#182033!important;
+  font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",Arial,sans-serif!important;
+  font-size:clamp(96px,18vw,220px)!important;
+  line-height:1!important;
+  text-align:center!important;
+  transform:none!important;
+  filter:drop-shadow(0 12px 10px rgba(40,44,70,.18))!important;
+}
+#iconGlyph.icon-glyph:empty::after{
+  content:attr(data-fallback);
+}
+#photoMask.photo-mask{
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+  display:grid!important;
+  grid-template-columns:repeat(var(--photo-cols,5),1fr)!important;
+  grid-template-rows:repeat(var(--photo-rows,2),1fr)!important;
   gap:0!important;
   padding:0!important;
-  background:#18243d!important;
+  background:transparent!important;
+  pointer-events:none!important;
 }
-.tile{
+#photoMask .tile{
   border-radius:0!important;
-  background:linear-gradient(135deg,#172033,#22375c 52%,#192844)!important;
-  box-shadow:none!important;
-  opacity:1;
-}
-.tile:nth-child(3n){background:linear-gradient(135deg,#1b2b49,#263e66 52%,#172033)!important;}
-.tile:nth-child(5n){background:linear-gradient(135deg,#142238,#20375d 52%,#192844)!important;}
-.tile.revealed{
-  opacity:0!important;
+  background:#efe0b7!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)!important;
+  opacity:1!important;
   transform:none!important;
+  transition:opacity .18s ease,transform .18s ease!important;
 }
-.photo-caption-result{
-  margin-top:6px;
-  padding:7px 10px;
-  border-radius:14px;
-  background:#fff;
-  font-weight:950;
-  text-align:center;
-  box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);
+#photoMask .tile:nth-child(2n){background:#f3e7c7!important;}
+#photoMask .tile:nth-child(3n){background:#ead9aa!important;}
+#photoMask .tile.revealed{
+  opacity:0!important;
+  transform:scale(.98)!important;
 }
-.photo-caption-result.win{color:#126b2d;background:linear-gradient(135deg,#e9f9ef,#ffffff)}
-.photo-caption-result.lose{color:#8f2d22;background:linear-gradient(135deg,#fff0ed,#ffffff)}
-</style>
+
+/* Guess debajo del icono: el recuadro no cambia de tamaño al abrir respuestas. */
+.learn-right{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:7px!important;
+  min-height:0!important;
+}
+#photoCard.photo-card{
+  order:1!important;
+  flex:0 0 auto!important;
+  height:auto!important;
+  min-height:0!important;
+}
+#guessPanel.guess-panel{
+  order:2!important;
+  flex:0 0 auto!important;
+  margin-top:0!important;
+  padding:6px!important;
+  border-radius:16px!important;
+  max-height:138px!important;
+  overflow:auto!important;
+}
+#guessPanel .guess-top{
+  margin-bottom:4px!important;
+  gap:6px!important;
+}
+#guessPanel .guess-title{
+  font-size:11px!important;
+  line-height:1.1!important;
+}
+#guessPanel .hearts{
+  font-size:11px!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+}
+#guessPanel .choices{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:4px!important;
+}
+#guessPanel .choice{
+  min-width:0!important;
+  min-height:30px!important;
+  padding:5px 4px!important;
+  border-radius:11px!important;
+  font-size:clamp(9px,1.05vw,12px)!important;
+  line-height:1.05!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  box-shadow:0 3px 0 rgba(112,76,35,.12),0 6px 10px rgba(40,44,70,.07)!important;
+}
+@media (min-width:761px) and (max-width:1180px){
+  #photoFrame.photo-frame{
+    flex:0 0 clamp(210px,31vh,300px)!important;
+    height:clamp(210px,31vh,300px)!important;
+    min-height:210px!important;
+  }
+  #guessPanel.guess-panel{max-height:124px!important;padding:5px!important;}
+  #guessPanel .choice{font-size:10px!important;min-height:28px!important;padding:4px 3px!important;}
+}
+@media(max-width:760px){
+  #photoFrame.photo-frame{
+    flex:0 0 145px!important;
+    height:145px!important;
+    min-height:145px!important;
+  }
+  #guessPanel.guess-panel{max-height:112px!important;padding:4px!important;}
+  #guessPanel .choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important;}
+  #guessPanel .choice{font-size:9.5px!important;min-height:25px!important;padding:3px!important;border-radius:9px!important;}
+  #guessPanel .guess-title,#guessPanel .hearts{font-size:10px!important;}
+}
 
 
-<style id="local-photo-and-pill-fix">
-.learn-cell,.learn-cell .letters,.learn-cell .char{white-space:nowrap!important;overflow:visible!important;}
-.learn-cell{min-width:0!important;}
-.learn-cell .letters{width:100%!important;flex-wrap:nowrap!important;justify-content:center!important;}
-.learn-cell .char{font-size:clamp(14px,2.35vw,30px)!important;line-height:1.05!important;flex:0 1 auto!important;min-width:0!important;}
-@media(max-width:760px){.learn-cell .char{font-size:clamp(11px,3.6vw,22px)!important}}
-.photo-frame{background:#fff8e8!important;}
-.photo-image{background-color:#fff8e8!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;}
-</style>
 
-<style id="valentina-final-layout-fix">
-/* Horca: base siempre visible y unida al poste */
-.stage::after{content:"";position:absolute;left:22px;bottom:14px;width:175px;height:12px;border-radius:999px;background:#a66a34;box-shadow:0 5px 0 rgba(95,55,22,.16);z-index:7!important;pointer-events:none}
-.part.base{display:block!important;opacity:1!important;left:22px!important;bottom:14px!important;width:175px!important;height:12px!important;z-index:7!important;transform:none!important}
-.part.pole{bottom:26px!important;z-index:6!important}
-/* Palabras: siempre una sola línea, sin cambiar la forma de la pastilla */
-.cell{min-width:0!important;overflow:hidden!important}
-.cell .letters{width:100%!important;min-width:0!important;flex-wrap:nowrap!important;white-space:nowrap!important;overflow:hidden!important;gap:0!important}
-.cell .char{flex:0 1 auto!important;min-width:0!important;padding:0!important;font-size:clamp(15px,2.35vw,30px)!important;line-height:1!important;white-space:nowrap!important}
-.cell.ref{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;font-size:clamp(16px,2.5vw,31px)!important}
-/* Foto estable y fallback visible */
-.photo-image{background-color:#fff!important;background-size:contain,cover!important;background-position:center,center!important;background-repeat:no-repeat,no-repeat!important}
-@media(max-width:760px){.cell .char{font-size:clamp(12px,3.8vw,18px)!important}.cell.ref{font-size:clamp(13px,4vw,19px)!important}.stage::after{transform:none!important;left:14px!important;bottom:10px!important;width:118px!important}.part.base{left:14px!important;bottom:10px!important;width:118px!important;transform:none!important}.part.pole{top:34px!important;bottom:22px!important;height:auto!important}}
+/* Corrección anti-rendijas: los bloques se solapan, pero la máscara no tiene fondo que tape lo revelado. */
+#photoMask.photo-mask{
+  gap:0!important;
+  padding:0!important;
+  background:transparent!important;
+  overflow:hidden!important;
+}
+#photoMask .tile{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:#ead9aa!important;
+  transform:scale(1.035)!important;
+  transform-origin:center!important;
+  backface-visibility:hidden!important;
+}
+#photoMask .tile:nth-child(2n){background:#efe0b7!important;}
+#photoMask .tile:nth-child(3n){background:#f3e7c7!important;}
+#photoMask .tile:nth-child(5n){background:#e6d19e!important;}
+#photoMask .tile.revealed{
+  opacity:0!important;
+  transform:scale(1)!important;
+}
+@media(max-width:760px){#iconGlyph.icon-glyph{font-size:clamp(78px,27vw,145px)!important;}}
 </style>
-<style id="valentina-direct-photo-hangman-fix">
-/* Direct fix: visible base inside the game box + real image element for photo test. */
-.stage{position:relative!important;overflow:hidden!important;}
-.gallows-base{position:absolute!important;left:22px!important;bottom:12px!important;width:min(175px,calc(100% - 44px))!important;height:16px!important;border-radius:999px!important;background:linear-gradient(90deg,#6f421e,#c4874a 50%,#6f421e)!important;box-shadow:0 5px 0 rgba(95,55,22,.22),inset 0 2px 0 rgba(255,255,255,.28)!important;z-index:70!important;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:none!important;}
-.part.base{display:none!important;}
-.part.pole{bottom:28px!important;z-index:35!important;}
-.photo-frame{position:relative!important;background:#fff8e8!important;}
-.photo-actual-img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;display:block!important;z-index:1!important;background:#fff8e8!important;}
-.photo-image{display:none!important;}
-.photo-mask{z-index:3!important;display:grid!important;grid-template-columns:repeat(2,1fr)!important;grid-template-rows:repeat(2,1fr)!important;gap:0!important;padding:0!important;background:transparent!important;}
-.tile{border-radius:0!important;background:#182033!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)!important;}
-.tile.revealed{opacity:0!important;transform:none!important;}
-.photo-notice{display:block!important;margin-top:6px;padding:7px 8px;border-radius:10px;font-size:11px;font-weight:900;text-align:center;line-height:1.2;background:#fff4c4;color:#6b4b00;}
-.photo-notice.ok{background:#e9f9ef;color:#126b2d;}
-.photo-notice.bad{background:#fff0ed;color:#872214;}
-.photo-controls .target{opacity:.45!important;pointer-events:none!important;}
-@media(max-width:760px){.gallows-base{left:14px!important;bottom:10px!important;width:min(118px,calc(100% - 28px))!important;height:14px!important}.part.pole{top:34px!important;bottom:26px!important;height:auto!important}}
-</style></head>
+</head>
 <body>
 <div class="app">
   <header class="top">
     <div class="brand"><span class="star">⭐</span><h1>Irregular Verbs</h1></div>
     <div class="meta"><button id="homeBtn" class="btn home">🏠</button><div class="stat"><div class="lab">Aciertos</div><div id="good" class="val">0</div></div><div class="stat"><div class="lab">Errores</div><div id="bad" class="val">0</div></div><div class="stat"><div class="lab">Verbo</div><div class="val"><span id="idx">1</span>/<span id="total">0</span></div></div><div class="stat"><div class="lab">Conjunto</div><div id="setName" class="val">Studying</div></div></div>
-    <nav class="nav"><button id="learnBtn" class="btn good">🎓 Aprendizaje</button><button id="hangBtn" class="btn active">🎯 Ahorcado</button><span class="gap"></span><button id="filterNew" class="btn active">Studying</button><button id="filterStudied" class="btn">Studied</button><button id="filterAll" class="btn">All</button><button id="shuffleBtn" class="btn">🔀 Mezclar</button></nav>
+    <nav class="nav"><button id="learnBtn" class="btn good active">🎓 Aprendizaje</button><button id="hangBtn" class="btn">🎯 Ahorcado</button><span class="gap"></span><button id="filterNew" class="btn active">Studying</button><button id="filterStudied" class="btn">Studied</button><button id="filterAll" class="btn">All</button><button id="shuffleBtn" class="btn">🔀 Mezclar</button></nav>
   </header>
   <main class="main" id="main">
     <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-    <section id="hangView" class="view active">
+    <section id="hangView" class="view">
       <div class="hangman-layout">
         <div class="hang-left">
           <div class="actions"><button id="revealBtn" class="btn good">Solución</button><button id="solutionOkBtn" class="btn good" style="display:none">OK</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button></div>
@@ -316,20 +554,20 @@ body:before{
           <div id="hangMsg" class="message">Escribe con el teclado.</div>
           <div class="tools"><button id="deleteBtn" class="btn">Borrar última</button><button id="restartVerbBtn" class="btn">Reiniciar verbo</button><label class="btn">Importar Excel<input type="file" id="fileInput" style="display:none" accept=".xlsx,.xls,.xlsm,.json"></label><button id="exportBtn" class="btn">Exportar</button></div>
         </div>
-        <div class="hang-right"><div class="stage-card"><div class="stage-head"><div class="stage-title">Ahorcado</div><div class="stage-stats"><div class="mini"><span>Vidas</span><b id="lives">0</b></div><div class="mini"><span>Partes</span><b><span id="damage">0</span>/<span id="partsTotal">15</span></b></div></div></div><div id="stage" class="stage"><div id="gallowsBase" class="gallows-base" aria-hidden="true"></div><div id="result" class="result"><div class="result-card"><div id="resultTitle" style="font-size:34px"></div><div id="resultText"></div></div></div></div></div></div>
+        <div class="hang-right"><div class="stage-card"><div class="stage-head"><div class="stage-title">Ahorcado</div><div class="stage-stats"><div class="mini"><span>Vidas</span><b id="lives">0</b></div><div class="mini"><span>Partes</span><b><span id="damage">0</span>/<span id="partsTotal">15</span></b></div></div></div><div id="stage" class="stage"><div id="result" class="result"><div class="result-card"><div id="resultTitle" style="font-size:34px"></div><div id="resultText"></div></div></div></div></div></div>
       </div>
     </section>
-    <section id="learnView" class="view">
+    <section id="learnView" class="view active">
       <div class="learn-layout">
         <div class="learn-left">
-          <div class="photo-controls"><button id="photoToggle" class="btn active">Foto sí</button><button id="guessBtn" class="btn warn">🧠 Guess!</button><button class="btn active target" data-b="300">300 bloques</button><button class="btn target" data-b="600">600</button><button class="btn target" data-b="1200">1200</button></div>
+          <div class="photo-controls"><button id="photoToggle" class="btn active">Iconos sí</button><button id="guessBtn" class="btn warn">🧠 Guess!</button><button id="blocksBtn" class="btn active">1200 bloques</button></div>
           <div id="learnTable" class="learn-table"></div>
           <div id="learnMsg" class="message">Completa las celdas. Toca una celda para escribir ahí.</div>
           <div id="hint" class="hint">Aquí aparecerá una ayuda visual.</div>
         </div>
         <div class="learn-right">
-          <div id="guessPanel" class="guess-panel"><div class="guess-top"><div class="guess-title">¿Qué hay en la foto?</div><div id="hearts" class="hearts">❤️❤️❤️</div></div><div id="choices" class="choices"></div></div>
-          <div id="photoCard" class="photo-card"><div id="photoFrame" class="photo-frame"><img id="photoActualImg" class="photo-actual-img" alt="Foto oculta"><div id="photoImage" class="photo-image"></div><div id="photoMask" class="photo-mask"></div></div><div id="photoCaption" class="caption">Photo Pack 01 · Foto oculta</div><div id="photoNotice" class="photo-notice">Comprobando foto...</div></div>
+          <div id="photoCard" class="photo-card"><div id="photoFrame" class="photo-frame"><div id="photoImage" class="photo-image"><span id="iconGlyph" class="icon-glyph" aria-hidden="true">⚽</span></div><div id="photoMask" class="photo-mask"></div></div><div id="photoCaption" class="caption">Icono oculto</div></div>
+          <div id="guessPanel" class="guess-panel"><div class="guess-top"><div class="guess-title">¿Qué icono?</div><div id="hearts" class="hearts">❤️❤️❤️</div></div><div id="choices" class="choices"></div></div>
         </div>
       </div>
     </section>
@@ -338,17 +576,215 @@ body:before{
 </div>
 <script>
 const D=[{"baseForm":"write","pastSimple":"wrote","pastSimplePattern":"wr_te","pastParticiple":"written","pastParticiplePattern":"writ_e_","studyVisual":"i → o → i+t+n","studyHint":"Piensa en WRITE con la i atrapada. La i cambia a o en wrote, y en written vuelve el sonido i y aparecen dos t + en.","psHighlight":"o","ppHighlight":"tn","isNew":"new_studied"},{"baseForm":"give","pastSimple":"gave","pastSimplePattern":"g_ve","pastParticiple":"given","pastParticiplePattern":"give_","studyVisual":"i → a → i+n","studyHint":"En GIVE, la i salta a una a en gave. Después vuelve la i en given y se añade -n.","psHighlight":"a","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"see","pastSimple":"saw","pastSimplePattern":"s__","pastParticiple":"seen","pastParticiplePattern":"see_","studyVisual":"ee → aw → ee+n","studyHint":"SEE se abre mucho y aparece una a en saw. Luego vuelve el ee largo y se pega una n: seen.","psHighlight":"aw","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"break","pastSimple":"broke","pastSimplePattern":"br___","pastParticiple":"broken","pastParticiplePattern":"br____","studyVisual":"ea → o → o+n","studyHint":"BREAK se rompe: ea cambia a o en broke. Luego a broke se le añade -n para formar broken.","psHighlight":"o","ppHighlight":"on","isNew":"new_studied"},{"baseForm":"be","pastSimple":"was/were","pastSimplePattern":"w__/w___","pastParticiple":"been","pastParticiplePattern":"be__","studyVisual":"be → was/were → bee+n","studyHint":"BE es especial: en pasado puede ser was o were. En participio se queda been, con bee + n.","psHighlight":"was/were","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"eat","pastSimple":"ate","pastSimplePattern":"___","pastParticiple":"eaten","pastParticiplePattern":"eat__","studyVisual":"eat → ate → eat+en","studyHint":"EAT pierde la e inicial larga y queda ate. Luego vuelve eat y se añade -en: eaten.","psHighlight":"ate","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"drink","pastSimple":"drank","pastSimplePattern":"dr_nk","pastParticiple":"drunk","pastParticiplePattern":"dr_nk","studyVisual":"i → a → u","studyHint":"DRINK cambia i por a en drank. Después la a se convierte en u en drunk.","psHighlight":"a","ppHighlight":"u","isNew":"new_studied"},{"baseForm":"go","pastSimple":"went","pastSimplePattern":"w___","pastParticiple":"gone","pastParticiplePattern":"go__","studyVisual":"go → went → go+n","studyHint":"GO desaparece y aparece WENT. Luego vuelve GO y se añade una n.","psHighlight":"went","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"do","pastSimple":"did","pastSimplePattern":"d__","pastParticiple":"done","pastParticiplePattern":"do__","studyVisual":"do → did → do+ne","studyHint":"DO cambia la o por i en DID. Luego vuelve DO y se añade -ne.","psHighlight":"id","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"come","pastSimple":"came","pastSimplePattern":"c_me","pastParticiple":"come","pastParticiplePattern":"c_me","studyVisual":"o → a → o","studyHint":"COME cambia la o por a en CAME. Luego vuelve a COME igual.","psHighlight":"a","ppHighlight":"","isNew":"old_studied"},{"baseForm":"take","pastSimple":"took","pastSimplePattern":"t___","pastParticiple":"taken","pastParticiplePattern":"take_","studyVisual":"a → oo → a+en","studyHint":"TAKE cambia a por oo en TOOK. Luego vuelve la a y se añade -en.","psHighlight":"oo","ppHighlight":"en","isNew":"old_studied"},{"baseForm":"have","pastSimple":"had","pastSimplePattern":"ha_","pastParticiple":"had","pastParticiplePattern":"ha_","studyVisual":"ve → d → d","studyHint":"HAVE se corta: desaparece ve y queda HAD, igual en participio.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"make","pastSimple":"made","pastSimplePattern":"ma_e","pastParticiple":"made","pastParticiplePattern":"ma_e","studyVisual":"k → d → d","studyHint":"MAKE cambia la k por d en MADE, y se mantiene igual después.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"say","pastSimple":"said","pastSimplePattern":"sa__","pastParticiple":"said","pastParticiplePattern":"sa__","studyVisual":"y → id → id","studyHint":"SAY cambia la y por id en SAID y ya no cambia más.","psHighlight":"id","ppHighlight":"id","isNew":"old_studied"},{"baseForm":"begin","pastSimple":"began","pastSimplePattern":"beg_n","pastParticiple":"begun","pastParticiplePattern":"beg_n","studyVisual":"i → a → u","studyHint":"BEGIN cambia i por a en began y luego por u en begun.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"become","pastSimple":"became","pastSimplePattern":"bec_me","pastParticiple":"become","pastParticiplePattern":"bec_me","studyVisual":"o → a → o","studyHint":"BECOME cambia o por a en became y luego vuelve a become.","psHighlight":"a","ppHighlight":"","isNew":"not_studied"},{"baseForm":"bring","pastSimple":"brought","pastSimplePattern":"br_____","pastParticiple":"brought","pastParticiplePattern":"br_____","studyVisual":"ing → ought","studyHint":"BRING cambia completamente a brought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"build","pastSimple":"built","pastSimplePattern":"buil_","pastParticiple":"built","pastParticiplePattern":"buil_","studyVisual":"d → t","studyHint":"BUILD pierde la i y aparece ui en built.","psHighlight":"ui","ppHighlight":"ui","isNew":"not_studied"},{"baseForm":"buy","pastSimple":"bought","pastSimplePattern":"b_____","pastParticiple":"bought","pastParticiplePattern":"b_____","studyVisual":"uy → ought","studyHint":"BUY cambia a bought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"catch","pastSimple":"caught","pastSimplePattern":"c_____","pastParticiple":"caught","pastParticiplePattern":"c_____","studyVisual":"atch → aught","studyHint":"CATCH cambia a caught y se mantiene igual.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"choose","pastSimple":"chose","pastSimplePattern":"ch__s","pastParticiple":"chosen","pastParticiplePattern":"ch__se","studyVisual":"oo → o → o+en","studyHint":"CHOOSE pierde una o en chose y añade -en en chosen.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"cut","pastSimple":"cut","pastSimplePattern":"c_t","pastParticiple":"cut","pastParticiplePattern":"c_t","studyVisual":"igual","studyHint":"CUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"draw","pastSimple":"drew","pastSimplePattern":"dr_w","pastParticiple":"drawn","pastParticiplePattern":"draw_","studyVisual":"aw → ew → aw+n","studyHint":"DRAW cambia a drew y luego añade n en drawn.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"drive","pastSimple":"drove","pastSimplePattern":"dr_ve","pastParticiple":"driven","pastParticiplePattern":"drive_","studyVisual":"i → o → i+n","studyHint":"DRIVE cambia i por o y luego vuelve i con n.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"fall","pastSimple":"fell","pastSimplePattern":"f_ll","pastParticiple":"fallen","pastParticiplePattern":"fall__","studyVisual":"a → e → a+en","studyHint":"FALL cambia a e en fell y luego añade -en.","psHighlight":"e","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"feel","pastSimple":"felt","pastSimplePattern":"f___","pastParticiple":"felt","pastParticiplePattern":"f___","studyVisual":"eel → elt","studyHint":"FEEL pierde una e y queda felt.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"find","pastSimple":"found","pastSimplePattern":"f__nd","pastParticiple":"found","pastParticiplePattern":"f__nd","studyVisual":"i → ou","studyHint":"FIND cambia i por ou en found.","psHighlight":"ou","ppHighlight":"ou","isNew":"not_studied"},{"baseForm":"fly","pastSimple":"flew","pastSimplePattern":"fl__","pastParticiple":"flown","pastParticiplePattern":"fl___","studyVisual":"y → ew → ow+n","studyHint":"FLY cambia a flew y luego a flown.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"forget","pastSimple":"forgot","pastSimplePattern":"forg_t","pastParticiple":"forgotten","pastParticiplePattern":"forg_t___","studyVisual":"e → o → o+ten","studyHint":"FORGET cambia e por o y luego añade -ten.","psHighlight":"o","ppHighlight":"tten","isNew":"not_studied"},{"baseForm":"get","pastSimple":"got","pastSimplePattern":"g_t","pastParticiple":"got/gotten","pastParticiplePattern":"g_t/g_t___","studyVisual":"e → o → o / o+ten","studyHint":"GET cambia e por o.","psHighlight":"o","ppHighlight":"otten","isNew":"not_studied"},{"baseForm":"grow","pastSimple":"grew","pastSimplePattern":"gr_w","pastParticiple":"grown","pastParticiplePattern":"grow_","studyVisual":"o → e → ow+n","studyHint":"GROW cambia a grew y luego añade n.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"hear","pastSimple":"heard","pastSimplePattern":"hear_","pastParticiple":"heard","pastParticiplePattern":"hear_","studyVisual":"r → rd","studyHint":"HEAR cambia a heard y se mantiene.","psHighlight":"ear","ppHighlight":"ear","isNew":"not_studied"},{"baseForm":"hide","pastSimple":"hid","pastSimplePattern":"h_d","pastParticiple":"hidden","pastParticiplePattern":"hid___","studyVisual":"ide → id → id+den","studyHint":"HIDE se acorta a hid y luego añade -den.","psHighlight":"i","ppHighlight":"den","isNew":"not_studied"},{"baseForm":"hold","pastSimple":"held","pastSimplePattern":"h_ld","pastParticiple":"held","pastParticiplePattern":"h_ld","studyVisual":"o → e","studyHint":"HOLD cambia o por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"keep","pastSimple":"kept","pastSimplePattern":"ke__","pastParticiple":"kept","pastParticiplePattern":"ke__","studyVisual":"ee → ept","studyHint":"KEEP pierde una e en kept.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"know","pastSimple":"knew","pastSimplePattern":"kn_w","pastParticiple":"known","pastParticiplePattern":"kno__","studyVisual":"o → e → ow+n","studyHint":"KNOW cambia a knew y luego añade n.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"leave","pastSimple":"left","pastSimplePattern":"le__","pastParticiple":"left","pastParticiplePattern":"le__","studyVisual":"eave → eft","studyHint":"LEAVE cambia ea por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"lose","pastSimple":"lost","pastSimplePattern":"los_","pastParticiple":"lost","pastParticiplePattern":"los_","studyVisual":"e → t","studyHint":"LOSE cambia a lost.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"meet","pastSimple":"met","pastSimplePattern":"m_t","pastParticiple":"met","pastParticiplePattern":"m_t","studyVisual":"ee → e","studyHint":"MEET pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"pay","pastSimple":"paid","pastSimplePattern":"pa__","pastParticiple":"paid","pastParticiplePattern":"pa__","studyVisual":"y → id","studyHint":"PAY cambia y por i.","psHighlight":"i","ppHighlight":"i","isNew":"not_studied"},{"baseForm":"put","pastSimple":"put","pastSimplePattern":"p_t","pastParticiple":"put","pastParticiplePattern":"p_t","studyVisual":"igual","studyHint":"PUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"read","pastSimple":"read","pastSimplePattern":"r__d","pastParticiple":"read","pastParticiplePattern":"r__d","studyVisual":"ea pronunciación","studyHint":"READ se escribe igual pero cambia la pronunciación.","psHighlight":"ea","ppHighlight":"ea","isNew":"not_studied"},{"baseForm":"ride","pastSimple":"rode","pastSimplePattern":"r_de","pastParticiple":"ridden","pastParticiplePattern":"ri__e_","studyVisual":"i → o → i+den","studyHint":"RIDE cambia i por o y luego añade -den.","psHighlight":"o","ppHighlight":"dden","isNew":"not_studied"},{"baseForm":"ring","pastSimple":"rang","pastSimplePattern":"r_ng","pastParticiple":"rung","pastParticiplePattern":"r_ng","studyVisual":"i → a → u","studyHint":"RING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"run","pastSimple":"ran","pastSimplePattern":"r_n","pastParticiple":"run","pastParticiplePattern":"r_n","studyVisual":"u → a → u","studyHint":"RUN cambia a ran y vuelve a run.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sell","pastSimple":"sold","pastSimplePattern":"s___","pastParticiple":"sold","pastParticiplePattern":"s___","studyVisual":"ell → old","studyHint":"SELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"send","pastSimple":"sent","pastSimplePattern":"sen_","pastParticiple":"sent","pastParticiplePattern":"sen_","studyVisual":"d → t","studyHint":"SEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"sing","pastSimple":"sang","pastSimplePattern":"s_ng","pastParticiple":"sung","pastParticiplePattern":"s_ng","studyVisual":"i → a → u","studyHint":"SING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sit","pastSimple":"sat","pastSimplePattern":"s_t","pastParticiple":"sat","pastParticiplePattern":"s_t","studyVisual":"i → a","studyHint":"SIT cambia i por a.","psHighlight":"a","ppHighlight":"a","isNew":"not_studied"},{"baseForm":"sleep","pastSimple":"slept","pastSimplePattern":"sl___","pastParticiple":"slept","pastParticiplePattern":"sl___","studyVisual":"eep → ept","studyHint":"SLEEP pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"speak","pastSimple":"spoke","pastSimplePattern":"sp_k_","pastParticiple":"spoken","pastParticiplePattern":"sp_k__","studyVisual":"ea → o+e → o+en","studyHint":"SPEAK cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"on","isNew":"not_studied"},{"baseForm":"spend","pastSimple":"spent","pastSimplePattern":"spen_","pastParticiple":"spent","pastParticiplePattern":"spen_","studyVisual":"d → t","studyHint":"SPEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"stand","pastSimple":"stood","pastSimplePattern":"st__d","pastParticiple":"stood","pastParticiplePattern":"st__d","studyVisual":"an → oo","studyHint":"STAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"steal","pastSimple":"stole","pastSimplePattern":"st_l_","pastParticiple":"stolen","pastParticiplePattern":"st_l__","studyVisual":"eal → ole → ole+n","studyHint":"STEAL cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"swim","pastSimple":"swam","pastSimplePattern":"sw_m","pastParticiple":"swum","pastParticiplePattern":"sw_m","studyVisual":"i → a → u","studyHint":"SWIM cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"tell","pastSimple":"told","pastSimplePattern":"t___","pastParticiple":"told","pastParticiplePattern":"t___","studyVisual":"ell → old","studyHint":"TELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"think","pastSimple":"thought","pastSimplePattern":"th_____","pastParticiple":"thought","pastParticiplePattern":"th_____","studyVisual":"ink → ought","studyHint":"THINK cambia a thought.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"understand","pastSimple":"understood","pastSimplePattern":"underst__d","pastParticiple":"understood","pastParticiplePattern":"underst__d","studyVisual":"an → oo","studyHint":"UNDERSTAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"wear","pastSimple":"wore","pastSimplePattern":"w___","pastParticiple":"worn","pastParticiplePattern":"w___","studyVisual":"ea → ore → ore+n","studyHint":"WEAR cambia a wore y luego a worn.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"win","pastSimple":"won","pastSimplePattern":"w_n","pastParticiple":"won","pastParticiplePattern":"w_n","studyVisual":"i → o","studyHint":"WIN cambia i por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"wake","pastSimple":"woke","pastSimplePattern":"w_ke","pastParticiple":"woken","pastParticiplePattern":"w_ken","studyVisual":"a → o → o+n","studyHint":"WAKE cambia a woke y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"}];
-const HIDDEN_PHOTOS=[
- {title:"Lionel Messi",category:"Football",img:"images/photo-pack-01/messi.png",emoji:"⚽",bg1:"#72b7ff",bg2:"#e8f5ff"},
- {title:"Cristiano Ronaldo",category:"Football",img:"images/photo-pack-01/cristiano.png",emoji:"⚽",bg1:"#92e6a7",bg2:"#eaffef"},
- {title:"Torre Eiffel",category:"Famous Places",img:"images/photo-pack-01/torre-eiffel.png",emoji:"🗼",bg1:"#9ac7ff",bg2:"#f0f7ff"},
- {title:"Ferrari F1",category:"Vehicles",img:"images/photo-pack-01/ferrari-f1.png",emoji:"🏎️",bg1:"#ff7b7b",bg2:"#ffe3e3"}
-];const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const HIDDEN_ICONS=[
+ {title:"Cara feliz",html:"&#x1F600;",fallback:"😀"},
+ {title:"Sonrisa",html:"&#x1F603;",fallback:"😃"},
+ {title:"Risa",html:"&#x1F604;",fallback:"😄"},
+ {title:"Guiño",html:"&#x1F609;",fallback:"😉"},
+ {title:"Sonrojado",html:"&#x1F60A;",fallback:"😊"},
+ {title:"Carcajada",html:"&#x1F602;",fallback:"😂"},
+ {title:"Ojos corazón",html:"&#x1F60D;",fallback:"😍"},
+ {title:"Estrella ojos",html:"&#x1F929;",fallback:"🤩"},
+ {title:"Beso",html:"&#x1F618;",fallback:"😘"},
+ {title:"Lengua",html:"&#x1F61B;",fallback:"😛"},
+ {title:"Pensando",html:"&#x1F914;",fallback:"🤔"},
+ {title:"Silencio",html:"&#x1F92B;",fallback:"🤫"},
+ {title:"Dormido",html:"&#x1F634;",fallback:"😴"},
+ {title:"Sorpresa",html:"&#x1F62E;",fallback:"😮"},
+ {title:"Gafas",html:"&#x1F60E;",fallback:"😎"},
+ {title:"Fiesta",html:"&#x1F973;",fallback:"🥳"},
+ {title:"Llorando",html:"&#x1F622;",fallback:"😢"},
+ {title:"Enfadado",html:"&#x1F620;",fallback:"😠"},
+ {title:"Fantasma",html:"&#x1F47B;",fallback:"👻"},
+ {title:"Alien",html:"&#x1F47D;",fallback:"👽"},
+ {title:"Mono",html:"&#x1F435;",fallback:"🐵"},
+ {title:"Perro",html:"&#x1F436;",fallback:"🐶"},
+ {title:"Lobo",html:"&#x1F43A;",fallback:"🐺"},
+ {title:"Zorro",html:"&#x1F98A;",fallback:"🦊"},
+ {title:"Gato",html:"&#x1F431;",fallback:"🐱"},
+ {title:"León",html:"&#x1F981;",fallback:"🦁"},
+ {title:"Tigre",html:"&#x1F42F;",fallback:"🐯"},
+ {title:"Caballo",html:"&#x1F434;",fallback:"🐴"},
+ {title:"Unicornio",html:"&#x1F984;",fallback:"🦄"},
+ {title:"Vaca",html:"&#x1F42E;",fallback:"🐮"},
+ {title:"Cerdo",html:"&#x1F437;",fallback:"🐷"},
+ {title:"Ratón",html:"&#x1F42D;",fallback:"🐭"},
+ {title:"Hámster",html:"&#x1F439;",fallback:"🐹"},
+ {title:"Conejo",html:"&#x1F430;",fallback:"🐰"},
+ {title:"Oso",html:"&#x1F43B;",fallback:"🐻"},
+ {title:"Panda",html:"&#x1F43C;",fallback:"🐼"},
+ {title:"Koala",html:"&#x1F428;",fallback:"🐨"},
+ {title:"Pollo",html:"&#x1F414;",fallback:"🐔"},
+ {title:"Pingüino",html:"&#x1F427;",fallback:"🐧"},
+ {title:"Pájaro",html:"&#x1F426;",fallback:"🐦"},
+ {title:"Pollito",html:"&#x1F424;",fallback:"🐤"},
+ {title:"Rana",html:"&#x1F438;",fallback:"🐸"},
+ {title:"Cocodrilo",html:"&#x1F40A;",fallback:"🐊"},
+ {title:"Tortuga",html:"&#x1F422;",fallback:"🐢"},
+ {title:"Lagarto",html:"&#x1F98E;",fallback:"🦎"},
+ {title:"Serpiente",html:"&#x1F40D;",fallback:"🐍"},
+ {title:"Dragón",html:"&#x1F409;",fallback:"🐉"},
+ {title:"Ballena",html:"&#x1F433;",fallback:"🐳"},
+ {title:"Delfín",html:"&#x1F42C;",fallback:"🐬"},
+ {title:"Pez",html:"&#x1F41F;",fallback:"🐟"},
+ {title:"Pulpo",html:"&#x1F419;",fallback:"🐙"},
+ {title:"Mariposa",html:"&#x1F98B;",fallback:"🦋"},
+ {title:"Caracol",html:"&#x1F40C;",fallback:"🐌"},
+ {title:"Abeja",html:"&#x1F41D;",fallback:"🐝"},
+ {title:"Hormiga",html:"&#x1F41C;",fallback:"🐜"},
+ {title:"Araña",html:"&#x1F577;",fallback:"🕷"},
+ {title:"Cangrejo",html:"&#x1F980;",fallback:"🦀"},
+ {title:"Camarón",html:"&#x1F990;",fallback:"🦐"},
+ {title:"Calamar",html:"&#x1F991;",fallback:"🦑"},
+ {title:"Dinosaurio",html:"&#x1F996;",fallback:"🦖"},
+ {title:"Manzana",html:"&#x1F34E;",fallback:"🍎"},
+ {title:"Pera",html:"&#x1F350;",fallback:"🍐"},
+ {title:"Naranja",html:"&#x1F34A;",fallback:"🍊"},
+ {title:"Limón",html:"&#x1F34B;",fallback:"🍋"},
+ {title:"Plátano",html:"&#x1F34C;",fallback:"🍌"},
+ {title:"Sandía",html:"&#x1F349;",fallback:"🍉"},
+ {title:"Uvas",html:"&#x1F347;",fallback:"🍇"},
+ {title:"Fresa",html:"&#x1F353;",fallback:"🍓"},
+ {title:"Melón",html:"&#x1F348;",fallback:"🍈"},
+ {title:"Cereza",html:"&#x1F352;",fallback:"🍒"},
+ {title:"Piña",html:"&#x1F34D;",fallback:"🍍"},
+ {title:"Kiwi",html:"&#x1F95D;",fallback:"🥝"},
+ {title:"Tomate",html:"&#x1F345;",fallback:"🍅"},
+ {title:"Aguacate",html:"&#x1F951;",fallback:"🥑"},
+ {title:"Zanahoria",html:"&#x1F955;",fallback:"🥕"},
+ {title:"Maíz",html:"&#x1F33D;",fallback:"🌽"},
+ {title:"Patata",html:"&#x1F954;",fallback:"🥔"},
+ {title:"Pan",html:"&#x1F35E;",fallback:"🍞"},
+ {title:"Queso",html:"&#x1F9C0;",fallback:"🧀"},
+ {title:"Huevo",html:"&#x1F95A;",fallback:"🥚"},
+ {title:"Bacon",html:"&#x1F953;",fallback:"🥓"},
+ {title:"Hamburguesa",html:"&#x1F354;",fallback:"🍔"},
+ {title:"Patatas fritas",html:"&#x1F35F;",fallback:"🍟"},
+ {title:"Pizza",html:"&#x1F355;",fallback:"🍕"},
+ {title:"Hot dog",html:"&#x1F32D;",fallback:"🌭"},
+ {title:"Taco",html:"&#x1F32E;",fallback:"🌮"},
+ {title:"Burrito",html:"&#x1F32F;",fallback:"🌯"},
+ {title:"Palomitas",html:"&#x1F37F;",fallback:"🍿"},
+ {title:"Arroz",html:"&#x1F35A;",fallback:"🍚"},
+ {title:"Sushi",html:"&#x1F363;",fallback:"🍣"},
+ {title:"Helado",html:"&#x1F366;",fallback:"🍦"},
+ {title:"Tarta",html:"&#x1F370;",fallback:"🍰"},
+ {title:"Cupcake",html:"&#x1F9C1;",fallback:"🧁"},
+ {title:"Chocolate",html:"&#x1F36B;",fallback:"🍫"},
+ {title:"Caramelo",html:"&#x1F36C;",fallback:"🍬"},
+ {title:"Pirulí",html:"&#x1F36D;",fallback:"🍭"},
+ {title:"Galleta",html:"&#x1F36A;",fallback:"🍪"},
+ {title:"Leche",html:"&#x1F95B;",fallback:"🥛"},
+ {title:"Café",html:"&#x2615;&#xFE0F;",fallback:"☕️"},
+ {title:"Té",html:"&#x1F375;",fallback:"🍵"},
+ {title:"Fútbol",html:"&#x26BD;&#xFE0F;",fallback:"⚽️"},
+ {title:"Baloncesto",html:"&#x1F3C0;",fallback:"🏀"},
+ {title:"Fútbol americano",html:"&#x1F3C8;",fallback:"🏈"},
+ {title:"Béisbol",html:"&#x26BE;&#xFE0F;",fallback:"⚾️"},
+ {title:"Tenis",html:"&#x1F3BE;",fallback:"🎾"},
+ {title:"Voleibol",html:"&#x1F3D0;",fallback:"🏐"},
+ {title:"Rugby",html:"&#x1F3C9;",fallback:"🏉"},
+ {title:"Billar",html:"&#x1F3B1;",fallback:"🎱"},
+ {title:"Ping pong",html:"&#x1F3D3;",fallback:"🏓"},
+ {title:"Bádminton",html:"&#x1F3F8;",fallback:"🏸"},
+ {title:"Hockey",html:"&#x1F3D2;",fallback:"🏒"},
+ {title:"Cricket",html:"&#x1F3CF;",fallback:"🏏"},
+ {title:"Golf",html:"&#x26F3;&#xFE0F;",fallback:"⛳️"},
+ {title:"Arco",html:"&#x1F3F9;",fallback:"🏹"},
+ {title:"Caña pesca",html:"&#x1F3A3;",fallback:"🎣"},
+ {title:"Patín hielo",html:"&#x26F8;&#xFE0F;",fallback:"⛸️"},
+ {title:"Esquí",html:"&#x1F3BF;",fallback:"🎿"},
+ {title:"Trineo",html:"&#x1F6F7;",fallback:"🛷"},
+ {title:"Diana",html:"&#x1F3AF;",fallback:"🎯"},
+ {title:"Dados",html:"&#x1F3B2;",fallback:"🎲"},
+ {title:"Ajedrez",html:"&#x265F;&#xFE0F;",fallback:"♟️"},
+ {title:"Puzzle",html:"&#x1F9E9;",fallback:"🧩"},
+ {title:"Bowling",html:"&#x1F3B3;",fallback:"🎳"},
+ {title:"Trompeta",html:"&#x1F3BA;",fallback:"🎺"},
+ {title:"Guitarra",html:"&#x1F3B8;",fallback:"🎸"},
+ {title:"Piano",html:"&#x1F3B9;",fallback:"🎹"},
+ {title:"Tambor",html:"&#x1F941;",fallback:"🥁"},
+ {title:"Micrófono",html:"&#x1F3A4;",fallback:"🎤"},
+ {title:"Coche",html:"&#x1F697;",fallback:"🚗"},
+ {title:"Taxi",html:"&#x1F695;",fallback:"🚕"},
+ {title:"Autobús",html:"&#x1F68C;",fallback:"🚌"},
+ {title:"Camión",html:"&#x1F69A;",fallback:"🚚"},
+ {title:"Tractor",html:"&#x1F69C;",fallback:"🚜"},
+ {title:"Moto",html:"&#x1F3CD;",fallback:"🏍"},
+ {title:"Bici",html:"&#x1F6B2;",fallback:"🚲"},
+ {title:"Patinete",html:"&#x1F6F4;",fallback:"🛴"},
+ {title:"Tren",html:"&#x1F686;",fallback:"🚆"},
+ {title:"Tranvía",html:"&#x1F68A;",fallback:"🚊"},
+ {title:"Cohete",html:"&#x1F680;",fallback:"🚀"},
+ {title:"Avión",html:"&#x2708;&#xFE0F;",fallback:"✈️"},
+ {title:"Helicóptero",html:"&#x1F681;",fallback:"🚁"},
+ {title:"Barco",html:"&#x26F5;&#xFE0F;",fallback:"⛵️"},
+ {title:"Ancla",html:"&#x2693;&#xFE0F;",fallback:"⚓️"},
+ {title:"Casa",html:"&#x1F3E0;",fallback:"🏠"},
+ {title:"Castillo",html:"&#x1F3F0;",fallback:"🏰"},
+ {title:"Tienda",html:"&#x1F3EA;",fallback:"🏪"},
+ {title:"Escuela",html:"&#x1F3EB;",fallback:"🏫"},
+ {title:"Hospital",html:"&#x1F3E5;",fallback:"🏥"},
+ {title:"Banco",html:"&#x1F3E6;",fallback:"🏦"},
+ {title:"Fábrica",html:"&#x1F3ED;",fallback:"🏭"},
+ {title:"Rueda feria",html:"&#x1F3A1;",fallback:"🎡"},
+ {title:"Montaña rusa",html:"&#x1F3A2;",fallback:"🎢"},
+ {title:"Circo",html:"&#x1F3AA;",fallback:"🎪"},
+ {title:"Sol",html:"&#x2600;&#xFE0F;",fallback:"☀️"},
+ {title:"Luna",html:"&#x1F319;",fallback:"🌙"},
+ {title:"Estrella",html:"&#x2B50;&#xFE0F;",fallback:"⭐️"},
+ {title:"Rayo",html:"&#x26A1;&#xFE0F;",fallback:"⚡️"},
+ {title:"Fuego",html:"&#x1F525;",fallback:"🔥"},
+ {title:"Arcoíris",html:"&#x1F308;",fallback:"🌈"},
+ {title:"Nube",html:"&#x2601;&#xFE0F;",fallback:"☁️"},
+ {title:"Nieve",html:"&#x2744;&#xFE0F;",fallback:"❄️"},
+ {title:"Muñeco nieve",html:"&#x26C4;&#xFE0F;",fallback:"⛄️"},
+ {title:"Ola",html:"&#x1F30A;",fallback:"🌊"},
+ {title:"Gota",html:"&#x1F4A7;",fallback:"💧"},
+ {title:"Flor",html:"&#x1F33C;",fallback:"🌼"},
+ {title:"Rosa",html:"&#x1F339;",fallback:"🌹"},
+ {title:"Tulipán",html:"&#x1F337;",fallback:"🌷"},
+ {title:"Árbol",html:"&#x1F333;",fallback:"🌳"},
+ {title:"Palmera",html:"&#x1F334;",fallback:"🌴"},
+ {title:"Cactus",html:"&#x1F335;",fallback:"🌵"},
+ {title:"Seta",html:"&#x1F344;",fallback:"🍄"},
+ {title:"Tierra",html:"&#x1F30D;",fallback:"🌍"},
+ {title:"Volcán",html:"&#x1F30B;",fallback:"🌋"},
+ {title:"Bombilla",html:"&#x1F4A1;",fallback:"💡"},
+ {title:"Linterna",html:"&#x1F526;",fallback:"🔦"},
+ {title:"Libro",html:"&#x1F4D8;",fallback:"📘"},
+ {title:"Cuaderno",html:"&#x1F4D3;",fallback:"📓"},
+ {title:"Lápiz",html:"&#x270F;&#xFE0F;",fallback:"✏️"},
+ {title:"Pincel",html:"&#x1F58C;",fallback:"🖌"},
+ {title:"Tijeras",html:"&#x2702;&#xFE0F;",fallback:"✂️"},
+ {title:"Regla",html:"&#x1F4CF;",fallback:"📏"},
+ {title:"Mochila",html:"&#x1F392;",fallback:"🎒"},
+ {title:"Gafas sol",html:"&#x1F576;",fallback:"🕶"},
+ {title:"Corona",html:"&#x1F451;",fallback:"👑"},
+ {title:"Sombrero",html:"&#x1F3A9;",fallback:"🎩"},
+ {title:"Camiseta",html:"&#x1F455;",fallback:"👕"},
+ {title:"Zapatilla",html:"&#x1F45F;",fallback:"👟"},
+ {title:"Paraguas",html:"&#x2602;&#xFE0F;",fallback:"☂️"},
+ {title:"Reloj",html:"&#x231A;&#xFE0F;",fallback:"⌚️"},
+ {title:"Cámara",html:"&#x1F4F7;",fallback:"📷"},
+ {title:"Teléfono",html:"&#x1F4F1;",fallback:"📱"},
+ {title:"Ordenador",html:"&#x1F4BB;",fallback:"💻"},
+ {title:"Impresora",html:"&#x1F5A8;",fallback:"🖨"},
+ {title:"Radio",html:"&#x1F4FB;",fallback:"📻"},
+ {title:"Televisión",html:"&#x1F4FA;",fallback:"📺"},
+ {title:"Candado",html:"&#x1F512;",fallback:"🔒"},
+ {title:"Llave",html:"&#x1F511;",fallback:"🔑"},
+ {title:"Martillo",html:"&#x1F528;",fallback:"🔨"},
+ {title:"Engranaje",html:"&#x2699;&#xFE0F;",fallback:"⚙️"},
+ {title:"Imán",html:"&#x1F9F2;",fallback:"🧲"}
+];
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
 const PARTS=['base','pole','beam','brace','rope','head','neck','bodyTop','bodyBottom','leftArm','rightArm','leftForearm','rightForearm','leftLeg','rightLeg'];
-let rawData=[...D], dataset=[], idx=0, mode='hang', filter='new', score={good:0,bad:0}, activeTarget='pastSimple', seen=new Set(), solutionPending=false;
+let rawData=[...D], dataset=[], idx=0, mode='learn', filter='new', score={good:0,bad:0}, activeTarget='pastSimple', seen=new Set(), solutionPending=false;
 let hang={damage:4,lives:0,status:'playing'};
 let learn={phase:'tricky', col:0, cells:{}, done:{}, activeKey:'tricky_baseForm'};
-let photo={on:true,blocks:4,revealed:0,order:[],photoIdx:0,guessOpen:false,guessTries:3,guessSolved:false,streak:0,verbHits:0};
+let photo={on:true,blocks:1200,revealed:0,order:[],iconIdx:Math.floor(Math.random()*HIDDEN_ICONS.length),guessOpen:false,guessTries:3,guessSolved:false,streak:0,verbHits:0,choices:[],choicesKey:""};
 function esc(x){return String(x??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 function clean(e){let c={baseForm:String(e.baseForm||'').trim(),pastSimple:String(e.pastSimple||'').trim(),pastSimplePattern:String(e.pastSimplePattern||e.pastSimple||'').trim(),pastParticiple:String(e.pastParticiple||'').trim(),pastParticiplePattern:String(e.pastParticiplePattern||e.pastParticiple||'').trim(),studyHint:String(e.studyHint||'').trim(),isNew:String(e.isNew||'').trim().toLowerCase()}; if(!c.baseForm||!c.pastSimple||!c.pastParticiple)return null; c.pastSimplePattern=norm(c.pastSimple,c.pastSimplePattern); c.pastParticiplePattern=norm(c.pastParticiple,c.pastParticiplePattern); return c}
 function norm(a,p){a=String(a||'');p=String(p||a);if(p.length>a.length)p=p.slice(0,a.length);if(p.length<a.length)p+=a.slice(p.length);return p}
@@ -360,15 +796,39 @@ function resetItem(it){it.state={pastSimple:makeState(it.pastSimple,ensureBlank(
 function makeState(answer,pattern){return {answer,pattern,guessed:[...pattern].map(ch=>ch==='_?'?'':(ch==='_'?'':ch)),ok:null}}
 function cur(){return dataset[idx]}
 function updateStats(){ $('#good').textContent=score.good; $('#bad').textContent=score.bad; $('#idx').textContent=dataset.length?idx+1:0; $('#total').textContent=dataset.length; $('#setName').textContent=filter==='new'?'Studying':filter==='studied'?'Studied':'All'}
-function focusInput(){setTimeout(()=>{$('#hiddenInput').focus({preventScroll:true})},0)}
+function focusInput(){
+  setTimeout(()=>{
+    const el=$('#hiddenInput');
+    if(el) el.focus({preventScroll:true});
+  },0)
+}
 function showMsg(t){(mode==='learn'?$('#learnMsg'):$('#hangMsg')).textContent=t}
 function setMode(m){mode=m; $('#hangView').classList.toggle('active',m==='hang'); $('#learnView').classList.toggle('active',m==='learn'); $('#hangBtn').classList.toggle('active',m==='hang'); $('#learnBtn').classList.toggle('active',m==='learn'); if(m==='learn') resetLearn(false); render(); focusInput()}
 function setFilter(f){filter=f; $$('.nav .btn').forEach(()=>{}); $('#filterNew').classList.toggle('active',f==='new'); $('#filterStudied').classList.toggle('active',f==='studied'); $('#filterAll').classList.toggle('active',f==='all'); rebuild(); render();}
 function chars(s){return [...s.answer].map((ch,i)=>ch==='/'?{c:'slash',v:'/'}:s.pattern[i]==='_'?{c:(s.guessed[i]?'blank filled':'blank'),v:s.guessed[i]||'_'}:{c:'fixed',v:ch})}
-function renderLetters(el,s){el.innerHTML=''; chars(s).forEach(it=>{let d=document.createElement('span');d.className='char '+it.c;d.textContent=it.v;el.appendChild(d)})}
+function renderLetters(el,s){el.innerHTML='';let items=chars(s);el.style.setProperty('--char-count',Math.max(3,items.length));items.forEach(it=>{let d=document.createElement('span');d.className='char '+it.c;d.textContent=it.v;el.appendChild(d)})}
 function nextBlank(s){return s.pattern.split('').findIndex((ch,i)=>ch==='_'&&!s.guessed[i])}
 function lastFilled(s){for(let i=s.guessed.length-1;i>=0;i--)if(s.pattern[i]==='_'&&s.guessed[i])return i;return -1}
-function insert(ch){if(!dataset.length)return; if(mode==='learn') return learnInsert(ch); let it=cur(), s=it.state[activeTarget], i=nextBlank(s); if(i<0){showMsg('Ese recuadro ya está completo.');return} s.guessed[i]=ch; let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]); if(done){let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase(); let ok=guess===it[activeTarget].toLowerCase(); s.ok=ok; if(!it.meta.scored[activeTarget]){score[ok?'good':'bad']++; it.meta.scored[activeTarget]=true;} let hmsg=ok?hangSuccess():hangFail(); showMsg((hmsg? hmsg+' ':'')+(ok?'Bien.':'Casi.')); if(ok) activeTarget=activeTarget==='pastSimple'?'pastParticiple':'pastSimple'; if(it.state.pastSimple.ok&&it.state.pastParticiple.ok) setTimeout(nextVerb,600);} render()}
+function insert(ch){
+ if(!dataset.length)return;
+ if(mode==='learn') return learnInsert(ch);
+ let it=cur(), s=it.state[activeTarget], i=nextBlank(s);
+ if(i<0){showMsg('Ese recuadro ya está completo.');return}
+ s.guessed[i]=ch;
+ let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]);
+ if(done){
+   let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase();
+   let ok=guess===it[activeTarget].toLowerCase();
+   s.ok=ok;
+   if(!it.meta.scored[activeTarget]){score[ok?'good':'bad']++;it.meta.scored[activeTarget]=true;}
+   let hmsg=ok?hangSuccess():hangFail();
+   showMsg((hmsg?hmsg+' ':'')+(ok?'Bien. Pasamos a la siguiente.':'Está mal, pero pasamos a la siguiente.'));
+   activeTarget=activeTarget==='pastSimple'?'pastParticiple':'pastSimple';
+   let bothComplete=it.state.pastSimple.ok!==null&&it.state.pastParticiple.ok!==null;
+   if(bothComplete)setTimeout(nextVerb,750);
+ }
+ render()
+}
 function del(){if(!dataset.length)return; if(mode==='learn') return learnDelete(); let s=cur().state[activeTarget], i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
 function setActiveTarget(t){activeTarget=t;render();focusInput()}
 function renderHang(){if(!dataset.length)return; let it=cur(); $('#baseWord').textContent=it.baseForm; renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); renderHangman()}
@@ -380,32 +840,120 @@ function reveal(){if(mode!=='hang'||!dataset.length)return; let it=cur(); ['past
 function restartVerb(){if(!dataset.length)return; resetItem(cur()); if(mode==='learn')resetLearn(false); activeTarget='pastSimple'; render(); showMsg('Reiniciado.')}
 function restartGame(){score={good:0,bad:0}; hang={damage:4,lives:0,status:'playing'}; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
 function markSeen(){if(dataset.length)seen.add(keyOf(cur()))}
-function nextVerb(){if(!dataset.length)return; if(photo.guessSolved||photo.revealed>=gridForTarget().tiles){photo.photoIdx=(photo.photoIdx+1)%HIDDEN_PHOTOS.length;resetPhotoProgress();} markSeen(); let ni=-1; for(let step=1;step<=dataset.length;step++){let c=(idx+step)%dataset.length;if(!seen.has(keyOf(dataset[c]))){ni=c;break}} if(ni<0){seen.clear();ni=(idx+1)%dataset.length} idx=ni; resetItem(cur()); resetLearn(false); activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render(); showMsg(mode==='learn'?'Nuevo verbo de aprendizaje.':'Nuevo verbo.')}
+function nextVerb(){if(!dataset.length)return; markSeen(); let ni=-1; for(let step=1;step<=dataset.length;step++){let c=(idx+step)%dataset.length;if(!seen.has(keyOf(dataset[c]))){ni=c;break}} if(ni<0){seen.clear();ni=(idx+1)%dataset.length} idx=ni; resetItem(cur()); resetLearn(false); activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render(); showMsg(mode==='learn'?'Nuevo verbo de aprendizaje.':'Nuevo verbo.')}
 function shuffleVerbs(){if(!dataset.length)return; let currentKey=keyOf(cur()); let unseen=dataset.filter(x=>!seen.has(keyOf(x))&&keyOf(x)!==currentKey); let seenItems=dataset.filter(x=>seen.has(keyOf(x))||keyOf(x)===currentKey); unseen.sort(()=>Math.random()-.5); seenItems.sort(()=>Math.random()-.5); dataset=[...unseen,...seenItems]; idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Mezclado sin repetir hasta agotar el conjunto.')}
 function resetLearn(resetPhoto=false){if(!dataset.length)return; let it=cur(); learn={phase:'tricky',col:0,cells:{},done:{},activeKey:'tricky_baseForm'}; ['baseForm','pastSimple','pastParticiple'].forEach(k=>{let ans=it[k]; let pat=k==='baseForm'?ensureBlank(ans,ans):ensureBlank(ans,k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); learn.cells['tricky_'+k]=makeState(ans,pat); learn.cells['blind_'+k]=makeState(ans,blindPattern(ans)); learn.done['tricky_'+k]=false; learn.done['blind_'+k]=false}); if(resetPhoto){resetPhotoProgress()}}
 function renderLearn(){if(!dataset.length)return; let it=cur(); let cols=['baseForm','pastSimple','pastParticiple']; let labels={baseForm:'Base Form',pastSimple:'Past Simple',pastParticiple:'Past Participle'}; let html='<div></div>'+cols.map(c=>`<div class="th">${labels[c]}</div>`).join(''); html+=`<div class="rlabel">Base Form</div>`+cols.map(c=>`<div class="cell ref">${esc(it[c])}</div>`).join(''); ['tricky','blind'].forEach(ph=>{html+=`<div class="rlabel ${ph}">${ph==='tricky'?'🟩 Tricky':'🟨 Blind'}</div>`; cols.forEach(c=>{let k=ph+'_'+c, locked=ph==='blind' && !cols.every(x=>learn.done['tricky_'+x]); let cls='cell editable '+(learn.activeKey===k?'active ':'')+(learn.done[k]?'good ':'')+(locked?'locked ':''); html+=`<div class="${cls}" data-key="${k}"><div class="letters" id="learn_${k}"></div></div>`})}); $('#learnTable').innerHTML=html; Object.entries(learn.cells).forEach(([k,s])=>renderLetters($('#learn_'+k),s)); $$('#learnTable .editable').forEach(el=>el.onclick=()=>{if(el.classList.contains('locked'))return; learn.activeKey=el.dataset.key; render(); focusInput()}); $('#hint').textContent=it.studyHint||'Mira la forma completa, completa Tricky y después escribe Blind de memoria.'; renderPhoto(); renderGuess()}
 function learnInsert(ch){let s=learn.cells[learn.activeKey]; if(!s)return; let i=nextBlank(s); if(i<0){showMsg('Esta celda ya está completa.');return} s.guessed[i]=ch; let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]); if(done){let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase(); let ok=guess===s.answer.toLowerCase(); s.ok=ok; if(ok){ if(!learn.done[learn.activeKey]){score.good++; learn.done[learn.activeKey]=true; let amount=registerPhotoHit(); revealProgress(amount);} moveNextLearnCell(); showMsg(photo.lastBoostMsg||'Bien. Se descubre un poco más.'); photo.lastBoostMsg=''; } else {score.bad++; photo.streak=0; showMsg('Casi. Borra y corrige.')} } render()}
 function learnDelete(){let s=learn.cells[learn.activeKey]; if(!s)return; let i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
 function moveNextLearnCell(){let cols=['baseForm','pastSimple','pastParticiple']; let keys=[...cols.map(c=>'tricky_'+c),...cols.map(c=>'blind_'+c)]; let i=keys.indexOf(learn.activeKey); for(let j=i+1;j<keys.length;j++){if(!learn.done[keys[j]] && !(keys[j].startsWith('blind')&&!cols.every(c=>learn.done['tricky_'+c]))){learn.activeKey=keys[j];return}} if(keys.every(k=>learn.done[k])) setTimeout(nextVerb,650)}
-function photoObj(){return HIDDEN_PHOTOS[photo.photoIdx%HIDDEN_PHOTOS.length]}
-function photoTitle(p=photoObj()){let t=String(p.title||p.text||'Foto'); t=t.replace(/^Foto oculta\s*\d*:\s*/i,'').trim(); return t||'Foto'}
-function photoVisual(p=photoObj()){ let title=String(p.text||photoTitle(p)||'Foto').replace(/[<>&]/g,''); let emoji=String(p.emoji||'⭐').replace(/[<>&]/g,''); let bg1=p.bg1||'#4f8cff', bg2=p.bg2||'#7c5cff'; let svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${bg1}"/><stop offset="1" stop-color="${bg2}"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity=".22"/></filter></defs><rect width="900" height="520" rx="38" fill="url(#g)"/><circle cx="450" cy="210" r="142" fill="rgba(255,255,255,.22)"/><text x="50%" y="43%" text-anchor="middle" dominant-baseline="middle" font-size="176" filter="url(#s)">${emoji}</text><rect x="170" y="374" width="560" height="82" rx="28" fill="rgba(255,255,255,.92)"/><text x="50%" y="428" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="54" fill="#172033">${title}</text></svg>`; let fallback=`url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`; return p.img ? `url("${encodeURI(p.img)}"), ${fallback}` : fallback;}
+function photoObj(){return HIDDEN_ICONS[photo.iconIdx%HIDDEN_ICONS.length]}
+function photoTitle(p=photoObj()){return String(p.title||'Icono')}
+function shuffleArray(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function chooseNewIcon(){
+ let next=photo.iconIdx;
+ if(HIDDEN_ICONS.length>1){while(next===photo.iconIdx)next=Math.floor(Math.random()*HIDDEN_ICONS.length)}
+ photo.iconIdx=next;
+}
 
-function gridForTarget(){photo.blocks=4;return {cols:2,rows:2,tiles:4}}
-function resetPhotoProgress(){photo.blocks=4;photo.revealed=0;photo.order=[];photo.guessOpen=false;photo.guessTries=3;photo.guessSolved=false;photo.streak=0;photo.verbHits=0;photo.lastBoostMsg=''}
+function gridForTarget(){let tiles=photo.blocks||1200; if(tiles===600)return {cols:30,rows:20,tiles}; if(tiles===1200)return {cols:40,rows:30,tiles}; return {cols:60,rows:30,tiles}}
+function resetPhotoProgress(newIcon=false){photo.revealed=0;photo.order=[];photo.guessOpen=false;photo.guessTries=3;photo.guessSolved=false;photo.streak=0;photo.verbHits=0;photo.lastBoostMsg="";photo.choices=[];photo.choicesKey="";if(newIcon)chooseNewIcon()}
 function ensurePhotoOrder(total){if(photo.order&&photo.order.length===total)return; photo.order=[...Array(total).keys()]; for(let i=photo.order.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[photo.order[i],photo.order[j]]=[photo.order[j],photo.order[i]]}}
-function photoNotice(msg,bad=false){let n=$('#photoNotice'); if(!n)return; n.textContent=msg; n.className='photo-notice '+(bad?'bad':'ok')}
-function verifyPhotoImage(p=photoObj()){let img=$('#photoActualImg'); if(!img||!p||!p.img){photoNotice('AVISO: no hay ruta de foto.',true);return} img.onload=()=>photoNotice('Imagen cargada: '+p.img+' · prueba con 4 bloques',false); img.onerror=()=>photoNotice('AVISO: no se pudo cargar '+p.img,true); img.src=encodeURI(p.img)}
-function renderPhoto(){let card=$('#photoCard'); card.classList.toggle('off',!photo.on); if(!photo.on)return; let p=photoObj(), g=gridForTarget(); ensurePhotoOrder(g.tiles); let bg=$('#photoImage'); if(bg) bg.style.backgroundImage='none'; verifyPhotoImage(p); $('#photoMask').style.setProperty('--photo-cols',g.cols); $('#photoMask').style.setProperty('--photo-rows',g.rows); let revealed=Math.min(g.tiles,photo.guessSolved?g.tiles:(photo.revealed||0)); let revealedSet=new Set(photo.order.slice(0,revealed)); $('#photoMask').innerHTML=''; for(let i=0;i<g.tiles;i++){let d=document.createElement('div');d.className='tile '+(revealedSet.has(i)?'revealed':'');$('#photoMask').appendChild(d)} $('#photoCaption').classList.toggle('done',revealed>=g.tiles); $('#photoCaption').innerHTML=revealed>=g.tiles?`Foto descubierta: <strong>${esc(photoTitle(p))}</strong>`:`Foto oculta · ${revealed}/${g.tiles} bloques`};
-function revealProgress(amount=2){if(!photo.on)return; let g=gridForTarget(); ensurePhotoOrder(g.tiles); photo.revealed=Math.min(g.tiles,(photo.revealed||0)+Math.max(0,amount||0)); if(photo.revealed>=g.tiles && !photo.guessOpen && !photo.guessSolved){photo.guessOpen=true;showMsg('Foto descubierta. ¡Haz Guess!')}}
-function buildChoices(){let current=photoObj(),correct=photoTitle(current),same=HIDDEN_PHOTOS.filter(p=>p!==current&&p.category===current.category).map(photoTitle),rest=HIDDEN_PHOTOS.filter(p=>p!==current&&p.category!==current.category).map(photoTitle);let pool=[...new Set([...same.sort(()=>Math.random()-.5),...rest.sort(()=>Math.random()-.5)])].slice(0,7);return [...pool,correct].sort(()=>Math.random()-.5)}
+function registerPhotoHit(){if(!photo.on||photo.guessSolved)return 0; photo.streak=(photo.streak||0)+1; photo.verbHits=(photo.verbHits||0)+1; let amount=2; let boosts=[]; if(photo.verbHits%6===0){amount+=5;boosts.push('Perfect Verb +5')} if(photo.streak>0&&photo.streak%9===0){amount+=8;boosts.push('Racha +8')} photo.lastBoostMsg=boosts.length?`¡Boost! ${boosts.join(' · ')}. Se descubren ${amount} bloques.`:'Bien. Se descubren 2 bloques.'; return amount}
+function renderPhoto(){
+ const card=$('#photoCard');
+ card.classList.toggle('off',!photo.on);
+ if(!photo.on)return;
+ const p=photoObj();
+ const g=gridForTarget();
+ ensurePhotoOrder(g.tiles);
+ const frame=$('#photoFrame');
+ const img=$('#photoImage');
+ const glyph=$('#iconGlyph');
+ const mask=$('#photoMask');
+ if(frame) frame.setAttribute('data-icon-title',photoTitle(p));
+ if(img) img.setAttribute('aria-label',photoTitle(p));
+ if(glyph){
+   glyph.innerHTML=p.html||esc(p.fallback||'?');
+   glyph.setAttribute('data-fallback',p.fallback||'?');
+   glyph.setAttribute('title',photoTitle(p));
+ }
+ mask.style.setProperty('--photo-cols',g.cols);
+ mask.style.setProperty('--photo-rows',g.rows);
+ const revealed=Math.min(g.tiles,photo.guessSolved?g.tiles:(photo.revealed||0));
+ const revealedSet=new Set(photo.order.slice(0,revealed));
+ mask.innerHTML='';
+ const frag=document.createDocumentFragment();
+ for(let i=0;i<g.tiles;i++){
+   const d=document.createElement('div');
+   d.className='tile '+(revealedSet.has(i)?'revealed':'');
+   frag.appendChild(d);
+ }
+ mask.appendChild(frag);
+ $('#photoCaption').classList.toggle('done',revealed>=g.tiles);
+ $('#photoCaption').innerHTML=revealed>=g.tiles?`Icono descubierto: <strong>${esc(photoTitle(p))}</strong>`:`Icono oculto · ${revealed}/${g.tiles} bloques`;
+}
+function revealProgress(amount=2){if(!photo.on)return; let g=gridForTarget(); ensurePhotoOrder(g.tiles); photo.revealed=Math.min(g.tiles,(photo.revealed||0)+Math.max(0,amount||0)); if(photo.revealed>=g.tiles && !photo.guessSolved){showMsg('Icono descubierto. Pulsa Guess cuando quieras responder.')}}
+function buildChoices(){
+ const correct=photoTitle();
+ const key=photo.iconIdx+'|'+correct;
+ if(photo.choicesKey===key && photo.choices && photo.choices.length)return photo.choices;
+ const pool=HIDDEN_ICONS.map(x=>x.title).filter(x=>x!==correct);
+ shuffleArray(pool);
+ photo.choices=shuffleArray([...pool.slice(0,7),correct]);
+ photo.choicesKey=key;
+ return photo.choices;
+}
 function renderGuess(){let panel=$('#guessPanel'); panel.classList.toggle('show',photo.guessOpen&&photo.on); $('#guessBtn').classList.toggle('active',photo.guessOpen); $('#hearts').textContent='❤️'.repeat(photo.guessTries)+'🖤'.repeat(Math.max(0,3-photo.guessTries)); if(!photo.guessOpen)return; let choices=buildChoices(); $('#choices').innerHTML=''; choices.forEach(ch=>{let b=document.createElement('button');b.className='choice';b.textContent=ch;b.onclick=()=>guess(ch,b);$('#choices').appendChild(b)})}
-function guess(ch,b){let correct=photoTitle(); if(ch.toLowerCase()===correct.toLowerCase()){b.classList.add('good'); photo.guessSolved=true; photo.revealed=gridForTarget().tiles; photo.guessOpen=false; celebrate(); renderPhoto(); showMsg('¡Enhorabuena! Has descubierto: '+correct+'.'); return} b.classList.add('bad'); photo.guessTries--; if(photo.guessTries<=0){photo.guessSolved=true; photo.revealed=gridForTarget().tiles; photo.guessOpen=false; renderPhoto(); showMsg('¡Oh, perdiste! Era: '+correct+'.'); return} showMsg(photo.guessTries===2?'No... ¡Inténtalo otra vez!':'Casi... ¡Todavía puedes acertar!'); setTimeout(renderGuess,350)}
+function guess(ch,b){
+ let correct=photoTitle(),ok=ch.toLowerCase()===correct.toLowerCase();
+ photo.guessOpen=false;
+ renderGuess();
+ if(ok){
+   photo.guessSolved=true;
+   photo.revealed=gridForTarget().tiles;
+   score.good++;
+   celebrate();
+   renderPhoto();
+   showMsg('¡Correcto! Empieza un nuevo icono.');
+   setTimeout(()=>{resetPhotoProgress(true);render()},650);
+ }else{
+   score.bad++;
+   photo.guessTries=Math.max(0,photo.guessTries-1);
+   showMsg('No era ese. Guess se ha cerrado y puedes seguir jugando.');
+   updateStats();
+ }
+}
 function celebrate(){let c=$('#confetti'); c.innerHTML=''; let colors=['#4f8cff','#25c96f','#ffd34f','#ff6fb5','#7c5cff']; for(let i=0;i<42;i++){let el=document.createElement('i');el.style.left=Math.random()*100+'%';el.style.top='-20px';el.style.background=colors[i%colors.length];el.style.animationDelay=(Math.random()*0.25)+'s';c.appendChild(el)} setTimeout(()=>c.innerHTML='',1100)}
 function render(){updateStats(); if(mode==='hang')renderHang(); else renderLearn(); focusInput()}
 function exportJson(){let blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'}); let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='irregular_verbs_lucyago.json';a.click();URL.revokeObjectURL(a.href)}
 function importFile(file){let r=new FileReader(); r.onload=e=>{try{if(file.name.endsWith('.json')) rawData=JSON.parse(e.target.result); else {let wb=XLSX.read(e.target.result,{type:'binary'}), ws=wb.Sheets[wb.SheetNames[0]], rows=XLSX.utils.sheet_to_json(ws,{defval:''}); rawData=rows.map(x=>({baseForm:x.baseForm||x.Base||x['Base Form']||x.base||'',pastSimple:x.pastSimple||x['Past Simple']||x.Past||'',pastSimplePattern:x.pastSimplePattern||x['Past Simple Pattern']||'',pastParticiple:x.pastParticiple||x['Past Participle']||x.Participle||'',pastParticiplePattern:x.pastParticiplePattern||x['Past Participle Pattern']||'',studyHint:x.studyHint||x.Hint||'',isNew:x.isNew||x.Status||''}))} rebuild();render();showMsg('Conjunto importado.')}catch(err){showMsg('No he podido importar el archivo.')}}; if(file.name.endsWith('.json'))r.readAsText(file);else r.readAsBinaryString(file)}
-$('#learnBtn').onclick=()=>setMode('learn'); $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#solutionOkBtn').onclick=()=>{solutionPending=false;$('#solutionOkBtn').style.display='none';nextVerb()}; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Foto sí':'Foto no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $$('.target').forEach(b=>b.onclick=()=>{$$('.target').forEach(x=>x.classList.remove('active'));b.classList.add('active');photo.blocks=+b.dataset.b||300;resetPhotoProgress();render();showMsg('Foto ajustada a '+photo.blocks+' bloques.');}); $('#guessBtn').onclick=()=>{if(photo.guessSolved){showMsg('Foto ya descubierta. Pulsa Siguiente para continuar.');return} photo.guessOpen=!photo.guessOpen; if(photo.guessOpen) photo.guessTries=3; render()}; document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();del()} else if(e.key.length===1 && /[a-zA-Z]/.test(e.key)){e.preventDefault();insert(e.key.toLowerCase())}}); document.addEventListener('pointerdown',focusInput); rebuild(); render();
+$('#learnBtn').onclick=()=>setMode('learn'); $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#solutionOkBtn').onclick=()=>{solutionPending=false;$('#solutionOkBtn').style.display='none';nextVerb()}; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Iconos sí':'Iconos no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $('#blocksBtn').onclick=()=>{
+  const levels=[600,1200,1800];
+  const current=levels.indexOf(photo.blocks);
+  photo.blocks=levels[(current+1)%levels.length];
+  $('#blocksBtn').textContent=photo.blocks+' bloques';
+  resetPhotoProgress();
+  render();
+  showMsg('Icono ajustado a '+photo.blocks+' bloques.');
+};
+$('#guessBtn').onclick=()=>{
+  if(!photo.on)return;
+  photo.guessOpen=!photo.guessOpen;
+  renderGuess();
+}; document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();del()} else if(e.key.length===1 && /[a-zA-Z]/.test(e.key)){e.preventDefault();insert(e.key.toLowerCase())}}); document.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button,.cell,label,input')) return;
+  focusInput();
+});
+rebuild();
+mode='learn';
+idx=0;
+$('#hangView').classList.remove('active');
+$('#learnView').classList.add('active');
+$('#hangBtn').classList.remove('active');
+$('#learnBtn').classList.add('active');
+resetLearn(false);
+render();
 </script>
 </body>
 </html>
