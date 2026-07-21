@@ -889,28 +889,11 @@ html,body{
 
 
 
-/* v4.0 Mascota integrada: lado derecho completo */
+/* v4.0 Football Empire integrado: lado derecho completo */
 .brand .cam{font-size:26px!important}.brand span:last-child{font-size:0}.brand span:last-child:after{content:'';font-size:0}
 .right{display:block!important;grid-template-rows:1fr!important;min-height:0!important;height:100%!important}
-.rightPhotoPanel.petPanel{height:100%!important;min-height:0!important;padding:8px!important}
 .draftPanel{display:none!important}
-.photoStage.petStage{height:100%!important;min-height:0!important;position:relative!important;overflow:hidden!important;border:4px solid #fff!important;border-radius:24px!important;background:linear-gradient(180deg,#a7f3ff 0%,#e0ffcf 58%,#87d45a 59%,#38a851 100%)!important;box-shadow:inset 0 0 0 2px rgba(255,255,255,.65),0 12px 28px rgba(50,120,80,.22)!important;color:#172554!important}
-.petSky{position:absolute;inset:0;background:radial-gradient(circle at 80% 12%,#fff59d 0 34px,transparent 36px),radial-gradient(circle at 16% 18%,rgba(255,255,255,.9) 0 24px,transparent 26px),radial-gradient(circle at 26% 14%,rgba(255,255,255,.9) 0 18px,transparent 20px);z-index:1;opacity:.95}
-.petGround{position:absolute;left:-8%;right:-8%;bottom:-8%;height:31%;background:linear-gradient(180deg,#82df5f,#38a851);border-radius:50% 50% 0 0;z-index:2;box-shadow:inset 0 12px 0 rgba(255,255,255,.18)}
-.petTitle{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:20;background:#fff7d6;border:3px solid #f59e0b;color:#7c2d12;border-radius:999px;padding:6px 14px;font-size:14px;font-weight:1000;box-shadow:0 4px 0 rgba(120,80,0,.18);white-space:nowrap}
-.petMoodBubble{position:absolute;top:58px;left:18px;right:18px;z-index:20;min-height:40px;background:rgba(255,255,255,.88);border:3px solid #c4b5fd;border-radius:18px;padding:8px 10px;text-align:center;font-size:18px;font-weight:1000;color:#312e81;box-shadow:0 4px 0 rgba(60,50,130,.13)}
-.petEnergyWrap{position:absolute;left:18px;right:18px;top:112px;z-index:20;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:1000;color:#31572c;background:rgba(255,255,255,.65);border-radius:999px;padding:5px 8px}.petEnergy{flex:1;height:16px;background:#d1d5db;border:2px solid white;border-radius:999px;overflow:hidden}.petEnergy #petEnergyFill{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#facc15,#f97316);border-radius:999px;transition:width .35s ease}
-.petProblems{position:absolute;left:18px;right:18px;top:148px;min-height:44px;z-index:18;display:flex;gap:7px;justify-content:center;align-items:center}.petProblem{font-size:32px;animation:petProblemWobble .75s infinite alternate;filter:drop-shadow(0 3px 0 rgba(0,0,0,.18))}
-.petCreature{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%);width:300px;height:300px;z-index:12;animation:petBreathe 1.8s ease-in-out infinite;filter:drop-shadow(0 18px 10px rgba(0,0,0,.22));transition:transform .25s ease,filter .25s ease}.petCreature.joy{animation:petJump .42s ease-in-out 2}.petCreature.sad{filter:grayscale(.45) drop-shadow(0 18px 10px rgba(0,0,0,.25));animation:petSad 1.2s infinite}.petCreature.sick{filter:hue-rotate(70deg) saturate(.7) drop-shadow(0 18px 10px rgba(0,0,0,.25));animation:petSick .2s infinite alternate}.petCreature.sleep{animation:petSleep 2.2s ease-in-out infinite}.petCreature.evolve{animation:petEvolve 1s ease-in-out 1;filter:drop-shadow(0 0 30px #facc15)}
-.petBody{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:230px;height:245px;background:radial-gradient(circle at 35% 25%,#fff7c8 0 18px,transparent 20px),linear-gradient(145deg,var(--pet1,#f7b267),var(--pet2,#f79d65));border:7px solid #5b341f;border-radius:48% 52% 45% 55% / 52% 48% 52% 48%;box-shadow:inset 0 -16px 0 rgba(0,0,0,.08), inset 16px 14px 0 rgba(255,255,255,.25)}
-.petEar{position:absolute;top:28px;width:82px;height:82px;background:var(--pet2,#f79d65);border:7px solid #5b341f;border-radius:35% 65% 45% 55%;z-index:1}.petEar.left{left:26px;transform:rotate(-22deg)}.petEar.right{right:26px;transform:rotate(22deg)}
-.petEye{position:absolute;top:82px;width:48px;height:58px;background:#fff;border:5px solid #3a2417;border-radius:50%;z-index:3}.petEye.left{left:54px}.petEye.right{right:54px}.petEye span{position:absolute;left:15px;top:18px;width:17px;height:22px;background:#111;border-radius:50%;box-shadow:7px -5px 0 -4px #fff}.petCheek{position:absolute;top:143px;width:28px;height:20px;background:#ff7aa2;border-radius:50%;opacity:.75}.petCheek.left{left:43px}.petCheek.right{right:43px}.petMouth{position:absolute;left:50%;top:142px;transform:translateX(-50%);width:52px;height:28px;border-bottom:7px solid #3a2417;border-radius:0 0 50px 50px}.petBelly{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);width:92px;height:66px;background:rgba(255,255,255,.35);border-radius:50%;border:3px solid rgba(91,52,31,.25)}
-.petFoot{position:absolute;bottom:14px;width:62px;height:44px;background:#5b341f;border-radius:50%;z-index:0}.petFoot.left{left:78px}.petFoot.right{right:78px}
-.petToyZone{position:absolute;inset:0;z-index:15;pointer-events:none}.petItem{position:absolute;font-size:46px;animation:petItemFly 1.6s ease-out forwards;filter:drop-shadow(0 4px 0 rgba(0,0,0,.15))}.petFloat{position:absolute;font-size:38px;animation:petFloatAcross 7s linear forwards;z-index:9;filter:drop-shadow(0 4px 0 rgba(0,0,0,.15))}.petNeed{position:absolute;font-size:56px;left:50%;top:25%;transform:translateX(-50%);z-index:25;animation:petNeedPop 1.1s ease-out forwards}.petPoof{position:absolute;font-size:52px;z-index:30;animation:petPoof .65s ease-out forwards}
-@keyframes petBreathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-53%) scale(1.025)}}@keyframes petJump{0%,100%{transform:translate(-50%,-50%) scale(1)}45%{transform:translate(-50%,-72%) scale(1.05)}}@keyframes petSad{0%,100%{transform:translate(-50%,-50%) rotate(-1deg)}50%{transform:translate(-50%,-49%) rotate(1deg)}}@keyframes petSick{from{transform:translate(-51%,-50%)}to{transform:translate(-49%,-50%)}}@keyframes petSleep{0%,100%{transform:translate(-50%,-48%) rotate(-3deg)}50%{transform:translate(-50%,-50%) rotate(-5deg)}}@keyframes petEvolve{0%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.18) rotate(8deg)}100%{transform:translate(-50%,-50%) scale(1)}}@keyframes petProblemWobble{to{transform:translateY(-6px) rotate(8deg)}}@keyframes petItemFly{0%{opacity:0;transform:scale(.5) translateY(20px)}30%{opacity:1}100%{opacity:0;transform:scale(1.35) translateY(-120px)}}@keyframes petFloatAcross{from{left:110%;}to{left:-20%;}}@keyframes petNeedPop{0%{opacity:0;transform:translateX(-50%) scale(.5)}30%{opacity:1;transform:translateX(-50%) scale(1.12)}100%{opacity:0;transform:translateX(-50%) scale(1) translateY(-35px)}}@keyframes petPoof{to{opacity:0;transform:scale(1.8) translateY(-35px)}}
-@media (max-width:800px){.rightPhotoPanel.petPanel{padding:4px!important}.petTitle{font-size:10px;padding:4px 8px}.petMoodBubble{font-size:12px;top:42px;min-height:30px;padding:5px}.petEnergyWrap{top:78px;font-size:9px}.petProblems{top:110px}.petProblem{font-size:24px}.petCreature{width:185px;height:185px;top:58%}.petBody{width:145px;height:154px;border-width:5px}.petEar{width:50px;height:50px;border-width:5px;top:18px}.petEar.left{left:19px}.petEar.right{right:19px}.petEye{top:51px;width:30px;height:36px;border-width:3px}.petEye.left{left:34px}.petEye.right{right:34px}.petEye span{left:9px;top:11px;width:11px;height:14px}.petMouth{top:90px;width:36px;height:20px;border-bottom-width:5px}.petCheek{top:90px;width:18px;height:13px}.petCheek.left{left:27px}.petCheek.right{right:27px}.petBelly{width:58px;height:42px;bottom:15px}.petFoot{width:38px;height:28px;bottom:9px}.petFoot.left{left:50px}.petFoot.right{right:50px}.petItem{font-size:32px}.petFloat{font-size:26px}}
 
-/* v4.1 visual upgrade: math board + responsive pet */
 .main{grid-template-columns:minmax(640px,1.5fr) minmax(320px,.5fr)!important}
 .workArea{
   overflow:hidden!important;
@@ -1059,14 +1042,12 @@ html,body{
 .keypad button:focus-visible{outline:4px solid #fbbf24;outline-offset:2px}
 
 .right{display:flex!important;min-width:0!important;height:100%!important}
-.rightPhotoPanel.petPanel{
   flex:1 1 auto!important;
   height:100%!important;
   min-height:0!important;
   padding:8px!important;
   overflow:hidden!important;
 }
-.photoStage.petStage{
   isolation:isolate;
   display:block!important;
   min-height:420px!important;
@@ -1076,11 +1057,6 @@ html,body{
     radial-gradient(circle at 28% 14%,rgba(255,255,255,.95) 0 18px,transparent 20px),
     linear-gradient(180deg,#90e8ff 0%,#ddfbff 47%,#d9f99d 48%,#52b95d 100%)!important;
 }
-.petTitle{max-width:calc(100% - 26px);overflow:hidden;text-overflow:ellipsis}
-.petMoodBubble{left:14px!important;right:14px!important;font-size:clamp(12px,1.35vw,17px)!important}
-.petEnergyWrap{left:14px!important;right:14px!important}
-.petProblems{top:140px!important;left:12px!important;right:12px!important}
-.petProblem{
   min-width:58px;
   padding:6px 8px;
   border-radius:12px;
@@ -1091,74 +1067,39 @@ html,body{
   text-transform:uppercase;
   letter-spacing:.4px;
 }
-.petCreature{
-  --petStageScale:1;
   width:clamp(205px,72%,285px)!important;
   height:clamp(205px,72%,285px)!important;
   top:57%!important;
-  transform:translate(-50%,-50%) scale(var(--petStageScale))!important;
   transform-origin:center center!important;
 }
-.petBody{width:76%!important;height:81%!important;border-width:clamp(5px,1.7vw,7px)!important}
-.petEar{top:9%!important;width:27%!important;height:27%!important;border-width:clamp(5px,1.7vw,7px)!important}
-.petEar.left{left:9%!important}.petEar.right{right:9%!important}
-.petEye{top:27%!important;width:16%!important;height:19%!important;border-width:clamp(3px,1.2vw,5px)!important}
-.petEye.left{left:18%!important}.petEye.right{right:18%!important}
-.petEye span{left:31%!important;top:31%!important;width:36%!important;height:38%!important}
-.petCheek{top:47%!important;width:10%!important;height:7%!important}
-.petCheek.left{left:14%!important}.petCheek.right{right:14%!important}
-.petMouth{top:47%!important;width:18%!important;height:10%!important}
-.petBelly{width:31%!important;height:22%!important;bottom:8%!important}
-.petFoot{width:21%!important;height:15%!important;bottom:5%!important}
-.petFoot.left{left:26%!important}.petFoot.right{right:26%!important}
-.petCreature.happy .petMouth,.petCreature.sparkly .petMouth{
   border-bottom-color:#16a34a!important;
   height:13%!important;
   border-bottom-width:8px!important;
 }
-.petCreature.worried .petMouth{
   top:50%!important;
   border-bottom:0!important;
   border-top:7px solid #7f1d1d!important;
   border-radius:50px 50px 0 0!important;
 }
-.petCreature.veryBad .petMouth{
   top:49%!important;
   width:24%!important;
   border-bottom:0!important;
   border-top:9px solid #7f1d1d!important;
   border-radius:50px 50px 0 0!important;
 }
-.petCreature.worried .petEye span,.petCreature.veryBad .petEye span{
   height:18%!important;
   top:43%!important;
   border-radius:6px!important;
 }
-.petCreature.happy .petCheek,.petCreature.sparkly .petCheek{
   opacity:1!important;
   background:#fb7185!important;
   transform:scale(1.2);
 }
-.petCreature.veryBad .petBody{
   filter:saturate(.55) hue-rotate(65deg);
   box-shadow:inset 0 -16px 0 rgba(0,0,0,.12),0 0 0 8px rgba(248,113,113,.35)!important;
 }
-.petCreature.sparkly .petBody{
   box-shadow:inset 0 -16px 0 rgba(0,0,0,.08), inset 16px 14px 0 rgba(255,255,255,.25),0 0 28px #facc15!important;
 }
-.petReward{background:#dcfce7!important;border:3px solid #22c55e!important;color:#14532d!important;border-radius:999px;padding:6px 10px;font-size:18px!important;font-weight:1000}
-.petDamage{background:#fee2e2!important;border:3px solid #ef4444!important;color:#7f1d1d!important;border-radius:999px;padding:6px 10px;font-size:18px!important;font-weight:1000}
-.petCare{background:#dbeafe!important;border:3px solid #60a5fa!important;color:#1e3a8a!important;border-radius:999px;padding:6px 10px;font-size:16px!important;font-weight:1000}
-.petNeed{background:#fff7ed;border:3px solid #fb923c;border-radius:16px;padding:6px 10px;font-size:18px!important;font-weight:1000;color:#7c2d12}
-@keyframes petBreathe{0%,100%{transform:translate(-50%,-50%) scale(var(--petStageScale,1))}50%{transform:translate(-50%,-53%) scale(var(--petStageScale,1))}}
-@keyframes petJump{0%,100%{transform:translate(-50%,-50%) scale(var(--petStageScale,1))}45%{transform:translate(-50%,-70%) scale(var(--petStageScale,1))}}
-@keyframes petSad{0%,100%{transform:translate(-50%,-50%) rotate(-1deg) scale(var(--petStageScale,1))}50%{transform:translate(-50%,-49%) rotate(1deg) scale(var(--petStageScale,1))}}
-@keyframes petSick{from{transform:translate(-51%,-50%) scale(var(--petStageScale,1))}to{transform:translate(-49%,-50%) scale(var(--petStageScale,1))}}
-@keyframes petSleep{0%,100%{transform:translate(-50%,-48%) rotate(-3deg) scale(var(--petStageScale,1))}50%{transform:translate(-50%,-50%) rotate(-5deg) scale(var(--petStageScale,1))}}
-@keyframes petEvolve{0%{transform:translate(-50%,-50%) scale(var(--petStageScale,1))}50%{transform:translate(-50%,-50%) scale(1.18) rotate(8deg)}100%{transform:translate(-50%,-50%) scale(var(--petStageScale,1))}}
-@media (min-width:1200px){.photoStage.petStage{min-height:500px!important}.petCreature{width:clamp(230px,70%,315px)!important;height:clamp(230px,70%,315px)!important}}
-@media (min-width:801px) and (max-width:1199px){.main{grid-template-columns:minmax(560px,1.55fr) minmax(290px,.45fr)!important}.photoStage.petStage{min-height:390px!important}.petCreature{width:clamp(190px,68%,250px)!important;height:clamp(190px,68%,250px)!important;top:59%!important}.petProblems{top:128px!important}.verticalWrap{padding:24px 26px 22px!important}}
-@media (max-width:800px){.workArea{min-height:520px!important}.verticalWrap{padding:22px 18px 18px!important;margin-top:38px!important}.photoStage.petStage{min-height:300px!important}.petCreature{width:clamp(160px,58%,220px)!important;height:clamp(160px,58%,220px)!important;top:62%!important}.petProblems{top:108px!important}.petMoodBubble{left:10px!important;right:10px!important}.petEnergyWrap{left:10px!important;right:10px!important}.rightPhotoPanel.petPanel{min-height:300px!important}}
 
 /* v4.2 functional fix: keep controls visible and fit long division */
 .workArea{
@@ -1205,7 +1146,6 @@ html,body{
 .divMinus{
   transform:translateX(-145%)!important;
 }
-.petEnergy #petEnergyFill{
   min-width:4px;
 }
 .celebrationOverlay{
@@ -1250,6 +1190,7 @@ button:disabled{
 @keyframes celebrationPop{0%{transform:scale(.55);opacity:0}18%{opacity:1}58%{transform:scale(1.1)}100%{transform:scale(.98);opacity:0}}
 @keyframes celebrationDot{0%{opacity:0;transform:rotate(var(--a)) translateY(0) scale(.4)}16%{opacity:1}100%{opacity:0;transform:rotate(var(--a)) translateY(-52vh) scale(1.25)}}
 
+#checkBtn, button[onclick="check()"]{display:none!important}
 </style>
 <style id="ipad-no-overlap-final">
 @media (min-width:700px) and (max-width:800px){
@@ -1268,14 +1209,9 @@ button:disabled{
   .keypad button.wide{width:36px!important}
   .right{display:grid!important;grid-template-columns:1fr!important;grid-template-rows:minmax(0,42%) minmax(0,58%)!important;gap:5px!important}
   .rightPhotoPanel,.draftPanel{min-height:0!important;overflow:hidden!important;padding:5px!important}
-  .photoStage.petStage{min-height:0!important;height:100%!important}
-  .petCreature{width:clamp(145px,52%,200px)!important;height:clamp(145px,52%,200px)!important;top:63%!important}
-  .petProblems{top:104px!important}
-  .petMoodBubble{left:8px!important;right:8px!important;font-size:11px!important}
-  .petEnergyWrap{left:8px!important;right:8px!important;top:74px!important;font-size:8px!important}
 }
 </style>
-<style id="mystery-pet-requested-fixes">
+<style id="legacy-panel-requested-fixes">
 .topbar{
   display:grid!important;
   grid-template-columns:minmax(0,1fr) auto!important;
@@ -1374,7 +1310,7 @@ button:disabled{
   .workArea{padding-bottom:58px!important}
 }
 </style>
-<style id="mystery-pet-operation-space-fix">
+<style id="operation-space-fix">
 .operationStatus{
   grid-template-columns:minmax(0,1fr) auto!important;
   padding:4px 8px!important;
@@ -1433,7 +1369,7 @@ button:disabled{
   .divSchool{--dcell:clamp(30px,4.1vw,42px)!important;padding:8px!important;column-gap:6px!important}
 }
 </style>
-<style id="mystery-pet-final-space-fix">
+<style id="final-space-fix">
 .brand .cam{
   font-size:clamp(18px,2.6vw,28px)!important;
   text-transform:none!important;
@@ -1467,11 +1403,50 @@ button:disabled{
 }
 .divCell,.divBlank,.divDot,.divGuideCell{font-size:clamp(20px,2.7vw,28px)!important}
 .divBlank input{font-size:clamp(19px,2.55vw,27px)!important}
-.petFloat,.petMoodBubble{display:none!important}
 @media (min-width:700px) and (max-width:1199px){
   .verticalWrap{padding:20px 24px 16px!important;margin-top:8px!important}
   .mathGrid{padding-top:16px!important;gap:8px!important}
   .divSchool{--dcell:clamp(34px,4.75vw,48px)!important;padding:10px!important;column-gap:7px!important}
+}
+</style>
+
+<style id="lucyago-football-empire">
+/* Football Empire: sustituye visualmente Football Empire sin tocar el resto del juego */
+.right{display:block!important;grid-template-rows:1fr!important;min-height:0!important;height:100%!important}.draftPanel{display:none!important}.footballPanel{height:100%!important;min-height:0!important;padding:8px!important}.photoStage.footballStage{height:100%!important;min-height:0!important;position:relative!important;overflow:hidden!important;border:4px solid #fff!important;border-radius:24px!important;background:radial-gradient(circle at 50% 5%,#60a5fa 0,#172554 38%,#061126 100%)!important;box-shadow:inset 0 0 0 2px rgba(255,255,255,.18),0 12px 28px rgba(0,0,0,.28)!important;color:white!important;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.fbPitchGlow{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 34%),radial-gradient(circle at 50% 72%,rgba(34,197,94,.35),transparent 36%);z-index:1}.fbHeader{position:absolute;left:12px;right:12px;top:10px;z-index:30;display:flex;gap:10px;align-items:center;background:rgba(2,6,23,.72);border:2px solid rgba(255,255,255,.28);border-radius:18px;padding:8px 10px;backdrop-filter:blur(6px)}.fbClubBadge{width:44px;height:44px;border-radius:14px;background:linear-gradient(145deg,#facc15,#f97316);display:flex;align-items:center;justify-content:center;font-weight:1000;color:#111827;border:3px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.24)}.fbTitle{font-size:19px;font-weight:1000;letter-spacing:.6px}.fbSub{font-size:12px;font-weight:900;color:#bfdbfe}.fbStadium{position:absolute;left:12px;right:12px;top:86px;height:44%;z-index:5}.fbLights{position:absolute;left:10%;right:10%;top:0;height:24px;background:repeating-linear-gradient(90deg,#fef3c7 0 10px,transparent 10px 28px);filter:drop-shadow(0 0 10px #fef3c7);opacity:.9}.fbStand{position:absolute;left:2%;right:2%;height:58px;border-radius:20px 20px 8px 8px;background:repeating-linear-gradient(90deg,#ef4444 0 12px,#2563eb 12px 24px,#f8fafc 24px 36px);border:3px solid rgba(255,255,255,.8);box-shadow:0 8px 0 rgba(0,0,0,.20)}.fbStand.back{top:24px;opacity:.8}.fbStand.front{top:62px;transform:scaleX(1.03)}.fbScoreboard{position:absolute;left:50%;top:38px;transform:translateX(-50%);z-index:9;background:#111827;color:#fef3c7;border:3px solid #facc15;border-radius:10px;padding:4px 10px;font-weight:1000;font-size:13px;box-shadow:0 4px 0 rgba(0,0,0,.35)}.fbField{position:absolute;left:5%;right:5%;top:105px;bottom:0;min-height:120px;border:4px solid #eaffea;border-radius:18px;background:repeating-linear-gradient(90deg,#16a34a 0 34px,#15803d 34px 68px);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35),0 12px 22px rgba(0,0,0,.2);overflow:hidden}.fbField:before{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;background:#eaffea;opacity:.8}.fbCircle{position:absolute;left:50%;top:50%;width:58px;height:58px;border:3px solid #eaffea;border-radius:50%;transform:translate(-50%,-50%);opacity:.9}.fbBox{position:absolute;top:24%;width:18%;height:52%;border:3px solid #eaffea}.fbBox.left{left:0;border-left:0}.fbBox.right{right:0;border-right:0}.fbPlayers{position:absolute;inset:0}.fbPlayer{position:absolute;width:30px;height:30px;border-radius:50%;background:linear-gradient(145deg,#facc15,#fb7185);border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 0 rgba(0,0,0,.25);animation:fbBounce 1.8s ease-in-out infinite}.fbPlayer:nth-child(2n){animation-delay:-.5s}.fbPlayer:nth-child(3n){animation-delay:-1s}.fbUnlockCard{position:absolute;left:18px;right:18px;top:54%;z-index:25;background:linear-gradient(135deg,#fff,#e0f2fe);color:#0f172a;border:3px solid #93c5fd;border-radius:20px;padding:10px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 9px 0 rgba(30,64,175,.20),0 15px 30px rgba(0,0,0,.24)}.fbPack{width:58px;height:58px;border-radius:16px;background:linear-gradient(145deg,#111827,#334155);display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid #facc15;box-shadow:0 5px 0 rgba(0,0,0,.25)}.fbPack.opening{animation:fbPackOpen .7s ease-in-out 1}.fbUnlockText{font-weight:1000;font-size:16px;line-height:1.15}.fbBottom{position:absolute;left:14px;right:14px;bottom:14px;z-index:28;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.fbStat{background:rgba(255,255,255,.92);color:#0f172a;border:2px solid rgba(255,255,255,.95);border-radius:14px;padding:8px 6px;display:flex;justify-content:center;align-items:center;gap:5px;font-size:14px;font-weight:1000;box-shadow:0 4px 0 rgba(0,0,0,.16)}.fbProgressWrap{position:absolute;left:18px;right:18px;top:calc(54% + 88px);z-index:25}.fbProgressLabel{display:flex;justify-content:space-between;font-size:12px;font-weight:1000;margin-bottom:4px;color:#dbeafe}.fbProgress{height:16px;background:rgba(15,23,42,.75);border:2px solid rgba(255,255,255,.55);border-radius:999px;overflow:hidden}.fbProgress #fbProgressFill{height:100%;width:0%;background:linear-gradient(90deg,#22c55e,#facc15,#f97316);border-radius:999px;transition:width .35s ease}.fbCollection{position:absolute;left:18px;right:18px;top:calc(54% + 128px);z-index:24;background:rgba(2,6,23,.52);border:2px solid rgba(255,255,255,.22);border-radius:16px;padding:8px}.fbMiniTitle{font-size:11px;font-weight:1000;color:#bfdbfe;margin-bottom:5px}.fbSlots{display:flex;gap:5px;flex-wrap:wrap}.fbSlot{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:17px}.fbSlot.got{background:linear-gradient(145deg,#fef3c7,#facc15);border-color:#fff;color:#111}.fbBurstZone{position:absolute;inset:0;z-index:50;pointer-events:none}.fbBurst{position:absolute;font-size:28px;font-weight:1000;padding:6px 10px;border-radius:999px;background:#fff;color:#111827;border:3px solid #facc15;box-shadow:0 6px 0 rgba(0,0,0,.22);animation:fbBurstUp 1.15s ease-out forwards}.fbConfetti{position:absolute;font-size:28px;animation:fbConfetti 1.15s ease-out forwards}.fbRarity-common{color:#334155}.fbRarity-rare{color:#2563eb}.fbRarity-epic{color:#7c3aed}.fbRarity-legend{color:#f97316;text-shadow:0 0 10px rgba(250,204,21,.75)}.footballStage.fbWin{animation:fbWinFlash .8s ease-in-out 1}.footballStage.fbMistake{animation:fbRedFlash .45s ease-in-out 1}@keyframes fbBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes fbBurstUp{0%{opacity:0;transform:scale(.6) translateY(20px)}30%{opacity:1}100%{opacity:0;transform:scale(1.12) translateY(-70px)}}@keyframes fbConfetti{0%{opacity:0;transform:scale(.6) translateY(0) rotate(0)}25%{opacity:1}100%{opacity:0;transform:scale(1.4) translateY(-90px) rotate(30deg)}}@keyframes fbPackOpen{0%,100%{transform:scale(1) rotate(0)}35%{transform:scale(1.12) rotate(-6deg)}70%{transform:scale(1.08) rotate(6deg)}}@keyframes fbWinFlash{50%{filter:saturate(1.55) brightness(1.12);box-shadow:inset 0 0 0 6px rgba(34,197,94,.75),0 0 28px rgba(34,197,94,.55)}}@keyframes fbRedFlash{50%{box-shadow:inset 0 0 0 6px rgba(239,68,68,.75),0 0 28px rgba(239,68,68,.55)}}@media (max-width:800px){.footballPanel{padding:4px!important}.fbHeader{top:6px;left:8px;right:8px;padding:5px 7px;border-radius:14px}.fbClubBadge{width:34px;height:34px;border-radius:11px;font-size:13px}.fbTitle{font-size:14px}.fbSub{font-size:9px}.fbStadium{top:58px;height:42%}.fbStand{height:38px}.fbStand.back{top:18px}.fbStand.front{top:44px}.fbScoreboard{top:26px;font-size:10px;padding:3px 7px}.fbField{top:78px;min-height:88px}.fbPlayer{width:22px;height:22px;font-size:11px;border-width:2px}.fbUnlockCard{left:8px;right:8px;top:52%;padding:7px 8px;border-radius:15px}.fbPack{width:42px;height:42px;font-size:23px}.fbUnlockText{font-size:12px}.fbProgressWrap{left:10px;right:10px;top:calc(52% + 66px)}.fbCollection{left:10px;right:10px;top:calc(52% + 102px);padding:6px}.fbSlot{width:25px;height:25px;font-size:13px}.fbBottom{left:8px;right:8px;bottom:8px;gap:5px}.fbStat{font-size:11px;padding:6px 3px}.fbProgressLabel{font-size:9px}.fbProgress{height:13px}}
+
+
+/* v2 espacio extra para Football Empire + moneda propia sin emoji */
+.main{grid-template-columns:minmax(520px,1.08fr) minmax(480px,.92fr)!important;}
+.footballPanel{padding:10px!important;}
+.photoStage.footballStage{border-radius:26px!important;}
+.fbHeader{left:14px!important;right:14px!important;top:12px!important;padding:9px 12px!important;}
+.fbStadium{left:16px!important;right:16px!important;top:90px!important;height:46%!important;}
+.fbUnlockCard{left:20px!important;right:20px!important;padding:12px 14px!important;}
+.fbBottom{left:16px!important;right:16px!important;bottom:16px!important;gap:10px!important;}
+.fbStat{font-size:15px!important;min-height:44px!important;}
+.fbCollection{left:20px!important;right:20px!important;}
+.fbProgressWrap{left:20px!important;right:20px!important;}
+.fbCoinIcon{
+  width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 22px;
+  border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff8c7 0 16%,#facc15 38%,#d97706 72%,#92400e 100%);
+  border:2px solid #fff7ad;box-shadow:inset -2px -3px 0 rgba(120,53,15,.28),0 2px 0 rgba(0,0,0,.18);position:relative;
+}
+.fbCoinIcon:before{content:'FE';font-size:8px;font-weight:1000;color:#7c2d12;letter-spacing:-.5px;text-shadow:0 1px 0 rgba(255,255,255,.7)}
+.fbCoinIcon:after{content:'';position:absolute;inset:4px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55)}
+@media (min-width:1200px){
+  .main{grid-template-columns:minmax(570px,1.05fr) minmax(520px,.95fr)!important;}
+  .fbStadium{height:47%!important;}
+}
+@media (min-width:801px) and (max-width:1199px){
+  .main{grid-template-columns:minmax(440px,1.05fr) minmax(390px,.95fr)!important;}
+  .footballPanel{padding:8px!important;}
+  .fbHeader{left:10px!important;right:10px!important;top:8px!important;}
+  .fbStadium{left:10px!important;right:10px!important;top:72px!important;height:44%!important;}
+  .fbUnlockCard{left:10px!important;right:10px!important;}
+  .fbBottom{left:10px!important;right:10px!important;bottom:10px!important;}
+}
+@media (max-width:800px){
+  .fbCoinIcon{width:18px;height:18px;flex-basis:18px}.fbCoinIcon:before{font-size:7px}
 }
 </style>
 </head>
@@ -1516,7 +1491,6 @@ button:disabled{
       <div class="workArea">
         <div class="opButtons">
           <button class="primary smallPlay" id="newGameBtn" title="Nueva partida">Nueva partida</button>
-          <button class="good smallPlay" id="checkBtn" title="Comprobar la operación">Comprobar</button>
           <button class="warn smallPlay" id="helpBtn">Ayuda (3)</button>
           <button class="smallPlay" id="hintBtn">Pista</button>
           <button class="smallPlay" id="fullEraserBtn" title="Goma pantalla">Goma</button>
@@ -1545,25 +1519,51 @@ button:disabled{
 
     <div class="right">
 
-      <div class="rightPhotoPanel panel petPanel">
-        <div class="photoStage petStage" id="photoStage">
-          <div class="petSky"></div>
-          <div class="petTitle" id="flashText">MASCOTA MISTERIOSA</div>
-          <div class="petMoodBubble" id="petMoodBubble">Mascota lista</div>
-          <div class="petEnergyWrap"><span>Evolución</span><div class="petEnergy"><div id="petEnergyFill"></div></div></div>
-          <div class="petProblems" id="petProblems"></div>
-          <div class="petCreature baby" id="petCreature">
-            <div class="petEar left"></div><div class="petEar right"></div>
-            <div class="petBody">
-              <div class="petEye left"><span></span></div><div class="petEye right"><span></span></div>
-              <div class="petCheek left"></div><div class="petCheek right"></div>
-              <div class="petMouth"></div>
-              <div class="petBelly"></div>
+      <div class="rightPhotoPanel panel footballPanel">
+        <div class="photoStage footballStage" id="photoStage">
+          <div class="fbPitchGlow"></div>
+          <div class="fbHeader">
+            <div class="fbClubBadge" id="fbClubBadge">LF</div>
+            <div>
+              <div class="fbTitle" id="flashText">LUCYAGO FC</div>
+              <div class="fbSub" id="fbDivision">Barrio · Temporada 1</div>
             </div>
-            <div class="petFoot left"></div><div class="petFoot right"></div>
           </div>
-          <div class="petGround"></div>
-          <div class="petToyZone" id="petToyZone"></div>
+
+          <div class="fbStadium" id="fbStadium">
+            <div class="fbLights"></div>
+            <div class="fbStand back"></div>
+            <div class="fbStand front"></div>
+            <div class="fbScoreboard" id="fbScoreboard">0 - 0</div>
+            <div class="fbField">
+              <div class="fbCircle"></div>
+              <div class="fbBox left"></div><div class="fbBox right"></div>
+              <div class="fbPlayers" id="fbPlayers"></div>
+            </div>
+          </div>
+
+          <div class="fbUnlockCard" id="fbUnlockCard">
+            <div class="fbPack" id="fbPack">🎁</div>
+            <div class="fbUnlockText" id="fbUnlockText">Próximo sobre</div>
+          </div>
+
+          <div class="fbBottom">
+            <div class="fbStat"><span class="fbCoinIcon" aria-hidden="true"></span><b id="fbCoins">0</b></div>
+            <div class="fbStat"><span>👥</span><b id="fbFans">150</b></div>
+            <div class="fbStat"><span>⭐</span><b id="fbPrestige">1</b></div>
+          </div>
+
+          <div class="fbProgressWrap">
+            <div class="fbProgressLabel"><span id="fbGoalLabel">Fichaje estrella</span><span id="fbGoalPct">0%</span></div>
+            <div class="fbProgress"><div id="fbProgressFill"></div></div>
+          </div>
+
+          <div class="fbCollection" id="fbCollection">
+            <div class="fbMiniTitle">Colección</div>
+            <div class="fbSlots" id="fbSlots"></div>
+          </div>
+
+          <div class="fbBurstZone" id="fbBurstZone"></div>
         </div>
       </div>
       <div class="panel draftPanel" style="display:none!important">
@@ -1723,112 +1723,18 @@ function buildQueue(){
 }
 
 
-function initPet(){
-  state.pet={energy:0, stage:0, problems:[], species:null, personality:choice(['traviesa','glotona','dormilona','curiosa','carinosa']), mood:'Huevo tranquilo', reaction:'calm', ticks:0};
-  const speciesPool=[
-    {name:'Pompita',c1:'#f7b267',c2:'#f79d65',ears:'round'},
-    {name:'Mochi',c1:'#f9a8d4',c2:'#c084fc',ears:'round'},
-    {name:'Nub',c1:'#93c5fd',c2:'#60a5fa',ears:'round'},
-    {name:'Chispa',c1:'#fde68a',c2:'#fb923c',ears:'pointy'},
-    {name:'Brócoli',c1:'#86efac',c2:'#22c55e',ears:'leaf'}
-  ];
-  state.pet.species=choice(speciesPool);
-  applyPetLook();
-  renderPet();
-  startPetAmbient();
+function initFootballGame(){
+  if(typeof window.initFootballEmpire==='function') window.initFootballEmpire();
 }
-function applyPetLook(){
-  const pet=$('#petCreature'); if(!pet || !state.pet) return;
-  const s=state.pet.species || {c1:'#f7b267',c2:'#f79d65'};
-  pet.style.setProperty('--pet1',s.c1); pet.style.setProperty('--pet2',s.c2);
-  pet.className='petCreature '+(['baby','kid','teen','legend'][state.pet.stage]||'baby');
-  const scale=[.86,1,1.08,1.18][state.pet.stage]||1;
-  pet.style.setProperty('--petStageScale',scale);
+function renderFootballGame(){
+  if(typeof window.renderFootballEmpire==='function') window.renderFootballEmpire();
 }
-function renderPet(){
-  if(!$('#photoStage') || !state.pet) return;
-  const p=state.pet;
-  $('#flashText') && ($('#flashText').textContent=(p.stage===0?'HUEVO / BEBE':p.stage===1?'MASCOTA PEQUENA':p.stage===2?'MASCOTA JUVENIL':'MASCOTA LEGENDARIA'));
-  const problemText = p.problems.length ? ' | Problemas: '+p.problems.join(', ') : ' | Sin problemas';
-  $('#petMoodBubble') && ($('#petMoodBubble').textContent=p.mood+' | '+p.species.name+' '+personalityIcon(p.personality)+problemText);
-  $('#petEnergyFill') && ($('#petEnergyFill').style.width=Math.max(0,Math.min(100,p.energy))+'%');
-  const box=$('#petProblems');
-  if(box) box.innerHTML=p.problems.map(x=>`<span class="petProblem">${x}</span>`).join('');
-  const pet=$('#petCreature');
-  if(pet){
-    pet.classList.toggle('worried', p.reaction==='worried');
-    pet.classList.toggle('veryBad', p.reaction==='veryBad' || p.problems.length>=4);
-    pet.classList.toggle('happy', p.reaction==='happy');
-    pet.classList.toggle('sparkly', p.reaction==='sparkly');
-    pet.classList.toggle('sad', p.problems.length>=3);
-    pet.classList.toggle('sick', p.problems.includes('virus') || p.problems.length>=5);
-    pet.classList.toggle('sleep', p.mood.toLowerCase().includes('sueno'));
-  }
+function footballReward(){
+  if(typeof window.footballGood==='function') window.footballGood();
 }
-function personalityIcon(t){return {traviesa:'juguetona',glotona:'glotona',dormilona:'dormilona',curiosa:'curiosa',carinosa:'carinosa'}[t]||'especial';}
-function startPetAmbient(){
-  if(window.petAmbientTimer) clearInterval(window.petAmbientTimer);
-  if(window.petMoodTimer) clearInterval(window.petMoodTimer);
-  window.petAmbientTimer=null;
-  window.petMoodTimer=setInterval(()=>{ if(!state.pet || state.pet.reaction!=='calm') return; const moods=['Te mira','Busca merienda','Tiene sueno','Quiere jugar','Observa la cuenta','Da saltitos']; state.pet.mood=choice(moods); renderPet(); },5200);
+function footballPenalty(hard=false){
+  if(typeof window.footballBad==='function') window.footballBad(!!hard);
 }
-function spawnPetFloat(icon){ return; }
-function petPop(icon, cls='petItem'){
-  const stage=$('#photoStage'); if(!stage) return;
-  const el=document.createElement('div'); el.className=cls; el.textContent=icon; el.style.left=randInt(22,78)+'%'; el.style.top=randInt(30,70)+'%'; stage.appendChild(el); setTimeout(()=>el.remove(),1700);
-}
-function petNeed(icon){ petPop(icon,'petNeed'); }
-function petCorrect(){
-  if(!state.pet) initPet();
-  const p=state.pet;
-  const actions=['MERIENDA','JUEGO','CARINO','LIMPIEZA','ENERGIA','REGALO'];
-  const action=choice(actions);
-  let gain=12;
-  if(action==='LIMPIEZA' && p.problems.length){ p.problems.shift(); gain=18; p.mood='Acierto: se cura un problema'; }
-  else if(action==='MERIENDA'){ gain=14; p.mood='Acierto: gana merienda'; }
-  else if(action==='JUEGO'){ gain=12; p.mood='Acierto: juega contigo'; }
-  else if(action==='CARINO'){ gain=15; p.mood='Acierto: recibe carino'; }
-  else if(action==='REGALO'){ gain=18; p.mood='Acierto: regalo especial'; }
-  else { gain=10; p.mood='Acierto: gana energia'; }
-  p.energy+=gain;
-  p.reaction=p.energy>=80?'sparkly':'happy';
-  petPop('+'+gain+' energia','petItem petReward');
-  petPop(action,'petItem petCare');
-  petJoy(); maybeEvolvePet(); renderPet();
-}
-function petWrong(hard=false){
-  if(!state.pet) initPet();
-  const p=state.pet;
-  const problems=hard?['virus','susto','mancha','frio','cansancio']:['duda','susto','mancha','frio'];
-  if(Math.random()< (hard ? .95 : .65) && p.problems.length<6){ p.problems.push(choice(problems)); }
-  const loss=hard?16:7;
-  p.energy=Math.max(0,p.energy-loss);
-  p.reaction=hard?'veryBad':'worried';
-  p.mood=hard?'Error: pierde una vida':'Error: revisa la operacion';
-  petNeed(p.problems.length?p.problems[p.problems.length-1]:'duda');
-  petPop('-'+loss+' energia','petItem petDamage');
-  petSad(hard); renderPet();
-}
-function petJoy(){ const pet=$('#petCreature'); if(!pet) return; pet.classList.add('joy','happy'); setTimeout(()=>{pet.classList.remove('joy'); if(state.pet) state.pet.reaction='calm'; renderPet();},1200); }
-function petSad(hard=false){ const pet=$('#petCreature'); if(!pet) return; pet.classList.add(hard?'veryBad':'worried'); setTimeout(()=>{ if(state.pet) state.pet.reaction='calm'; renderPet();},1800); }
-function maybeEvolvePet(){
-  const p=state.pet; if(!p) return;
-  if(p.energy>=100 && p.stage<3){
-    p.energy=0; p.stage++; p.mood=choice(['Ha crecido','Nueva forma','Evolucion']);
-    p.reaction='sparkly';
-    applyPetLook(); const pet=$('#petCreature'); if(pet){pet.classList.add('evolve','sparkly'); setTimeout(()=>pet.classList.remove('evolve','sparkly'),1300);} for(let i=0;i<10;i++) setTimeout(()=>petPop(choice(['+','*','BRAVO','NIVEL']),'petItem petReward'),i*80);
-  }
-}
-function petFinish(won){
-  if(!state.pet) return;
-  state.pet.mood=won?'Final: esta orgullosa de ti':'Final: descansa para otra partida';
-  state.pet.reaction=won?'sparkly':'worried';
-  renderPet();
-}
-function initMission(){ initPet(); }
-function renderMission(){ renderPet(); }
-function missionGood(){ petCorrect(); }
-function missionDanger(hard=false){ petWrong(hard); }
 
 function startGame(){
   state.difficulty = $('#difficulty').value;
@@ -1836,10 +1742,10 @@ function startGame(){
   state.queue=buildQueue(); state.photos=[]; state.failCount=0; state.activeIndex=0; state.activeKind='answer'; state.activeCarryIndex=0; state.activeElement=null; state.autoAdvancing=false;
   $('#helpBtn').textContent='Ayuda ('+state.helps+')';
   $('#thumbs').innerHTML='';
-  initPet();
+  initFootballGame();
   nextOperation();
   updateUI();
-  setFeedback('Nueva mascota: resuelve operaciones para cuidarla y ayudarla a evolucionar.', 'ok');
+  setFeedback('Nuevo partido: resuelve operaciones para hacer crecer tu club.', 'ok');
 }
 
 function nextOperation(){
@@ -1851,7 +1757,7 @@ function nextOperation(){
   state.current = makeProblem(t);
   state.failCount=0; state.activeIndex=0; state.activeKind='answer'; state.activeCarryIndex=0; state.activeElement=null; state.autoAdvancing=false;
   renderProblem();
-  renderPet();
+  renderFootballGame();
   $('#helpBox').classList.remove('show');
 }
 
@@ -2518,12 +2424,7 @@ function operationAnswerCompleteAndCorrect(){
 function scheduleAutoSuccess(){
   if(state.autoAdvancing || !state.current || state.current.type==='comb') return;
   if(!operationAnswerCompleteAndCorrect()) return;
-  state.autoAdvancing=true;
-  setFeedback('Correcto. Siguiente operacion en 3 segundos.', 'good');
-  setTimeout(()=>{
-    state.autoAdvancing=false;
-    if(state.current && state.current.type!=='comb' && operationAnswerCompleteAndCorrect()) success(0);
-  },3000);
+  success();
 }
 function updateActiveCell(){
   const stepActive = stepModeActive();
@@ -2632,18 +2533,25 @@ function check(){
   if(ok) success();
   else if(!(state.current?.type==='comb' && state.current.awaitingSelection)) fail();
 }
-function success(nextDelay=3000){
+function success(){
+  if(state.autoAdvancing || !state.current) return;
+  state.autoAdvancing=true;
   if(window.LucYagoReto) window.LucYagoReto.record(true);
   const t=state.current.type;
   state.done[t]=true;
   state.completed++;
   addStat(t,true);
   addPhoto(true);
-  setFeedback('Bien. Siguiente operacion en 3 segundos.', 'good');
+  setFeedback('¡Correcto!', 'good');
   const goalReached = state.goal!=='infinite' && state.completed>=Number(state.goal);
   updateUI();
-  if(goalReached) finishGame(false);
-  else setTimeout(nextOperation, nextDelay);
+  if(goalReached){
+    state.autoAdvancing=false;
+    finishGame(false);
+  }else{
+    state.autoAdvancing=false;
+    nextOperation();
+  }
 }
 function fail(){
   if(window.LucYagoReto) window.LucYagoReto.record(false);
@@ -2735,7 +2643,7 @@ function showGeneralHint(){
     ? 'Pista: primero parentesis; despues multiplicaciones y divisiones; despues sumas y restas; dentro del mismo nivel, izquierda a derecha.'
     : (state.flow==='step'
       ? 'Pista: escribe solo en la casilla iluminada. Si aciertas, el juego pasa a la siguiente.'
-      : 'Pista: completa todas las casillas amarillas y pulsa Comprobar.');
+      : 'Pista: completa las casillas amarillas. Al acertar, pasarás automáticamente a la siguiente operación.');
   $('#helpBox').textContent = msg;
   $('#helpBox').classList.add('show');
   setFeedback(msg, 'ok');
@@ -2755,17 +2663,16 @@ function finishGame(lost=false){
   state.current=null;
   updateControlAvailability();
   $('#operationArea').innerHTML='<div style="text-align:center;font-weight:1000;font-size:28px;padding:20px;">'+
-    (lost?'MASCOTA ASUSTADA':'MASCOTA FELIZ')+'</div>';
+    (lost?'PARTIDO TERMINADO':'¡VICTORIA!')+'</div>';
   const won = !lost && (state.mode!=='full' || Object.values(state.done).every(Boolean));
   if(won){
-    setFeedback('Mascota feliz: la has cuidado muy bien.', 'good');
-    petFinish(true);
-    $('#flashText').textContent='MASCOTA FELIZ';
-    celebratePark();
+    setFeedback('¡Victoria! Tu club recibe un premio final.', 'good');
+    if(typeof window.footballFinish==='function') window.footballFinish(true);
+    $('#flashText').textContent='LUCYAGO FC';
   }else if(lost){
-    setFeedback('La mascota necesita descansar. Nueva partida para cuidarla mejor.', 'bad');
-    petFinish(false);
-    $('#flashText').textContent='MASCOTA ASUSTADA';
+    setFeedback('Partido terminado. Empieza una nueva partida para volver a intentarlo.', 'bad');
+    if(typeof window.footballFinish==='function') window.footballFinish(false);
+    $('#flashText').textContent='LUCYAGO FC';
   }else{
     setFeedback('Entrenamiento terminado.', 'ok');
   }
@@ -2785,23 +2692,19 @@ function updateUI(){
 }
 function addPhoto(good, intensity=''){
   state.photos.push({good,intensity,e: good?'OK':(intensity==='soft'?'!':'X')});
-  $('#thumbs').innerHTML = state.photos.map(p=>`<div class="thumb ${p.good?'goodT':(p.intensity==='soft'?'okT':'badT')}">${p.e}</div>`).join('');
-  if(good) missionGood(); else missionDanger(intensity==='hard');
+  const thumbs=$('#thumbs');
+  if(thumbs){
+    thumbs.innerHTML = state.photos.map(p=>`<div class="thumb ${p.good?'goodT':(p.intensity==='soft'?'okT':'badT')}">${p.e}</div>`).join('');
+  }
+  if(good) footballReward(); else footballPenalty(intensity==='hard');
 }
-function updateParkStateOnly(){ renderPet(); }
+function updateParkStateOnly(){ renderFootballGame(); }
 function updatePark(good=true, intensity=''){
-  if(good) missionGood(); else missionDanger(intensity==='hard');
+  if(good) footballReward(); else footballPenalty(intensity==='hard');
 }
-function randomizeClient(bad=false, showProp=true){
-  renderPet();
-}
-function celebratePark(){
-  state.missionStep = state.mission?.phases?.length || state.missionStep;
-  renderMission();
-  const stage=$('#photoStage');
-  if(stage){ stage.classList.add('successFlash'); setTimeout(()=>stage.classList.remove('successFlash'),900); }
-  $('#caseIcon') && ($('#caseIcon').textContent='OK');
-}
+
+function randomizeClient(){ renderFootballGame(); }
+function celebratePark(){ if(typeof window.footballCelebrate==='function') window.footballCelebrate(); }
 
 function saveStats(){ localStorage.setItem('photoPanicStats', JSON.stringify(state.stats)); }
 function renderStats(){
@@ -2982,7 +2885,6 @@ document.addEventListener('focusin',e=>{
 
 // Events
 $('#newGameBtn').onclick=startGame;
-$('#checkBtn').onclick=check;
 $('#helpBtn').onclick=useHelp;
 $('#hintBtn').onclick=showGeneralHint;
 $('#difficulty').onchange=()=>{state.difficulty=$('#difficulty').value; renderSpecificBtns(); startGame();};
@@ -3058,5 +2960,87 @@ updateControlAvailability();
   window.addEventListener('load',()=>setTimeout(paint,250));
 })();
 </script><script>window.addEventListener('load',function(){if(window.LucYagoReto){setTimeout(function(){try{if(typeof startGame==='function') startGame();}catch(e){}},500);}});</script>
+
+<script id="lucyago-football-empire-js">
+(function(){
+  const $=window.$ || (s=>document.querySelector(s));
+  const players=['Lamine Yamal','Pedri','Nico Williams','Mbappé','Haaland','Bellingham','Vinicius','Rodri','Griezmann','Salah','Musiala','Foden','Kane','Lewandowski','Dembélé','Gavi','Julián Álvarez','Courtois','Ter Stegen','Unai Simón'];
+  const boots=['Nike Mercurial oro','Adidas Predator roja','Puma Future azul','Nike Phantom negra','Adidas F50 blanca','Mizuno Morelia clásica','New Balance Furon verde'];
+  const kits=['España home','Argentina celeste','Brasil amarilla','Athletic rojiblanca','Barça blaugrana','Real Madrid blanca','Liverpool roja','PSG azul'];
+  const stadiums=['Campo de barrio','Estadio municipal','San Mamés','Bernabéu','Camp Nou','Anfield','Wembley','Maracaná'];
+  const rivals=['Blue Sharks','Fire Dragons','Royal Lions','Storm FC','Iron Bulls','Sky Eagles'];
+  const icons=['👕','👟','⚽','🧤','🏟️','⭐','🏆','🔥'];
+  function choice(a){return a[Math.floor(Math.random()*a.length)]}
+  function initFootball(){
+    window.state=window.state||{};
+    if(window.state.football) return;
+    window.state.football={coins:0,xp:0,prestige:1,fans:150,pack:0,stadium:0,division:0,goalsFor:0,goalsAgainst:0,collection:[],next:'Primer sobre',lastUnlock:'Gana operaciones para conseguir premios'};
+    renderFootball();
+  }
+  function renderPlayers(){
+    const box=$('#fbPlayers'); if(!box) return;
+    const pos=[[48,13,'⚽'],[24,31,'7'],[72,31,'11'],[37,52,'8'],[60,54,'10'],[18,72,'3'],[40,76,'5'],[62,76,'4'],[82,72,'2']];
+    box.innerHTML=pos.map((p,i)=>`<div class="fbPlayer" style="left:${p[0]}%;top:${p[1]}%">${p[2]}</div>`).join('');
+  }
+  function renderFootball(){
+    initFootball();
+    const f=window.state.football;
+    const divs=['Barrio','Ciudad','Regional','Nacional','Primera','Champions','Leyendas'];
+    $('#flashText') && ($('#flashText').textContent='FOOTBALL EMPIRE');
+    $('#fbDivision') && ($('#fbDivision').textContent=(divs[f.division]||'Leyendas')+' · Temporada '+(1+Math.floor(f.xp/120)));
+    $('#fbCoins') && ($('#fbCoins').textContent=f.coins);
+    $('#fbFans') && ($('#fbFans').textContent=f.fans.toLocaleString('es-ES'));
+    $('#fbPrestige') && ($('#fbPrestige').textContent=f.prestige);
+    $('#fbGoalLabel') && ($('#fbGoalLabel').textContent=f.next);
+    const pct=Math.min(100,f.pack%100); $('#fbGoalPct') && ($('#fbGoalPct').textContent=pct+'%'); $('#fbProgressFill') && ($('#fbProgressFill').style.width=pct+'%');
+    $('#fbUnlockText') && ($('#fbUnlockText').innerHTML=f.lastUnlock);
+    $('#fbScoreboard') && ($('#fbScoreboard').textContent=f.goalsFor+' - '+f.goalsAgainst);
+    const slots=$('#fbSlots'); if(slots){slots.innerHTML=''; for(let i=0;i<10;i++){let got=f.collection[i]; let d=document.createElement('div'); d.className='fbSlot '+(got?'got':''); d.textContent=got?got.icon:'+'; d.title=got?got.name:'Pendiente'; slots.appendChild(d);}}
+    renderPlayers(); updateStadiumLook();
+  }
+  function updateStadiumLook(){
+    const f=window.state.football||{}; const st=$('#fbStadium'); if(!st) return;
+    st.style.filter=`saturate(${1+Math.min(1,f.stadium*.12)}) brightness(${1+Math.min(.18,f.stadium*.02)})`;
+  }
+  function burst(txt,kind='good'){
+    const zone=$('#fbBurstZone')||$('#photoStage'); if(!zone) return;
+    const b=document.createElement('div'); b.className='fbBurst'; b.textContent=txt; b.style.left=(15+Math.random()*62)+'%'; b.style.top=(40+Math.random()*35)+'%';
+    if(kind==='bad'){b.style.borderColor='#ef4444'; b.style.background='#fee2e2';}
+    zone.appendChild(b); setTimeout(()=>b.remove(),1300);
+  }
+  function confetti(){
+    const zone=$('#fbBurstZone')||$('#photoStage'); if(!zone) return;
+    for(let i=0;i<10;i++){const c=document.createElement('div'); c.className='fbConfetti'; c.textContent=choice(['⚽','★','FE','🔥','🏆']); c.style.left=(10+Math.random()*80)+'%'; c.style.top=(35+Math.random()*45)+'%'; c.style.animationDelay=(i*35)+'ms'; zone.appendChild(c); setTimeout(()=>c.remove(),1300);}
+  }
+  function unlockItem(){
+    const f=window.state.football; const roll=Math.random(); let name,icon,rar='common';
+    if(roll>.78){name=choice(players); icon='⭐'; rar=roll>.94?'legend':'epic'; f.prestige+=rar==='legend'?2:1; f.next='Mejorar estadio';}
+    else if(roll>.55){name=choice(boots); icon='👟'; rar='rare'; f.next='Nueva equipación';}
+    else if(roll>.34){name=choice(kits); icon='👕'; rar='rare'; f.next='Fichaje estrella';}
+    else if(roll>.18){name=choice(stadiums); icon='🏟️'; rar='epic'; f.stadium=Math.min(7,f.stadium+1); f.next='Derrotar a '+choice(rivals);}
+    else {name=choice(['Balón Champions','Guantes Pro','Capitán del equipo','Trofeo local']); icon=choice(icons); rar='common';}
+    f.collection.unshift({name,icon,rar}); f.collection=f.collection.slice(0,10);
+    f.lastUnlock=`<span class="fbRarity-${rar}">${icon} ${name}</span><br><small>desbloqueado</small>`;
+    const pack=$('#fbPack'); if(pack){pack.classList.add('opening'); setTimeout(()=>pack.classList.remove('opening'),800)}
+    confetti(); burst('¡SOBRE!', 'good');
+  }
+  window.footballGood=function(){
+    initFootball(); const f=window.state.football; const gain=10+Math.floor(Math.random()*10); f.coins+=gain; f.xp+=10; f.fans+=25+Math.floor(Math.random()*80); f.pack+=25; f.goalsFor++; confetti(); if(f.pack>=100){f.pack-=100; unlockItem()} else {f.lastUnlock='+'+gain+' monedas · +10 XP · gol del equipo'; burst('+'+gain+' FE','good')}
+    f.prestige=Math.max(1,Math.floor(f.xp/70)+1); f.division=Math.min(6,Math.floor(f.xp/180));
+    const st=$('#photoStage'); if(st){st.classList.add('fbWin'); setTimeout(()=>st.classList.remove('fbWin'),850)}
+    renderFootball();
+  };
+  window.footballBad=function(hard){
+    initFootball(); const f=window.state.football; f.pack=Math.max(0,f.pack-(hard?12:6)); f.fans=Math.max(100,f.fans-(hard?75:25)); if(hard) f.goalsAgainst++; f.lastUnlock=hard?'El rival marca. ¡Recupérate!':'Ocasión fallada, sigue'; burst(hard?'Presión rival':'Casi','bad');
+    const st=$('#photoStage'); if(st){st.classList.add('fbMistake'); setTimeout(()=>st.classList.remove('fbMistake'),520)}
+    renderFootball();
+  };
+  window.initFootballEmpire=initFootball;
+  window.renderFootballEmpire=renderFootball;
+  window.footballCelebrate=confetti;
+  window.footballFinish=function(won){ initFootball(); const f=window.state.football; f.lastUnlock=won?'Partido ganado · bonus de 50 monedas':'Descanso y a por el siguiente partido'; if(won){f.coins+=50; f.fans+=500; confetti();} renderFootball(); };
+  window.addEventListener('load',()=>{setTimeout(()=>{initFootball(); renderFootball();},150)});
+})();
+</script>
 </body>
 </html>
