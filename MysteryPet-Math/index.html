@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>MYSTERY PET MATH v4.0 - LucYago Games</title>
+<title>Operaciones</title>
 <style>
 :root{
   --bg:#f6f2ff;
@@ -890,7 +890,7 @@ html,body{
 
 
 /* v4.0 Mascota integrada: lado derecho completo */
-.brand .cam{font-size:26px!important}.brand span:last-child{font-size:0}.brand span:last-child:after{content:'MYSTERY PET!';font-size:22px}
+.brand .cam{font-size:26px!important}.brand span:last-child{font-size:0}.brand span:last-child:after{content:'';font-size:0}
 .right{display:block!important;grid-template-rows:1fr!important;min-height:0!important;height:100%!important}
 .rightPhotoPanel.petPanel{height:100%!important;min-height:0!important;padding:8px!important}
 .draftPanel{display:none!important}
@@ -1275,11 +1275,210 @@ button:disabled{
   .petEnergyWrap{left:8px!important;right:8px!important;top:74px!important;font-size:8px!important}
 }
 </style>
+<style id="mystery-pet-requested-fixes">
+.topbar{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-rows:auto auto!important;
+  align-items:center!important;
+  gap:4px 8px!important;
+  padding:6px 8px!important;
+  min-height:0!important;
+}
+.brand{grid-column:1!important;grid-row:1!important;min-width:0!important}
+.lives{grid-column:2!important;grid-row:1!important;white-space:nowrap!important;margin-left:0!important}
+.topControls{
+  grid-column:1 / -1!important;
+  grid-row:2!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:4px!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  min-width:0!important;
+}
+.topGap{display:none!important}
+.topControls button,.topControls label{
+  flex:1 1 0!important;
+  min-width:0!important;
+  padding:4px 5px!important;
+  font-size:clamp(8px,1.12vw,11px)!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.topControls label{flex:.9 1 0!important;padding:0!important;border:0!important;background:transparent!important}
+.topControls select{width:100%!important;max-width:none!important;font-size:clamp(8px,1.1vw,11px)!important;padding:4px!important}
+.workArea{
+  justify-content:flex-start!important;
+  overflow:hidden!important;
+  padding-top:6px!important;
+}
+.opButtons{
+  position:static!important;
+  top:auto!important;
+  left:auto!important;
+  right:auto!important;
+  align-self:stretch!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:4px!important;
+  width:100%!important;
+  max-width:620px!important;
+  margin:0 auto 6px!important;
+  padding:4px!important;
+  background:rgba(255,255,255,.88)!important;
+  border-radius:14px!important;
+  z-index:30!important;
+}
+.opButtons button,.smallPlay{
+  min-width:0!important;
+  min-height:30px!important;
+  padding:6px 4px!important;
+  font-size:clamp(9px,1.18vw,12px)!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.verticalWrap{margin-top:4px!important}
+.carryRow{display:flex!important;visibility:visible!important;opacity:1!important;min-height:26px!important}
+.carryBlank{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:.95!important;
+  background:#fff9cf!important;
+  border-color:#f4df8a!important;
+}
+.blank input,.divBlank input,.carryBlank input{
+  color:#111827!important;
+  -webkit-text-fill-color:#111827!important;
+  opacity:1!important;
+  visibility:visible!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.85)!important;
+}
+.carryBlank input{-webkit-text-fill-color:#7a5b00!important;color:#7a5b00!important;background:#fff9cf!important}
+.divCell,.divBlank,.divDot,.divGuideCell{border-radius:14px!important}
+@media (min-width:700px) and (max-width:1199px){
+  #app{overflow:hidden!important}
+  .topbar{gap:3px 6px!important;padding:5px 6px!important}
+  .brand{font-size:clamp(13px,2vw,18px)!important}
+  .brand .cam{font-size:clamp(16px,2.4vw,22px)!important}
+  .lives{font-size:clamp(12px,1.7vw,16px)!important;min-width:auto!important}
+  .topControls button,.topControls label{font-size:clamp(7.5px,1.15vw,10px)!important;padding:3px 4px!important;border-width:1.5px!important}
+  .topControls select{font-size:clamp(7.5px,1.15vw,10px)!important;padding:3px!important}
+  .opButtons button,.smallPlay{font-size:clamp(8px,1.3vw,11px)!important;padding:5px 3px!important}
+  .workArea{padding-bottom:58px!important}
+}
+</style>
+<style id="mystery-pet-operation-space-fix">
+.operationStatus{
+  grid-template-columns:minmax(0,1fr) auto!important;
+  padding:4px 8px!important;
+  gap:6px!important;
+}
+#opTitle{font-size:16px!important;line-height:1!important}
+#opSub{display:none!important}
+#progress .badge{font-size:10px!important;padding:3px 5px!important}
+.workArea{
+  padding-top:3px!important;
+  padding-left:4px!important;
+  padding-right:4px!important;
+}
+.opButtons{
+  display:flex!important;
+  grid-template-columns:none!important;
+  flex-wrap:nowrap!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  width:auto!important;
+  max-width:100%!important;
+  margin:0 0 3px auto!important;
+  padding:2px!important;
+  gap:3px!important;
+  background:rgba(255,255,255,.72)!important;
+  border-radius:10px!important;
+}
+.opButtons button,.opButtons .smallPlay{
+  flex:0 1 auto!important;
+  min-height:24px!important;
+  max-width:92px!important;
+  padding:4px 6px!important;
+  font-size:clamp(8px,1vw,10px)!important;
+  border-radius:9px!important;
+}
+#fullEraserBtn,#clearFullInkBtn{
+  max-width:54px!important;
+  padding-left:5px!important;
+  padding-right:5px!important;
+}
+.verticalWrap{
+  margin-top:2px!important;
+  padding:18px 26px 18px!important;
+}
+.divSchool{
+  --dcell:clamp(30px,3.65vw,44px)!important;
+  padding:10px!important;
+}
+@media (min-width:700px) and (max-width:1199px){
+  .operationStatus{padding:3px 6px!important}
+  #opTitle{font-size:14px!important}
+  .opButtons{gap:2px!important;margin-bottom:2px!important}
+  .opButtons button,.opButtons .smallPlay{min-height:22px!important;max-width:78px!important;padding:3px 4px!important;font-size:clamp(7px,1.08vw,9px)!important}
+  #fullEraserBtn,#clearFullInkBtn{max-width:46px!important}
+  .verticalWrap{padding:14px 18px 14px!important;margin-top:1px!important}
+  .divSchool{--dcell:clamp(30px,4.1vw,42px)!important;padding:8px!important;column-gap:6px!important}
+}
+</style>
+<style id="mystery-pet-final-space-fix">
+.brand .cam{
+  font-size:clamp(18px,2.6vw,28px)!important;
+  text-transform:none!important;
+}
+.brand span:last-child,.brand span:last-child:after{content:""!important;font-size:0!important;display:none!important}
+.operationStatus{display:none!important}
+#opTitle,#opSub{display:none!important}
+.workArea{padding-top:2px!important}
+.verticalWrap{
+  margin-top:10px!important;
+  padding:24px 30px 20px!important;
+}
+.verticalWrap:before{
+  top:8px!important;
+  left:18px!important;
+  right:18px!important;
+  height:6px!important;
+}
+.mathGrid{padding-top:14px!important;gap:9px!important}
+.rowMath.carryRow{
+  margin-top:8px!important;
+  margin-bottom:4px!important;
+  min-height:30px!important;
+}
+.carryBlank{height:26px!important;align-self:flex-end!important}
+.divSchool{
+  --dcell:clamp(34px,4.15vw,50px)!important;
+  padding:12px!important;
+  column-gap:8px!important;
+  row-gap:5px!important;
+}
+.divCell,.divBlank,.divDot,.divGuideCell{font-size:clamp(20px,2.7vw,28px)!important}
+.divBlank input{font-size:clamp(19px,2.55vw,27px)!important}
+.petFloat,.petMoodBubble{display:none!important}
+@media (min-width:700px) and (max-width:1199px){
+  .verticalWrap{padding:20px 24px 16px!important;margin-top:8px!important}
+  .mathGrid{padding-top:16px!important;gap:8px!important}
+  .divSchool{--dcell:clamp(34px,4.75vw,48px)!important;padding:10px!important;column-gap:7px!important}
+}
+</style>
 </head>
 <body>
 <div id="app">
   <div class="topbar">
-    <div class="brand"><span class="cam">PET</span><span>MYSTERY PET!</span></div>
+    <div class="brand"><span class="cam">Operaciones</span><span></span></div>
     <div class="topControls">
       <button id="homeBtn" class="homeBtn" title="Volver al menú">🏠</button>
       <button data-mode="full" class="modeTop selectedMode">Mixto</button>
@@ -1570,13 +1769,10 @@ function personalityIcon(t){return {traviesa:'juguetona',glotona:'glotona',dormi
 function startPetAmbient(){
   if(window.petAmbientTimer) clearInterval(window.petAmbientTimer);
   if(window.petMoodTimer) clearInterval(window.petMoodTimer);
-  window.petAmbientTimer=setInterval(()=>{ if(!state.pet) return; spawnPetFloat(choice(['+','*','OK','GO'])); },2600);
+  window.petAmbientTimer=null;
   window.petMoodTimer=setInterval(()=>{ if(!state.pet || state.pet.reaction!=='calm') return; const moods=['Te mira','Busca merienda','Tiene sueno','Quiere jugar','Observa la cuenta','Da saltitos']; state.pet.mood=choice(moods); renderPet(); },5200);
 }
-function spawnPetFloat(icon){
-  const stage=$('#photoStage'); if(!stage) return;
-  const el=document.createElement('div'); el.className='petFloat'; el.textContent=icon; el.style.top=randInt(18,72)+'%'; el.style.animationDuration=randInt(55,90)/10+'s'; stage.appendChild(el); setTimeout(()=>el.remove(),9000);
-}
+function spawnPetFloat(icon){ return; }
 function petPop(icon, cls='petItem'){
   const stage=$('#photoStage'); if(!stage) return;
   const el=document.createElement('div'); el.className=cls; el.textContent=icon; el.style.left=randInt(22,78)+'%'; el.style.top=randInt(30,70)+'%'; stage.appendChild(el); setTimeout(()=>el.remove(),1700);
@@ -1608,7 +1804,7 @@ function petWrong(hard=false){
   const loss=hard?16:7;
   p.energy=Math.max(0,p.energy-loss);
   p.reaction=hard?'veryBad':'worried';
-  p.mood=hard?'Fallo fuerte: pierde una vida y se asusta':'Fallo: pierde energia y se preocupa';
+  p.mood=hard?'Error: pierde una vida':'Error: revisa la operacion';
   petNeed(p.problems.length?p.problems[p.problems.length-1]:'duda');
   petPop('-'+loss+' energia','petItem petDamage');
   petSad(hard); renderPet();
@@ -1661,11 +1857,8 @@ function nextOperation(){
 
 function renderProblem(){
   const p=state.current;
-  $('#opTitle').textContent = icons[p.type]+' '+labels[p.type];
-  const flowText = ['div','comb'].includes(p.type)
-    ? 'Modo todo editable: paso a paso anulado en divisiones y combinadas.'
-    : (state.flow==='step' ? 'Modo paso a paso: rellena la casilla iluminada.' : 'Modo todo vacio: rellena todos los huecos.');
-  $('#opSub').textContent = flowText;
+  $('#opTitle').textContent = '';
+  $('#opSub').textContent = '';
   if(p.type==='add' || p.type==='sub') renderAddSub(p);
   if(p.type==='mul') renderMul(p);
   if(p.type==='div') renderDiv(p);
@@ -2082,15 +2275,19 @@ function rowFromAnswer(answer,rowKey,op=''){
 }
 
 function renderMul(p){
-  const topFormatted = padThousands(p.a);
+  const rows = [padThousands(p.a), padThousands(p.b), padThousands(p.partial1), padThousands(p.partial2*10), padThousands(p.answer)];
+  const width = Math.max(...rows.map(x=>x.length));
+  const topFormatted = padFormattedToWidth(padThousands(p.a), width);
+  const bottomFormatted = padFormattedToWidth(padThousands(p.b), width);
   let html='<div class="mathGrid">';
-  html += rowFromNumber(p.a,'',false);
-  html += rowFromNumber(p.b,'x',false);
+  html += carryRowFor(topFormatted);
+  html += '<div class="rowMath"><div class="opMark"></div>'+cellsFromFormattedText(topFormatted)+'</div>';
+  html += '<div class="rowMath"><div class="opMark">x</div>'+cellsFromFormattedText(bottomFormatted)+'</div>';
   html += '<div class="line"></div>';
-  html += rowFromAnswer(padThousands(p.partial1),'p1');
-  html += rowFromAnswer(padThousands(p.partial2*10),'p2');
+  html += rowFromAnswer(padFormattedToWidth(padThousands(p.partial1), width),'p1');
+  html += rowFromAnswer(padFormattedToWidth(padThousands(p.partial2*10), width),'p2');
   html += '<div class="line"></div>';
-  html += rowFromAnswer(padThousands(p.answer),'ans');
+  html += rowFromAnswer(padFormattedToWidth(padThousands(p.answer), width),'ans');
   html += '</div>';
   $('#operationArea').innerHTML=html;
 }
@@ -2322,11 +2519,11 @@ function scheduleAutoSuccess(){
   if(state.autoAdvancing || !state.current || state.current.type==='comb') return;
   if(!operationAnswerCompleteAndCorrect()) return;
   state.autoAdvancing=true;
-  setFeedback('Correcto. Pasamos a la siguiente operación.', 'good');
+  setFeedback('Correcto. Siguiente operacion en 3 segundos.', 'good');
   setTimeout(()=>{
     state.autoAdvancing=false;
-    if(state.current && state.current.type!=='comb' && operationAnswerCompleteAndCorrect()) success();
-  },320);
+    if(state.current && state.current.type!=='comb' && operationAnswerCompleteAndCorrect()) success(0);
+  },3000);
 }
 function updateActiveCell(){
   const stepActive = stepModeActive();
@@ -2379,6 +2576,7 @@ function inputKey(k){
         }
       }else{
         cell.classList.add('badCell');
+        setFeedback('Error.', 'bad', true);
       }
     }
     updateActiveCell();
@@ -2387,12 +2585,13 @@ function inputKey(k){
 
   inp.value=String(k).slice(0,1);
   cell.classList.remove('badCell','goodCell');
-  if(stepModeActive() && cell.dataset.answer!==undefined){
+  if(cell.dataset.answer!==undefined){
     if(inp.value===cell.dataset.answer){
       cell.classList.add('goodCell');
-      state.activeElement=nextStepTarget();
+      if(stepModeActive()) state.activeElement=nextStepTarget();
     }else{
       cell.classList.add('badCell');
+      setFeedback('Error.', 'bad', true);
     }
   }
   updateActiveCell();
@@ -2433,18 +2632,18 @@ function check(){
   if(ok) success();
   else if(!(state.current?.type==='comb' && state.current.awaitingSelection)) fail();
 }
-function success(){
+function success(nextDelay=3000){
   if(window.LucYagoReto) window.LucYagoReto.record(true);
   const t=state.current.type;
   state.done[t]=true;
   state.completed++;
   addStat(t,true);
   addPhoto(true);
-  setFeedback('Bien: la mascota gana energía y pasa a la siguiente operación.', 'good');
+  setFeedback('Bien. Siguiente operacion en 3 segundos.', 'good');
   const goalReached = state.goal!=='infinite' && state.completed>=Number(state.goal);
   updateUI();
   if(goalReached) finishGame(false);
-  else setTimeout(nextOperation, 250);
+  else setTimeout(nextOperation, nextDelay);
 }
 function fail(){
   if(window.LucYagoReto) window.LucYagoReto.record(false);
@@ -2453,13 +2652,13 @@ function fail(){
   if(state.failCount===1){
     addPhoto(false,'soft');
     randomizeClient(true);
-    setFeedback('Fallo suave: la mascota pierde energia y se preocupa. Prueba otra vez o usa Ayuda.', 'bad', true);
+    setFeedback('Error. Revisa las casillas marcadas.', 'bad', true);
   }else{
     state.lives--;
     state.failCount=0;
     addPhoto(false,'hard');
     randomizeClient(true);
-    setFeedback('Fallo fuerte: la mascota se asusta mucho. Pierdes una vida.', 'bad', true);
+    setFeedback('Error. Pierdes una vida.', 'bad', true);
     if(state.lives<=0){ finishGame(true); }
   }
   updateUI();
