@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -54,7 +54,7 @@
 const SESSION='lucyago_reto_session';
 const GAMES=[
  {id:'pecera',name:'Pecera',icon:'🐠',path:'Multiplicaciones-Pecera/index.html',win:.70,msgWin:'Los peces nadan haciendo fiesta.',msgLose:'La pecera pide otra ronda de burbujas.'},
- {id:'mystery',name:'Mystery Pet',icon:'🐾',path:'MysteryPet-Math/index.html',win:.70,msgWin:'La mascota misteriosa está felizísima.',msgLose:'La mascota quiere revancha con ojitos tiernos.'},
+ {id:'footballEmpire',name:'Football Empire',icon:'🏟️',path:'Football_Empire-MATHS/index.html',win:.70,msgWin:'El club ficha, crece y celebra una victoria de gestión.',msgLose:'El club revisa plantilla y mercado para volver más fuerte.'},
  {id:'volcan',name:'Volcán de tildes',icon:'🌋',path:'Acentos-Volcan/index.html',win:.70,msgWin:'El volcán se queda tranquilo.',msgLose:'El volcán sigue echando humo, pero poquito.'},
  {id:'verbs',name:'Irregular Verbs',icon:'📚',path:'IrregularVerbs-Ahorcado/index.html',win:.70,msgWin:'Los verbos obedecen a Yago.',msgLose:'Los verbos se han escondido para mañana.'},
  {id:'pirata',name:'Unitats Pirata',icon:'🏴‍☠️',path:'Unitats-Pirata/index.html',extra:'&sinMagnituds=1',win:.70,msgWin:'El tesoro pirata es suyo.',msgLose:'El pirata guarda el mapa para la próxima.'},
@@ -86,3 +86,7 @@ function showSummary(){const s=get(); if(!s.active && !s.results){return} const 
 document.getElementById('startBtn').onclick=newSession;document.getElementById('resumeBtn').onclick=renderAll;document.getElementById('summaryBtn').onclick=showSummary;const params=new URLSearchParams(location.search);renderAll();if(params.get('continue')==='1'){renderAll();}
 </script>
 </body></html>
+
+
+
+
