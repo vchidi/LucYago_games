@@ -3801,6 +3801,9 @@ body.learning-mode.keyboard-open .topline{
   grid-template-columns:repeat(10,minmax(0,1fr));
   gap:4px;
 }
+.spelling-spanish-keyboard-row:last-child{
+  grid-template-columns:repeat(11,minmax(0,1fr));
+}
 .spelling-key{
   min-width:0!important;
   height:31px!important;
@@ -3816,6 +3819,15 @@ body.learning-mode.keyboard-open .topline{
   color:#172033!important;
   border:1px solid rgba(32,48,74,.08)!important;
   box-shadow:0 5px 10px rgba(32,48,74,.10)!important;
+}
+.spelling-key-shift{
+  background:#eef3ff!important;
+  color:#285bd5!important;
+  font-size:10px!important;
+}
+.spelling-spanish-keyboard.shift-on .spelling-key-shift{
+  background:#285bd5!important;
+  color:#fff!important;
 }
 .spelling-key-delete{
   background:#ffe4e2!important;
@@ -3855,10 +3867,11 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
 </style>
 <script id="valentina-spelling-spanish-keyboard-20260726">
 (function(){
+  var shift=false;
   var rows=[
     ['q','w','e','r','t','y','u','i','o','p'],
     ['a','s','d','f','g','h','j','k','l','ñ'],
-    ['z','x','c','v','b','n','m','.', 'Espacio','Borrar']
+    ['Mayús','z','x','c','v','b','n','m','.', '⎵','⌫']
   ];
   function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
   function isCompetition(){return document.body&&document.body.classList.contains('competition-mode')}
@@ -3902,10 +3915,28 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
     else if(ch==='Espacio')dispatchKey(' ');
     else dispatchKey(ch);
   }
+  function refreshShiftLabels(){
+    var kb=document.getElementById('spellingSpanishKeyboard');
+    if(!kb)return;
+    kb.classList.toggle('shift-on',shift);
+    kb.querySelectorAll('.spelling-key').forEach(function(key){
+      var value=key.dataset.value;
+      if(value&&/^[a-zñ]$/.test(value))key.textContent=shift?value.toUpperCase():value;
+    });
+  }
   function press(label){
     neutralizeHiddenInput();
-    if(isLearning())typeLearning(label);
-    else typeCompetition(label);
+    if(label==='Mayús'){
+      shift=!shift;
+      refreshShiftLabels();
+      setTimeout(neutralizeHiddenInput,0);
+      return;
+    }
+    var value=label==='⌫'?'Borrar':(label==='⎵'?'Espacio':label);
+    if(/^[a-zñ]$/.test(value)&&shift)value=value.toUpperCase();
+    if(isLearning())typeLearning(value);
+    else typeCompetition(value);
+    if(/^[a-zñ]$/i.test(value)){shift=false;refreshShiftLabels();}
     setTimeout(neutralizeHiddenInput,0);
   }
   function buildKeyboard(){
@@ -3918,8 +3949,9 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
       row.forEach(function(label){
         var b=document.createElement('button');
         b.type='button';
-        b.className='spelling-key'+(label==='Borrar'?' spelling-key-delete':'');
+        b.className='spelling-key'+(label==='⌫'?' spelling-key-delete':'')+(label==='⎵'?' spelling-key-space':'')+(label==='Mayús'?' spelling-key-shift':'');
         b.textContent=label;
+        b.dataset.value=label;
         b.setAttribute('inputmode','none');
         b.tabIndex=-1;
         b.addEventListener('pointerdown',function(e){e.preventDefault();press(label);});
@@ -4623,3 +4655,182 @@ body.learning-mode.keyboard-open .panel{
 
 
 
+
+
+
+<style id="valentina-ipad-learning-final-20260726">
+/* Ajuste final iPad: cabecera compacta, botones de ancho natural y scroll horizontal */
+@media (pointer:coarse) and (min-width:761px){
+  .hero{overflow:hidden!important;position:relative!important}
+  .hero .controls{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    justify-content:flex-start!important;
+    align-items:center!important;
+    gap:5px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    padding:0 4px 3px 0!important;
+  }
+  .hero .controls::-webkit-scrollbar{display:none!important}
+  .hero .controls > *,
+  .hero .controls button,
+  .hero .controls label.btn,
+  .hero .controls select.select-pill{
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:max-content!important;
+    max-width:none!important;
+    white-space:nowrap!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .hero .controls .icon-btn,
+  .hero .controls #menuBtn{
+    min-width:30px!important;
+    width:30px!important;
+    max-width:30px!important;
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  body.keyboard-open .hero .controls{
+    position:static!important;
+    right:auto!important;
+    top:auto!important;
+    max-width:100%!important;
+    justify-content:flex-start!important;
+  }
+}
+
+/* Aprendizaje: todos los controles propios en una sola linea, sin casita delante de Iconos si */
+body.learning-mode #learnHomeBtn,
+body.learning-mode.keyboard-open #learnHomeBtn{display:none!important}
+body.learning-mode .photo-controls,
+body.learning-mode.keyboard-open .photo-controls{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:5px!important;
+  width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  scrollbar-width:none!important;
+  padding:0 0 3px!important;
+  margin:0 0 4px!important;
+}
+body.learning-mode .photo-controls::-webkit-scrollbar{display:none!important}
+body.learning-mode .photo-controls > *,
+body.learning-mode.keyboard-open .photo-controls > *{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:max-content!important;
+  white-space:nowrap!important;
+}
+body.learning-mode .learn-control,
+body.learning-mode.keyboard-open .learn-control,
+body.learning-mode .photo-controls .status,
+body.learning-mode.keyboard-open .photo-controls .status{
+  min-height:26px!important;
+  height:26px!important;
+  padding:0 8px!important;
+  border-radius:10px!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+body.learning-mode .stats .stat:has(#stepCount),
+body.learning-mode.keyboard-open .stats .stat:has(#stepCount){display:none!important}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(74px,1fr))!important;
+  gap:4px!important;
+}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode,
+  body.learning-mode.keyboard-open{--hero-h:98px!important}
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:98px!important;
+    min-height:98px!important;
+    max-height:98px!important;
+    flex-basis:98px!important;
+    padding:4px 7px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 108px)!important}
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title{font-size:20px!important;line-height:1.08!important;margin:0 0 3px!important}
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    position:absolute!important;
+    left:392px!important;
+    right:7px!important;
+    top:7px!important;
+    width:auto!important;
+    margin:0!important;
+    grid-template-columns:repeat(4,minmax(58px,1fr))!important;
+  }
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{height:25px!important;min-height:25px!important;padding:2px 5px!important;border-radius:9px!important}
+  body.learning-mode .stat .k,
+  body.learning-mode.keyboard-open .stat .k{font-size:7px!important;line-height:1!important}
+  body.learning-mode .stat .v,
+  body.learning-mode.keyboard-open .stat .v{font-size:12.5px!important;line-height:1!important;margin-top:0!important}
+}
+@media (pointer:coarse) and (min-width:761px) and (max-width:1050px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    width:100%!important;
+    margin:2px 0 0!important;
+  }
+  body.learning-mode,
+  body.learning-mode.keyboard-open{--hero-h:116px!important}
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{height:116px!important;min-height:116px!important;max-height:116px!important;flex-basis:116px!important}
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 126px)!important}
+}
+
+/* Teclado visual: simbolos compactos y letras un poco mas grandes */
+.spelling-key{
+  font-size:18px!important;
+  font-weight:900!important;
+}
+.spelling-key-space,.spelling-key-delete{
+  font-family:'Segoe UI Symbol','Arial Unicode MS',Inter,Arial,sans-serif!important;
+  font-size:20px!important;
+  line-height:1!important;
+}
+@media (pointer:coarse){
+  .spelling-key{font-size:19px!important}
+  .spelling-key-space,.spelling-key-delete{font-size:22px!important}
+}
+
+/* BLIND exactamente con la misma base visual que WORD */
+.learn-phrase-blind,
+.learn-phrase-blind *,
+.learn-word,
+.learn-word *{
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-weight:900!important;
+  letter-spacing:0!important;
+}
+.learn-phrase-blind .learn-cell,
+.learn-word .learn-cell,
+.learn-phrase-blind .learn-letter,
+.learn-word .learn-letter{
+  font-size:inherit!important;
+  line-height:1.08!important;
+  color:var(--text)!important;
+}
+</style>
