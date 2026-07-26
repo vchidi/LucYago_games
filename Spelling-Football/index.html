@@ -4978,43 +4978,7 @@ body.learning-mode.keyboard-open .learn-cell.editable:not(.phrase){
 }
 </style>
 <script id="valentina-learning-control-order-final-20260726">
-(function(){
-  function byId(id){return document.getElementById(id)}
-  function tuneLearningHeader(){
-    var pc=document.querySelector('.photo-controls');
-    var controls=document.querySelector('.hero .controls');
-    if(!pc||!controls)return;
-    var isLearning=document.body&&document.body.classList.contains('learning-mode');
-    if(isLearning){
-      var comp=byId('competitionScreenBtn');
-      if(pc.parentElement!==controls){
-        if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',pc);
-        else controls.appendChild(pc);
-      }
-      pc.classList.add('learning-top-strip');
-      var ordered=['learnPhraseBtn','learnBlocksBtn','learnShuffleBtn','learnPhotoToggle','learnGuessBtn','learnIndex'];
-      ordered.forEach(function(id){var el=byId(id);if(el)pc.appendChild(el)});
-      Array.prototype.slice.call(pc.querySelectorAll('.status')).forEach(function(el){
-        if(el.id!=='learnIndex')pc.appendChild(el);
-      });
-      var home=byId('learnHomeBtn');
-      if(home)home.style.display='none';
-    }
-  }
-  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){
-    window.addEventListener(ev,function(){setTimeout(tuneLearningHeader,0);setTimeout(tuneLearningHeader,160)},true);
-  });
-  var oldRenderLearn=window.renderLearn;
-  if(typeof oldRenderLearn==='function'){
-    window.renderLearn=function(){
-      var out=oldRenderLearn.apply(this,arguments);
-      setTimeout(tuneLearningHeader,0);
-      return out;
-    };
-  }
-  setInterval(tuneLearningHeader,700);
-  setTimeout(tuneLearningHeader,0);
-})();
+/* Desactivado: este bloque movia intermitentemente la tira de Aprendizaje a la cabecera. */
 </script>
 <style id="valentina-competition-ipad-button-fit-final-20260726">
 /* Partido en iPad: botones ajustados al texto, sin recortes, con scroll horizontal */
@@ -5381,3 +5345,193 @@ body.learning-mode.keyboard-open .learn-cell.editable:not(.phrase){
   cleanTitle();
 })();
 </script>
+<style id="valentina-restore-learning-strip-final-20260726">
+/* Restaurar la tira de controles de Aprendizaje como en la captura */
+body.learning-mode .photo-controls,
+body.learning-mode.keyboard-open .photo-controls{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:7px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  scrollbar-width:none!important;
+  margin:6px 0 6px!important;
+  padding:0 2px 4px!important;
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  z-index:30!important;
+}
+body.learning-mode .photo-controls::-webkit-scrollbar,
+body.learning-mode.keyboard-open .photo-controls::-webkit-scrollbar{display:none!important}
+body.learning-mode .hero .controls .photo-controls,
+body.learning-mode.keyboard-open .hero .controls .photo-controls{
+  display:none!important;
+}
+body.learning-mode .learn-left > .photo-controls,
+body.learning-mode.keyboard-open .learn-left > .photo-controls{
+  display:flex!important;
+}
+body.learning-mode .photo-controls > *,
+body.learning-mode.keyboard-open .photo-controls > *{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:max-content!important;
+  max-width:none!important;
+  white-space:nowrap!important;
+}
+body.learning-mode .photo-controls .learn-control,
+body.learning-mode.keyboard-open .photo-controls .learn-control{
+  height:38px!important;
+  min-height:38px!important;
+  max-height:38px!important;
+  padding:0 14px!important;
+  border-radius:9px!important;
+  font-size:15px!important;
+  line-height:1!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+body.learning-mode .photo-controls .status,
+body.learning-mode.keyboard-open .photo-controls .status{
+  height:28px!important;
+  min-height:28px!important;
+  max-height:28px!important;
+  padding:0 8px!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  line-height:1!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+body.learning-mode #learnHomeBtn,
+body.learning-mode.keyboard-open #learnHomeBtn{display:none!important}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:94px!important;
+    min-height:94px!important;
+    max-height:94px!important;
+    flex-basis:94px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 104px)!important}
+}
+</style>
+<script id="valentina-restore-learning-strip-final-20260726">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function restoreStrip(){
+    if(!document.body||!document.body.classList.contains('learning-mode'))return;
+    var strip=document.querySelector('.photo-controls');
+    var left=document.querySelector('#learningView .learn-left');
+    if(!strip||!left)return;
+    if(strip.parentElement!==left){
+      var meaning=byId('learnMeaning');
+      if(meaning&&meaning.parentElement===left)left.insertBefore(strip,meaning);
+      else left.insertBefore(strip,left.firstChild);
+    }
+    strip.style.display='flex';
+    strip.style.visibility='visible';
+    strip.style.opacity='1';
+    var order=['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn','learnIndex'];
+    order.forEach(function(id){var el=byId(id);if(el)strip.appendChild(el)});
+    Array.prototype.slice.call(strip.querySelectorAll('.status')).forEach(function(el){
+      if(el.id!=='learnIndex')strip.appendChild(el);
+    });
+    var home=byId('learnHomeBtn');
+    if(home)home.style.display='none';
+  }
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(restoreStrip,0);setTimeout(restoreStrip,160)},true);
+  });
+  var oldRenderLearn=window.renderLearn;
+  if(typeof oldRenderLearn==='function'){
+    window.renderLearn=function(){
+      var out=oldRenderLearn.apply(this,arguments);
+      setTimeout(restoreStrip,0);
+      return out;
+    };
+  }
+  setInterval(restoreStrip,500);
+  setTimeout(restoreStrip,0);
+})();
+</script>
+
+<style id="valentina-remove-learning-title-suffix-final-20260726">
+body.learning-mode .title::after,
+body.learning-mode.keyboard-open .title::after{
+  content:""!important;
+  display:none!important;
+}
+</style>
+<style id="valentina-learning-strip-clickable-final-20260726">
+body.learning-mode .learn-left,
+body.learning-mode.keyboard-open .learn-left,
+body.learning-mode .photo-controls,
+body.learning-mode.keyboard-open .photo-controls,
+body.learning-mode .photo-controls *,
+body.learning-mode.keyboard-open .photo-controls *{
+  pointer-events:auto!important;
+}
+body.learning-mode .photo-controls,
+body.learning-mode.keyboard-open .photo-controls{
+  position:relative!important;
+  z-index:999!important;
+}
+body.learning-mode .learn-table,
+body.learning-mode .learn-sentence,
+body.learning-mode .learn-phrase-blind,
+body.learning-mode .learn-message,
+body.learning-mode .actions{
+  position:relative!important;
+  z-index:1!important;
+}
+</style>
+<script id="valentina-learning-strip-clickable-final-20260726">/* inactivo: sustituido por enlaces directos */</script>
+<script id="valentina-learning-buttons-direct-final-20260726">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function run(id){
+    var b=byId(id);
+    if(!b)return;
+    var now=Date.now();
+    if(b.__lastDirectRun&&now-b.__lastDirectRun<220)return;
+    b.__lastDirectRun=now;
+    var original=b.__nativeLearningClick||b.onclick;
+    if(typeof original==='function')original.call(b,new MouseEvent('click',{bubbles:false,cancelable:true}));
+  }
+  function bindDirect(){
+    var strip=document.querySelector('#learningView .learn-left > .photo-controls');
+    if(!strip)return;
+    ['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){
+      var b=byId(id);
+      if(!b)return;
+      if(!b.__nativeLearningClick&&typeof b.onclick==='function')b.__nativeLearningClick=b.onclick;
+      if(b.dataset.directFinal==='2')return;
+      b.dataset.directFinal='2';
+      b.addEventListener('pointerup',function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();run(id)},true);
+      b.addEventListener('touchend',function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();run(id)},true);
+      b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();run(id)},true);
+    });
+  }
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(bindDirect,0);setTimeout(bindDirect,180)},true);
+  });
+  setInterval(bindDirect,500);
+  setTimeout(bindDirect,0);
+})();
+</script>
+
+
