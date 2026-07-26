@@ -3871,7 +3871,7 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
   var rows=[
     ['q','w','e','r','t','y','u','i','o','p'],
     ['a','s','d','f','g','h','j','k','l','ñ'],
-    ['Mayús','z','x','c','v','b','n','m','.', '⎵','⌫']
+    ['↑','z','x','c','v','b','n','m','.', '⎵','⌫']
   ];
   function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
   function isCompetition(){return document.body&&document.body.classList.contains('competition-mode')}
@@ -3926,7 +3926,7 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
   }
   function press(label){
     neutralizeHiddenInput();
-    if(label==='Mayús'){
+    if(label==='↑'){
       shift=!shift;
       refreshShiftLabels();
       setTimeout(neutralizeHiddenInput,0);
@@ -3949,7 +3949,7 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
       row.forEach(function(label){
         var b=document.createElement('button');
         b.type='button';
-        b.className='spelling-key'+(label==='⌫'?' spelling-key-delete':'')+(label==='⎵'?' spelling-key-space':'')+(label==='Mayús'?' spelling-key-shift':'');
+        b.className='spelling-key'+(label==='⌫'?' spelling-key-delete':'')+(label==='⎵'?' spelling-key-space':'')+(label==='↑'?' spelling-key-shift':'');
         b.textContent=label;
         b.dataset.value=label;
         b.setAttribute('inputmode','none');
@@ -4832,5 +4832,387 @@ body.learning-mode.keyboard-open .stats{
   font-size:inherit!important;
   line-height:1.08!important;
   color:var(--text)!important;
+}
+</style>
+
+<style id="valentina-learning-header-order-final-20260726">
+/* Cabecera: una sola linea desplazable tambien en Partido */
+.hero .controls,
+body.competition-mode .hero .controls,
+body.competition-mode.keyboard-open .hero .controls,
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:6px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  scrollbar-width:none!important;
+  position:static!important;
+  right:auto!important;
+  top:auto!important;
+}
+.hero .controls::-webkit-scrollbar{display:none!important}
+.hero .controls > *,
+.hero .controls button,
+.hero .controls label.btn,
+.hero .controls select.select-pill{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:max-content!important;
+  max-width:none!important;
+  white-space:nowrap!important;
+}
+body.learning-mode .hero .controls .photo-controls,
+body.learning-mode.keyboard-open .hero .controls .photo-controls{
+  display:flex!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  max-width:none!important;
+  min-width:max-content!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:visible!important;
+  margin:0 0 0 18px!important;
+  padding:0!important;
+}
+body.competition-mode .hero .controls .photo-controls,
+body.competition-mode.keyboard-open .hero .controls .photo-controls{display:none!important}
+body.learning-mode .hero .controls .photo-controls::before{
+  content:"";
+  display:block;
+  flex:0 0 10px;
+}
+body.learning-mode .hero .controls button,
+body.learning-mode .hero .controls .learn-control,
+body.learning-mode .hero .controls .photo-controls .status,
+body.learning-mode.keyboard-open .hero .controls button,
+body.learning-mode.keyboard-open .hero .controls .learn-control,
+body.learning-mode.keyboard-open .hero .controls .photo-controls .status,
+body.competition-mode .hero .controls button,
+body.competition-mode.keyboard-open .hero .controls button,
+body.competition-mode .hero .controls label.btn,
+body.competition-mode.keyboard-open .hero .controls label.btn,
+body.competition-mode .hero .controls select.select-pill,
+body.competition-mode.keyboard-open .hero .controls select.select-pill{
+  height:31px!important;
+  min-height:31px!important;
+  max-height:31px!important;
+  padding:0 10px!important;
+  border-radius:12px!important;
+  font-size:13px!important;
+  line-height:1!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-shadow:0 6px 14px rgba(100,145,181,.08)!important;
+}
+body.learning-mode .hero .controls #menuBtn,
+body.learning-mode.keyboard-open .hero .controls #menuBtn,
+body.competition-mode .hero .controls #menuBtn,
+body.competition-mode.keyboard-open .hero .controls #menuBtn{
+  width:31px!important;
+  min-width:31px!important;
+  max-width:31px!important;
+  padding:0!important;
+}
+body.learning-mode #learnHomeBtn,
+body.learning-mode.keyboard-open #learnHomeBtn{display:none!important}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode,
+  body.learning-mode.keyboard-open{--hero-h:92px!important}
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:92px!important;
+    min-height:92px!important;
+    max-height:92px!important;
+    flex-basis:92px!important;
+    padding:4px 7px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 102px)!important}
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title{font-size:20px!important;margin:0 0 4px!important;line-height:1.08!important}
+}
+
+/* WORD y los dos BLIND con el mismo tamano y estilo de letra */
+body.learning-mode .learn-cell.ref .learn-letters,
+body.learning-mode .learn-cell.editable:not(.phrase) .learn-letters,
+body.learning-mode.keyboard-open .learn-cell.ref .learn-letters,
+body.learning-mode.keyboard-open .learn-cell.editable:not(.phrase) .learn-letters{
+  gap:0!important;
+  justify-content:center!important;
+  align-items:center!important;
+  overflow:visible!important;
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-weight:1000!important;
+  letter-spacing:0!important;
+  word-spacing:0!important;
+}
+body.learning-mode .learn-cell.ref .learn-char,
+body.learning-mode .learn-cell.editable:not(.phrase) .learn-char,
+body.learning-mode.keyboard-open .learn-cell.ref .learn-char,
+body.learning-mode.keyboard-open .learn-cell.editable:not(.phrase) .learn-char{
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-size:clamp(24px,calc(104cqw / var(--char-count,8)),40px)!important;
+  font-weight:1000!important;
+  line-height:1.08!important;
+  min-width:.46em!important;
+  padding:0!important;
+  margin:0!important;
+  color:#3f7cff!important;
+  text-shadow:none!important;
+}
+body.learning-mode .learn-cell.ref,
+body.learning-mode .learn-cell.editable:not(.phrase),
+body.learning-mode.keyboard-open .learn-cell.ref,
+body.learning-mode.keyboard-open .learn-cell.editable:not(.phrase){
+  min-height:60px!important;
+}
+</style>
+<script id="valentina-learning-control-order-final-20260726">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function tuneLearningHeader(){
+    var pc=document.querySelector('.photo-controls');
+    var controls=document.querySelector('.hero .controls');
+    if(!pc||!controls)return;
+    var isLearning=document.body&&document.body.classList.contains('learning-mode');
+    if(isLearning){
+      var comp=byId('competitionScreenBtn');
+      if(pc.parentElement!==controls){
+        if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',pc);
+        else controls.appendChild(pc);
+      }
+      pc.classList.add('learning-top-strip');
+      var ordered=['learnPhraseBtn','learnBlocksBtn','learnShuffleBtn','learnPhotoToggle','learnGuessBtn','learnIndex'];
+      ordered.forEach(function(id){var el=byId(id);if(el)pc.appendChild(el)});
+      Array.prototype.slice.call(pc.querySelectorAll('.status')).forEach(function(el){
+        if(el.id!=='learnIndex')pc.appendChild(el);
+      });
+      var home=byId('learnHomeBtn');
+      if(home)home.style.display='none';
+    }
+  }
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(tuneLearningHeader,0);setTimeout(tuneLearningHeader,160)},true);
+  });
+  var oldRenderLearn=window.renderLearn;
+  if(typeof oldRenderLearn==='function'){
+    window.renderLearn=function(){
+      var out=oldRenderLearn.apply(this,arguments);
+      setTimeout(tuneLearningHeader,0);
+      return out;
+    };
+  }
+  setInterval(tuneLearningHeader,700);
+  setTimeout(tuneLearningHeader,0);
+})();
+</script>
+<style id="valentina-competition-ipad-button-fit-final-20260726">
+/* Partido en iPad: botones ajustados al texto, sin recortes, con scroll horizontal */
+@media (pointer:coarse) and (min-width:761px){
+  body.competition-mode .hero,
+  body.competition-mode.keyboard-open .hero{
+    overflow:hidden!important;
+  }
+  body.competition-mode .hero .controls,
+  body.competition-mode.keyboard-open .hero .controls{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    justify-content:flex-start!important;
+    align-items:center!important;
+    gap:6px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    padding:0 10px 4px 0!important;
+    position:static!important;
+    right:auto!important;
+    top:auto!important;
+  }
+  body.competition-mode .hero .controls::-webkit-scrollbar,
+  body.competition-mode.keyboard-open .hero .controls::-webkit-scrollbar{display:none!important}
+  body.competition-mode .hero .controls > *,
+  body.competition-mode.keyboard-open .hero .controls > *{
+    flex:0 0 auto!important;
+    box-sizing:border-box!important;
+    width:auto!important;
+    min-width:max-content!important;
+    max-width:none!important;
+  }
+  body.competition-mode .hero .controls button,
+  body.competition-mode.keyboard-open .hero .controls button,
+  body.competition-mode .hero .controls label.btn,
+  body.competition-mode.keyboard-open .hero .controls label.btn,
+  body.competition-mode .hero .controls select.select-pill,
+  body.competition-mode.keyboard-open .hero .controls select.select-pill{
+    width:auto!important;
+    min-width:max-content!important;
+    max-width:none!important;
+    height:31px!important;
+    min-height:31px!important;
+    max-height:31px!important;
+    padding:0 10px!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    border-radius:12px!important;
+    font-size:12px!important;
+    line-height:1!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+  body.competition-mode .hero .controls #menuBtn,
+  body.competition-mode.keyboard-open .hero .controls #menuBtn{
+    width:31px!important;
+    min-width:31px!important;
+    max-width:31px!important;
+    padding:0!important;
+  }
+}
+</style>
+<style id="valentina-ipad-title-right-controls-final-20260726">
+/* iPad: botones principales a la derecha del titulo, en una fila con scroll */
+@media (pointer:coarse) and (min-width:761px){
+  .hero,
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero,
+  body.competition-mode .hero,
+  body.competition-mode.keyboard-open .hero{
+    position:relative!important;
+    overflow:hidden!important;
+    height:92px!important;
+    min-height:92px!important;
+    max-height:92px!important;
+    flex-basis:92px!important;
+    padding:6px 8px!important;
+  }
+  .topline,
+  body.learning-mode .topline,
+  body.competition-mode .topline{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    flex-wrap:nowrap!important;
+    min-width:0!important;
+  }
+  .topline > div:first-child{
+    flex:0 0 auto!important;
+    width:auto!important;
+    max-width:220px!important;
+    min-width:190px!important;
+  }
+  .badge,.subtitle{display:none!important}
+  .title,
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title,
+  body.competition-mode .title,
+  body.competition-mode.keyboard-open .title{
+    margin:0!important;
+    line-height:31px!important;
+    height:31px!important;
+    font-size:clamp(19px,2.15vw,24px)!important;
+    white-space:nowrap!important;
+  }
+  .hero .controls,
+  body.learning-mode .hero .controls,
+  body.learning-mode.keyboard-open .hero .controls,
+  body.competition-mode .hero .controls,
+  body.competition-mode.keyboard-open .hero .controls{
+    position:absolute!important;
+    left:218px!important;
+    right:8px!important;
+    top:6px!important;
+    width:auto!important;
+    max-width:none!important;
+    min-width:0!important;
+    height:36px!important;
+    margin:0!important;
+    padding:0 10px 4px 0!important;
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:6px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+  }
+  .hero .controls::-webkit-scrollbar{display:none!important}
+  .hero .controls > *,
+  .hero .controls button,
+  .hero .controls label.btn,
+  .hero .controls select.select-pill{
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:max-content!important;
+    max-width:none!important;
+    white-space:nowrap!important;
+  }
+  body.learning-mode .hero .controls .photo-controls,
+  body.learning-mode.keyboard-open .hero .controls .photo-controls{
+    flex:0 0 auto!important;
+    min-width:max-content!important;
+    margin-left:16px!important;
+  }
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats,
+  body.competition-mode .stats,
+  body.competition-mode.keyboard-open .stats{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    width:100%!important;
+    margin:7px 0 0!important;
+    transform:none!important;
+  }
+  body.learning-mode,
+  body.learning-mode.keyboard-open,
+  body.competition-mode,
+  body.competition-mode.keyboard-open{--hero-h:92px!important}
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel,
+  body.competition-mode .panel,
+  body.competition-mode.keyboard-open .panel{
+    height:calc(100dvh - 102px)!important;
+  }
+}
+@media (pointer:coarse) and (min-width:761px) and (max-width:860px){
+  .topline > div:first-child{min-width:178px!important;max-width:178px!important}
+  .hero .controls,
+  body.learning-mode .hero .controls,
+  body.learning-mode.keyboard-open .hero .controls,
+  body.competition-mode .hero .controls,
+  body.competition-mode.keyboard-open .hero .controls{left:186px!important}
+  .title,
+  body.learning-mode .title,
+  body.competition-mode .title{font-size:19px!important}
+}
+</style>
+<style id="valentina-hide-football-log-final-20260726">
+/* Quitar el log del partido de la interfaz */
+#footballLog,
+.football-log,
+.football-log-item,
+.panel-mini:has(#footballLog),
+.clue-card .panel-mini:has(#footballLog),
+.football-status-grid .panel-mini:has(#footballLog){
+  display:none!important;
 }
 </style>
