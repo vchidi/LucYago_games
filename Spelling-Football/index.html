@@ -1520,12 +1520,8 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
 
   function getHiddenInput(){return hiddenInput||(hiddenInput=document.getElementById('hiddenInput'));}
   function isTypingTarget(el){return !!(el&&el.closest&&el.closest('input[type=file],input[type=number],input[type=text]:not(#hiddenInput),textarea,select'))}
-  function keepKeyboard(){
-    var input=getHiddenInput();
-    if(!input) return;
-    try{input.focus({preventScroll:true});}catch(e){try{input.focus();}catch(_){}}
-  }
-  function keepKeyboardSoon(){setTimeout(keepKeyboard,40);setTimeout(keepKeyboard,180);}
+  function keepKeyboard(){}
+  function keepKeyboardSoon(){}
 
   function pickVoice(prefix, contains){
     var list=[];
@@ -1698,12 +1694,11 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
       try{window.speechSynthesis.getVoices();}catch(e){}
       window.speechSynthesis.onvoiceschanged=function(){try{window.speechSynthesis.getVoices();}catch(e){}};
     }
-    setTimeout(keepKeyboard,160);
+
   });
-  document.addEventListener('touchstart',function(e){window.unlockSpeech();if(!isTypingTarget(e.target)) keepKeyboard();},{capture:true,passive:true});
-  document.addEventListener('pointerdown',function(e){window.unlockSpeech();if(!isTypingTarget(e.target)) keepKeyboard();},{capture:true,passive:true});
-  document.addEventListener('click',function(e){window.unlockSpeech();if(!isTypingTarget(e.target)) keepKeyboardSoon();},{capture:true});
-  document.addEventListener('focusout',function(){keepKeyboardSoon();},true);
+  document.addEventListener('touchstart',function(){window.unlockSpeech();},{capture:true,passive:true});
+  document.addEventListener('pointerdown',function(){window.unlockSpeech();},{capture:true,passive:true});
+  document.addEventListener('click',function(){window.unlockSpeech();},{capture:true});
 })();
 </script>
 
@@ -2188,86 +2183,6 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
   body.keyboard-open .football-ball{width:20px!important;height:20px!important;margin-left:-10px!important;margin-top:-10px!important;}
 }
 </style>
-<script id="valentina-ipad-keyboard-layout-script">
-(function(){
-  function byId(id){return document.getElementById(id)}
-  function isTypingTarget(el){
-    if(!el) return false;
-    var tag=(el.tagName||'').toLowerCase();
-    return tag==='input'||tag==='textarea'||tag==='select'||tag==='button'||tag==='label'||el.closest('button,label,select,input,textarea,a');
-  }
-  function removeEditor(){
-    var b=byId('togglePlayersEditorBtn'); if(b) b.remove();
-    document.querySelectorAll('.football-editor-panel,#playersEditor,#playersEditorInfo').forEach(function(el){el.remove();});
-    document.querySelectorAll('#importPlayersTopBtn,#exportPlayersTopBtn').forEach(function(el){el.remove();});
-  }
-  function focusHidden(force){
-    var h=byId('hiddenInput');
-    if(!h) return;
-    try{
-      h.removeAttribute('readonly');
-      h.disabled=false;
-      h.style.pointerEvents='none';
-      h.focus({preventScroll:true});
-      if(force && document.activeElement!==h){ setTimeout(function(){try{h.focus({preventScroll:true});}catch(_){}},30); }
-      document.body.classList.add('keyboard-open');
-    }catch(_){}
-  }
-  function updateKeyboardHeight(){
-    try{
-      var vv=window.visualViewport;
-      var h=0;
-      if(vv){ h=Math.max(0, window.innerHeight - vv.height - vv.offsetTop); }
-      if(h>80){
-        document.documentElement.style.setProperty('--keyboard-h', Math.round(h)+'px');
-        document.body.classList.add('keyboard-open');
-      }else if(document.activeElement!==byId('hiddenInput')){
-        document.documentElement.style.setProperty('--keyboard-h','0px');
-        document.body.classList.remove('keyboard-open');
-      }
-    }catch(_){}
-  }
-  function installKeyboard(){
-    var h=byId('hiddenInput');
-    if(!h) return;
-    h.setAttribute('autocomplete','off');
-    h.setAttribute('autocorrect','off');
-    h.setAttribute('autocapitalize','none');
-    h.setAttribute('spellcheck','false');
-    h.setAttribute('inputmode','text');
-    h.addEventListener('blur',function(){setTimeout(updateKeyboardHeight,60)});
-    h.addEventListener('focus',function(){document.body.classList.add('keyboard-open');setTimeout(updateKeyboardHeight,60)});
-    document.addEventListener('touchend',function(e){
-      if(isTypingTarget(e.target)) return;
-      focusHidden(true);
-    },true);
-    document.addEventListener('pointerup',function(e){
-      if(e.pointerType==='mouse') return;
-      if(isTypingTarget(e.target)) return;
-      focusHidden(true);
-    },true);
-    document.addEventListener('click',function(e){
-      if(isTypingTarget(e.target)) return;
-      focusHidden(false);
-    },true);
-    if(window.visualViewport){
-      visualViewport.addEventListener('resize',updateKeyboardHeight);
-      visualViewport.addEventListener('scroll',updateKeyboardHeight);
-    }
-  }
-  function install(){
-    removeEditor();
-    installKeyboard();
-    updateKeyboardHeight();
-    if(typeof setMessage==='function') setMessage('Toca la zona de la palabra para abrir el teclado del iPad.');
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',install); else install();
-  window.addEventListener('load',function(){install();setTimeout(function(){removeEditor();updateKeyboardHeight();},250);});
-})();
-</script>
-
-
-
 <!-- PATCH FINAL AUDIO: partido primero, palabra después, sin interrupciones -->
 <script id="valentina-audio-partido-antes-palabra-final">
 (function(){
@@ -2387,43 +2302,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
   window.addEventListener('load',function(){setTimeout(syncAudioButtons,100);setTimeout(syncAudioButtons,700);});
 })();
 </script>
-
-<script id="ipad-keyboard-focus-final">
-(function(){
-  const input=document.getElementById('hiddenInput');
-  if(!input) return;
-  function isInteractive(el){return !!(el&&el.closest&&el.closest('button,label,input,select,textarea,a'));}
-  function openKeyboard(e){
-    if(isInteractive(e.target)) return;
-    try{input.removeAttribute('readonly'); input.focus({preventScroll:true}); input.setSelectionRange(input.value.length,input.value.length);}catch(err){try{input.focus();}catch(_){}}
-  }
-  document.addEventListener('touchend',openKeyboard,{capture:true,passive:false});
-  document.addEventListener('mousedown',openKeyboard,{capture:true});
-  document.addEventListener('click',openKeyboard,{capture:true});
-})();
-</script>
-
 <!-- Valentina iPad final patch: teclado, viewport y Safari -->
-<script id="valentina-ios-viewport-fix">
-(function(){
-  function setVH(){
-    var vv=window.visualViewport;
-    var h=vv?vv.height:window.innerHeight;
-    document.documentElement.style.setProperty('--ios-vh',h+'px');
-    if(vv){
-      var kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);
-      document.documentElement.style.setProperty('--ios-keyboard',Math.round(kb)+'px');
-      document.body.classList.toggle('keyboard-open',kb>80);
-    }
-  }
-  setVH();
-  window.addEventListener('resize',setVH,{passive:true});
-  window.addEventListener('orientationchange',function(){setTimeout(setVH,80);setTimeout(setVH,350);},{passive:true});
-  if(window.visualViewport){visualViewport.addEventListener('resize',setVH,{passive:true});visualViewport.addEventListener('scroll',setVH,{passive:true});}
-})();
-</script>
-
-
 <style id="valentina-football-ipad-clean-final-css">
 html,body{height:var(--ios-vh,100dvh)!important;min-height:0!important;overscroll-behavior:none;-webkit-text-size-adjust:100%;}
 #hiddenInput.hidden-input{position:fixed!important;left:10px!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;width:34px!important;height:34px!important;opacity:.02!important;font-size:16px!important;z-index:2147483647!important;pointer-events:auto!important;}
@@ -2431,23 +2310,6 @@ html,body{height:var(--ios-vh,100dvh)!important;min-height:0!important;overscrol
 body.keyboard-open{--hero-h:94px!important;}
 body.keyboard-open .wrap{height:var(--ios-vh,100dvh)!important;max-height:var(--ios-vh,100dvh)!important;}
 </style>
-<script id="valentina-football-ipad-clean-final-js">
-(function(){
-  var input=document.getElementById('hiddenInput'); if(!input) return;
-  input.setAttribute('inputmode','text'); input.setAttribute('enterkeyhint','done'); input.removeAttribute('readonly');
-  function interactive(el){return !!(el&&el.closest&&el.closest('button,label,input[type=file],input[type=number],input[type=text]:not(#hiddenInput),select,textarea,a'));}
-  function open(e){if(interactive(e.target)) return; try{input.focus({preventScroll:true});input.setSelectionRange(input.value.length,input.value.length);}catch(_){try{input.focus();}catch(__){}}}
-  document.addEventListener('touchstart',open,{capture:true,passive:true});
-  document.addEventListener('pointerdown',open,{capture:true,passive:true});
-  document.addEventListener('click',open,{capture:true});
-  function unlock(){try{if(window.unlockSpeech)window.unlockSpeech();else if(window.speechSynthesis)window.speechSynthesis.resume();}catch(_){}}
-  document.addEventListener('touchstart',unlock,{capture:true,passive:true});
-  document.addEventListener('click',unlock,{capture:true});
-})();
-</script>
-
-
-
 <!-- === Valentina iPad football fixes v3 === -->
 <style id="valentina-football-ipad-v3">
 /* 1) Bloque superior: todos los botones visibles en una o dos líneas, vertical y horizontal */
@@ -2489,151 +2351,6 @@ body.keyboard-open .football-log{max-height:72px!important}
 .football-player.has-ball + .football-player-name{font-weight:900!important;background:rgba(255,246,168,.96)!important;color:#513b00!important}
 body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54px!important;padding:1px 3px!important}
 </style>
-<script id="valentina-football-ipad-v3-script">
-(function(){
-  function currentRival(){try{return (window.currentRivalTeamName||document.querySelector('.football-team.right span:first-child')?.textContent||'Rival').trim();}catch(e){return 'Rival';}}
-  function cleanTeamName(name){return String(name||'Rival').replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
-  function inferTeam(text){
-    var t=String(text||'');
-    var low=t.toLowerCase();
-    var rival=currentRival();
-    if(rival && rival!=='Rival' && new RegExp(cleanTeamName(rival),'i').test(t)) return rival;
-    if(/\brival\b|contrario|oponente/.test(low)) return rival||'Rival';
-    if(/\bAtletic\b/i.test(t)) return 'Atletic';
-    // Si habla de robo/recuperación y la posesión visible no es Atletic, usa el equipo visible.
-    var poss=document.getElementById('footballPossession');
-    var p=poss?poss.textContent.trim():'';
-    if(p && p!=='Atletic') return p;
-    return 'Atletic';
-  }
-  function shortFootball(text){
-    var t=String(text||'').trim();
-    var low=t.toLowerCase();
-    var team=inferTeam(t);
-    var first=t.split(/[.!?]/)[0];
-    if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
-    if(/parad|parada|mano salvadora|evita el gol/.test(low)) return first.replace(/Atletic/g,'Atletic').slice(0,75)+'.';
-    if(/robo|recupera|corte|presión perfecta|presion perfecta/.test(low)) return 'Recupera '+team+'.';
-    if(/saca/.test(low)) return 'Saca '+team+'.';
-    if(/chuta|dispara/.test(low)) return first.slice(0,70)+'.';
-    if(/pase|avanza|oportunidad|aguanta|protege/.test(low)) return first.slice(0,70)+'.';
-    return first.slice(0,70)+'.';
-  }
-  var oldSpeak=window.speakCommentary;
-  window.speakCommentary=function(text,urgent){
-    var fixed=shortFootball(text);
-    if(typeof oldSpeak==='function') return oldSpeak(fixed,urgent);
-  };
-  // Mantiene el log siempre scrolleado arriba para ver el último evento completo.
-  var oldRender=window.render;
-  if(typeof oldRender==='function'){
-    window.render=function(){
-      var r=oldRender.apply(this,arguments);
-      setTimeout(function(){var log=document.getElementById('footballLog'); if(log) log.scrollTop=0;},0);
-      return r;
-    };
-  }
-})();
-</script>
-
-
-<script id="valentina-football-v3-position-preserved-fix">
-(function(){
-  var input=document.getElementById('hiddenInput');
-
-  function refocusKeyboard(){
-    try{
-      document.body.classList.add('keyboard-open');
-      if(input && document.activeElement!==input){
-        setTimeout(function(){
-          try{input.focus({preventScroll:true});}catch(e){try{input.focus();}catch(_){}}
-        },20);
-      }
-    }catch(e){}
-  }
-
-  ['touchstart','touchend','pointerdown','pointerup','click'].forEach(function(ev){
-    document.addEventListener(ev,function(e){
-      var tag=(e.target&&e.target.tagName||'').toLowerCase();
-      if(tag==='input'||tag==='textarea'||tag==='select') return;
-      refocusKeyboard();
-    },true);
-  });
-
-  window.addEventListener('orientationchange',function(){
-    setTimeout(refocusKeyboard,120);
-    setTimeout(refocusKeyboard,350);
-  },{passive:true});
-  window.addEventListener('resize',function(){document.body.classList.add('keyboard-open');},{passive:true});
-
-  setInterval(function(){
-    document.body.classList.add('keyboard-open');
-    if(input && document.activeElement!==input) refocusKeyboard();
-  },1200);
-
-  function rivalName(){
-    try{
-      return (window.currentRivalTeamName||document.querySelector('.football-team.right span:first-child')?.textContent||'Rival').trim()||'Rival';
-    }catch(e){return 'Rival';}
-  }
-  function visiblePossession(){
-    var el=document.getElementById('footballPossession');
-    return el?el.textContent.trim():'';
-  }
-  function teamFromText(txt){
-    var t=String(txt||'');
-    var low=t.toLowerCase();
-    var rv=rivalName();
-    if(rv && rv!=='Rival' && t.toLowerCase().indexOf(rv.toLowerCase())!==-1) return rv;
-    if(/\brival\b|contrario|oponente/.test(low)) return rv;
-    if(/\batletic\b/i.test(t)) return 'Atletic';
-    if(/robo|recupera|corte|se anticipa|presión perfecta|presion perfecta/.test(low)){
-      var p=visiblePossession();
-      return p||rv;
-    }
-    if(/saca/.test(low)){
-      var p2=visiblePossession();
-      return p2||'Atletic';
-    }
-    return visiblePossession()||'Atletic';
-  }
-  function shortSpeech(txt){
-    var t=String(txt||'').trim();
-    var low=t.toLowerCase();
-    var team=teamFromText(t);
-    var first=t.split(/[.!?]/)[0];
-    if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
-    if(/saca/.test(low)) return 'Saca '+team+' desde el centro.';
-    if(/robo|recupera|corte|se anticipa|presión perfecta|presion perfecta/.test(low)) return 'Recupera '+team+'.';
-    if(/parad|parada|mano salvadora|evita el gol/.test(low)) return first.slice(0,75)+'.';
-    if(/chuta|dispara/.test(low)) return first.slice(0,70)+'.';
-    return first.slice(0,70)+'.';
-  }
-
-  var oldSpeak=window.speakCommentary;
-  window.speakCommentary=function(text,urgent){
-    var fixed=shortSpeech(text);
-    if(typeof oldSpeak==='function') return oldSpeak(fixed,urgent);
-  };
-
-  var oldRender=window.render;
-  if(typeof oldRender==='function'){
-    window.render=function(){
-      var r=oldRender.apply(this,arguments);
-      document.body.classList.add('keyboard-open');
-      setTimeout(function(){
-        var log=document.getElementById('footballLog');
-        if(log) log.scrollTop=0;
-        refocusKeyboard();
-      },0);
-      return r;
-    };
-  }
-})();
-</script>
-
-
-
 <!-- PATCH VALENTINA 13-05-2026: locución partido, solución sin audio, botones y estabilidad iPad -->
 <style id="valentina-1305-final-layout-fixes">
 /* Mantener medidas estables en iPad: no refluye el bloque al tocar botones ni al mantener teclado */
@@ -2791,7 +2508,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     if(b.id==='retryBtn' && typeof retryCurrent==='function') retryCurrent();
     if(b.id==='revealBtn' && typeof window.revealCurrent==='function') window.revealCurrent();
     if(b.id==='nextBtn' && typeof nextWord==='function') nextWord();
-    setTimeout(function(){var h=byId('hiddenInput');try{if(h)h.focus({preventScroll:true});}catch(_){}},80);
+    
   }
   document.addEventListener('click',actionClick,true);
   document.addEventListener('touchend',actionClick,true);
@@ -2802,8 +2519,8 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var p=byId('footballPossession'); if(p && /rival|oponente|contrario/i.test(p.textContent)) p.textContent=rivalName();
   }
   var oldRender=window.render;
-  if(typeof oldRender==='function') window.render=function(){var r=oldRender.apply(this,arguments);syncRivalVisible();document.body.classList.add('keyboard-open');return r;};
-  window.addEventListener('load',function(){syncRivalVisible();document.body.classList.add('keyboard-open');});
+  if(typeof oldRender==='function') window.render=function(){var r=oldRender.apply(this,arguments);syncRivalVisible();return r;};
+  window.addEventListener('load',function(){syncRivalVisible();});
 })();
 </script>
 
@@ -2883,7 +2600,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     if(b.id==='retryBtn' && typeof retryCurrent==='function') retryCurrent();
     if(b.id==='revealBtn' && typeof window.revealCurrent==='function') window.revealCurrent();
     if(b.id==='nextBtn' && typeof nextWord==='function') nextWord();
-    if(isCoarse()) setTimeout(function(){var h=byId('hiddenInput');try{if(h)h.focus({preventScroll:true})}catch(_){}},80);
+
   }
   document.addEventListener('pointerdown',runActionButton,true);
   document.addEventListener('touchstart',runActionButton,true);
@@ -3003,186 +2720,6 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   window.addEventListener('load',()=>setTimeout(paint,250));
 })();
 </script>
-<style id="football-spelling-stable-keyboard-final">
-/* Final layout: teclado activo desde el inicio, sin salto visual al enfocarse. */
-html,body{height:100dvh!important;min-height:0!important;overflow:hidden!important}
-body{touch-action:manipulation}
-body.keyboard-open{--hero-h:96px!important}
-.wrap{height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;padding:5px!important;gap:5px!important}
-.hero{height:96px!important;min-height:96px!important;max-height:96px!important;padding:5px 7px!important;overflow:hidden!important;flex:0 0 96px!important}
-.panel{height:calc(100dvh - 106px)!important;min-height:0!important;overflow:hidden!important;padding:5px!important;flex:1 1 auto!important}
-.topline,body.keyboard-open .topline{display:grid!important;grid-template-columns:minmax(185px,.34fr) minmax(0,1fr)!important;gap:6px!important;align-items:start!important}
-.badge,.subtitle{display:none!important}
-.title,body.keyboard-open .title{font-size:clamp(18px,2.25vw,26px)!important;line-height:1!important;margin:0!important;white-space:nowrap!important}
-.controls,body.keyboard-open .controls{position:static!important;grid-column:2!important;grid-row:1!important;display:flex!important;flex-wrap:nowrap!important;justify-content:flex-start!important;align-items:center!important;gap:4px!important;max-width:none!important;width:100%!important;margin:0!important;overflow-x:auto!important;overflow-y:hidden!important;padding:0 0 2px!important;scrollbar-width:none!important}
-.controls::-webkit-scrollbar{display:none!important}
-.controls button,.controls label.btn,.controls select.select-pill,body.keyboard-open .controls button,body.keyboard-open .controls label.btn,body.keyboard-open .controls select.select-pill{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:24px!important;padding:4px 6px!important;border-radius:9px!important;font-size:9px!important;line-height:1!important;white-space:nowrap!important;box-shadow:none!important}
-#menuBtn{order:0!important;min-width:30px!important;font-size:0!important}
-#menuBtn::before{content:"🏠";font-size:15px!important;line-height:1}
-#autoAudioBtn{order:1!important;font-size:0!important;min-width:31px!important;width:31px!important;padding:4px!important}
-#autoAudioBtn::before{content:"ðŸŽ™ï¸";font-size:15px!important;line-height:1}
-#commentaryBtn{order:2!important;font-size:0!important;min-width:31px!important;width:31px!important;padding:4px!important}
-#commentaryBtn::before{content:"ðŸŽ¤";font-size:15px!important;line-height:1}
-#repeatAudioBtn{order:3!important;font-size:0!important;min-width:31px!important;width:31px!important;padding:4px!important}
-#repeatAudioBtn::before{content:"ðŸ”";font-size:15px!important;line-height:1}
-#modeClassicBtn{order:4!important}#modeBlindBtn{order:5!important}#shuffleVerbsBtn{order:6!important}#restartBtn{order:7!important}#noGameBtn{order:8!important}#formationCycleBtn{order:9!important}#yagoRoleCycleBtn{order:10!important}#regenTeamsBtn{order:11!important}#importPlayersTopBtn{order:12!important}#exportPlayersTopBtn{order:13!important}
-.stats,body.keyboard-open .stats{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;margin-top:5px!important}
-.stat,body.keyboard-open .stat{padding:3px 5px!important;border-radius:9px!important}.stat .k,.k{font-size:7px!important;line-height:1!important}.stat .v,.v{font-size:13px!important;line-height:1!important;margin-top:1px!important}
-.game-grid,body.keyboard-open .game-grid{height:100%!important;min-height:0!important;grid-template-columns:minmax(285px,.62fr) minmax(430px,1.38fr)!important;gap:5px!important;align-items:stretch!important;overflow:hidden!important}
-.clue-card,body.keyboard-open .clue-card{height:100%!important;min-height:0!important;padding:7px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
-.spanish,body.keyboard-open .spanish{font-size:clamp(22px,3.05vw,32px)!important;line-height:.95!important;margin-top:1px!important}
-.smallnote,body.keyboard-open .smallnote{display:none!important}
-.word-zone,body.keyboard-open .word-zone{margin-top:6px!important;padding:9px!important;border-radius:16px!important;background:linear-gradient(180deg,#fffdf1,#f7fbff)!important;border:3px solid #ffd166!important;box-shadow:0 0 0 3px rgba(89,184,255,.18),0 8px 18px rgba(31,74,58,.08)!important}
-.word-head,body.keyboard-open .word-head{margin-bottom:6px!important}.word-title,body.keyboard-open .word-title{font-size:13px!important;color:#083560!important}.status,body.keyboard-open .status{font-size:9px!important;padding:4px 7px!important}
-.letters,body.keyboard-open .letters{gap:5px!important}.tile,body.keyboard-open .tile{min-width:28px!important;height:34px!important;border-radius:10px!important;font-size:21px!important}.tile.blank{background:#fff7dc!important;border:2px dashed #e1a900!important}.tile.blank.filled{background:#fff!important;border:2px solid #59b8ff!important}
-.progress,body.keyboard-open .progress{height:7px!important;margin-top:7px!important}
-.actions,body.keyboard-open .actions{margin-top:7px!important;gap:5px!important;padding-bottom:12px!important;border-bottom:10px solid transparent!important}
-.actions button,body.keyboard-open .actions button{min-height:30px!important;padding:6px 8px!important;font-size:10px!important;border-radius:10px!important}
-#nextBtn{margin-right:0!important}.message,body.keyboard-open .message{margin-top:0!important;min-height:30px!important;padding:6px 8px!important;font-size:11px!important;line-height:1.15!important}.mini{display:none!important}
-.match-stage,body.keyboard-open .match-stage{display:grid!important;height:100%!important;min-height:0!important;margin:0!important;overflow:hidden!important}.side-game-card,body.keyboard-open .side-game-card{height:100%!important;min-height:0!important;padding:5px!important;gap:4px!important;overflow:hidden!important}.football-field,body.keyboard-open .football-field{height:100%!important;min-height:230px!important;max-height:none!important;border-radius:16px!important;padding:7px!important}
-#hiddenInput.hidden-input{position:fixed!important;left:1px!important;bottom:1px!important;width:1px!important;height:1px!important;opacity:.01!important;pointer-events:auto!important;z-index:2147483647!important}
-@media (max-width:760px){.game-grid,body.keyboard-open .game-grid{grid-template-columns:1fr!important}.match-stage{display:none!important}.controls{display:flex!important}.hero{height:104px!important;min-height:104px!important;flex-basis:104px!important}.panel{height:calc(100dvh - 114px)!important}}
-</style>
-<script id="football-spelling-stable-keyboard-final">
-(function(){
-  function byId(id){return document.getElementById(id)}
-  function keepKeyboardState(){
-    document.body.classList.add('keyboard-open');
-    var input=byId('hiddenInput');
-    if(input){
-      input.setAttribute('autofocus','autofocus');
-      input.setAttribute('inputmode','text');
-      try{ if(document.activeElement!==input) input.focus({preventScroll:true}); }catch(e){ try{input.focus();}catch(_){} }
-    }
-  }
-  function labelAudioButtons(){
-    var word=byId('autoAudioBtn'), match=byId('commentaryBtn'), repeat=byId('repeatAudioBtn'), home=byId('menuBtn');
-    if(home){home.setAttribute('aria-label','Inicio');home.title='Inicio';}
-    if(word){word.textContent='';word.setAttribute('aria-label','Audio spelling');word.title='Audio spelling';}
-    if(match){match.textContent='';match.setAttribute('aria-label','Audio partido');match.title='Audio partido';}
-    if(repeat){repeat.textContent='';repeat.setAttribute('aria-label','Repetir audio');repeat.title='Repetir audio';}
-  }
-  function applyText(){
-    document.title='Football Spelling';
-    var title=document.querySelector('.title'); if(title) title.textContent='Football Spelling';
-    var msg=byId('messageBox'); if(msg && /teclado/i.test(msg.textContent||'')) msg.textContent='Escribe con el teclado para completar el spelling.';
-  }
-  function settle(){keepKeyboardState();labelAudioButtons();applyText();}
-  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(settle,0);setTimeout(settle,120);},true);});
-  ['pointerdown','touchstart','click','focusin','blur'].forEach(function(ev){document.addEventListener(ev,function(){setTimeout(settle,0);},true);});
-  var oldRender=window.render;
-  if(typeof oldRender==='function') window.render=function(){var out=oldRender.apply(this,arguments);setTimeout(settle,0);return out;};
-  settle();
-  setInterval(settle,900);
-})();
-</script>
-<style id="football-spelling-no-vibrate-audio-log-final">
-/* Sin vibraciones ni reajustes al pulsar botones. */
-button,button:active,button:focus,.controls button,.actions button,label.btn,select.select-pill{
-  transform:none!important;
-  transition:none!important;
-  animation:none!important;
-  will-change:auto!important;
-}
-button:active,.controls button:active,.actions button:active{filter:brightness(.98)!important;box-shadow:0 0 0 2px rgba(8,53,96,.10)!important}
-.hero,.panel,.wrap,.game-grid,.clue-card,.word-zone,.match-stage,.side-game-card,.football-panel,.football-field,.stats,.controls,.actions,.title,.message{
-  transition:none!important;
-  animation:none!important;
-  transform:none!important;
-  will-change:auto!important;
-}
-.football-field.match-shake,.football-field.match-zoom,.football-banner.visible .football-banner-box,.football-player-wrap.near-ball,.football-player-wrap.celebrate,.football-player-wrap.defend,.football-player-wrap.keeper-dive-left,.football-player-wrap.keeper-dive-right,.player-doll,.football-speedline.visible,.football-confetti i{
-  animation:none!important;
-  transform:none!important;
-}
-.football-ball,.football-player-wrap{transition:left .35s linear,top .35s linear!important;animation:none!important}
-/* Audio: icono + estado muy claro. */
-#audioStateLegend{display:none!important}
-#autoAudioBtn,#commentaryBtn{
-  position:relative!important;
-  border:2px solid #94a3b8!important;
-  background:#f8fafc!important;
-  color:#0f172a!important;
-}
-#autoAudioBtn.audio-on,#commentaryBtn.audio-on{
-  background:#dcfce7!important;
-  border-color:#16a34a!important;
-  box-shadow:inset 0 -3px 0 rgba(22,163,74,.22)!important;
-}
-#autoAudioBtn.audio-off,#commentaryBtn.audio-off{
-  background:#fee2e2!important;
-  border-color:#ef4444!important;
-  box-shadow:inset 0 -3px 0 rgba(239,68,68,.22)!important;
-}
-#autoAudioBtn::after,#commentaryBtn::after{
-  content:"";
-  position:absolute;
-  right:2px;
-  top:2px;
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#ef4444;
-  border:1px solid #fff;
-}
-#autoAudioBtn.audio-on::after,#commentaryBtn.audio-on::after{background:#16a34a}
-#autoAudioBtn.audio-off::before,#commentaryBtn.audio-off::before{opacity:.45!important}
-/* Quitar el bloque POR QUE PASO. */
-.panel-mini:has(#builderEvent),.hide-why-panel{display:none!important}
-/* Log del partido: solo dos lineas visibles y letra menor. */
-.football-log,body.keyboard-open .football-log{
-  display:block!important;
-  max-height:43px!important;
-  min-height:43px!important;
-  overflow:hidden!important;
-  padding-right:0!important;
-}
-.football-log-item{
-  font-size:8.5px!important;
-  line-height:1.08!important;
-  padding:3px 5px!important;
-  border-radius:7px!important;
-  margin:0 0 3px!important;
-  font-weight:750!important;
-  white-space:nowrap!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-}
-.football-log-item:nth-child(n+3){display:none!important}
-.clue-card .football-status-grid{gap:4px!important}
-</style>
-<script id="football-spelling-no-vibrate-audio-log-final">
-(function(){
-  function byId(id){return document.getElementById(id)}
-  function markAudio(){
-    var word=byId('autoAudioBtn'), match=byId('commentaryBtn');
-    var wordOn=(typeof window.autoAudio==='undefined') ? true : !!window.autoAudio;
-    var matchOn=(typeof window.commentaryEnabled==='undefined') ? true : !!window.commentaryEnabled;
-    [[word,wordOn,'Audio spelling'],[match,matchOn,'Audio partido']].forEach(function(row){
-      var el=row[0], on=row[1], label=row[2]; if(!el) return;
-      el.classList.toggle('audio-on',on); el.classList.toggle('audio-off',!on);
-      el.setAttribute('aria-label',label+(on?' activo':' apagado'));
-      el.title=label+(on?' activo':' apagado');
-      el.textContent='';
-    });
-  }
-  function hideWhyAndTrimLog(){
-    var why=byId('builderEvent');
-    if(why && why.closest){var panel=why.closest('.panel-mini'); if(panel) panel.classList.add('hide-why-panel');}
-    var log=byId('footballLog');
-    if(log){Array.from(log.children).forEach(function(el,i){el.style.display=i<2?'':'none';}); log.scrollTop=0;}
-  }
-  function settle(){markAudio();hideWhyAndTrimLog();document.body.classList.add('keyboard-open');}
-  ['DOMContentLoaded','load','pageshow','click','pointerdown','touchstart','resize'].forEach(function(ev){
-    window.addEventListener(ev,function(){setTimeout(settle,0);setTimeout(settle,80);},true);
-    document.addEventListener(ev,function(){setTimeout(settle,0);},true);
-  });
-  var oldRender=window.render;
-  if(typeof oldRender==='function') window.render=function(){var out=oldRender.apply(this,arguments);setTimeout(settle,0);return out;};
-  settle();
-  setInterval(settle,700);
-})();
-</script>
 <style id="football-ipad-two-line-buttons-no-abbrev">
 /* iPad: botones junto al titulo con texto completo, en dos lineas si hace falta. */
 @media (min-width:761px) and (max-width:1199px){
@@ -3289,126 +2826,6 @@ button:active,.controls button:active,.actions button:active{filter:brightness(.
   .hero .controls,body.keyboard-open .hero .controls{column-gap:4px!important;row-gap:3px!important;max-height:60px!important}
 }
 </style>
-
-
-<style id="valentina-final-audio-buttons-no-shake-20260708">
-/* Corrección final: los tres botones de audio quedan legibles justo después de la casita y sin saltos al pulsar. */
-.hero .controls,
-body.keyboard-open .hero .controls{
-  align-items:center!important;
-  gap:5px!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  max-height:none!important;
-  overscroll-behavior:contain!important;
-  -webkit-overflow-scrolling:touch!important;
-}
-#menuBtn{order:0!important;flex:0 0 32px!important;width:32px!important;min-width:32px!important;max-width:32px!important;padding:0!important;font-size:0!important;line-height:1!important;overflow:hidden!important}
-#menuBtn::before{content:"⌂"!important;font-size:17px!important;line-height:1!important}
-#autoAudioBtn,#commentaryBtn,#repeatAudioBtn{
-  display:inline-flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  height:26px!important;
-  min-height:26px!important;
-  max-height:26px!important;
-  padding:0 8px!important;
-  border-radius:12px!important;
-  font-size:10px!important;
-  font-weight:900!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-  text-align:center!important;
-  overflow:hidden!important;
-  font-family:Inter,Arial,Helvetica,sans-serif!important;
-  letter-spacing:0!important;
-  transform:none!important;
-  transition:none!important;
-  animation:none!important;
-  -webkit-tap-highlight-color:transparent!important;
-}
-#autoAudioBtn{order:1!important;flex:0 0 48px!important;width:48px!important;min-width:48px!important;max-width:48px!important;font-size:0!important}
-#commentaryBtn{order:2!important;flex:0 0 62px!important;width:62px!important;min-width:62px!important;max-width:62px!important;font-size:0!important}
-#repeatAudioBtn{order:3!important;flex:0 0 60px!important;width:60px!important;min-width:60px!important;max-width:60px!important;font-size:0!important}
-#autoAudioBtn::before{content:"ABC"!important;font-size:10px!important;line-height:1!important}
-#commentaryBtn::before{content:"Partido"!important;font-size:10px!important;line-height:1!important}
-#repeatAudioBtn::before{content:"Repetir"!important;font-size:10px!important;line-height:1!important}
-#autoAudioBtn::after,#commentaryBtn::after{right:3px!important;top:3px!important;width:6px!important;height:6px!important}
-#modeClassicBtn{order:4!important}#modeBlindBtn{order:5!important}#shuffleVerbsBtn{order:6!important}#restartBtn{order:7!important}#noGameBtn{order:8!important}#formationCycleBtn{order:9!important}#yagoRoleCycleBtn{order:10!important}#regenTeamsBtn{order:11!important}#importPlayersTopBtn{order:12!important}#exportPlayersTopBtn{order:13!important}
-button,button:active,button:focus,.controls button,.controls button:active,.controls button:focus,.actions button,.actions button:active,.actions button:focus{
-  transform:none!important;
-  transition:none!important;
-  animation:none!important;
-  will-change:auto!important;
-}
-button:active,.controls button:active,.actions button:active{box-shadow:none!important;filter:none!important}
-.hero,.panel,.wrap,.game-grid,.clue-card,.word-zone,.match-stage,.side-game-card,.football-panel,.football-field,.stats,.controls,.actions,.title,.message{
-  transform:none!important;
-  transition:none!important;
-  animation:none!important;
-  will-change:auto!important;
-}
-.football-field.match-shake,.football-field.match-zoom{animation:none!important;transform:none!important}
-@media (min-width:761px) and (max-width:1199px){
-  .topline,body.keyboard-open .topline{grid-template-columns:minmax(185px,.42fr) minmax(0,1fr)!important}
-  .hero .controls,body.keyboard-open .hero .controls{justify-content:flex-start!important;flex-wrap:nowrap!important;max-height:30px!important}
-  #autoAudioBtn{flex-basis:46px!important;width:46px!important;min-width:46px!important;max-width:46px!important}
-  #commentaryBtn{flex-basis:58px!important;width:58px!important;min-width:58px!important;max-width:58px!important}
-  #repeatAudioBtn{flex-basis:56px!important;width:56px!important;min-width:56px!important;max-width:56px!important}
-  #autoAudioBtn::before,#commentaryBtn::before,#repeatAudioBtn::before{font-size:9px!important}
-}
-@media (max-width:760px){
-  .hero .controls,body.keyboard-open .hero .controls{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;justify-content:flex-start!important;max-height:30px!important}
-}
-</style>
-<script id="valentina-final-stop-button-shake-20260708">
-(function(){
-  var lastButtonTap=0;
-  function isButtonTarget(t){return !!(t&&t.closest&&t.closest('button,.controls button,.actions button,label.btn,select'))}
-  ['pointerdown','touchstart','mousedown','click'].forEach(function(ev){
-    document.addEventListener(ev,function(e){
-      if(isButtonTarget(e.target)){
-        lastButtonTap=Date.now();
-        document.body.classList.add('button-tap-stable');
-        setTimeout(function(){document.body.classList.remove('button-tap-stable')},260);
-      }
-    },true);
-  });
-  var oldFocus=HTMLElement.prototype.focus;
-  HTMLElement.prototype.focus=function(opts){
-    if(this && this.id==='hiddenInput' && Date.now()-lastButtonTap<450){return;}
-    return oldFocus.call(this,opts);
-  };
-  function relabel(){
-    var a=document.getElementById('autoAudioBtn'), p=document.getElementById('commentaryBtn'), r=document.getElementById('repeatAudioBtn');
-    if(a){a.textContent='';a.title='Audio spelling';a.setAttribute('aria-label','Audio spelling');}
-    if(p){p.textContent='';p.title='Audio partido';p.setAttribute('aria-label','Audio partido');}
-    if(r){r.textContent='';r.title='Repetir audio';r.setAttribute('aria-label','Repetir audio');}
-  }
-  ['DOMContentLoaded','load','pageshow','click','pointerdown','touchstart','resize'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(relabel,0)},true);document.addEventListener(ev,function(){setTimeout(relabel,0)},true)});
-  relabel();setInterval(relabel,1000);
-})();
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- SPELLING_LEARNING_MODE_START -->
 <style id="spelling-learning-mode-css">
 body.learning-mode #gameGrid,body.learning-mode .footer-tools,body.learning-mode .match-stage,body.learning-mode #footballCard,body.learning-mode .football-panel,body.learning-mode .football-field,body.learning-mode .football-status-grid,body.learning-mode #spanishWord,body.learning-mode #modeExplain,body.learning-mode .word-zone,body.learning-mode .clue-card>.actions,body.learning-mode #messageBox,body.learning-mode .mini{display:none!important}
@@ -3459,20 +2876,23 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function sentenceWithWord(sentence,word){var safe=esc(sentence||''),w=esc(word||'');if(!w)return safe;var i=safe.toLowerCase().indexOf(w.toLowerCase());if(i<0)return safe;return safe.slice(0,i)+'<span class="sentence-word">'+safe.slice(i,i+w.length)+'</span>'+safe.slice(i+w.length)}
   function cleanLetters(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z]/g,'').toLowerCase()}
-  function phraseDisplay(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z\s.,!?']/g,'').replace(/\s+/g,' ').trim()}
+  function phraseDisplay(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z\s.,!?']/g,'').replace(/\s+/g,' ').trim()}
+  function phraseTarget(s){return String(s||'').replace(/\s+/g,'')}
   function normalize(s){return cleanLetters(s)}
   function wordCount(s){var m=String(s||'').trim().match(/[a-zA-Z]+/g);return m?m.length:1}
   function allLearnDone(){return done('line1')&&done('line2')&&(!phraseMode||done('phrase'))}
   function item(){return data[idx]||data[0]}
-  function initCells(){var it=item(),letters=cleanLetters(it.letters||it.word),display=phraseDisplay(it&&it.sentence),sentence=cleanLetters(display),phraseWord=cleanLetters(it&&it.word);cells={line1:{target:letters,guess:[],ok:null},line2:{target:letters,guess:[],ok:null}};if(phraseMode&&sentence)cells.phrase={target:sentence,display:display,word:phraseWord,guess:[],ok:null};activeKey='line1'}
+  function initCells(){var it=item(),letters=cleanLetters(it.letters||it.word),display=phraseDisplay(it&&it.sentence),sentence=phraseTarget(display),phraseWord=cleanLetters(it&&it.word);cells={line1:{target:letters,guess:[],ok:null,cursor:0},line2:{target:letters,guess:[],ok:null,cursor:0}};if(phraseMode&&sentence)cells.phrase={target:sentence,display:display,word:phraseWord,guess:[],ok:null,cursor:0};activeKey='line1'}
   function lastFilled(cell){for(var i=cell.guess.length-1;i>=0;i--)if(cell.guess[i])return i;return -1}
   function done(k){return cells[k]&&cells[k].ok===true}
   function complete(cell){return cell.guess.length>=cell.target.length&&cell.guess.every(Boolean)}
-  function cellNode(key,locked){var cell=cells[key],div=document.createElement('div');div.className='learn-cell editable '+(key==='phrase'?'phrase ':'')+(activeKey===key?'active ':'')+(cell.ok===true?'good ':cell.ok===false?'bad ':'')+(locked?'locked':'');var letters=document.createElement('div');letters.className='learn-letters '+(key==='phrase'?'phrase-letters':'');letters.style.setProperty('--char-count',Math.max(1,cell.target.length));if(key==='phrase'){var gi=0,wordStart=cell.word?cell.target.indexOf(cell.word):-1,wordEnd=wordStart>=0?wordStart+cell.word.length:-1;(cell.display||cell.target).split('').forEach(function(ch){var sp=document.createElement('span');if(ch===' '){sp.className='learn-char phrase-space';sp.textContent=' '}else if(!/[a-z]/i.test(ch)){sp.className='learn-char phrase-punct filled';sp.textContent=ch}else{var letterIndex=gi,typed=cell.guess[gi++],inWord=wordStart>=0&&letterIndex>=wordStart&&letterIndex<wordEnd;sp.className='learn-char phrase-letter '+(inWord?'sentence-word ':'')+(typed?'filled':'blank');sp.textContent=typed||'_'}letters.appendChild(sp)})}else{cell.target.split('').forEach(function(ch,i){var sp=document.createElement('span');sp.className='learn-char '+(cell.guess[i]?'filled':'blank');sp.textContent=cell.guess[i]||'_';letters.appendChild(sp)})}div.appendChild(letters);return div}
-  function renderLearn(){var it=item();if(!it||!$('learnMeaning'))return;$('learnMeaning').textContent=it.meaning;var sh=$('learnShuffleBtn'),ph=$('learnPhraseBtn');if(sh)sh.textContent=orderMode==='original'?'Mezclar':orderMode==='mixed'?'Alfabetico':'Original';if(ph){ph.textContent=phraseMode?'Frase s\u00ed':'Frase no';ph.classList.toggle('active',phraseMode)}var table=$('learnTable');table.innerHTML='';[['Significado','meaning'],['Word','word'],['Blind','line1'],['Blind','line2']].forEach(function(row){var lab=document.createElement('div');lab.className='learn-label';lab.textContent=row[0];table.appendChild(lab);if(row[1]==='meaning'){var mean=document.createElement('div');mean.className='learn-cell meaning';mean.textContent=it.meaning;table.appendChild(mean);return}if(row[1]==='word'){var ref=document.createElement('div');ref.className='learn-cell ref';ref.textContent=it.wordDisplay||it.letters||it.word;table.appendChild(ref);return}var locked=row[1]==='line2'&&!done('line1'),node=cellNode(row[1],locked);node.onclick=function(){if(!locked){activeKey=row[1];renderLearn();focusLater()}};table.appendChild(node)});$('learnSentence').innerHTML=sentenceWithWord(it.sentence,it.word);var phrase=$('learnPhraseBlind');if(phrase){phrase.innerHTML='';phrase.classList.toggle('show',phraseMode&&!!cells.phrase);if(phraseMode&&cells.phrase){var label=document.createElement('div');label.className='learn-phrase-label';label.textContent='Frase';phrase.appendChild(label);var lockedPhrase=!done('line2'),phraseNode=cellNode('phrase',lockedPhrase);phraseNode.onclick=function(){if(!lockedPhrase){activeKey='phrase';renderLearn();focusLater()}};phrase.appendChild(phraseNode)}}$('learnIndex').textContent=(idx+1)+'/'+data.length;$('learnGood').textContent=score.good;$('learnBad').textContent=score.bad;if($('goodCount'))$('goodCount').textContent=score.good;if($('badCount'))$('badCount').textContent=score.bad;if($('streakCount'))$('streakCount').textContent=photo.streak||0;if($('currentIndex'))$('currentIndex').textContent=idx+1;if($('totalCount'))$('totalCount').textContent=data.length;if($('stepCount'))$('stepCount').textContent='0 - 0';renderPhoto();renderGuess()}
+  function cellNode(key,locked){var cell=cells[key],div=document.createElement('div');div.className='learn-cell editable '+(key==='phrase'?'phrase ':'')+(activeKey===key?'active ':'')+(cell.ok===true?'good ':cell.ok===false?'bad ':'')+(locked?'locked':'');div.dataset.key=key;var letters=document.createElement('div');letters.className='learn-letters '+(key==='phrase'?'phrase-letters':'');letters.style.setProperty('--char-count',Math.max(1,cell.target.length));function addCaret(pos){if(activeKey===key&&cell.cursor===pos){var caret=document.createElement('span');caret.className='learn-caret';letters.appendChild(caret)}}if(key==='phrase'){var gi=0,wordStart=cell.word?cleanLetters(cell.display||'').indexOf(cell.word):-1,wordEnd=wordStart>=0?wordStart+cell.word.length:-1,lettersSeen=0;(cell.display||cell.target).split('').forEach(function(ch){var sp=document.createElement('span');if(ch===' '){sp.className='learn-char phrase-space';sp.textContent=' '}else{addCaret(gi);var typed=cell.guess[gi],isPunct=!/[a-z]/i.test(ch),inWord=wordStart>=0&&lettersSeen>=wordStart&&lettersSeen<wordEnd;if(/[a-z]/i.test(ch))lettersSeen++;sp.dataset.pos=gi;sp.className='learn-char '+(isPunct?'phrase-punct ':'phrase-letter ')+(inWord?'sentence-word ':'')+(typed?'filled':'blank');sp.textContent=typed||'_';gi++}letters.appendChild(sp)});addCaret(gi)}else{cell.target.split('').forEach(function(ch,i){addCaret(i);var sp=document.createElement('span');sp.dataset.pos=i;sp.className='learn-char '+(cell.guess[i]?'filled':'blank');sp.textContent=cell.guess[i]||'_';letters.appendChild(sp)});addCaret(cell.target.length)}div.appendChild(letters);return div}
+  function setCursorFromEvent(key,e){var cell=cells[key];if(!cell)return;var pos=cell.guess.length,target=e&&e.target&&e.target.closest&&e.target.closest('[data-pos]');if(target){pos=Number(target.dataset.pos)||0;var r=target.getBoundingClientRect&&target.getBoundingClientRect();if(r&&e&&typeof e.clientX==='number'&&e.clientX>r.left+r.width/2)pos++;}cell.cursor=Math.max(0,Math.min(cell.guess.length,pos));cell.ok=null}
+  function refNode(it){var letters=cleanLetters(it.letters||it.word),div=document.createElement('div'),wrap=document.createElement('div');div.className='learn-cell ref';wrap.className='learn-letters';wrap.style.setProperty('--char-count',Math.max(1,letters.length));letters.split('').forEach(function(ch){var sp=document.createElement('span');sp.className='learn-char filled';sp.textContent=ch;wrap.appendChild(sp)});div.appendChild(wrap);return div}
+  function renderLearn(){var it=item();if(!it||!$('learnMeaning'))return;$('learnMeaning').textContent=it.meaning;var sh=$('learnShuffleBtn'),ph=$('learnPhraseBtn');if(sh)sh.textContent=orderMode==='original'?'Mezclar':orderMode==='mixed'?'Alfabetico':'Original';if(ph){ph.textContent=phraseMode?'Frase s\u00ed':'Frase no';ph.classList.toggle('active',phraseMode)}var table=$('learnTable');table.innerHTML='';[['Significado','meaning'],['Word','word'],['Blind','line1'],['Blind','line2']].forEach(function(row){var lab=document.createElement('div');lab.className='learn-label';lab.textContent=row[0];table.appendChild(lab);if(row[1]==='meaning'){var mean=document.createElement('div');mean.className='learn-cell meaning';mean.textContent=it.meaning;table.appendChild(mean);return}if(row[1]==='word'){table.appendChild(refNode(it));return}var locked=row[1]==='line2'&&!done('line1'),node=cellNode(row[1],locked);node.onclick=function(e){if(!locked){activeKey=row[1];setCursorFromEvent(row[1],e);renderLearn();focusLater()}};table.appendChild(node)});$('learnSentence').innerHTML=sentenceWithWord(it.sentence,it.word);var phrase=$('learnPhraseBlind');if(phrase){phrase.innerHTML='';phrase.classList.toggle('show',phraseMode&&!!cells.phrase);if(phraseMode&&cells.phrase){var label=document.createElement('div');label.className='learn-phrase-label';label.textContent='Frase';phrase.appendChild(label);var lockedPhrase=!done('line2'),phraseNode=cellNode('phrase',lockedPhrase);phraseNode.onclick=function(e){if(!lockedPhrase){activeKey='phrase';setCursorFromEvent('phrase',e);renderLearn();focusLater()}};phrase.appendChild(phraseNode)}}$('learnIndex').textContent=(idx+1)+'/'+data.length;$('learnGood').textContent=score.good;$('learnBad').textContent=score.bad;if($('goodCount'))$('goodCount').textContent=score.good;if($('badCount'))$('badCount').textContent=score.bad;if($('streakCount'))$('streakCount').textContent=photo.streak||0;if($('currentIndex'))$('currentIndex').textContent=idx+1;if($('totalCount'))$('totalCount').textContent=data.length;if($('stepCount'))$('stepCount').textContent='0 - 0';renderPhoto();renderGuess()}
   function showMsg(t){$('learnMsg').textContent=t}
-  function insert(ch){var cell=cells[activeKey];if(!cell||cell.ok===true||!/^[a-z]$/i.test(ch)||cell.guess.length>=cell.target.length)return;cell.guess.push(ch.toLowerCase());if(complete(cell)){cell.ok=normalize(cell.guess.join(''))===normalize(cell.target);if(cell.ok){var it=item(),points=activeKey==='phrase'?wordCount(it&&it.sentence):1;score.good+=points;var amount=registerHit();reveal(amount);activeKey=activeKey==='line1'?'line2':activeKey==='line2'&&phraseMode?'phrase':activeKey;photo.lastBoostMsg='';if(allLearnDone())setTimeout(nextWord,550)}else{score.bad++;photo.streak=0;showMsg('')}}renderLearn()}
-  function del(){var cell=cells[activeKey];if(!cell||cell.ok===true)return;var i=lastFilled(cell);if(i>=0){cell.guess.splice(i,1);cell.ok=null;showMsg('');renderLearn()}}
+  function insert(ch){var cell=cells[activeKey];if(!cell||cell.ok===true)return;var allowed=activeKey==='phrase'?/^[a-zA-Z.,!?']$/:/^[a-zA-Z]$/;if(!allowed.test(ch)||cell.guess.length>=cell.target.length)return;var pos=Math.max(0,Math.min(cell.guess.length,cell.cursor||0));cell.guess.splice(pos,0,activeKey==='phrase'?ch:ch.toLowerCase());cell.cursor=pos+1;cell.ok=null;if(complete(cell)){cell.ok=activeKey==='phrase'?cell.guess.join('')===cell.target:normalize(cell.guess.join(''))===normalize(cell.target);if(cell.ok){var it=item(),points=activeKey==='phrase'?wordCount(it&&it.sentence):1;score.good+=points;var amount=registerHit();reveal(amount);activeKey=activeKey==='line1'?'line2':activeKey==='line2'&&phraseMode?'phrase':activeKey;photo.lastBoostMsg='';if(cells[activeKey])cells[activeKey].cursor=cells[activeKey].guess.length;if(allLearnDone())setTimeout(nextWord,550)}else{score.bad++;photo.streak=0;showMsg('')}}renderLearn()}
+  function del(){var cell=cells[activeKey];if(!cell||cell.ok===true)return;var pos=Math.max(0,Math.min(cell.guess.length,cell.cursor||cell.guess.length));if(pos>0){cell.guess.splice(pos-1,1);cell.cursor=pos-1;cell.ok=null;showMsg('');renderLearn()}}
   function nextWord(){idx=(idx+1)%data.length;initCells();showMsg('');renderLearn()}
   function retry(){initCells();showMsg('');renderLearn()}
   function toggleLearnOrder(){if(!originalData.length)originalData=data.slice();if(orderMode==='original'){data=originalData.slice();shuffle(data);orderMode='mixed';shuffled=true}else if(orderMode==='mixed'){data=originalData.slice().sort(function(a,b){return String(a.word||'').localeCompare(String(b.word||''),'en',{sensitivity:'base'})});orderMode='alpha';shuffled=false}else{data=originalData.slice();orderMode='original';shuffled=false}idx=0;initCells();renderLearn()}
@@ -3490,9 +2910,9 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function guess(ch){var ok=ch.toLowerCase()===pObj().title.toLowerCase();photo.guessOpen=false;if(ok){photo.guessSolved=true;photo.revealed=grid().tiles;score.good++;showMsg('¡Correcto! Empieza un nuevo icono.');setTimeout(function(){resetPhoto(true);renderLearn()},650)}else{score.bad++;photo.guessTries=Math.max(0,photo.guessTries-1);showMsg('No era ese. Guess se ha cerrado y puedes seguir jugando.')}renderLearn()}
   function focusLater(){document.body.classList.add('learning-input-ready');setTimeout(function(){var input=$('hiddenInput');if(input)try{input.focus({preventScroll:true})}catch(e){}},40)}
   function bindScreenButtons(){if(!document.body.dataset.learnDelegatedFinal){document.body.dataset.learnDelegatedFinal='1';var lastTap=0;document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#learnPhraseBtn,#learnScreenBtn,#competitionScreenBtn');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var now=Date.now();if(now-lastTap<260)return;lastTap=now;if(t.id==='learnPhraseBtn'){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()}else{screen(t.id==='learnScreenBtn'?'learning':'competition')}},true)}var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),p=document.getElementById('learnPhraseBtn');if(a&&!a.dataset.learnBound){a.dataset.learnBound='1'}if(c&&!c.dataset.learnBound){c.dataset.learnBound='1'}if(p&&!p.dataset.learnPhraseBound){p.dataset.learnPhraseBound='1'}}
-  function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView'))return;var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnPhotoToggle" class="learn-control">Iconos sí</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">✓ <span id="learnGood">0</span></span><span class="status">✗ <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar última</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">¿Qué icono?</div><div id="learnHearts" class="learn-hearts">♥♥♥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};$('learnGuessBtn').onclick=function(){if(!photo.on)return;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
+  function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView'))return;var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnHomeBtn" class="learn-control" title="Volver al menu">&#x1F3E0;</button><button id="learnPhotoToggle" class="learn-control">Iconos sí</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">✓ <span id="learnGood">0</span></span><span class="status">✗ <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar última</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">¿Qué icono?</div><div id="learnHearts" class="learn-hearts">♥♥♥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};$('learnGuessBtn').onclick=function(){if(!photo.on)return;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
   function screen(s){var isLearning=s==='learning',already=document.body.classList.contains(isLearning?'learning-mode':'competition-mode');document.body.classList.toggle('learning-mode',isLearning);document.body.classList.toggle('competition-mode',!isLearning);var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),ctl=document.querySelector('.hero .controls');if(a)a.classList.toggle('active',isLearning);if(c)c.classList.toggle('active',!isLearning);if(ctl)ctl.scrollLeft=0;if(already){if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}return}if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}else{document.body.classList.remove('keyboard-open');if(typeof render==='function')render();if(ctl)ctl.scrollLeft=0}}
-  function key(e){if(!document.body.classList.contains('learning-mode'))return;if(e.key==='Backspace'){e.preventDefault();del()}else if(e.key&&e.key.length===1&&/[a-zA-Z]/.test(e.key)){e.preventDefault();insert(e.key)}}
+  function key(e){if(!document.body.classList.contains('learning-mode'))return;if(e.key==='Backspace'){e.preventDefault();del()}else if(e.key&&e.key.length===1&&(/[a-zA-Z]/.test(e.key)||(activeKey==='phrase'&&/[.,!?']/.test(e.key)))){e.preventDefault();insert(e.key)}}
   function fallbackLearningData(){try{return JSON.parse(($('spellingLearningData')||{textContent:'[]'}).textContent)||[]}catch(e){return []}}
 function parseLearningRows(rows){var out=[];(rows||[]).forEach(function(r,i){if(!r||!r.length)return;var num=String(r[0]||'').toLowerCase().trim(),wordRaw=String(r[1]||'').trim(),meaning=String(r[2]||'').trim(),letters=String(r[3]||wordRaw).trim(),sentence=String(r[4]||'').trim();if(i===0&&(num==='nÃºmero'||num==='numero'||wordRaw.toLowerCase()==='palabra'))return;var word=cleanLetters(wordRaw||letters);if(!word||!meaning||!sentence)return;out.push({word:word,wordDisplay:wordRaw||letters,meaning:meaning,letters:letters||wordRaw,sentence:sentence})});return out}
 var LEARNING_EXCEL_FILE='./yago_common_english_words.xlsx';async function loadLearningExcel(){if(!window.XLSX||!window.fetch)throw new Error('No esta disponible el lector XLSX');var res=await fetch(LEARNING_EXCEL_FILE,{cache:'no-store'});if(!res.ok)throw new Error('No se puede leer '+LEARNING_EXCEL_FILE);var wb=XLSX.read(await res.arrayBuffer(),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''}),parsed=parseLearningRows(rows);if(!parsed.length)throw new Error('El Excel no tiene datos validos en columnas B-E');return parsed}
@@ -4350,9 +3770,47 @@ body.learning-mode.keyboard-open .topline{
 </script>
 </html>
 
-
-
-
+<style id="valentina-clean-final-20260726">
+body.learning-mode .learn-cell.ref,body.learning-mode .learn-cell.editable:not(.phrase){background:linear-gradient(180deg,#fff,#f8fbff)!important;border:3px solid rgba(90,61,26,.07)!important;box-shadow:0 7px 0 rgba(109,72,33,.07),0 12px 20px rgba(40,44,70,.08)!important;color:#3f7cff!important;font-family:Inter,Arial,Helvetica,sans-serif!important;font-weight:1000!important;letter-spacing:0!important;word-spacing:0!important}
+body.learning-mode .learn-cell.ref .learn-letters,body.learning-mode .learn-cell.editable:not(.phrase) .learn-letters{gap:0!important;justify-content:center!important;align-items:center!important;white-space:nowrap!important;overflow:visible!important;font-family:Inter,Arial,Helvetica,sans-serif!important;font-weight:1000!important;letter-spacing:0!important;word-spacing:0!important;color:#3f7cff!important}
+body.learning-mode .learn-cell.ref .learn-char,body.learning-mode .learn-cell.editable:not(.phrase) .learn-char{font-size:clamp(22px,calc(96cqw / var(--char-count,8)),38px)!important;line-height:1.12!important;min-width:.46em!important;padding:0!important;margin:0!important;color:#3f7cff!important;font-family:inherit!important;font-weight:1000!important;letter-spacing:0!important;text-shadow:none!important}
+body.learning-mode .learn-cell.phrase .phrase-space{flex:0 0 .20em!important;min-width:.20em!important;width:.20em!important}
+body.learning-mode .learn-cell.phrase .phrase-punct.blank{color:#172033!important;opacity:.82!important;text-align:center!important}
+.learn-caret{display:inline-block!important;width:2px!important;height:1.12em!important;margin:0 1px!important;background:#172033!important;border-radius:2px!important;vertical-align:-.12em!important;animation:learnCaretBlink 1s steps(1,end) infinite!important}
+@keyframes learnCaretBlink{50%{opacity:0}}
+#learnHomeBtn{min-width:48px!important;padding:0 14px!important;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',Arial,sans-serif!important;font-size:20px!important;line-height:1!important}
+.learn-photo-mask .learn-tile{background:#334155!important}.learn-photo-mask .learn-tile:nth-child(2n){background:#2563eb!important}.learn-photo-mask .learn-tile:nth-child(3n){background:#0f766e!important}.learn-photo-mask .learn-tile:nth-child(5n){background:#7c2d12!important}.learn-photo-mask .learn-tile.revealed{opacity:0!important}
+#menuBtn::before{content:"\1F3E0"!important;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',Arial,sans-serif!important;font-size:17px!important;line-height:1!important}
+body.competition-mode,body.competition-mode *{scroll-behavior:auto!important}
+body.competition-mode .hero,body.competition-mode .panel,body.competition-mode .wrap,body.competition-mode .game-grid,body.competition-mode .clue-card,body.competition-mode .word-zone,body.competition-mode .match-stage,body.competition-mode .side-game-card,body.competition-mode .football-panel,body.competition-mode .football-field,body.competition-mode .stats,body.competition-mode .controls,body.competition-mode .actions,body.competition-mode .title,body.competition-mode .message{transition:none!important;animation:none!important;transform:none!important;will-change:auto!important}
+body.competition-mode .football-field.match-shake,body.competition-mode .football-field.match-zoom,body.competition-mode .football-speedline.visible,body.competition-mode .football-confetti i{animation:none!important;transform:none!important}
+</style>
+<script id="valentina-clean-final-20260726">
+(function(){
+  function inCompetition(){return document.body&&document.body.classList.contains('competition-mode')}
+  function inLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  var lastTypingTap=0;
+  function isRealTypingTarget(t){return !!(t&&t.closest&&t.closest('.learn-cell.editable,.word-zone,.letters,.tile,#hiddenInput'))}
+  function settle(){
+    var field=document.getElementById('footballField');
+    if(field){field.classList.remove('match-shake');field.classList.remove('match-zoom')}
+    if(inCompetition())document.body.classList.remove('keyboard-open');
+    if(inLearning())document.body.classList.remove('keyboard-open');
+    var h=document.getElementById('learnHomeBtn');
+    if(h&&!h.dataset.boundHome){h.dataset.boundHome='1';h.onclick=function(){window.location.href='../index.html'}}
+  }
+  var nativeFocus=HTMLElement.prototype.focus;
+  HTMLElement.prototype.focus=function(opts){
+    if(this&&this.id==='hiddenInput'&&inCompetition()&&Date.now()-lastTypingTap>700)return;
+    return nativeFocus.call(this,opts);
+  };
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(settle,0)},true)});
+  ['click','pointerdown','touchstart'].forEach(function(ev){document.addEventListener(ev,function(e){if(isRealTypingTarget(e.target))lastTypingTap=Date.now();setTimeout(settle,0)},true)});
+  var oldRender=window.render;
+  if(typeof oldRender==='function')window.render=function(){var out=oldRender.apply(this,arguments);setTimeout(settle,0);return out};
+  settle();
+})();
+</script>
 
 
 
