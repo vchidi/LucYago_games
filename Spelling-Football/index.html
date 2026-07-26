@@ -770,7 +770,7 @@ const footballEngine=(()=>{
   const lineShort={goalkeeper:'POR',defense:'DEF',midfield:'MED',attack:'ATA'};
   const lineY={goalkeeper:{yago:86,rival:14},defense:{yago:68,rival:32},midfield:{yago:50,rival:50},attack:{yago:24,rival:76}};
   const xMap={one:[50],two:[36,64],three:[24,50,76]};
-  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,bannerTimer:null,eventTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
+  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,interactionsSinceGoal:0,bannerTimer:null,eventTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
   const refs={};
 
   function firstRivalWord(name){
@@ -1060,6 +1060,21 @@ const footballEngine=(()=>{
     const attacker=getBallOwner()||pickZoneDefender(teamId,'attack');
     const goalkeeper=pickZoneDefender(getOpponentId(teamId),'goalkeeper');
     pendingWordSpeech=null;
+    if(state.interactionsSinceGoal<=6){
+      const earlyY=isYago?28:72;
+      const earlyX=Math.max(22,Math.min(78,getX(goalkeeper)+(Math.random()>.5?8:-8)));
+      return moveBallTo(getOpponentId(teamId),'goalkeeper',{
+        playerId:goalkeeper.id,
+        ballTarget:{x:earlyX,y:earlyY},
+        logText:'Todavia no puede haber gol: hacen falta 6 jugadas anteriores. '+goalkeeper.name+' bloquea el tiro de '+attacker.name+'.',
+        bannerTitle:'BLOQUEO',
+        bannerText:'Aun faltan jugadas antes de que pueda haber gol.',
+        bannerTone:isYago?'bad':'good',
+        eventKind:'save',
+        keeperId:goalkeeper.id,
+        explanation:'Regla anti-gol rapido: antes de marcar tiene que haber al menos 6 interacciones previas desde el saque.',
+        commentaryText:goalkeeper.name+' bloquea el tiro. Todavia no puede haber gol: faltan jugadas previas.'});
+    }
     const duel=resolveContest(getShotPower(attacker)+3,getSavePower(goalkeeper)*0.82,'tiro','parada',isYago?2:4);
     if(duel.attackerWins){
       state.score[teamId]+=1;
@@ -1111,8 +1126,11 @@ const footballEngine=(()=>{
     });
   }
 
+  function recordFootballInteraction(){state.interactionsSinceGoal=(state.interactionsSinceGoal||0)+1;} 
+
   function onSpellingSuccess(){
     if(!gameEnabled) return;
+    recordFootballInteraction();
     if(state.possession==='yago'){
       if(state.line==='attack') return resolveShot('yago');
       return attemptAdvance('yago');
@@ -1122,6 +1140,7 @@ const footballEngine=(()=>{
 
   function onSpellingFail(){
     if(!gameEnabled) return;
+    recordFootballInteraction();
     if(state.possession==='yago'){
       return attemptRecovery('rival',12);
     }
@@ -1274,7 +1293,7 @@ const footballEngine=(()=>{
     state.score={yago:0,rival:0};
     state.log=[];
     state.banner={title:'',text:'',tone:'good',visible:false};
-    state.lastEvent=null; state.ballTarget=null; state.kickoffMode=false;
+    state.lastEvent=null; state.ballTarget=null; state.kickoffMode=false; state.interactionsSinceGoal=0;
     pickStartingTeam();
     addLog('Atletic empieza sacando desde el centro.');
     render();
@@ -2912,7 +2931,7 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function bindScreenButtons(){if(!document.body.dataset.learnDelegatedFinal){document.body.dataset.learnDelegatedFinal='1';var lastTap=0;document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#learnPhraseBtn,#learnScreenBtn,#competitionScreenBtn');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var now=Date.now();if(now-lastTap<260)return;lastTap=now;if(t.id==='learnPhraseBtn'){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()}else{screen(t.id==='learnScreenBtn'?'learning':'competition')}},true)}var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),p=document.getElementById('learnPhraseBtn');if(a&&!a.dataset.learnBound){a.dataset.learnBound='1'}if(c&&!c.dataset.learnBound){c.dataset.learnBound='1'}if(p&&!p.dataset.learnPhraseBound){p.dataset.learnPhraseBound='1'}}
   function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView'))return;var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnHomeBtn" class="learn-control" title="Volver al menu">&#x1F3E0;</button><button id="learnPhotoToggle" class="learn-control">Iconos sí</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">✓ <span id="learnGood">0</span></span><span class="status">✗ <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar última</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">¿Qué icono?</div><div id="learnHearts" class="learn-hearts">♥♥♥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};$('learnGuessBtn').onclick=function(){if(!photo.on)return;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
   function screen(s){var isLearning=s==='learning',already=document.body.classList.contains(isLearning?'learning-mode':'competition-mode');document.body.classList.toggle('learning-mode',isLearning);document.body.classList.toggle('competition-mode',!isLearning);var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),ctl=document.querySelector('.hero .controls');if(a)a.classList.toggle('active',isLearning);if(c)c.classList.toggle('active',!isLearning);if(ctl)ctl.scrollLeft=0;if(already){if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}return}if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}else{document.body.classList.remove('keyboard-open');if(typeof render==='function')render();if(ctl)ctl.scrollLeft=0}}
-  function key(e){if(!document.body.classList.contains('learning-mode'))return;if(e.key==='Backspace'){e.preventDefault();del()}else if(e.key&&e.key.length===1&&(/[a-zA-Z]/.test(e.key)||(activeKey==='phrase'&&/[.,!?']/.test(e.key)))){e.preventDefault();insert(e.key)}}
+  function key(e){if(!document.body.classList.contains('learning-mode'))return;if(e.key==='Backspace'){e.preventDefault();del()}else if(e.key===' '||e.code==='Space'){e.preventDefault();return}else if(e.key&&e.key.length===1&&(/[a-zA-Z]/.test(e.key)||(activeKey==='phrase'&&/[.,!?']/.test(e.key)))){e.preventDefault();insert(e.key)}}
   function fallbackLearningData(){try{return JSON.parse(($('spellingLearningData')||{textContent:'[]'}).textContent)||[]}catch(e){return []}}
 function parseLearningRows(rows){var out=[];(rows||[]).forEach(function(r,i){if(!r||!r.length)return;var num=String(r[0]||'').toLowerCase().trim(),wordRaw=String(r[1]||'').trim(),meaning=String(r[2]||'').trim(),letters=String(r[3]||wordRaw).trim(),sentence=String(r[4]||'').trim();if(i===0&&(num==='nÃºmero'||num==='numero'||wordRaw.toLowerCase()==='palabra'))return;var word=cleanLetters(wordRaw||letters);if(!word||!meaning||!sentence)return;out.push({word:word,wordDisplay:wordRaw||letters,meaning:meaning,letters:letters||wordRaw,sentence:sentence})});return out}
 var LEARNING_EXCEL_FILE='./yago_common_english_words.xlsx';async function loadLearningExcel(){if(!window.XLSX||!window.fetch)throw new Error('No esta disponible el lector XLSX');var res=await fetch(LEARNING_EXCEL_FILE,{cache:'no-store'});if(!res.ok)throw new Error('No se puede leer '+LEARNING_EXCEL_FILE);var wb=XLSX.read(await res.arrayBuffer(),{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]],rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''}),parsed=parseLearningRows(rows);if(!parsed.length)throw new Error('El Excel no tiene datos validos en columnas B-E');return parsed}
@@ -3815,3 +3834,420 @@ body.competition-mode .football-field.match-shake,body.competition-mode .footbal
 
 
 
+
+<style id="valentina-green-learning-and-match-20260726">
+body.learning-mode #menuBtn,
+body.competition-mode #menuBtn{
+  order:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+  height:32px!important;
+  padding:0!important;
+  border-radius:12px!important;
+  background:linear-gradient(135deg,#ffffff,#e8fbff)!important;
+  border:2px solid rgba(45,109,89,.16)!important;
+  box-shadow:0 5px 0 rgba(48,86,68,.12)!important;
+  font-size:0!important;
+}
+body.learning-mode #menuBtn::before,
+body.competition-mode #menuBtn::before{
+  content:"\1F3E0"!important;
+  font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',Arial,sans-serif!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+body.learning-mode #learnScreenBtn,
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #learnScreenBtn,
+body.competition-mode #competitionScreenBtn{
+  position:static!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  height:32px!important;
+  min-height:32px!important;
+  max-height:32px!important;
+  padding:0 14px!important;
+  border-radius:14px!important;
+  font-size:13px!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  order:1!important;
+  box-shadow:0 5px 0 rgba(55,74,104,.16),0 10px 18px rgba(40,44,70,.10)!important;
+}
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #competitionScreenBtn{order:2!important}
+body.learning-mode #modeClassicBtn,
+body.competition-mode #modeClassicBtn{order:3!important}
+body.learning-mode #modeBlindBtn,
+body.competition-mode #modeBlindBtn{order:4!important}
+body.learning-mode #learnScreenBtn,
+body.competition-mode #learnScreenBtn{
+  background:linear-gradient(135deg,#b8ffd7,#69e6a1)!important;
+  color:#145234!important;
+  border:2px solid rgba(38,154,89,.22)!important;
+}
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #competitionScreenBtn{
+  background:linear-gradient(135deg,#3f7cff,#7557ff)!important;
+  color:#fff!important;
+  border:2px solid rgba(255,255,255,.28)!important;
+}
+body.competition-mode{
+  background:radial-gradient(circle at 14% 8%,rgba(255,209,102,.42),transparent 24%),radial-gradient(circle at 92% 20%,rgba(126,219,255,.36),transparent 26%),linear-gradient(135deg,#fff8db,#e8fbff 58%,#fff0f7)!important;
+}
+body.competition-mode .hero{
+  background:linear-gradient(180deg,#fffdf6,#fff6dc)!important;
+  border:3px solid rgba(255,255,255,.86)!important;
+  box-shadow:0 8px 0 rgba(109,72,33,.08),0 16px 28px rgba(40,44,70,.12)!important;
+}
+body.competition-mode .panel,
+body.competition-mode .clue-card,
+body.competition-mode .side-game-card{
+  background:radial-gradient(circle at 14% 8%,rgba(255,209,102,.28),transparent 24%),radial-gradient(circle at 92% 20%,rgba(126,219,255,.24),transparent 26%),linear-gradient(135deg,#fff8db,#e8fbff 58%,#fff0f7)!important;
+  border-color:rgba(90,61,26,.08)!important;
+}
+.learn-photo-mask .learn-tile{background:#064e3b!important}
+.learn-photo-mask .learn-tile:nth-child(2n){background:#047857!important}
+.learn-photo-mask .learn-tile:nth-child(3n){background:#10b981!important}
+.learn-photo-mask .learn-tile:nth-child(5n){background:#6ee7b7!important}
+.learn-photo-mask .learn-tile:nth-child(7n){background:#a7f3d0!important}
+.learn-photo-mask .learn-tile.revealed{opacity:0!important}
+</style>
+
+
+
+<style id="valentina-final-order-space-20260726">
+body.learning-mode .controls > #menuBtn,
+body.learning-mode.keyboard-open .controls > #menuBtn,
+body.competition-mode .controls > #menuBtn,
+body.competition-mode.keyboard-open .controls > #menuBtn{
+  display:inline-flex!important;
+  order:0!important;
+  position:static!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+body.learning-mode .controls > *:not(#menuBtn):not(#learnScreenBtn):not(#competitionScreenBtn):not(#modeClassicBtn):not(#modeBlindBtn),
+body.competition-mode .controls > *:not(#menuBtn):not(#learnScreenBtn):not(#competitionScreenBtn):not(#modeClassicBtn):not(#modeBlindBtn){
+  order:20!important;
+}
+body.learning-mode #learnScreenBtn,
+body.competition-mode #learnScreenBtn{order:1!important}
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #competitionScreenBtn{order:2!important}
+body.learning-mode #modeClassicBtn,
+body.competition-mode #modeClassicBtn{order:3!important}
+body.learning-mode #modeBlindBtn,
+body.competition-mode #modeBlindBtn{order:4!important}
+body.learning-mode .hero .controls,
+body.competition-mode .hero .controls{
+  justify-content:flex-start!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  gap:6px!important;
+}
+</style>
+<style id="valentina-menu-specificity-final-20260726">
+body.learning-mode .hero .controls > #menuBtn#menuBtn#menuBtn,
+body.learning-mode.keyboard-open .hero .controls > #menuBtn#menuBtn#menuBtn,
+body.competition-mode .hero .controls > #menuBtn#menuBtn#menuBtn,
+body.competition-mode.keyboard-open .hero .controls > #menuBtn#menuBtn#menuBtn{
+  display:inline-flex!important;
+  order:0!important;
+  position:static!important;
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+  height:32px!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+</style>
+<style id="valentina-competition-buttons-left-20260726">
+body.competition-mode .hero .controls,
+body.competition-mode.keyboard-open .hero .controls{
+  margin-left:-128px!important;
+  width:calc(100% + 128px)!important;
+  max-width:calc(100% + 128px)!important;
+  padding-right:6px!important;
+}
+@media (max-width:1200px){
+  body.competition-mode .hero .controls,
+  body.competition-mode.keyboard-open .hero .controls{
+    margin-left:-80px!important;
+    width:calc(100% + 80px)!important;
+    max-width:calc(100% + 80px)!important;
+  }
+}
+</style>
+
+<style id="valentina-learning-compact-header-20260726">
+body.learning-mode,
+body.learning-mode.keyboard-open{
+  --hero-h:126px!important;
+}
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:126px!important;
+  min-height:126px!important;
+  max-height:126px!important;
+  flex:0 0 126px!important;
+  padding:6px 8px 6px!important;
+  overflow:visible!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 138px)!important;
+  min-height:0!important;
+  padding-top:5px!important;
+}
+body.learning-mode .title,
+body.learning-mode.keyboard-open .title{
+  font-size:clamp(22px,2.4vw,32px)!important;
+  line-height:1!important;
+  margin:0 0 2px!important;
+}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  margin:2px 0 3px!important;
+  gap:5px!important;
+  min-height:30px!important;
+  max-height:32px!important;
+  overflow:visible!important;
+}
+body.learning-mode .hero .controls button,
+body.learning-mode.keyboard-open .hero .controls button,
+body.learning-mode .hero .controls label.btn,
+body.learning-mode.keyboard-open .hero .controls label.btn{
+  height:30px!important;
+  min-height:30px!important;
+  max-height:30px!important;
+  padding:0 10px!important;
+  font-size:12px!important;
+}
+body.learning-mode .hero .controls > #menuBtn#menuBtn#menuBtn,
+body.learning-mode.keyboard-open .hero .controls > #menuBtn#menuBtn#menuBtn{
+  width:32px!important;
+  min-width:32px!important;
+  max-width:32px!important;
+  height:30px!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  margin-top:0!important;
+  gap:5px!important;
+  transform:translateY(-4px)!important;
+}
+body.learning-mode .stat,
+body.learning-mode.keyboard-open .stat{
+  min-height:38px!important;
+  padding:5px 8px!important;
+  border-radius:12px!important;
+}
+body.learning-mode .stat .k,
+body.learning-mode.keyboard-open .stat .k{
+  font-size:8px!important;
+  line-height:1!important;
+}
+body.learning-mode .stat .v,
+body.learning-mode.keyboard-open .stat .v{
+  font-size:18px!important;
+  line-height:1.05!important;
+  margin-top:1px!important;
+}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode,
+  body.learning-mode.keyboard-open{
+    --hero-h:116px!important;
+  }
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:116px!important;
+    min-height:116px!important;
+    max-height:116px!important;
+    flex-basis:116px!important;
+    padding:5px 8px 5px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{
+    height:calc(100dvh - 126px)!important;
+    padding-top:4px!important;
+  }
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title{
+    font-size:20px!important;
+    margin-bottom:1px!important;
+  }
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    transform:translateY(-5px)!important;
+  }
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{
+    min-height:35px!important;
+    padding:4px 7px!important;
+  }
+  body.learning-mode .stat .v,
+  body.learning-mode.keyboard-open .stat .v{
+    font-size:17px!important;
+  }
+}
+@media (max-width:760px){
+  body.learning-mode,
+  body.learning-mode.keyboard-open{
+    --hero-h:136px!important;
+  }
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:136px!important;
+    min-height:136px!important;
+    max-height:136px!important;
+    flex-basis:136px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{
+    height:calc(100dvh - 146px)!important;
+  }
+}
+</style>
+<style id="valentina-competition-compact-header-20260726">
+body.competition-mode,
+body.competition-mode.keyboard-open{
+  --hero-h:112px!important;
+}
+body.competition-mode .hero,
+body.competition-mode.keyboard-open .hero{
+  height:112px!important;
+  min-height:112px!important;
+  max-height:112px!important;
+  flex:0 0 112px!important;
+  padding:5px 8px 5px!important;
+  overflow:visible!important;
+}
+body.competition-mode .panel,
+body.competition-mode.keyboard-open .panel{
+  height:calc(100dvh - 124px)!important;
+  min-height:0!important;
+  padding-top:5px!important;
+}
+body.competition-mode .title,
+body.competition-mode.keyboard-open .title{
+  font-size:clamp(20px,2.2vw,30px)!important;
+  line-height:1!important;
+  margin:0 0 1px!important;
+}
+body.competition-mode .hero .controls,
+body.competition-mode.keyboard-open .hero .controls{
+  margin-top:0!important;
+  margin-bottom:2px!important;
+  gap:5px!important;
+  min-height:28px!important;
+  max-height:30px!important;
+  overflow:visible!important;
+}
+body.competition-mode .hero .controls button,
+body.competition-mode.keyboard-open .hero .controls button,
+body.competition-mode .hero .controls label.btn,
+body.competition-mode.keyboard-open .hero .controls label.btn{
+  height:28px!important;
+  min-height:28px!important;
+  max-height:28px!important;
+  padding:0 9px!important;
+  border-radius:12px!important;
+  font-size:11.5px!important;
+  line-height:1!important;
+}
+body.competition-mode .hero .controls > #menuBtn#menuBtn#menuBtn,
+body.competition-mode.keyboard-open .hero .controls > #menuBtn#menuBtn#menuBtn{
+  width:30px!important;
+  min-width:30px!important;
+  max-width:30px!important;
+  height:28px!important;
+}
+body.competition-mode .hero .controls > #menuBtn#menuBtn#menuBtn::before,
+body.competition-mode.keyboard-open .hero .controls > #menuBtn#menuBtn#menuBtn::before{
+  font-size:16px!important;
+}
+body.competition-mode .stats,
+body.competition-mode.keyboard-open .stats{
+  margin-top:0!important;
+  gap:5px!important;
+  transform:translateY(-5px)!important;
+}
+body.competition-mode .stat,
+body.competition-mode.keyboard-open .stat{
+  min-height:32px!important;
+  padding:3px 7px!important;
+  border-radius:10px!important;
+}
+body.competition-mode .stat .k,
+body.competition-mode.keyboard-open .stat .k{
+  font-size:7.5px!important;
+  line-height:1!important;
+}
+body.competition-mode .stat .v,
+body.competition-mode.keyboard-open .stat .v{
+  font-size:15px!important;
+  line-height:1!important;
+  margin-top:1px!important;
+}
+@media (pointer:coarse) and (min-width:761px){
+  body.competition-mode,
+  body.competition-mode.keyboard-open{
+    --hero-h:104px!important;
+  }
+  body.competition-mode .hero,
+  body.competition-mode.keyboard-open .hero{
+    height:104px!important;
+    min-height:104px!important;
+    max-height:104px!important;
+    flex-basis:104px!important;
+    padding:4px 8px 4px!important;
+  }
+  body.competition-mode .panel,
+  body.competition-mode.keyboard-open .panel{
+    height:calc(100dvh - 114px)!important;
+    padding-top:4px!important;
+  }
+  body.competition-mode .title,
+  body.competition-mode.keyboard-open .title{
+    font-size:19px!important;
+    margin-bottom:0!important;
+  }
+  body.competition-mode .stats,
+  body.competition-mode.keyboard-open .stats{
+    transform:translateY(-6px)!important;
+  }
+  body.competition-mode .stat,
+  body.competition-mode.keyboard-open .stat{
+    min-height:30px!important;
+    padding:3px 6px!important;
+  }
+  body.competition-mode .stat .v,
+  body.competition-mode.keyboard-open .stat .v{
+    font-size:14px!important;
+  }
+}
+@media (max-width:760px){
+  body.competition-mode,
+  body.competition-mode.keyboard-open{
+    --hero-h:122px!important;
+  }
+  body.competition-mode .hero,
+  body.competition-mode.keyboard-open .hero{
+    height:122px!important;
+    min-height:122px!important;
+    max-height:122px!important;
+    flex-basis:122px!important;
+  }
+  body.competition-mode .panel,
+  body.competition-mode.keyboard-open .panel{
+    height:calc(100dvh - 132px)!important;
+  }
+}
+</style>
