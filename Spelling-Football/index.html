@@ -2912,6 +2912,7 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function showMsg(t){$('learnMsg').textContent=t}
   function insert(ch){var cell=cells[activeKey];if(!cell||cell.ok===true)return;var allowed=activeKey==='phrase'?/^[a-zA-Z.,!?']$/:/^[a-zA-Z]$/;if(!allowed.test(ch)||cell.guess.length>=cell.target.length)return;var pos=Math.max(0,Math.min(cell.guess.length,cell.cursor||0));cell.guess.splice(pos,0,activeKey==='phrase'?ch:ch.toLowerCase());cell.cursor=pos+1;cell.ok=null;if(complete(cell)){cell.ok=activeKey==='phrase'?cell.guess.join('')===cell.target:normalize(cell.guess.join(''))===normalize(cell.target);if(cell.ok){var it=item(),points=activeKey==='phrase'?wordCount(it&&it.sentence):1;score.good+=points;var amount=registerHit();reveal(amount);activeKey=activeKey==='line1'?'line2':activeKey==='line2'&&phraseMode?'phrase':activeKey;photo.lastBoostMsg='';if(cells[activeKey])cells[activeKey].cursor=cells[activeKey].guess.length;if(allLearnDone())setTimeout(nextWord,550)}else{score.bad++;photo.streak=0;showMsg('')}}renderLearn()}
   function del(){var cell=cells[activeKey];if(!cell||cell.ok===true)return;var pos=Math.max(0,Math.min(cell.guess.length,cell.cursor||cell.guess.length));if(pos>0){cell.guess.splice(pos-1,1);cell.cursor=pos-1;cell.ok=null;showMsg('');renderLearn()}}
+  window.__spellingLearningPress=function(ch){if(ch==='Borrar'){del();return}if(ch==='Espacio'){return}insert(ch)}
   function nextWord(){idx=(idx+1)%data.length;initCells();showMsg('');renderLearn()}
   function retry(){initCells();showMsg('');renderLearn()}
   function toggleLearnOrder(){if(!originalData.length)originalData=data.slice();if(orderMode==='original'){data=originalData.slice();shuffle(data);orderMode='mixed';shuffled=true}else if(orderMode==='mixed'){data=originalData.slice().sort(function(a,b){return String(a.word||'').localeCompare(String(b.word||''),'en',{sensitivity:'base'})});orderMode='alpha';shuffled=false}else{data=originalData.slice();orderMode='original';shuffled=false}idx=0;initCells();renderLearn()}
@@ -3787,6 +3788,223 @@ body.learning-mode.keyboard-open .topline{
   },true);
 })();
 </script>
+<style id="valentina-spelling-spanish-keyboard-20260726">
+.spelling-spanish-keyboard{
+  display:grid;
+  gap:4px;
+  width:100%;
+  margin-top:7px;
+  flex:0 0 auto;
+}
+.spelling-spanish-keyboard-row{
+  display:grid;
+  grid-template-columns:repeat(10,minmax(0,1fr));
+  gap:4px;
+}
+.spelling-key{
+  min-width:0!important;
+  height:31px!important;
+  min-height:31px!important;
+  padding:0 3px!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff!important;
+  color:#172033!important;
+  border:1px solid rgba(32,48,74,.08)!important;
+  box-shadow:0 5px 10px rgba(32,48,74,.10)!important;
+}
+.spelling-key-delete{
+  background:#ffe4e2!important;
+  color:#a52d2d!important;
+  font-size:11px!important;
+}
+body.learning-mode #spellingSpanishKeyboard{
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
+}
+body.competition-mode #spellingSpanishKeyboard{
+  margin-top:6px;
+}
+body.competition-mode .clue-card #spellingSpanishKeyboard,
+body.learning-mode #learningView #spellingSpanishKeyboard{
+  display:grid!important;
+}
+#hiddenInput{
+  input-mode:none!important;
+}
+@media (min-width:700px) and (max-width:1180px){
+  .spelling-spanish-keyboard{gap:3px!important;margin-top:5px!important}
+  .spelling-spanish-keyboard-row{gap:3px!important}
+  .spelling-key{height:29px!important;min-height:29px!important;font-size:12px!important;border-radius:9px!important}
+  .spelling-key-delete{font-size:10px!important}
+  body.learning-mode .learn-left{gap:4px!important}
+  body.learning-mode .learn-table{gap:4px!important}
+  body.learning-mode .learn-cell{min-height:52px!important;padding:7px 6px!important}
+  body.learning-mode #spellingSpanishKeyboard{max-width:720px!important}
+  body.competition-mode .word-zone{margin-top:6px!important;padding:8px!important}
+  body.competition-mode .message{display:none!important}
+}
+@media (max-width:760px){
+  .spelling-key{height:30px!important;min-height:30px!important;font-size:12px!important}
+}
+</style>
+<script id="valentina-spelling-spanish-keyboard-20260726">
+(function(){
+  var rows=[
+    ['q','w','e','r','t','y','u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l','ñ'],
+    ['z','x','c','v','b','n','m','.', 'Espacio','Borrar']
+  ];
+  function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  function isCompetition(){return document.body&&document.body.classList.contains('competition-mode')}
+  function neutralizeHiddenInput(){
+    var input=document.getElementById('hiddenInput');
+    if(!input)return;
+    input.setAttribute('readonly','readonly');
+    input.setAttribute('inputmode','none');
+    input.setAttribute('autocomplete','off');
+    input.setAttribute('autocorrect','off');
+    input.setAttribute('autocapitalize','off');
+    input.setAttribute('spellcheck','false');
+    input.tabIndex=-1;
+    if(document.activeElement===input)input.blur();
+  }
+  function dispatchKey(key){
+    var ev=new KeyboardEvent('keydown',{key:key,code:key===' '?'Space':'Key'+String(key).toUpperCase(),bubbles:true,cancelable:true});
+    document.dispatchEvent(ev);
+  }
+  function typeCompetition(ch){
+    if(ch==='Borrar'){
+      if(typeof window.deleteLast==='function')window.deleteLast();
+      else dispatchKey('Backspace');
+      return;
+    }
+    if(!/^[a-z]$/i.test(ch))return;
+    if(typeof window.insertLetter==='function'){
+      window.insertLetter(ch.toLowerCase());
+      return;
+    }
+    var input=document.getElementById('hiddenInput');
+    if(input){
+      input.value=ch.toLowerCase();
+      input.dispatchEvent(new Event('input',{bubbles:true,cancelable:true}));
+      input.value='';
+    }
+  }
+  function typeLearning(ch){
+    if(typeof window.__spellingLearningPress==='function'){window.__spellingLearningPress(ch);return;}
+    if(ch==='Borrar')dispatchKey('Backspace');
+    else if(ch==='Espacio')dispatchKey(' ');
+    else dispatchKey(ch);
+  }
+  function press(label){
+    neutralizeHiddenInput();
+    if(isLearning())typeLearning(label);
+    else typeCompetition(label);
+    setTimeout(neutralizeHiddenInput,0);
+  }
+  function buildKeyboard(){
+    var kb=document.createElement('div');
+    kb.id='spellingSpanishKeyboard';
+    kb.className='spelling-spanish-keyboard';
+    rows.forEach(function(row){
+      var line=document.createElement('div');
+      line.className='spelling-spanish-keyboard-row';
+      row.forEach(function(label){
+        var b=document.createElement('button');
+        b.type='button';
+        b.className='spelling-key'+(label==='Borrar'?' spelling-key-delete':'');
+        b.textContent=label;
+        b.setAttribute('inputmode','none');
+        b.tabIndex=-1;
+        b.addEventListener('pointerdown',function(e){e.preventDefault();press(label);});
+        b.addEventListener('click',function(e){e.preventDefault();});
+        line.appendChild(b);
+      });
+      kb.appendChild(line);
+    });
+    return kb;
+  }
+  function placeKeyboard(){
+    neutralizeHiddenInput();
+    var existing=document.getElementById('spellingSpanishKeyboard');
+    var target=null;
+    if(isLearning())target=document.querySelector('#learningView .learn-left');
+    else target=document.querySelector('.clue-card');
+    if(!target){if(existing)existing.remove();return;}
+    if(!existing)existing=buildKeyboard();
+    if(existing.parentElement!==target){
+      var actions=isLearning()?target.querySelector('.actions'):target.querySelector('.message');
+      if(actions&&isLearning())target.insertBefore(existing,actions);
+      else if(actions&&isCompetition())target.insertBefore(existing,actions);
+      else target.appendChild(existing);
+    }
+  }
+  document.addEventListener('keydown',function(e){
+    if(!isCompetition())return;
+    if(e.target&&e.target.closest&&e.target.closest('input[type=file],input[type=number],input[type=text]:not(#hiddenInput),textarea,select'))return;
+    if(e.key==='Backspace'){
+      e.preventDefault();
+      if(typeof window.deleteLast==='function')window.deleteLast();
+      return;
+    }
+    if(e.key&&/^[a-zA-Z]$/.test(e.key)){
+      e.preventDefault();
+      if(typeof window.insertLetter==='function')window.insertLetter(e.key.toLowerCase());
+    }
+  },true);
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(placeKeyboard,0);setTimeout(placeKeyboard,180)},true);
+  });
+  ['click','pointerdown','touchstart'].forEach(function(ev){
+    document.addEventListener(ev,function(){setTimeout(placeKeyboard,0);},true);
+  });
+  var oldRender=window.render;
+  if(typeof oldRender==='function'){
+    window.render=function(){
+      var result=oldRender.apply(this,arguments);
+      setTimeout(placeKeyboard,0);
+      return result;
+    };
+  }
+  setTimeout(placeKeyboard,0);
+})();
+</script>
+<script id="valentina-block-hidden-input-native-keyboard-20260726">
+(function(){
+  var nativeFocus=HTMLElement.prototype.focus;
+  HTMLElement.prototype.focus=function(opts){
+    if(this&&this.id==='hiddenInput'){
+      this.setAttribute('readonly','readonly');
+      this.setAttribute('inputmode','none');
+      return;
+    }
+    return nativeFocus.call(this,opts);
+  };
+  var nativeRemove=HTMLElement.prototype.removeAttribute;
+  HTMLElement.prototype.removeAttribute=function(name){
+    if(this&&this.id==='hiddenInput'&&String(name).toLowerCase()==='readonly')return;
+    return nativeRemove.call(this,name);
+  };
+  function lock(){
+    var input=document.getElementById('hiddenInput');
+    if(!input)return;
+    input.setAttribute('readonly','readonly');
+    input.setAttribute('inputmode','none');
+    input.tabIndex=-1;
+    if(document.activeElement===input)input.blur();
+  }
+  ['DOMContentLoaded','load','pageshow','click','pointerdown','touchstart'].forEach(function(ev){
+    document.addEventListener(ev,function(){setTimeout(lock,0)},true);
+  });
+  lock();
+})();
+</script>
 </html>
 
 <style id="valentina-clean-final-20260726">
@@ -4251,3 +4469,157 @@ body.competition-mode.keyboard-open .stat .v{
   }
 }
 </style>
+<style id="valentina-header-fine-tune-20260726">
+body.competition-mode .title,
+body.competition-mode.keyboard-open .title{
+  line-height:1.08!important;
+  margin-bottom:4px!important;
+}
+body.competition-mode .stats,
+body.competition-mode.keyboard-open .stats{
+  transform:translateY(-1px)!important;
+}
+body.competition-mode .hero,
+body.competition-mode.keyboard-open .hero{
+  height:116px!important;
+  min-height:116px!important;
+  max-height:116px!important;
+  flex-basis:116px!important;
+}
+body.competition-mode .panel,
+body.competition-mode.keyboard-open .panel{
+  height:calc(100dvh - 128px)!important;
+}
+body.learning-mode .stats .stat:has(#stepCount),
+body.learning-mode.keyboard-open .stats .stat:has(#stepCount){
+  display:none!important;
+}
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:112px!important;
+  min-height:112px!important;
+  max-height:112px!important;
+  flex-basis:112px!important;
+  padding:6px 8px 5px!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 124px)!important;
+}
+body.learning-mode .title,
+body.learning-mode.keyboard-open .title{
+  line-height:1.08!important;
+  margin-bottom:4px!important;
+}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  margin-bottom:0!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  position:absolute!important;
+  left:486px!important;
+  right:10px!important;
+  top:10px!important;
+  width:auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(86px,1fr))!important;
+  gap:5px!important;
+  margin:0!important;
+  transform:none!important;
+  z-index:8!important;
+}
+body.learning-mode .stat,
+body.learning-mode.keyboard-open .stat{
+  min-height:28px!important;
+  height:28px!important;
+  padding:3px 7px!important;
+  border-radius:10px!important;
+}
+body.learning-mode .stat .k,
+body.learning-mode.keyboard-open .stat .k{
+  font-size:7.5px!important;
+  line-height:1!important;
+}
+body.learning-mode .stat .v,
+body.learning-mode.keyboard-open .stat .v{
+  font-size:14px!important;
+  line-height:1!important;
+  margin-top:1px!important;
+}
+@media (max-width:1350px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    left:430px!important;
+    grid-template-columns:repeat(4,minmax(74px,1fr))!important;
+  }
+}
+@media (max-width:1080px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    left:390px!important;
+    right:8px!important;
+    gap:4px!important;
+    grid-template-columns:repeat(4,minmax(62px,1fr))!important;
+  }
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{
+    padding:3px 5px!important;
+  }
+  body.learning-mode .stat .k,
+  body.learning-mode.keyboard-open .stat .k{
+    font-size:7px!important;
+  }
+  body.learning-mode .stat .v,
+  body.learning-mode.keyboard-open .stat .v{
+    font-size:13px!important;
+  }
+}
+@media (max-width:760px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    width:100%!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    margin-top:2px!important;
+  }
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:132px!important;
+    min-height:132px!important;
+    max-height:132px!important;
+    flex-basis:132px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{
+    height:calc(100dvh - 142px)!important;
+  }
+}
+</style>
+<style id="valentina-learning-title-breathing-20260726">
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  margin-top:5px!important;
+}
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:116px!important;
+  min-height:116px!important;
+  max-height:116px!important;
+  flex-basis:116px!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 128px)!important;
+}
+</style>
+
+
+
+
+
+
+
