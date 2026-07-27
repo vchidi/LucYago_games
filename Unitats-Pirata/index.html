@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ca">
 <head>
 <meta charset="UTF-8">
@@ -703,6 +703,137 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .ship-view{min-height:50px!important}
   .ship-view svg{width:74px!important;height:50px!important}
   #inputArea{overflow:auto!important}
+}
+</style>
+<style id="valentina-ipad-spanish-keyboard-20260726">
+.spanish-keyboard{
+  display:grid;
+  gap:4px;
+  width:100%;
+  margin-top:4px;
+}
+.spanish-keyboard-row{
+  display:grid;
+  grid-template-columns:repeat(10,minmax(0,1fr));
+  gap:4px;
+}
+.spanish-keyboard-row:last-child{
+  grid-template-columns:repeat(11,minmax(0,1fr));
+}
+.spanish-keyboard .unit-key{
+  min-width:0!important;
+  min-height:31px!important;
+  height:31px!important;
+  padding:0 3px!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  line-height:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-shadow:0 5px 10px rgba(32,48,74,.10)!important;
+}
+.spanish-keyboard .unit-key-space{
+  grid-column:span 1;
+}
+.spanish-keyboard .unit-key-shift{
+  background:#eef3ff!important;
+  color:#285bd5!important;
+  font-size:10px!important;
+}
+.spanish-keyboard.shift-on .unit-key-shift{
+  background:#285bd5!important;
+  color:#fff!important;
+}
+.spanish-keyboard .unit-key-delete{
+  grid-column:span 1;
+  background:var(--red-soft)!important;
+  color:#a52d2d!important;
+  font-size:11px!important;
+}
+@media (min-width:700px) and (max-width:1180px){
+  html,body{height:100%;overflow:hidden!important}
+  .app{
+    width:100%!important;
+    max-width:none!important;
+    height:100dvh!important;
+    min-height:0!important;
+    padding:5px!important;
+    gap:5px!important;
+    overflow:hidden!important;
+  }
+  .topbar{
+    min-height:40px!important;
+    padding:4px 5px!important;
+    gap:4px!important;
+    border-radius:16px!important;
+    flex-wrap:nowrap!important;
+  }
+  .home-btn{width:32px!important;height:32px!important;font-size:17px!important;border-radius:12px!important}
+  .brand h1{font-size:15px!important;margin:0!important;max-width:190px!important}
+  .top-stats{gap:3px!important;flex-wrap:nowrap!important}
+  .route-btn,.game-toggle-btn{padding:6px 6px!important;font-size:9px!important;border-radius:11px!important;min-width:0!important}
+  .stat-pill{padding:4px 5px!important;border-radius:11px!important;min-width:0!important}
+  .stat-label{display:none!important}
+  .stat-value{font-size:12px!important;line-height:1!important;margin:0!important}
+  .coin-bar{font-size:11px!important;max-width:78px!important;letter-spacing:0!important}
+  .game{
+    min-height:0!important;
+    height:100%!important;
+    gap:5px!important;
+    overflow:hidden!important;
+  }
+  .panel{padding:6px!important;border-radius:16px!important;min-height:0!important;overflow:hidden!important}
+  .left-panel{gap:4px!important;min-height:0!important;overflow:hidden!important}
+  .test-selector{grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:4px!important}
+  .test-btn{min-height:29px!important;font-size:9px!important;padding:4px 3px!important;border-radius:11px!important}
+  .level-row{display:none!important}
+  .question-card{min-height:116px!important;padding:8px!important;border-radius:17px!important}
+  .question-meta .tag{padding:6px 9px!important;font-size:10px!important}
+  .question-text{min-height:34px!important;margin-top:5px!important;font-size:clamp(17px,2.4vw,25px)!important}
+  .answer-box{min-height:41px!important;margin-top:5px!important;padding:6px 8px!important;border-radius:15px!important}
+  .answer-label{font-size:10px!important}
+  .answer-value{font-size:clamp(18px,2.5vw,26px)!important}
+  #assistArea{min-height:0!important}
+  #inputArea{min-height:0!important;overflow:hidden!important;padding-right:0!important}
+  .write-grid{gap:4px!important;margin-bottom:5px!important}
+  .write-cell{min-height:30px!important;height:30px!important;font-size:14px!important;border-radius:10px!important}
+  .write-pad-note{font-size:10px!important;margin:0 0 4px!important}
+  .actions{gap:5px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #resetBtn{display:none!important}
+  .action-btn{min-height:33px!important;padding:5px 7px!important;border-radius:12px!important;font-size:12px!important}
+  .feedback{min-height:26px!important;font-size:11px!important;padding:5px 8px!important;border-radius:13px!important}
+  .conversion-table{gap:4px!important;padding:6px!important;border-radius:14px!important}
+  .unit-cell{min-height:34px!important;border-radius:10px!important}
+}
+@media (min-width:901px) and (max-width:1180px) and (orientation:landscape){
+  .game{grid-template-columns:minmax(360px,.9fr) minmax(430px,1.1fr)!important}
+  .right-panel{grid-template-columns:1fr 104px!important;gap:5px!important}
+  .map-wrap{min-height:0!important;border-radius:16px!important}
+  .side-panel{gap:5px!important}
+  .ship-card{padding:5px!important;border-radius:12px!important}
+  .ship-view{min-height:46px!important}
+  .ship-view svg{width:70px!important;height:46px!important}
+  .crew-list{gap:4px!important}
+  .crew-card{grid-template-columns:1fr!important;text-align:center!important;padding:4px!important;border-radius:10px!important}
+  .crew-icon{width:26px!important;height:26px!important;font-size:16px!important;margin:0 auto!important}
+  .crew-name{font-size:10px!important}.crew-state{font-size:8px!important}
+  .treasure-bar{gap:4px!important}.mini-card{padding:5px!important;border-radius:12px!important}
+  .mini-card .stat-value{font-size:16px!important}
+}
+@media (min-width:700px) and (max-width:900px) and (orientation:portrait){
+  .game{grid-template-columns:1fr!important;grid-template-rows:minmax(0,1fr) 255px!important}
+  .right-panel{display:grid!important;grid-template-columns:1fr 98px!important;grid-template-rows:minmax(0,1fr)!important;gap:5px!important}
+  .map-wrap{min-height:0!important}
+  .side-panel{display:grid!important;grid-template-columns:1fr!important;gap:4px!important;overflow:hidden!important}
+  .ship-card{display:none!important}
+  .crew-list{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important}
+  .crew-card{grid-template-columns:1fr!important;text-align:center!important;padding:3px!important;border-radius:10px!important}
+  .crew-icon{width:25px!important;height:25px!important;font-size:15px!important;margin:0 auto!important}
+  .crew-name{font-size:9px!important}.crew-state{font-size:8px!important}
+  .spanish-keyboard{gap:3px!important}
+  .spanish-keyboard-row{gap:3px!important}
+  .spanish-keyboard .unit-key{height:30px!important;min-height:30px!important;font-size:12px!important;border-radius:9px!important}
 }
 </style>
 </head>
@@ -1817,12 +1948,61 @@ function renderUnitTable(){
     table.appendChild(cell);
   });
 }
+function renderSpanishKeyboard(onChar,onDelete){
+  const keyboard=document.createElement("div");
+  keyboard.className="spanish-keyboard";
+  const rows=[
+    ["q","w","e","r","t","y","u","i","o","p"],
+    ["a","s","d","f","g","h","j","k","l","ñ"],
+    [{label:"↑",value:"shift",cls:"unit-key-shift"},"z","x","c","v","b","n","m", ".", {label:"⎵",value:" ",cls:"unit-key-space"}, {label:"⌫",value:"backspace",cls:"unit-key-delete"}]
+  ];
+  let shift=false;
+  rows.forEach(row=>{
+    const line=document.createElement("div");
+    line.className="spanish-keyboard-row";
+    row.forEach(item=>{
+      const isObj=typeof item==="object";
+      const label=isObj?item.label:item;
+      const value=isObj?item.value:item;
+      const cls=isObj&&item.cls?" "+item.cls:"";
+      const btn=makeButton(label,"pad-btn unit-key"+cls,()=>{
+        if(value==="shift"){
+          shift=!shift;
+          keyboard.classList.toggle("shift-on",shift);
+          keyboard.querySelectorAll(".unit-key").forEach(key=>{
+            const v=key.dataset.value;
+            if(v&&/^[a-zñ]$/.test(v))key.textContent=shift?v.toUpperCase():v;
+          });
+          return;
+        }
+        if(value==="backspace")onDelete();
+        else if(/^[a-zñ]$/.test(value)){
+          onChar(shift?value.toUpperCase():value);
+          shift=false;
+          keyboard.classList.remove("shift-on");
+          keyboard.querySelectorAll(".unit-key").forEach(key=>{const v=key.dataset.value;if(v&&/^[a-zñ]$/.test(v))key.textContent=v;});
+        }else onChar(value);
+      });
+      btn.dataset.value=value;
+      line.appendChild(btn);
+    });
+    keyboard.appendChild(line);
+  });
+  return keyboard;
+}
 function renderInputArea(){
   const area=$("#inputArea");
   area.innerHTML="";
   const q=game.current;
+  const selectedNow=cleanSelectedTests(game.selectedTests);
+  const wantsLetterKeyboard=selectedNow.length===1&&(selectedNow[0]==="writeScale"||selectedNow[0]==="abbrToName");
   if(!q){
-    area.innerHTML="<div class='order-area'>El teclat apareixer\u00e0 quan comenci la partida.</div>";
+    if(wantsLetterKeyboard){
+      area.innerHTML="<div class='write-pad-note'>Toca una tecla per escriure.</div>";
+      area.appendChild(renderSpanishKeyboard(ch=>inputChar(ch),deleteChar));
+    }else{
+      area.innerHTML="<div class='order-area'>El teclat apareixer\u00e0 quan comenci la partida.</div>";
+    }
     return;
   }
   if(q.kind==="testChoice"){
@@ -1875,18 +2055,7 @@ function renderInputArea(){
     return;
   }
   if(q.kind==="abbrToName"){
-    const pad=document.createElement("div");
-    pad.className="text-pad";
-    LETTERS.forEach(letter=>{
-      const b=document.createElement("button");
-      b.className="pad-btn";
-      b.textContent=letter;
-      b.addEventListener("click",()=>inputChar(letter));
-      pad.appendChild(b);
-    });
-    pad.appendChild(makeButton("Espai","pad-btn wide",()=>inputChar(" ")));
-    pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteChar));
-    area.appendChild(pad);
+    area.appendChild(renderSpanishKeyboard(ch=>inputChar(ch),deleteChar));
     return;
   }
   if(q.kind==="nameToAbbr"){
@@ -1941,12 +2110,7 @@ function renderInputArea(){
     note.className="write-pad-note";
     note.textContent="Toca un recuadre i escriu la unitat.";
     area.appendChild(note);
-    const pad=document.createElement("div");
-    pad.className="text-pad";
-    LETTERS.forEach(ch=>pad.appendChild(makeButton(ch,"pad-btn",()=>inputChar(ch))));
-    pad.appendChild(makeButton("Espai","pad-btn wide",()=>inputChar(" ")));
-    pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteChar));
-    area.appendChild(pad);
+    area.appendChild(renderSpanishKeyboard(ch=>inputChar(ch),deleteChar));
     return;
   }
   if(q.kind==="convert"){
@@ -2371,7 +2535,7 @@ $("#answerBox").addEventListener("pointerdown",selectResultTarget);
 window.addEventListener("keydown",event=>{
   if(event.key==="Enter"){game.final?handleFinalAnswer():checkAnswer();return}
   if(event.key==="Backspace"){deleteChar();return}
-  if(/^[a-zA-Z0-9., ]$/.test(event.key)){
+  if(/^[a-zA-ZñÑ0-9., ]$/.test(event.key)){
     const ch=event.key.toLowerCase();
     if(game.current&&game.current.kind==="convert")inputConvertOrAnswer(ch);
     else inputChar(ch);
@@ -2454,5 +2618,130 @@ setTimeout(lucyagoApplyDefaultStart,80);
   window.addEventListener('load',()=>setTimeout(paint,250));
 })();
 </script>
+<script id="valentina-disable-ipad-native-keyboard-20260726">
+(function(){
+  function isEditable(el){
+    return !!(el&&el.closest&&el.closest('input,textarea,[contenteditable="true"]'));
+  }
+  function neutralizeEditable(el){
+    if(!el)return;
+    if(el.matches&&el.matches('input,textarea')){
+      el.setAttribute('readonly','readonly');
+      el.setAttribute('inputmode','none');
+      el.setAttribute('autocomplete','off');
+      el.setAttribute('autocorrect','off');
+      el.setAttribute('autocapitalize','off');
+      el.setAttribute('spellcheck','false');
+      el.tabIndex=-1;
+    }
+    if(el.matches&&el.matches('[contenteditable="true"]')){
+      el.setAttribute('contenteditable','false');
+      el.tabIndex=-1;
+    }
+  }
+  function blurActive(){
+    var active=document.activeElement;
+    if(active&&active!==document.body&&active.blur)active.blur();
+  }
+  function neutralizeAll(){
+    document.querySelectorAll('input,textarea,[contenteditable="true"]').forEach(neutralizeEditable);
+    document.querySelectorAll('.spanish-keyboard button,.pad-btn,.write-cell,.answer-box').forEach(function(el){
+      el.setAttribute('inputmode','none');
+      el.tabIndex=-1;
+    });
+    blurActive();
+  }
+  document.addEventListener('focusin',function(event){
+    if(isEditable(event.target)){
+      neutralizeEditable(event.target);
+      setTimeout(blurActive,0);
+    }
+  },true);
+  ['pointerdown','touchstart','click'].forEach(function(type){
+    document.addEventListener(type,function(event){
+      if(isEditable(event.target)){
+        event.preventDefault();
+        neutralizeEditable(event.target);
+      }
+      if(event.target&&event.target.closest&&event.target.closest('.spanish-keyboard,.pad-btn,.write-cell,.answer-box,.action-btn,.test-btn')){
+        setTimeout(blurActive,0);
+      }
+    },true);
+  });
+  document.addEventListener('DOMContentLoaded',neutralizeAll,true);
+  window.addEventListener('load',neutralizeAll,true);
+  window.addEventListener('pageshow',neutralizeAll,true);
+  var oldRender=window.render;
+  if(typeof oldRender==='function'){
+    window.render=function(){
+      var result=oldRender.apply(this,arguments);
+      setTimeout(neutralizeAll,0);
+      return result;
+    };
+  }
+  neutralizeAll();
+})();
+</script>
+<script id="valentina-force-writing-keyboard-20260726">
+(function(){
+  function selectedWritingMode(){
+    var active=document.querySelector('#testSelector .test-btn.active');
+    return active&&active.dataset&&(active.dataset.test==='writeScale'||active.dataset.test==='abbrToName');
+  }
+  function buildFallbackKeyboard(){
+    if(typeof renderSpanishKeyboard==='function')return renderSpanishKeyboard(function(ch){inputChar(ch)},deleteChar);
+    var wrap=document.createElement('div');
+    wrap.className='spanish-keyboard';
+    [['q','w','e','r','t','y','u','i','o','p'],['a','s','d','f','g','h','j','k','l','ñ'],['↑','z','x','c','v','b','n','m','.','⎵','⌫']].forEach(function(row){
+      var line=document.createElement('div');
+      line.className='spanish-keyboard-row';
+      row.forEach(function(label){
+        var b=document.createElement('button');
+        b.className='pad-btn unit-key'+(label==='⌫'?' unit-key-delete':'')+(label==='⎵'?' unit-key-space':'');
+        b.type='button';
+        b.textContent=label;
+        b.addEventListener('click',function(){
+          if(label==='⌫')deleteChar();
+          else if(label==='↑')return;
+          else inputChar(label==='⎵'?' ':label);
+        });
+        line.appendChild(b);
+      });
+      wrap.appendChild(line);
+    });
+    return wrap;
+  }
+  function ensureKeyboard(){
+    var area=document.getElementById('inputArea');
+    if(!area||!selectedWritingMode()||area.querySelector('.spanish-keyboard'))return;
+    area.innerHTML='';
+    var note=document.createElement('div');
+    note.className='write-pad-note';
+    note.textContent='Toca una tecla per escriure.';
+    area.appendChild(note);
+    area.appendChild(buildFallbackKeyboard());
+  }
+  ['DOMContentLoaded','load','pageshow'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(ensureKeyboard,0);setTimeout(ensureKeyboard,150)},true)});
+  document.addEventListener('click',function(e){
+    if(e.target&&e.target.closest&&e.target.closest('#testSelector,#startBtn'))setTimeout(ensureKeyboard,0);
+  },true);
+  var oldRenderInput=window.renderInputArea;
+  if(typeof oldRenderInput==='function'){
+    window.renderInputArea=function(){
+      var result=oldRenderInput.apply(this,arguments);
+      setTimeout(ensureKeyboard,0);
+      return result;
+    };
+  }
+  setTimeout(ensureKeyboard,0);
+})();
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
