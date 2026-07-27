@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,user-scalable=no" />
-<title>🌋 volcán de las tildes</title>
+<title>🌋 Volcán de las tildes</title>
 
 <style>
 :root{
@@ -403,8 +403,8 @@ button{font-family:inherit}
 
 .studyBox.show{display:block}
 
-.studyBox h2{margin:0 0 8px;text-transform:lowercase}
-.studyBox h3{margin:8px 0 4px;text-transform:lowercase}
+.studyBox h2{margin:0 0 8px}
+.studyBox h3{margin:8px 0 4px}
 
 .studyGrid{
   display:grid;
@@ -1322,16 +1322,16 @@ button{font-family:inherit}
 <div class="app">
 
   <div class="topbar">
+    <div class="title">🌋 Volcán de las tildes</div>
     <a class="btn homeBtn" href="../index.html">🏠</a>
-    <div class="title">🌋 volcán de las tildes</div>
-    <button class="btn" onclick="newWord()">nueva</button>
-    <button class="btn" onclick="resetGame()">volver a empezar</button>
-    <button class="btn" onclick="shuffleWords()">mezclar</button>
-    <button class="btn" onclick="toggleGoal()">meta <span id="goalBtn">12</span></button>
-    <button class="btn" id="studyBtn" onclick="toggleStudy()">estudio</button>
-    <button class="btn solutionBtn" onclick="showSolution(true)">solución</button>
-    <button class="btn" id="reviewBtn" onclick="toggleReview()">errores</button>
-    <button class="btn" id="dataBtn" onclick="toggleDataBox()">palabras</button>
+    <button class="btn" onclick="newWord()">Nueva</button>
+    <button class="btn" onclick="resetGame()">Volver a empezar</button>
+    <button class="btn" onclick="shuffleWords()">Mezclar</button>
+    <button class="btn" onclick="toggleGoal()">Meta <span id="goalBtn">12</span></button>
+    <button class="btn" id="studyBtn" onclick="toggleStudy()">Estudio</button>
+    <button class="btn solutionBtn" onclick="showSolution(true)">Solución</button>
+    <button class="btn" id="reviewBtn" onclick="toggleReview()">Errores</button>
+    <button class="btn" id="dataBtn" onclick="toggleDataBox()">Palabras</button>
   </div>
 
   <div class="main">
@@ -1346,9 +1346,9 @@ button{font-family:inherit}
       </div>
 
       <div class="wordBox">
-        <div class="prompt">responde los pasos en orden</div>
+        <div class="prompt">Responde los pasos en orden</div>
         <div class="word" id="word">camion</div>
-        <div class="subhint" id="subhint">primero clasifica la palabra</div>
+        <div class="subhint" id="subhint">Primero clasifica la palabra</div>
       </div>
 
       <div class="mission">
@@ -1356,7 +1356,7 @@ button{font-family:inherit}
         <div class="q active" id="q1">
           <div class="qHead">
             <div class="badge" id="b1">1</div>
-            <div class="qTitle">clasifica la palabra</div>
+            <div class="qTitle">Clasifica la palabra</div>
           </div>
           <div class="options" id="typeOptions"></div>
           <div class="inlineFeedback" id="fb1"></div>
@@ -1365,7 +1365,7 @@ button{font-family:inherit}
         <div class="q locked" id="q2">
           <div class="qHead">
             <div class="badge" id="b2">2</div>
-            <div class="qTitle">¿lleva tilde?</div>
+            <div class="qTitle">¿Lleva tilde?</div>
           </div>
           <div class="options" id="accentOptions"></div>
           <div class="inlineFeedback" id="fb2"></div>
@@ -1374,7 +1374,7 @@ button{font-family:inherit}
         <div class="q locked" id="q3">
           <div class="qHead">
             <div class="badge" id="b3">3</div>
-            <div class="qTitle">¿dónde va y de qué lado?</div>
+            <div class="qTitle">¿Dónde va y de qué lado?</div>
           </div>
           <div class="options accentBtns" id="vowelOptions"></div>
           <div class="inlineFeedback" id="fb3"></div>
@@ -1393,7 +1393,7 @@ button{font-family:inherit}
 
       <div style="text-align:center;margin-top:4px;">
         <button class="btn nextBtn" id="nextBtn" onclick="goNextWord()" style="display:none;">
-          siguiente →
+          Siguiente →
         </button>
       </div>
 
@@ -1408,8 +1408,8 @@ button{font-family:inherit}
         <div class="cloud c3">☁️ ☁️</div>
 
         <div class="statusBanner">
-          <div class="pill" id="mood">❄️ volcán apagado</div>
-          <div class="pill" id="eventPill">pueblo: 2</div>
+          <div class="pill" id="mood">❄️ Volcán apagado</div>
+          <div class="pill" id="eventPill">Pueblo: 2</div>
         </div>
 
         <div class="ground"></div>
@@ -1429,7 +1429,7 @@ button{font-family:inherit}
 
       <div class="progressBox">
         <div class="progressHead">
-          <span>construir el pueblo</span>
+          <span>Construir el pueblo</span>
           <span id="progressText">0/12</span>
         </div>
         <div class="track"><div class="trackFill" id="trackFill"></div></div>
@@ -1441,39 +1441,39 @@ button{font-family:inherit}
 </div>
 
 <div class="studyBox" id="studyBox">
-  <h2>estudio</h2>
+  <h2>Estudio</h2>
   <div class="studyGrid">
     <div class="rule">
-      <h3>agudas</h3>
-      <p>la fuerza está en la última sílaba.</p>
+      <h3>Agudas</h3>
+      <p>La fuerza está en la última sílaba.</p>
       <p>ca-mi-<span class="tonica"><span class="acento">ó</span>n</span></p>
-      <p>llevan tilde si terminan en vocal, n o s.</p>
+      <p>Llevan tilde si terminan en vocal, n o s.</p>
     </div>
     <div class="rule">
-      <h3>llanas</h3>
-      <p>la fuerza está en la penúltima sílaba.</p>
+      <h3>Llanas</h3>
+      <p>La fuerza está en la penúltima sílaba.</p>
       <p><span class="tonica"><span class="acento">á</span>r</span>-bol</p>
-      <p>llevan tilde si no terminan en vocal, n o s.</p>
+      <p>Llevan tilde si no terminan en vocal, n o s.</p>
     </div>
     <div class="rule">
-      <h3>esdrújulas</h3>
-      <p>la fuerza está en la antepenúltima sílaba.</p>
+      <h3>Esdrújulas</h3>
+      <p>La fuerza está en la antepenúltima sílaba.</p>
       <p><span class="tonica">m<span class="acento">ú</span></span>-si-ca</p>
-      <p>siempre llevan tilde.</p>
+      <p>Siempre llevan tilde.</p>
     </div>
   </div>
-  <p>para catalán: el juego ya distingue acento agudo ´ y acento grave `.</p>
-  <button class="btn red" onclick="toggleStudy()">cerrar</button>
+  <p>Para catalán: el juego ya distingue acento agudo ´ y acento grave `.</p>
+  <button class="btn red" onclick="toggleStudy()">Cerrar</button>
 </div>
 
 <div class="reviewBox" id="reviewBox">
-  <h2>revisión de errores</h2>
+  <h2>Revisión de errores</h2>
   <div id="reviewList"></div>
-  <button class="btn red" onclick="toggleReview()">cerrar</button>
+  <button class="btn red" onclick="toggleReview()">Cerrar</button>
 </div>
 
 <div class="dataBox" id="dataBox">
-  <h2>banco de palabras</h2>
+  <h2>Banco de palabras</h2>
   <div class="dataHelp">
     Puedes alimentar el juego pegando una tabla copiada de Excel/Google Sheets o un CSV con estas columnas:<br>
     <b>word, correct, syllables, type, accent, accentChar, accentSide, rule</b><br><br>
@@ -1483,10 +1483,10 @@ button{font-family:inherit}
   </div>
   <textarea id="dataInput" spellcheck="false"></textarea>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-    <button class="btn green" onclick="loadWordsFromText()">cargar palabras</button>
-    <button class="btn blue" onclick="exportWordsToTextarea()">ver actuales</button>
-    <button class="btn yellow" onclick="restoreDefaultWords()">restaurar banco inicial</button>
-    <button class="btn red" onclick="toggleDataBox()">cerrar</button>
+    <button class="btn green" onclick="loadWordsFromText()">Cargar palabras</button>
+    <button class="btn blue" onclick="exportWordsToTextarea()">Ver actuales</button>
+    <button class="btn yellow" onclick="restoreDefaultWords()">Restaurar banco inicial</button>
+    <button class="btn red" onclick="toggleDataBox()">Cerrar</button>
   </div>
 </div>
 
@@ -1623,7 +1623,7 @@ function shuffleArray(arr){
 
 function shuffleWords(){
   queue = shuffleArray([...words]);
-  eventText("🔀 palabras mezcladas");
+  eventText("🔀 Palabras mezcladas");
   newWord();
 }
 
@@ -1638,7 +1638,7 @@ function newWord(){
   solvedInThisWord = false;
   correctionMode = false;
   $("word").textContent = current.word;
-  $("subhint").textContent = "primero clasifica la palabra";
+  $("subhint").textContent = "Primero clasifica la palabra";
   $("resultPanel").classList.remove("show");
   $("feedbackPanel").classList.remove("show");
   $("nextBtn").style.display="none";
@@ -1762,25 +1762,25 @@ function setInlineFeedback(n, ok, content){
 }
 
 function typeReasonText(w){
-  if(w.type==="aguda") return "es aguda porque la sílaba tónica está en la última.";
-  if(w.type==="llana") return "es llana porque la sílaba tónica está en la penúltima.";
-  return "es esdrújula porque la sílaba tónica está en la antepenúltima.";
+  if(w.type==="aguda") return "Es aguda porque la sílaba tónica está en la última.";
+  if(w.type==="llana") return "Es llana porque la sílaba tónica está en la penúltima.";
+  return "Es esdrújula porque la sílaba tónica está en la antepenúltima.";
 }
 
 function accentReasonText(w){
   const last = removeAccents(w.correct.slice(-1).toLowerCase());
   if(w.accent){
-    if(w.type==="aguda") return "lleva tilde por ser aguda y acabar en " + last + ".";
-    if(w.type==="llana") return "lleva tilde por ser llana y no acabar en vocal, n o s. acaba en " + last + ".";
-    return "lleva tilde porque las esdrújulas siempre llevan tilde.";
+    if(w.type==="aguda") return "Lleva tilde por ser aguda y acabar en " + last + ".";
+    if(w.type==="llana") return "Lleva tilde por ser llana y no acabar en vocal, n o s. Acaba en " + last + ".";
+    return "Lleva tilde porque las esdrújulas siempre llevan tilde.";
   }
-  if(w.type==="aguda") return "no lleva tilde porque es aguda y no acaba en vocal, n o s. acaba en " + last + ".";
-  if(w.type==="llana") return "no lleva tilde porque es llana y acaba en vocal, n o s. acaba en " + last + ".";
-  return "las esdrújulas siempre llevan tilde.";
+  if(w.type==="aguda") return "No lleva tilde porque es aguda y no acaba en vocal, n o s. Acaba en " + last + ".";
+  if(w.type==="llana") return "No lleva tilde porque es llana y acaba en vocal, n o s. Acaba en " + last + ".";
+  return "Las esdrújulas siempre llevan tilde.";
 }
 
 function accentPositionReasonText(w){
-  return "la tilde va en " + w.accentChar + " dentro de la sílaba tónica.";
+  return "La tilde va en " + w.accentChar + " dentro de la sílaba tónica.";
 }
 
 function syllableLine(w){
@@ -1801,30 +1801,30 @@ function syllableLineNoAccent(w){
 
 function cleanRuleForSummary(w){
   if(w.type==="aguda"){
-    if(w.accent) return "termina en vocal, n o s: lleva tilde.";
-    return "no termina en vocal, n o s: no lleva tilde.";
+    if(w.accent) return "Termina en vocal, n o s: lleva tilde.";
+    return "No termina en vocal, n o s: no lleva tilde.";
   }
   if(w.type==="llana"){
-    if(w.accent) return "no termina en vocal, n o s: lleva tilde.";
-    return "termina en vocal, n o s: no lleva tilde.";
+    if(w.accent) return "No termina en vocal, n o s: lleva tilde.";
+    return "Termina en vocal, n o s: no lleva tilde.";
   }
-  return "siempre lleva tilde.";
+  return "Siempre lleva tilde.";
 }
 
 function summaryTypeLine(w){
-  return typeReasonText(w).replace("es aguda porque ","").replace("es llana porque ","").replace("es esdrújula porque ","");
+  return typeReasonText(w).replace("Es aguda porque ","").replace("Es llana porque ","").replace("Es esdrújula porque ","");
 }
 
 function answerType(value){
   if(step!==1) return;
   if(value===current.type){
     markButton("#typeOptions", labelType(value), "ok");
-    setInlineFeedback(1, true, `<b>bien.</b> ${syllableLineNoAccent(current)} ${typeReasonText(current)}`);
-    $("subhint").textContent = "ahora decide si lleva tilde";
+    setInlineFeedback(1, true, `<b>Bien.</b> ${syllableLineNoAccent(current)} ${typeReasonText(current)}`);
+    $("subhint").textContent = "Ahora decide si lleva tilde";
     setTimeout(()=>setQuestionState(2),520);
   }else{
     setInlineFeedback(1, false, `${syllableLineNoAccent(current)} ${typeReasonText(current)}`);
-    wrong("#typeOptions", labelType(value), "q1", "clasificación incorrecta");
+    wrong("#typeOptions", labelType(value), "q1", "Clasificación incorrecta");
   }
 }
 
@@ -1833,17 +1833,17 @@ function answerAccent(value){
   const saysAccent=value==="yes";
   if(saysAccent===current.accent){
     markButton("#accentOptions", saysAccent?"sí":"no", "ok");
-    setInlineFeedback(2, true, `<b>bien.</b> ${accentReasonText(current)}`);
+    setInlineFeedback(2, true, `<b>Bien.</b> ${accentReasonText(current)}`);
     if(!current.accent){
       setQuestionState(4, true);
       completeWord(true);
     }else{
-      $("subhint").textContent = "elige la vocal acentuada y el lado";
+      $("subhint").textContent = "Elige la vocal acentuada y el lado";
       setTimeout(()=>setQuestionState(3),520);
     }
   }else{
     setInlineFeedback(2, false, accentReasonText(current));
-    wrong("#accentOptions", saysAccent?"sí":"no", "q2", "decisión de tilde incorrecta");
+    wrong("#accentOptions", saysAccent?"sí":"no", "q2", "Decisión de tilde incorrecta");
   }
 }
 
@@ -1852,14 +1852,14 @@ function answerVowel(value){
   const expected = expectedAccentChoice();
   if(value===expected){
     markChoice("#vowelOptions", value, "ok");
-    setInlineFeedback(3, true, `<b>bien.</b> ${syllableLine(current)} ${accentPositionReasonText(current)}`);
+    setInlineFeedback(3, true, `<b>Bien.</b> ${syllableLine(current)} ${accentPositionReasonText(current)}`);
     completeWord(false);
   }else{
     markChoice("#vowelOptions", value, "bad");
     const selected = document.querySelector(`#vowelOptions .opt[data-choice="${CSS.escape(value)}"]`);
     const readable = selected ? selected.textContent.trim().replace(/\s+/g," ") : value;
     setInlineFeedback(3, false, `${syllableLine(current)} ${accentPositionReasonText(current)}`);
-    wrongNoButton("q3", "posición del acento incorrecta: "+readable);
+    wrongNoButton("q3", "Posición del acento incorrecta: "+readable);
   }
 }
 
@@ -1915,13 +1915,13 @@ function completeWord(skippedThird){
   updateDisabled();
 
   if(correctionMode){
-    $("subhint").textContent = "corregido, no suma ni cambia el volcán";
-    eventText("corrección neutra");
+    $("subhint").textContent = "Corregido, no suma ni cambia el volcán";
+    eventText("Corrección neutra");
   }else{
     hits++;
     streak++;
     celebrate();
-    $("subhint").textContent = skippedThird ? "correcto: no lleva tilde" : "misión completa";
+    $("subhint").textContent = skippedThird ? "Correcto: no lleva tilde" : "Misión completa";
   }
 
   showSolution(false);
@@ -1957,17 +1957,17 @@ function showSolution(countAsFail){
   $("resultPanel").classList.add("show");
   $("solutionWord").innerHTML = formatSolutionWord(current);
   $("solutionExplain").innerHTML = `
-    <b>${labelType(current.type)}</b> · sílaba tónica: <b>${formatSyllables(current)}</b> · ${current.accent ? "tilde: "+current.accentChar : "sin tilde"}<br>
+    <b>${labelType(current.type)}</b> · Sílaba tónica: <b>${formatSyllables(current)}</b> · ${current.accent ? "Tilde: "+current.accentChar : "Sin tilde"}<br>
     ${summaryTypeLine(current)}<br>
     ${cleanRuleForSummary(current)}
   `;
   if(countAsFail && !solvedInThisWord){
     solvedInThisWord=true;
     updateDisabled();
-    recordError("pidió solución");
-    showFailureFeedback("pidió solución");
+    recordError("Pidió solución");
+    showFailureFeedback("Pidió solución");
     $("nextBtn").style.display="inline-block";
-    fail("pidió solución");
+    fail("Pidió solución");
   }
 }
 
@@ -2003,8 +2003,8 @@ function updateStats(){
   renderVillage();
 
   if(villageItems.length >= goalHits && volcanoHeat === 0){
-    $("mood").textContent = "🏆 pueblo salvado";
-    eventText("victoria");
+    $("mood").textContent = "🏆 Pueblo salvado";
+    eventText("Victoria");
   }
 }
 
@@ -2024,12 +2024,12 @@ function updateVolcanoVisual(){
     scene.classList.toggle("alarmSky", volcanoHeat >= 4);
   }
 
-  if(volcanoHeat === 0) $("mood").textContent = "❄️ volcán apagado";
-  else if(volcanoHeat === 1) $("mood").textContent = "🌫️ empieza a calentarse";
-  else if(volcanoHeat === 2) $("mood").textContent = "🔥 volcán caliente";
-  else if(volcanoHeat === 3) $("mood").textContent = "🌋 lava subiendo";
-  else if(volcanoHeat === 4) $("mood").textContent = "🚨 erupción próxima";
-  else $("mood").textContent = "💥 erupción";
+  if(volcanoHeat === 0) $("mood").textContent = "❄️ Volcán apagado";
+  else if(volcanoHeat === 1) $("mood").textContent = "🌫️ Empieza a calentarse";
+  else if(volcanoHeat === 2) $("mood").textContent = "🔥 Volcán caliente";
+  else if(volcanoHeat === 3) $("mood").textContent = "🌋 Lava subiendo";
+  else if(volcanoHeat === 4) $("mood").textContent = "🚨 Erupción próxima";
+  else $("mood").textContent = "💥 Erupción";
 }
 
 function renderVillage(){
@@ -2049,24 +2049,47 @@ function renderVillage(){
     el.style.setProperty("--town-box-h", metrics.boxH + "px");
     zone.appendChild(el);
   });
-  $("eventPill").textContent = "pueblo: " + villageItems.length;
+  $("eventPill").textContent = "Pueblo: " + villageItems.length;
 }
 
 function villageMetrics(kind){
   const metrics = {
-    building:{font:31, boxW:42, boxH:40, w:8.4, h:17},
-    special:{font:30, boxW:40, boxH:39, w:8.0, h:16},
-    rare:{font:29, boxW:39, boxH:38, w:7.8, h:16},
-    house:{font:25, boxW:36, boxH:34, w:6.8, h:14},
-    tree:{font:24, boxW:35, boxH:36, w:6.8, h:15},
-    car:{font:20, boxW:36, boxH:25, w:7.2, h:10},
-    bench:{font:16, boxW:30, boxH:24, w:5.8, h:10},
-    lamp:{font:16, boxW:26, boxH:29, w:5.2, h:12},
-    person:{font:14, boxW:25, boxH:27, w:4.8, h:11},
-    animal:{font:14, boxW:27, boxH:24, w:5.2, h:10},
-    dog:{font:14, boxW:27, boxH:24, w:5.2, h:10},
-    flower:{font:13, boxW:23, boxH:24, w:4.2, h:9}  };
-  return metrics[kind] || {font:18, boxW:32, boxH:30, w:6, h:15};
+    building:{font:34, boxW:48, boxH:45, w:9.8, h:18.8},
+    special:{font:33, boxW:47, boxH:45, w:9.6, h:18.6},
+    rare:{font:27, boxW:41, boxH:35, w:8.2, h:14.5},
+    house:{font:25, boxW:39, boxH:35, w:7.8, h:15},
+    tree:{font:24, boxW:36, boxH:38, w:7.2, h:16},
+    car:{font:19, boxW:36, boxH:25, w:7.4, h:10.5},
+    bench:{font:17, boxW:32, boxH:25, w:6.2, h:10.2},
+    lamp:{font:15, boxW:26, boxH:30, w:5.1, h:12.3},
+    person:{font:15, boxW:27, boxH:29, w:5.2, h:12},
+    animal:{font:15, boxW:28, boxH:25, w:5.5, h:10.5},
+    dog:{font:14, boxW:27, boxH:24, w:5.2, h:10.2},
+    flower:{font:13, boxW:23, boxH:24, w:4.3, h:8.8}
+  };
+  return metrics[kind] || {font:18, boxW:32, boxH:30, w:6.2, h:13};
+}
+
+function spacingGap(kind){
+  const gaps = {
+    building:2.8,
+    special:2.8,
+    rare:2.3,
+    house:2.4,
+    tree:2.1,
+    car:1.9,
+    bench:1.7,
+    lamp:1.6,
+    person:1.4,
+    animal:1.5,
+    dog:1.5,
+    flower:1.2
+  };
+  return gaps[kind] || 1.8;
+}
+
+function pairGap(a,b){
+  return Math.max(spacingGap(a.kind), spacingGap(b.kind));
 }
 
 function itemBox(item, extraGap=0){
@@ -2096,10 +2119,11 @@ function itemSize(kind){
 
 function randomPositionForKind(kind){
   const metrics = villageMetrics(kind);
+  const gap = spacingGap(kind);
   const halfW = metrics.w / 2;
-  const minX = Math.max(5, halfW + 2);
-  const maxX = Math.min(95, 98 - halfW);
-  const minY = metrics.h + 1;
+  const minX = Math.max(5, halfW + gap);
+  const maxX = Math.min(95, 100 - halfW - gap);
+  const minY = metrics.h + gap;
   let p = { x: minX + Math.random()*(maxX-minX), y: minY + Math.random()*(72-minY) };
 
   // zonas: izquierda, prado bajo delante del volcan, derecha
@@ -2125,95 +2149,80 @@ function randomPositionForKind(kind){
   }
 
   p.x = Math.max(minX, Math.min(maxX, p.x));
-  p.y = Math.max(minY, Math.min(74, p.y));
+  p.y = Math.max(minY, Math.min(74 - gap, p.y));
   return p;
 }
 
 function overlapsVolcanoZone(item){
-  const box = itemBox(item, .4);
-  if(box.right > 43 && box.left < 81 && box.top < 70 && box.bottom > 21) return true;
-  if((item.kind==="building" || item.kind==="special" || item.kind==="rare" || item.kind==="house") && box.right > 40 && box.left < 84 && box.bottom > 18) return true;
+  const box = itemBox(item, spacingGap(item.kind));
+  const isLarge = item.kind==="building" || item.kind==="special" || item.kind==="rare" || item.kind==="house";
+  if(isLarge && box.right > 40 && box.left < 84 && box.bottom > 18) return true;
+  if(!isLarge && box.right > 48 && box.left < 78 && box.top < 55 && box.bottom > 28) return true;
   return false;
 }
 
 function tooCloseToOther(a,b){
-  return boxesOverlap(itemBox(a, 1.8), itemBox(b, 1.8));
+  const gap = pairGap(a,b) / 2;
+  return boxesOverlap(itemBox(a, gap), itemBox(b, gap));
 }
 
 function assignPositionNoOverlap(placed){
-  let best = null;
-  let bestScore = -Infinity;
-
-  for(let tries=0; tries<700; tries++){
+  for(let tries=0; tries<1200; tries++){
     const p = randomPositionForKind(placed.kind);
     placed.x = p.x;
     placed.y = p.y;
 
-    let ok = !overlapsVolcanoZone(placed);
-    let score = ok ? 500 : -500;
-    const placedBox = itemBox(placed, 1.8);
+    if(overlapsVolcanoZone(placed)) continue;
 
+    let clear = true;
     for(const other of villageItems){
-      const otherBox = itemBox(other, 1.8);
-      const overlap = overlapArea(placedBox, otherBox);
-      if(overlap > 0){
-        ok = false;
-        score -= overlap * 100;
+      if(tooCloseToOther(placed, other)){
+        clear = false;
+        break;
       }
-      const dx = placed.x - other.x;
-      const dy = placed.y - other.y;
-      score += Math.min(50, Math.sqrt(dx*dx + dy*dy));
     }
 
-    if(ok) return true;
-    if(score > bestScore){
-      bestScore = score;
-      best = {x: placed.x, y: placed.y};
-    }
+    if(clear) return true;
   }
 
-  if(best){
-    placed.x = best.x;
-    placed.y = best.y;
-  }
   return false;
 }
 function addVillageItem(forceKind){
   const kinds = [
-    {kind:"house", emoji:"🏠", weight:18},
-    {kind:"house", emoji:"🏡", weight:16},
-    {kind:"house", emoji:"🏘️", weight:8},
-    {kind:"building", emoji:"🏢", weight:5},
-    {kind:"building", emoji:"🏤", weight:4},
-    {kind:"building", emoji:"🏫", weight:4},
-    {kind:"building", emoji:"🏥", weight:3},
-    {kind:"special", emoji:"⛪", weight:2},
-    {kind:"special", emoji:"🕌", weight:1},
-    {kind:"house", emoji:"🛖", weight:2},
-    {kind:"building", emoji:"🏭", weight:1},
-    {kind:"house", emoji:"🛒", weight:2},
-    {kind:"house", emoji:"🎪", weight:1},
+    {kind:"house", emoji:"🏠", weight:4},
+    {kind:"house", emoji:"🏡", weight:4},
+    {kind:"house", emoji:"🏘️", weight:2},
+    {kind:"building", emoji:"🏢", weight:4},
+    {kind:"building", emoji:"🏤", weight:3},
+    {kind:"building", emoji:"🏫", weight:3},
+    {kind:"building", emoji:"🏥", weight:2},
+    {kind:"special", emoji:"⛪", weight:3},
+    {kind:"special", emoji:"🕌", weight:2},
+    {kind:"house", emoji:"🛖", weight:1},
+    {kind:"building", emoji:"🏭", weight:2},
+    {kind:"bench", emoji:"🛒", weight:1},
+    {kind:"special", emoji:"🎪", weight:2},
 
-    {kind:"tree", emoji:"🌳", weight:14},
-    {kind:"tree", emoji:"🌲", weight:10},
-    {kind:"tree", emoji:"🌴", weight:4},
-    {kind:"tree", emoji:"🌵", weight:2},
+    {kind:"tree", emoji:"🌳", weight:7},
+    {kind:"tree", emoji:"🌲", weight:5},
+    {kind:"tree", emoji:"🌴", weight:3},
+    {kind:"tree", emoji:"🌵", weight:3},
     {kind:"tree", emoji:"🎄", weight:2},
 
-    {kind:"flower", emoji:"🌷", weight:7},
-    {kind:"flower", emoji:"🌹", weight:5},
-    {kind:"flower", emoji:"🌺", weight:4},
-    {kind:"flower", emoji:"🌸", weight:5},
-    {kind:"flower", emoji:"🌼", weight:5},
-    {kind:"flower", emoji:"🌻", weight:5},
-    {kind:"flower", emoji:"🌱", weight:4},
-    {kind:"flower", emoji:"🌾", weight:2},
+    {kind:"flower", emoji:"🌷", weight:9},
+    {kind:"flower", emoji:"🌹", weight:7},
+    {kind:"flower", emoji:"🌺", weight:6},
+    {kind:"flower", emoji:"🌸", weight:7},
+    {kind:"flower", emoji:"🌼", weight:7},
+    {kind:"flower", emoji:"🌻", weight:7},
+    {kind:"flower", emoji:"🌱", weight:6},
+    {kind:"flower", emoji:"🌾", weight:4},
 
-    {kind:"person", emoji:"🚶", weight:5},
-    {kind:"person", emoji:"🚶‍♀️", weight:5},
-    {kind:"person", emoji:"🚶‍♂️", weight:5},
-    {kind:"person", emoji:"🧍‍♀️", weight:4},
-    {kind:"person", emoji:"🧍‍♂️", weight:4},
+    {kind:"person", emoji:"🚶", weight:6},
+    {kind:"person", emoji:"🚶‍♀️", weight:6},
+    {kind:"person", emoji:"🚶‍♂️", weight:6},
+    {kind:"person", emoji:"🧍‍♀️", weight:5},
+    {kind:"person", emoji:"🧍‍♂️", weight:5},
     {kind:"person", emoji:"🚶‍♀️", weight:2},
     {kind:"person", emoji:"🚶‍♂️", weight:2},
     {kind:"person", emoji:"👷‍♀️", weight:2},
@@ -2226,10 +2235,10 @@ function addVillageItem(forceKind){
     {kind:"person", emoji:"🧍", weight:4},
     {kind:"person", emoji:"🧑‍🤝‍🧑", weight:1},
 
-    {kind:"animal", emoji:"🐕", weight:5},
-    {kind:"animal", emoji:"🐈", weight:4},
-    {kind:"animal", emoji:"🐓", weight:2},
-    {kind:"animal", emoji:"🦆", weight:2},
+    {kind:"animal", emoji:"🐕", weight:6},
+    {kind:"animal", emoji:"🐈", weight:5},
+    {kind:"animal", emoji:"🐓", weight:3},
+    {kind:"animal", emoji:"🦆", weight:3},
     {kind:"animal", emoji:"🐑", weight:1},
     {kind:"animal", emoji:"🐐", weight:1},
     {kind:"animal", emoji:"🐄", weight:1},
@@ -2238,7 +2247,7 @@ function addVillageItem(forceKind){
     {kind:"animal", emoji:"🐇", weight:1},
     {kind:"animal", emoji:"🕊️", weight:2},
 
-    {kind:"car", emoji:"🚗", weight:4},
+    {kind:"car", emoji:"🚗", weight:3},
     {kind:"car", emoji:"🚕", weight:2},
     {kind:"car", emoji:"🚙", weight:2},
     {kind:"car", emoji:"🚌", weight:1},
@@ -2246,18 +2255,18 @@ function addVillageItem(forceKind){
     {kind:"car", emoji:"🚒", weight:1},
     {kind:"car", emoji:"🚜", weight:1},
     {kind:"car", emoji:"🛵", weight:2},
-    {kind:"car", emoji:"🚲", weight:3},
+    {kind:"car", emoji:"🚲", weight:2},
 
-    {kind:"lamp", emoji:"🚏", weight:2},
-    {kind:"bench", emoji:"🪑", weight:4},
-    {kind:"bench", emoji:"⛲", weight:1},
+    {kind:"lamp", emoji:"🚏", weight:4},
+    {kind:"bench", emoji:"🪑", weight:5},
+    {kind:"bench", emoji:"⛲", weight:2},
     {kind:"bench", emoji:"🗿", weight:1},
-    {kind:"bench", emoji:"📮", weight:2},
-    {kind:"bench", emoji:"🛝", weight:2},
-    {kind:"bench", emoji:"🧱", weight:2},
-    {kind:"bench", emoji:"🪧", weight:2},
+    {kind:"bench", emoji:"📮", weight:3},
+    {kind:"bench", emoji:"🛝", weight:3},
+    {kind:"bench", emoji:"🧱", weight:3},
+    {kind:"bench", emoji:"🪧", weight:3},
     {kind:"bench", emoji:"🛤️", weight:1},
-    {kind:"bench", emoji:"🎠", weight:1},
+    {kind:"bench", emoji:"🎠", weight:2},
     {kind:"bench", emoji:"⚽", weight:2},
     {kind:"bench", emoji:"🧺", weight:1},
     {kind:"bench", emoji:"🛹", weight:1},
@@ -2276,7 +2285,7 @@ function addVillageItem(forceKind){
     return bag[Math.floor(Math.random()*bag.length)];
   }
 
-  const attempts = forceKind ? 1 : 90;
+  const attempts = forceKind ? 80 : 120;
   for(let attempt=0; attempt<attempts; attempt++){
     const choice = pickChoice();
     const placed = {
@@ -2294,7 +2303,7 @@ function addVillageItem(forceKind){
     }
   }
 
-  eventText("el pueblo necesita espacio");
+  eventText("El pueblo necesita espacio");
 }
 function destroyVillageItem(){
   if(!villageItems.length) return;
@@ -2322,11 +2331,11 @@ function destroyVillageItem(){
 function applyCorrectVisual(){
   if(volcanoHeat > 0){
     volcanoHeat = Math.max(0, volcanoHeat - 1);
-    eventText("❄️ el volcán se enfría");
+    eventText("❄️ El volcán se enfría");
     coolingParticles();
   }else{
     addVillageItem();
-    eventText("🏘️ el pueblo crece");
+    eventText("🏘️ El pueblo crece");
     buildParticles();
   }
   updateStats();
@@ -2335,7 +2344,7 @@ function applyCorrectVisual(){
 function applyWrongVisual(reason){
   if(volcanoHeat < 5){
     volcanoHeat++;
-    eventText(volcanoHeat >= 3 ? "🌋 la lava sube" : "🔥 el volcán se calienta");
+    eventText(volcanoHeat >= 3 ? "🌋 La lava sube" : "🔥 El volcán se calienta");
     heatParticles();
   }else{
     eruptionCount++;
@@ -2396,7 +2405,7 @@ function buildParticles(){
 
 function eventText(txt){
   $("eventPill").textContent=txt;
-  setTimeout(()=>{$("eventPill").textContent = "pueblo: " + villageItems.length},1300);
+  setTimeout(()=>{$("eventPill").textContent = "Pueblo: " + villageItems.length},1300);
 }
 
 function spawn(char,x,y,kind="particle"){
@@ -2426,7 +2435,7 @@ function toggleReview(){
 function renderReview(){
   const list=$("reviewList");
   if(!errorLog.length){
-    list.innerHTML="<p>todavía no hay errores para revisar.</p>";
+    list.innerHTML="<p>Todavía no hay errores para revisar.</p>";
     return;
   }
   list.innerHTML=errorLog.map(e=>`
@@ -2471,7 +2480,7 @@ function csvSplitLine(line){
 function loadWordsFromText(){
   const text=$("dataInput").value.trim();
   if(!text){
-    alert("pega primero una tabla o CSV");
+    alert("Pega primero una tabla o CSV");
     return;
   }
   const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
@@ -2495,12 +2504,12 @@ function loadWordsFromText(){
     });
   }
   if(!loaded.length){
-    alert("no he podido cargar palabras. revisa columnas y separadores.");
+    alert("No he podido cargar palabras. Revisa columnas y separadores.");
     return;
   }
   words=loaded;
   queue=shuffleArray([...words]);
-  eventText("📚 "+words.length+" palabras cargadas");
+  eventText("📚 "+words.length+" Palabras cargadas");
   toggleDataBox();
   resetGame();
 }
