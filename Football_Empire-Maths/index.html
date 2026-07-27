@@ -1449,6 +1449,25 @@ button:disabled{
   .fbCoinIcon{width:18px;height:18px;flex-basis:18px}.fbCoinIcon:before{font-size:7px}
 }
 </style>
+<style id="codex-no-kit-flash">
+.photoStage.footballStage>.cmGame{
+  height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:6px;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;
+  background:linear-gradient(180deg,#f8fbff,#e7f2ff 48%,#dbf7e3);padding:8px;overflow:hidden;
+}
+.photoStage.footballStage>.cmGame .cmTop{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:center;background:#fff;border:2px solid #dbeafe;border-radius:16px;padding:8px}
+.photoStage.footballStage>.cmGame .cmBadge{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-weight:1000;color:white;border:3px solid #0f172a;background:linear-gradient(135deg,#2563eb,#facc15)}
+.photoStage.footballStage>.cmGame .cmStats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:5px}
+.photoStage.footballStage>.cmGame .cmStat{background:#fff;border:2px solid #dbeafe;border-radius:11px;padding:5px;text-align:center;font-size:9px;font-weight:1000;color:#334155}
+.photoStage.footballStage>.cmGame .cmStat b{display:block;font-size:14px;color:#0f172a}
+.photoStage.footballStage>.cmGame .cmTabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.photoStage.footballStage>.cmGame .cmTabs button{font-size:11px;padding:7px 4px}
+.photoStage.footballStage>.cmGame .cmTabs .cmActive{background:#2563eb;color:white}
+.photoStage.footballStage>.cmGame .cmPanel{min-height:0;overflow:auto;background:rgba(255,255,255,.86);border:2px solid #dbeafe;border-radius:16px;padding:8px}
+.photoStage.footballStage>.cmGame .cmKitGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.photoStage.footballStage>.cmGame .cmKit{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px;align-items:center;min-height:78px;text-align:left}
+.photoStage.footballStage>.cmGame .cmMiniKit{width:42px;height:50px;border-radius:11px 11px 16px 16px;background:linear-gradient(135deg,var(--a),var(--b));border:3px solid #111827}
+</style>
 </head>
 <body>
 <div id="app">
@@ -1521,49 +1540,45 @@ button:disabled{
 
       <div class="rightPhotoPanel panel footballPanel">
         <div class="photoStage footballStage" id="photoStage">
-          <div class="fbPitchGlow"></div>
-          <div class="fbHeader">
-            <div class="fbClubBadge" id="fbClubBadge">LF</div>
-            <div>
-              <div class="fbTitle" id="flashText">LUCYAGO FC</div>
-              <div class="fbSub" id="fbDivision">Barrio Â· Temporada 1</div>
+          <div class="cmGame">
+            <div class="cmTop">
+              <div class="cmBadge">LF</div>
+              <div>
+                <div class="cmTitle" id="flashText">Director Deportivo</div>
+                <div class="cmSub" id="fbDivision">Fase 1: Equipación - Elige equipación para fundar tu club.</div>
+                <div class="cmStats">
+                  <div class="cmStat">Monedas<b>0</b></div>
+                  <div class="cmStat">Reputación<b>0</b></div>
+                  <div class="cmStat" title="mejores fichajes">Scouting<b>0</b><small>mejores fichajes</small></div>
+                  <div class="cmStat" title="promedio del once">Media 11<b>0</b><small>promedio del once</small></div>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div class="fbStadium" id="fbStadium">
-            <div class="fbLights"></div>
-            <div class="fbStand back"></div>
-            <div class="fbStand front"></div>
-            <div class="fbScoreboard" id="fbScoreboard">0 - 0</div>
-            <div class="fbField">
-              <div class="fbCircle"></div>
-              <div class="fbBox left"></div><div class="fbBox right"></div>
-              <div class="fbPlayers" id="fbPlayers"></div>
+            <div class="cmObjective">
+              <div class="cmObjectiveTop"><span>Hito: elegir equipación</span><span>0/1</span></div>
+              <div class="cmBar"><div class="cmBarFill" style="--pct:0%"></div></div>
             </div>
+            <div class="cmBody">
+              <div class="cmTabs">
+                <button data-cmtab="kit" class="cmActive">Equipación</button>
+                <button data-cmtab="market">Mercado</button>
+                <button data-cmtab="squad">Plantilla</button>
+                <button data-cmtab="tours">Campeonatos</button>
+              </div>
+              <div class="cmPanel">
+                <div class="cmNotice">Fase 1: elige identidad. Luego empieza el mercado.</div>
+                <div class="cmKitGrid">
+                  <button class="cmKit" data-kit="royal" style="--a:#2563eb;--b:#facc15"><span class="cmMiniKit"></span><span><span class="cmKitName">Azul Royal</span><span class="cmKitMeta">club técnico</span></span></button>
+                  <button class="cmKit" data-kit="fire" style="--a:#dc2626;--b:#111827"><span class="cmMiniKit"></span><span><span class="cmKitName">Rojo Fuego</span><span class="cmKitMeta">presión alta</span></span></button>
+                  <button class="cmKit" data-kit="green" style="--a:#16a34a;--b:#ffffff"><span class="cmMiniKit"></span><span><span class="cmKitName">Verde Barrio</span><span class="cmKitMeta">cantera valiente</span></span></button>
+                  <button class="cmKit" data-kit="white" style="--a:#f8fafc;--b:#0f172a"><span class="cmMiniKit"></span><span><span class="cmKitName">Blanco Elite</span><span class="cmKitMeta">posesión y calma</span></span></button>
+                </div>
+                <div class="cmActions"><button class="cmAction cmPrimary" data-cmtabgo="market">Ir al mercado</button><button class="cmAction cmReset" data-resetclub="1">Reiniciar club</button></div>
+              </div>
+            </div>
+            <div class="cmEvent"><span class="cmEventIcon">⚽</span><span class="cmEventText">Objetivo inicial: elige equipación y monta tu fútbol 11.</span></div>
+            <div id="cmBurst"></div>
           </div>
-
-          <div class="fbUnlockCard" id="fbUnlockCard">
-            <div class="fbPack" id="fbPack">ðŸŽ</div>
-            <div class="fbUnlockText" id="fbUnlockText">PrÃ³ximo sobre</div>
-          </div>
-
-          <div class="fbBottom">
-            <div class="fbStat"><span class="fbCoinIcon" aria-hidden="true"></span><b id="fbCoins">0</b></div>
-            <div class="fbStat"><span>ðŸ‘¥</span><b id="fbFans">150</b></div>
-            <div class="fbStat"><span>â­</span><b id="fbPrestige">1</b></div>
-          </div>
-
-          <div class="fbProgressWrap">
-            <div class="fbProgressLabel"><span id="fbGoalLabel">Fichaje estrella</span><span id="fbGoalPct">0%</span></div>
-            <div class="fbProgress"><div id="fbProgressFill"></div></div>
-          </div>
-
-          <div class="fbCollection" id="fbCollection">
-            <div class="fbMiniTitle">Coleccion</div>
-            <div class="fbSlots" id="fbSlots"></div>
-          </div>
-
-          <div class="fbBurstZone" id="fbBurstZone"></div>
         </div>
       </div>
       <div class="panel draftPanel" style="display:none!important">
@@ -2696,11 +2711,11 @@ function finishGame(lost=false){
   if(won){
     setFeedback('Victoria. Tu club recibe un premio final.', 'good');
     if(typeof window.footballFinish==='function') window.footballFinish(true);
-    $('#flashText').textContent='LUCYAGO FC';
+    $('#flashText').textContent='Director Deportivo';
   }else if(lost){
     setFeedback('Partido terminado. Empieza una nueva partida para volver a intentarlo.', 'bad');
     if(typeof window.footballFinish==='function') window.footballFinish(false);
-    $('#flashText').textContent='LUCYAGO FC';
+    $('#flashText').textContent='Director Deportivo';
   }else{
     setFeedback('Entrenamiento terminado.', 'ok');
   }
@@ -3023,7 +3038,7 @@ updateControlAvailability();
     initFootball();
     const f=window.state.football;
     const divs=['Barrio','Ciudad','Regional','Nacional','Primera','Champions','Leyendas'];
-    $('#flashText') && ($('#flashText').textContent='FOOTBALL EMPIRE');
+    $('#flashText') && ($('#flashText').textContent='Director Deportivo');
     $('#fbDivision') && ($('#fbDivision').textContent=(divs[f.division]||'Leyendas')+' Â· Temporada '+(1+Math.floor(f.xp/120)));
     $('#fbCoins') && ($('#fbCoins').textContent=f.coins);
     $('#fbFans') && ($('#fbFans').textContent=f.fans.toLocaleString('es-ES'));
@@ -3218,7 +3233,7 @@ updateControlAvailability();
     const f=ensureFootball();
     const divs=['Barrio','Ciudad','Regional','Nacional','Primera','Champions','Leyendas'];
     $('#fbClubBadge') && ($('#fbClubBadge').textContent='LF');
-    $('#flashText') && ($('#flashText').textContent='FOOTBALL EMPIRE');
+    $('#flashText') && ($('#flashText').textContent='Director Deportivo');
     $('#fbDivision') && ($('#fbDivision').textContent=(divs[f.division]||'Leyendas')+' - Temporada '+(1+Math.floor(f.xp/120)));
     $('#fbPack') && ($('#fbPack').textContent=gift);
     $('#fbCoins') && ($('#fbCoins').textContent=f.coins);
@@ -3383,7 +3398,7 @@ updateControlAvailability();
   function rand(a,b){return Math.floor(a+Math.random()*(b-a+1))}
   function pick(a){return a[Math.floor(Math.random()*a.length)]}
   function blankClub(){return {kit:null,coins:0,rep:0,scout:0,morale:80,correctOps:0,badOps:0,squad:[],offers:[],activeTab:'kit',activeTournament:null,goldPending:false,last:'Elige equipacion para fundar tu club.',event:{kind:'',text:'Objetivo inicial: elige equipacion y monta tu futbol 11.'},results:[]};}
-  function load(){try{return Object.assign(blankClub(),JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){return blankClub()}}
+  function load(){try{const f=Object.assign(blankClub(),JSON.parse(localStorage.getItem(STORE)||'{}')); if(!f.kit)f.activeTab='kit'; return f}catch(e){return blankClub()}}
   function save(f){localStorage.setItem(STORE,JSON.stringify(f))}
   function avg(f){return f.squad.length?Math.round(f.squad.reduce((s,p)=>s+p.rate,0)/f.squad.length):0}
   function complete(f){return f.squad.length>=11}
@@ -3518,7 +3533,7 @@ updateControlAvailability();
   function rand(a,b){return Math.floor(a+Math.random()*(b-a+1))}
   function pick(a){return a[Math.floor(Math.random()*a.length)]}
   function blankClub(){return {kit:null,coins:0,rep:0,scout:0,morale:80,correctOps:0,badOps:0,squad:[],offers:[],activeTab:'kit',activeTournament:null,goldPending:false,last:'Elige equipación para fundar tu club.',event:{kind:'',text:'Consigue una equipación.'},results:[]};}
-  function load(){try{return Object.assign(blankClub(),JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){return blankClub()}}
+  function load(){try{const f=Object.assign(blankClub(),JSON.parse(localStorage.getItem(STORE)||'{}')); if(!f.kit)f.activeTab='kit'; return f}catch(e){return blankClub()}}
   function save(f){localStorage.setItem(STORE,JSON.stringify(f))}
   function avg(f){return f.squad.length?Math.round(f.squad.reduce((s,p)=>s+p.rate,0)/f.squad.length):0}
   function complete(f){return f.squad.length>=11}
