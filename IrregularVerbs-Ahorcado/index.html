@@ -1,21 +1,21 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#4f8cff">
-<title>Irregular Verbs v2.0 Â· LucYago</title>
+<title>Irregular Verbs v2.0 · LucYago</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
   --blue:#4f8cff;--blue2:#7c5cff;--ink:#172033;--muted:#667085;--green:#25c96f;--red:#ef4444;--orange:#ff9f43;--yellow:#ffd34f;--teal:#10b7c4;--pink:#ff6fb5;--panel:#ffffffee;--line:rgba(79,140,255,.14);--shadow:0 14px 32px rgba(31,42,68,.13);
   --safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom);
 }
-*{box-sizing:border-box} html,body{margin:0;height:100%;overflow:hidden} body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 6%,rgba(255,211,79,.45),transparent 24%),radial-gradient(circle at 90% 20%,rgba(255,111,181,.26),transparent 24%),linear-gradient(135deg,#fff3c7,#dff7ff 55%,#ffe7f4);-webkit-font-smoothing:antialiased;touch-action:manipulation}.app{height:100dvh;display:flex;flex-direction:column;padding:calc(6px + var(--safe-top)) 8px calc(6px + var(--safe-bottom));gap:6px;max-width:1220px;margin:0 auto}.top{background:var(--panel);border:2px solid rgba(255,255,255,.72);border-radius:20px;box-shadow:var(--shadow);padding:7px 9px;display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}.brand{display:flex;align-items:center;gap:9px;white-space:nowrap}.brand h1{font-size:clamp(20px,2.7vw,34px);line-height:1;margin:0;font-weight:950;letter-spacing:-.04em;background:linear-gradient(90deg,#172033,#4f8cff,#7c5cff);-webkit-background-clip:text;background-clip:text;color:transparent}.brand .star{font-size:24px;filter:drop-shadow(0 4px 8px rgba(255,159,67,.28))}.meta{display:flex;gap:5px;justify-content:flex-end;align-items:center;min-width:0}.stat{background:linear-gradient(180deg,#fff,#f6f9ff);border-radius:13px;padding:4px 7px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07);min-width:64px;text-align:center}.stat .lab{font-size:8px;color:var(--muted);font-weight:800}.stat .val{font-size:12px;color:#1e3a8a;font-weight:950;margin-top:1px}.home{min-width:34px;height:31px;border-radius:12px!important;padding:0!important}.nav{grid-column:1/-1;display:flex;align-items:center;gap:6px;min-width:0}.nav .gap{width:34px;flex:0 0 34px}.btn{border:0;border-radius:999px;background:#fff;color:var(--ink);box-shadow:0 8px 16px rgba(31,42,68,.09),inset 0 0 0 1px rgba(79,140,255,.10);font-weight:900;font-size:12px;padding:8px 11px;cursor:pointer;white-space:nowrap;transition:transform .12s ease,filter .12s ease}.btn:active{transform:scale(.96)}.btn.active{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 10px 20px rgba(79,140,255,.30)}.btn.good{background:linear-gradient(135deg,#dffbe9,#9cf2bd);color:#0b6230}.btn.warn{background:linear-gradient(135deg,#fff4c4,#ffd34f);color:#6b4b00}.btn.bad{background:linear-gradient(135deg,#ffe2dc,#ffb4a8);color:#872214}.main{flex:1;min-height:0;background:var(--panel);border:2px solid rgba(255,255,255,.72);border-radius:22px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;position:relative;overflow:hidden}.view{display:none;min-height:0;height:100%}.view.active{display:flex}.message{background:linear-gradient(135deg,#fff7d6,#fff);border:1px solid rgba(255,211,79,.5);border-radius:14px;padding:7px 10px;font-size:12px;font-weight:800;color:#6b4b00;min-height:32px;display:flex;align-items:center}.message:before{content:"ðŸ’¬";margin-right:6px}.hidden-input{position:fixed;left:1px;top:1px;width:2px;height:2px;opacity:.01;border:0;background:transparent;color:transparent}
+*{box-sizing:border-box} html,body{margin:0;height:100%;overflow:hidden} body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 6%,rgba(255,211,79,.45),transparent 24%),radial-gradient(circle at 90% 20%,rgba(255,111,181,.26),transparent 24%),linear-gradient(135deg,#fff3c7,#dff7ff 55%,#ffe7f4);-webkit-font-smoothing:antialiased;touch-action:manipulation}.app{height:100dvh;display:flex;flex-direction:column;padding:calc(6px + var(--safe-top)) 8px calc(6px + var(--safe-bottom));gap:6px;max-width:1220px;margin:0 auto}.top{background:var(--panel);border:2px solid rgba(255,255,255,.72);border-radius:20px;box-shadow:var(--shadow);padding:7px 9px;display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}.brand{display:flex;align-items:center;gap:9px;white-space:nowrap}.brand h1{font-size:clamp(20px,2.7vw,34px);line-height:1;margin:0;font-weight:950;letter-spacing:-.04em;background:linear-gradient(90deg,#172033,#4f8cff,#7c5cff);-webkit-background-clip:text;background-clip:text;color:transparent}.brand .star{font-size:24px;filter:drop-shadow(0 4px 8px rgba(255,159,67,.28))}.meta{display:flex;gap:5px;justify-content:flex-end;align-items:center;min-width:0}.stat{background:linear-gradient(180deg,#fff,#f6f9ff);border-radius:13px;padding:4px 7px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07);min-width:64px;text-align:center}.stat .lab{font-size:8px;color:var(--muted);font-weight:800}.stat .val{font-size:12px;color:#1e3a8a;font-weight:950;margin-top:1px}.home{min-width:34px;height:31px;border-radius:12px!important;padding:0!important}.nav{grid-column:1/-1;display:flex;align-items:center;gap:6px;min-width:0}.nav .gap{width:34px;flex:0 0 34px}.btn{border:0;border-radius:999px;background:#fff;color:var(--ink);box-shadow:0 8px 16px rgba(31,42,68,.09),inset 0 0 0 1px rgba(79,140,255,.10);font-weight:900;font-size:12px;padding:8px 11px;cursor:pointer;white-space:nowrap;transition:transform .12s ease,filter .12s ease}.btn:active{transform:scale(.96)}.btn.active{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 10px 20px rgba(79,140,255,.30)}.btn.good{background:linear-gradient(135deg,#dffbe9,#9cf2bd);color:#0b6230}.btn.warn{background:linear-gradient(135deg,#fff4c4,#ffd34f);color:#6b4b00}.btn.bad{background:linear-gradient(135deg,#ffe2dc,#ffb4a8);color:#872214}.main{flex:1;min-height:0;background:var(--panel);border:2px solid rgba(255,255,255,.72);border-radius:22px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;position:relative;overflow:hidden}.view{display:none;min-height:0;height:100%}.view.active{display:flex}.message{background:linear-gradient(135deg,#fff7d6,#fff);border:1px solid rgba(255,211,79,.5);border-radius:14px;padding:7px 10px;font-size:12px;font-weight:800;color:#6b4b00;min-height:32px;display:flex;align-items:center}.message:before{content:"💬";margin-right:6px}.hidden-input{position:fixed;left:1px;top:1px;width:2px;height:2px;opacity:.01;border:0;background:transparent;color:transparent}
 /* Hangman */
-.hangman-layout{display:grid;grid-template-columns:minmax(350px,1fr) minmax(300px,.95fr);gap:8px;height:100%;min-height:0}.hang-left,.hang-right{min-height:0;display:flex;flex-direction:column;gap:7px}.actions{display:flex;gap:6px;flex-wrap:nowrap}.actions .btn{font-size:11px;padding:7px 10px}.base-card{border-radius:18px;background:linear-gradient(135deg,#f7fbff,#fff7df);box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);padding:8px;text-align:center}.label{font-size:10px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}.base-word{font-size:clamp(30px,5vw,52px);font-weight:950;line-height:1.18;letter-spacing:-.03em;background:linear-gradient(90deg,#172033,#4f8cff);-webkit-background-clip:text;background-clip:text;color:transparent}.prompt{border-radius:18px;background:linear-gradient(135deg,#fff,#f7fbff);border:2px solid rgba(79,140,255,.11);box-shadow:0 7px 16px rgba(31,42,68,.06);padding:8px}.prompt.active{border-color:var(--blue);box-shadow:0 12px 24px rgba(79,140,255,.16)}.prompt.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);border-color:#60d78a}.prompt.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);border-color:#f2a39a}.rowtop{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:3px}.rowtitle{font-size:13px;font-weight:950}.pill{font-size:10px;font-weight:900;color:#475467;background:#eef2ff;border-radius:999px;padding:4px 8px;min-width:62px;text-align:center}.letters{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1px;min-height:36px}.char{font-size:clamp(24px,4.2vw,40px);font-weight:950;line-height:1.16;padding:0 1px}.char.fixed{color:#344054}.char.blank{color:#ffb300;min-width:.54em;text-align:center}.char.filled{color:#172033}.stage-card{flex:1;min-height:0;background:linear-gradient(135deg,#fff8e1,#f1fbff 50%,#fff0f7);border:2px solid rgba(79,140,255,.13);border-radius:20px;padding:9px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.9)}.stage-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.stage-title{font-weight:950;color:#364152}.stage-title:before{content:"ðŸª„ "}.stage-stats{display:flex;gap:6px}.mini{background:#fff;border-radius:13px;padding:5px 8px;min-width:74px;text-align:center;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07)}.mini span{display:block;font-size:8px;color:var(--muted);font-weight:850}.mini b{font-size:13px;color:#1e3a8a}.stage{position:relative;height:100%;min-height:190px;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 18% 15%,#fff,transparent 25%),radial-gradient(circle at 84% 17%,rgba(255,211,79,.34),transparent 23%),linear-gradient(180deg,#dff7ff 0%,#f8fbff 62%,#fff5d6 100%);border:2px solid rgba(255,255,255,.75)}.part{position:absolute;opacity:.12;transition:opacity .25s,transform .25s;filter:drop-shadow(0 6px 10px rgba(31,42,68,.16));border-radius:999px}.part.visible{opacity:1}.part.base{left:32px;bottom:28px;width:125px;height:10px;background:#a66a34}.part.pole{left:72px;bottom:35px;width:12px;height:170px;background:#b9783b}.part.beam{left:72px;top:32px;width:145px;height:10px;background:#bd7a3f}.part.brace{left:82px;top:62px;width:74px;height:8px;background:#d39351;transform:rotate(-40deg);transform-origin:left center}.part.rope{left:207px;top:42px;width:7px;height:35px;background:#f2aa21}.part.head{left:184px;top:76px;width:52px;height:52px;border:6px solid var(--pink);background:#ffffff44}.part.neck{left:206px;top:127px;width:9px;height:13px;background:#ff6fb5}.part.bodyTop{left:206px;top:139px;width:9px;height:40px;background:var(--teal)}.part.bodyBottom{left:206px;top:177px;width:9px;height:36px;background:#1786c6}.part.leftArm{left:166px;top:155px;width:44px;height:7px;background:#4f8cff;transform:rotate(-34deg)}.part.rightArm{left:209px;top:155px;width:44px;height:7px;background:#4f8cff;transform:rotate(34deg)}.part.leftForearm{left:153px;top:177px;width:35px;height:7px;background:#7bb8ff;transform:rotate(22deg)}.part.rightForearm{left:232px;top:177px;width:35px;height:7px;background:#7bb8ff;transform:rotate(-22deg)}.part.leftLeg{left:171px;top:214px;width:48px;height:7px;background:#28a745;transform:rotate(40deg)}.part.rightLeg{left:203px;top:214px;width:48px;height:7px;background:#28a745;transform:rotate(-40deg)}.result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;opacity:0;pointer-events:none;transform:scale(.94);transition:.25s}.result.show{opacity:1;transform:scale(1)}.result-card{border-radius:22px;padding:18px 24px;font-weight:950;background:#fff;box-shadow:0 18px 34px rgba(31,42,68,.2)}.tools{display:flex;gap:6px;flex-wrap:wrap}.tools .btn{font-size:11px;padding:7px 10px}
+.hangman-layout{display:grid;grid-template-columns:minmax(350px,1fr) minmax(300px,.95fr);gap:8px;height:100%;min-height:0}.hang-left,.hang-right{min-height:0;display:flex;flex-direction:column;gap:7px}.actions{display:flex;gap:6px;flex-wrap:nowrap}.actions .btn{font-size:11px;padding:7px 10px}.base-card{border-radius:18px;background:linear-gradient(135deg,#f7fbff,#fff7df);box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);padding:8px;text-align:center}.label{font-size:10px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}.base-word{font-size:clamp(30px,5vw,52px);font-weight:950;line-height:1.18;letter-spacing:-.03em;background:linear-gradient(90deg,#172033,#4f8cff);-webkit-background-clip:text;background-clip:text;color:transparent}.prompt{border-radius:18px;background:linear-gradient(135deg,#fff,#f7fbff);border:2px solid rgba(79,140,255,.11);box-shadow:0 7px 16px rgba(31,42,68,.06);padding:8px}.prompt.active{border-color:var(--blue);box-shadow:0 12px 24px rgba(79,140,255,.16)}.prompt.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);border-color:#60d78a}.prompt.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);border-color:#f2a39a}.rowtop{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:3px}.rowtitle{font-size:13px;font-weight:950}.pill{font-size:10px;font-weight:900;color:#475467;background:#eef2ff;border-radius:999px;padding:4px 8px;min-width:62px;text-align:center}.letters{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1px;min-height:36px}.char{font-size:clamp(24px,4.2vw,40px);font-weight:950;line-height:1.16;padding:0 1px}.char.fixed{color:#344054}.char.blank{color:#ffb300;min-width:.54em;text-align:center}.char.filled{color:#172033}.stage-card{flex:1;min-height:0;background:linear-gradient(135deg,#fff8e1,#f1fbff 50%,#fff0f7);border:2px solid rgba(79,140,255,.13);border-radius:20px;padding:9px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.9)}.stage-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.stage-title{font-weight:950;color:#364152}.stage-title:before{content:"🪄 "}.stage-stats{display:flex;gap:6px}.mini{background:#fff;border-radius:13px;padding:5px 8px;min-width:74px;text-align:center;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07)}.mini span{display:block;font-size:8px;color:var(--muted);font-weight:850}.mini b{font-size:13px;color:#1e3a8a}.stage{position:relative;height:100%;min-height:190px;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 18% 15%,#fff,transparent 25%),radial-gradient(circle at 84% 17%,rgba(255,211,79,.34),transparent 23%),linear-gradient(180deg,#dff7ff 0%,#f8fbff 62%,#fff5d6 100%);border:2px solid rgba(255,255,255,.75)}.part{position:absolute;opacity:.12;transition:opacity .25s,transform .25s;filter:drop-shadow(0 6px 10px rgba(31,42,68,.16));border-radius:999px}.part.visible{opacity:1}.part.base{left:32px;bottom:28px;width:125px;height:10px;background:#a66a34}.part.pole{left:72px;bottom:35px;width:12px;height:170px;background:#b9783b}.part.beam{left:72px;top:32px;width:145px;height:10px;background:#bd7a3f}.part.brace{left:82px;top:62px;width:74px;height:8px;background:#d39351;transform:rotate(-40deg);transform-origin:left center}.part.rope{left:207px;top:42px;width:7px;height:35px;background:#f2aa21}.part.head{left:184px;top:76px;width:52px;height:52px;border:6px solid var(--pink);background:#ffffff44}.part.neck{left:206px;top:127px;width:9px;height:13px;background:#ff6fb5}.part.bodyTop{left:206px;top:139px;width:9px;height:40px;background:var(--teal)}.part.bodyBottom{left:206px;top:177px;width:9px;height:36px;background:#1786c6}.part.leftArm{left:166px;top:155px;width:44px;height:7px;background:#4f8cff;transform:rotate(-34deg)}.part.rightArm{left:209px;top:155px;width:44px;height:7px;background:#4f8cff;transform:rotate(34deg)}.part.leftForearm{left:153px;top:177px;width:35px;height:7px;background:#7bb8ff;transform:rotate(22deg)}.part.rightForearm{left:232px;top:177px;width:35px;height:7px;background:#7bb8ff;transform:rotate(-22deg)}.part.leftLeg{left:171px;top:214px;width:48px;height:7px;background:#28a745;transform:rotate(40deg)}.part.rightLeg{left:203px;top:214px;width:48px;height:7px;background:#28a745;transform:rotate(-40deg)}.result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;opacity:0;pointer-events:none;transform:scale(.94);transition:.25s}.result.show{opacity:1;transform:scale(1)}.result-card{border-radius:22px;padding:18px 24px;font-weight:950;background:#fff;box-shadow:0 18px 34px rgba(31,42,68,.2)}.tools{display:flex;gap:6px;flex-wrap:wrap}.tools .btn{font-size:11px;padding:7px 10px}
 /* Learning */
-.learn-layout{display:grid;grid-template-columns:minmax(440px,1.15fr) minmax(300px,.85fr);gap:8px;height:100%;min-height:0}.learn-left,.learn-right{min-height:0;display:flex;flex-direction:column;gap:7px}.photo-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;background:#fff;border-radius:16px;padding:6px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07)}.photo-controls .btn{font-size:10.5px;padding:6px 9px}.learn-table{display:grid;grid-template-columns:86px repeat(3,1fr);gap:6px;align-items:stretch}.th{font-size:10px;font-weight:950;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.04em}.rlabel{font-size:11px;font-weight:950;color:var(--muted);display:flex;align-items:center}.cell{min-height:54px;border-radius:15px;background:linear-gradient(180deg,#fff,#f8fbff);display:flex;align-items:center;justify-content:center;padding:8px 6px;box-shadow:0 7px 16px rgba(31,42,68,.06),inset 0 0 0 2px rgba(79,140,255,.08);position:relative;overflow:visible}.cell.ref{font-size:clamp(22px,3.8vw,36px);font-weight:950;line-height:1.18;color:#172033;background:#fff}.cell.editable{cursor:pointer}.cell.editable.active{transform:translateY(-2px);box-shadow:0 14px 26px rgba(79,140,255,.18),inset 0 0 0 3px var(--blue)}.cell.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);box-shadow:0 10px 20px rgba(38,201,111,.13),inset 0 0 0 3px #60d78a}.cell.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);box-shadow:inset 0 0 0 3px #f2a39a;animation:shake .18s linear 0s 2}.cell.locked{opacity:.42;filter:grayscale(.25)}@keyframes shake{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}.cell .char{font-size:clamp(20px,3.6vw,34px)}.hint{background:linear-gradient(135deg,#fff,#fff7df);border:1px solid rgba(255,211,79,.38);border-radius:15px;padding:8px 10px;font-size:12px;line-height:1.25;font-weight:780;color:#5b4700}.hint:before{content:"ðŸ’¡ ";}.photo-card{flex:1;min-height:0;background:linear-gradient(135deg,#fff,#f7fbff);border-radius:20px;padding:8px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.10),0 8px 18px rgba(31,42,68,.07);display:flex;flex-direction:column}.photo-card.off{display:none}.photo-frame{position:relative;flex:1;min-height:120px;border-radius:17px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.9)}.photo-image{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center bottom}.photo-mask{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--photo-cols,5),1fr);grid-template-rows:repeat(var(--photo-rows,3),1fr);gap:2px;padding:2px}.tile{border-radius:9px;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.22),transparent 38%),linear-gradient(135deg,#172033,#293b63 55%,#4f8cff);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 2px 4px rgba(31,42,68,.18);transition:opacity .28s ease,transform .28s ease}.tile.revealed{opacity:0;transform:scale(.72) rotate(5deg)}.caption{text-align:center;margin-top:5px;font-size:11px;font-weight:950;color:var(--muted)}.caption.done{color:#126b2d}.guess-panel{display:none;background:#fff;border-radius:18px;padding:8px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.10),0 8px 18px rgba(31,42,68,.08)}.guess-panel.show{display:block}.guess-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}.guess-title{font-weight:950}.hearts{color:#ef4444;font-size:15px;letter-spacing:1px}.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.choice{font-size:clamp(13px,1.9vw,18px);font-weight:950;border:0;border-radius:14px;padding:9px 5px;background:linear-gradient(180deg,#fff,#f6f9ff);box-shadow:0 7px 16px rgba(31,42,68,.08),inset 0 0 0 2px rgba(79,140,255,.08);cursor:pointer}.choice.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);box-shadow:inset 0 0 0 3px #60d78a}.choice.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);box-shadow:inset 0 0 0 3px #f2a39a}.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}.confetti i{position:absolute;width:8px;height:12px;border-radius:3px;animation:fall .9s ease forwards}@keyframes fall{to{transform:translateY(90vh) rotate(420deg);opacity:0}}
+.learn-layout{display:grid;grid-template-columns:minmax(440px,1.15fr) minmax(300px,.85fr);gap:8px;height:100%;min-height:0}.learn-left,.learn-right{min-height:0;display:flex;flex-direction:column;gap:7px}.photo-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;background:#fff;border-radius:16px;padding:6px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07)}.photo-controls .btn{font-size:10.5px;padding:6px 9px}.learn-table{display:grid;grid-template-columns:86px repeat(3,1fr);gap:6px;align-items:stretch}.th{font-size:10px;font-weight:950;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.04em}.rlabel{font-size:11px;font-weight:950;color:var(--muted);display:flex;align-items:center}.cell{min-height:54px;border-radius:15px;background:linear-gradient(180deg,#fff,#f8fbff);display:flex;align-items:center;justify-content:center;padding:8px 6px;box-shadow:0 7px 16px rgba(31,42,68,.06),inset 0 0 0 2px rgba(79,140,255,.08);position:relative;overflow:visible}.cell.ref{font-size:clamp(22px,3.8vw,36px);font-weight:950;line-height:1.18;color:#172033;background:#fff}.cell.editable{cursor:pointer}.cell.editable.active{transform:translateY(-2px);box-shadow:0 14px 26px rgba(79,140,255,.18),inset 0 0 0 3px var(--blue)}.cell.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);box-shadow:0 10px 20px rgba(38,201,111,.13),inset 0 0 0 3px #60d78a}.cell.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);box-shadow:inset 0 0 0 3px #f2a39a;animation:shake .18s linear 0s 2}.cell.locked{opacity:.42;filter:grayscale(.25)}@keyframes shake{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}.cell .char{font-size:clamp(20px,3.6vw,34px)}.hint{background:linear-gradient(135deg,#fff,#fff7df);border:1px solid rgba(255,211,79,.38);border-radius:15px;padding:8px 10px;font-size:12px;line-height:1.25;font-weight:780;color:#5b4700}.hint:before{content:"💡 ";}.photo-card{flex:1;min-height:0;background:linear-gradient(135deg,#fff,#f7fbff);border-radius:20px;padding:8px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.10),0 8px 18px rgba(31,42,68,.07);display:flex;flex-direction:column}.photo-card.off{display:none}.photo-frame{position:relative;flex:1;min-height:120px;border-radius:17px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.9)}.photo-image{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center bottom}.photo-mask{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--photo-cols,5),1fr);grid-template-rows:repeat(var(--photo-rows,3),1fr);gap:2px;padding:2px}.tile{border-radius:9px;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.22),transparent 38%),linear-gradient(135deg,#172033,#293b63 55%,#4f8cff);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 2px 4px rgba(31,42,68,.18);transition:opacity .28s ease,transform .28s ease}.tile.revealed{opacity:0;transform:scale(.72) rotate(5deg)}.caption{text-align:center;margin-top:5px;font-size:11px;font-weight:950;color:var(--muted)}.caption.done{color:#126b2d}.guess-panel{display:none;background:#fff;border-radius:18px;padding:8px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.10),0 8px 18px rgba(31,42,68,.08)}.guess-panel.show{display:block}.guess-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}.guess-title{font-weight:950}.hearts{color:#ef4444;font-size:15px;letter-spacing:1px}.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.choice{font-size:clamp(13px,1.9vw,18px);font-weight:950;border:0;border-radius:14px;padding:9px 5px;background:linear-gradient(180deg,#fff,#f6f9ff);box-shadow:0 7px 16px rgba(31,42,68,.08),inset 0 0 0 2px rgba(79,140,255,.08);cursor:pointer}.choice.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);box-shadow:inset 0 0 0 3px #60d78a}.choice.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);box-shadow:inset 0 0 0 3px #f2a39a}.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}.confetti i{position:absolute;width:8px;height:12px;border-radius:3px;animation:fall .9s ease forwards}@keyframes fall{to{transform:translateY(90vh) rotate(420deg);opacity:0}}
 @media (max-width:760px){.app{padding:calc(4px + var(--safe-top)) 5px calc(4px + var(--safe-bottom));gap:4px}.top{border-radius:16px;padding:5px;grid-template-columns:1fr}.brand{justify-content:center}.brand h1{font-size:20px}.meta{justify-content:center;flex-wrap:wrap}.stat{min-width:58px;padding:3px 5px}.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.nav .gap{display:none}.btn{font-size:10px;padding:7px 5px}.main{padding:6px;border-radius:16px}.hangman-layout,.learn-layout{display:flex;flex-direction:column;gap:6px}.actions{display:grid;grid-template-columns:repeat(3,1fr)}.actions .btn:nth-child(5){grid-column:span 2}.base-card{padding:6px}.base-word{font-size:28px}.prompt{padding:6px}.rowtitle{font-size:11px}.letters{min-height:28px}.char{font-size:24px}.stage-card{padding:6px;min-height:100px}.stage-head{display:none}.stage{min-height:112px}.part{transform:scale(.62);transform-origin:left top}.message{font-size:10.5px;min-height:26px;padding:5px 7px}.tools{display:grid;grid-template-columns:repeat(2,1fr)}.learn-table{grid-template-columns:64px repeat(3,1fr);gap:4px}.th{font-size:8px}.rlabel{font-size:9px}.cell{min-height:38px;padding:4px;border-radius:11px}.cell.ref{font-size:18px}.cell .char{font-size:18px}.photo-controls{padding:4px;gap:4px}.photo-controls .btn{font-size:9px;padding:5px 6px}.hint{font-size:10px;padding:5px 7px}.photo-card{padding:5px;border-radius:14px;min-height:100px}.photo-frame{min-height:88px;border-radius:12px}.caption{display:none}.guess-panel{padding:5px}.choices{grid-template-columns:repeat(2,1fr);gap:5px}.choice{font-size:12px;padding:7px 4px}.learn-right{flex:1}.hang-right{flex:1}}
 @media (min-width:761px) and (max-height:720px){.app{gap:4px;padding-top:4px;padding-bottom:4px}.top{padding:5px 7px}.brand h1{font-size:24px}.stat{padding:3px 6px}.nav{gap:5px}.btn{font-size:10.5px;padding:6px 8px}.main{padding:6px}.actions .btn,.tools .btn{font-size:10px;padding:6px 8px}.base-card{padding:5px}.base-word{font-size:32px}.prompt{padding:5px}.rowtop{margin-bottom:1px}.char{font-size:27px}.message{font-size:10.5px;min-height:25px;padding:5px 7px}.stage-card{padding:6px}.stage-head{margin-bottom:4px}.stage{min-height:150px}.learn-table{gap:5px}.cell{min-height:38px;padding:4px 5px}.cell.ref{font-size:23px}.cell .char{font-size:22px}.hint{font-size:10.5px;padding:5px 7px}.photo-controls{padding:4px}.photo-card{padding:5px}.caption{font-size:9px}.choices{gap:5px}.choice{font-size:13px;padding:6px 4px}}
 
@@ -59,9 +59,9 @@
 
 <style id="lucyago-edition-visual-system">
 /* =====================================================
-   LucYago Edition â€” primera capa estable de identidad
-   Objetivo: materiales tÃ¡ctiles + mÃ¡xima legibilidad.
-   No modifica la lÃ³gica del juego.
+   LucYago Edition — primera capa estable de identidad
+   Objetivo: materiales táctiles + máxima legibilidad.
+   No modifica la lógica del juego.
    ===================================================== */
 :root{
   --ly-ink:#182033;
@@ -111,7 +111,7 @@ body:before{
   content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(circle at 8% 20%,rgba(255,255,255,.65),transparent 22%),linear-gradient(90deg,rgba(255,255,255,.38),transparent 34%);
 }
-.brand,.meta,.nav{position:relative;z-index:1}.brand .star{font-size:26px!important}.brand .star:before{content:"ðŸ§­"}.brand .star{font-size:0!important}.brand .star:before{font-size:26px;filter:drop-shadow(0 4px 5px rgba(130,72,20,.25))}
+.brand,.meta,.nav{position:relative;z-index:1}.brand .star{font-size:26px!important}.brand .star:before{content:"🧭"}.brand .star{font-size:0!important}.brand .star:before{font-size:26px;filter:drop-shadow(0 4px 5px rgba(130,72,20,.25))}
 .brand h1{
   color:var(--ly-ink)!important;background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
   letter-spacing:-.055em!important;font-weight:1000!important;
@@ -145,7 +145,7 @@ body:before{
 .prompt.active,.cell.editable.active{border-color:rgba(63,124,255,.58)!important;box-shadow:0 8px 0 rgba(63,124,255,.13),0 16px 26px rgba(63,124,255,.18),inset 0 0 0 2px rgba(63,124,255,.12)!important}
 .prompt.good,.cell.good{background:linear-gradient(180deg,#edfff3,#d7f8e3)!important;border-color:rgba(32,191,107,.42)!important}.prompt.bad,.cell.bad{background:linear-gradient(180deg,#fff0f3,#ffe0e7)!important;border-color:rgba(239,71,111,.42)!important}
 .rowtitle,.stage-title,.guess-title{color:var(--ly-ink)!important}.pill,.label,.th,.rlabel,.caption{color:#7a6b55!important}.message{background:linear-gradient(180deg,#fff9df,#fffdf6)!important;color:#74520c!important;min-height:34px!important}
-/* Ahorcado: siempre unido y centrado como pieza fÃ­sica */
+/* Ahorcado: siempre unido y centrado como pieza física */
 .stage{background:linear-gradient(180deg,#e8f6ff 0%,#fdfdf9 62%,#fff0bd 100%)!important;border-radius:24px!important;border:3px solid rgba(255,255,255,.82)!important;overflow:hidden!important;box-shadow:inset 0 -18px 35px rgba(255,209,102,.18)!important}
 .part{filter:drop-shadow(0 5px 4px rgba(80,47,18,.18))!important}
 .part.base{left:34px!important;bottom:28px!important;width:142px!important;height:13px!important;background:linear-gradient(180deg,#b98249,#80512d)!important;border-radius:12px!important}
@@ -154,7 +154,7 @@ body:before{
 .part.brace{left:89px!important;top:68px!important;width:84px!important;height:10px!important;background:linear-gradient(180deg,#d99a55,#8c5729)!important}
 .part.rope{left:228px!important;top:48px!important;width:7px!important;height:38px!important;background:#c48422!important}
 .part.head{left:204px!important;top:86px!important}.part.neck{left:226px!important;top:137px!important}.part.bodyTop{left:226px!important;top:149px!important}.part.bodyBottom{left:226px!important;top:187px!important}.part.leftArm{left:186px!important;top:165px!important}.part.rightArm{left:229px!important;top:165px!important}.part.leftForearm{left:173px!important;top:187px!important}.part.rightForearm{left:252px!important;top:187px!important}.part.leftLeg{left:191px!important;top:224px!important}.part.rightLeg{left:223px!important;top:224px!important}
-/* Foto LucYago: objeto fÃ­sico, sin fondo visible entre bloques */
+/* Foto LucYago: objeto físico, sin fondo visible entre bloques */
 .photo-card{background:linear-gradient(180deg,#fff,#fff8e9)!important;padding:12px!important;transform:rotate(.2deg)}
 .photo-frame{
   border-radius:18px!important;background:#fff!important;border:8px solid #fff!important;
@@ -173,7 +173,7 @@ body:before{
 </style>
 
 <style id="final-photo-layout-fix">
-/* CorrecciÃ³n final: el layout de Aprendizaje ocupa siempre todo el ancho y la foto mantiene tamaÃ±o estable. */
+/* Corrección final: el layout de Aprendizaje ocupa siempre todo el ancho y la foto mantiene tamaño estable. */
 .view.active{display:flex!important;align-items:stretch!important;width:100%!important;}
 .learn-layout,.hangman-layout{width:100%!important;flex:1 1 auto!important;min-width:0!important;}
 .learn-layout{grid-template-columns:minmax(0,1.08fr) minmax(430px,.92fr)!important;align-items:stretch!important;}
@@ -196,8 +196,8 @@ body:before{
 </style>
 
 <style id="final-gallows-and-icons-patch">
-/* Horca: medidas fijas y proporcionales. Se evita top+bottom simultÃ¡neo,
-   que era lo que estiraba el palo vertical segÃºn la altura disponible. */
+/* Horca: medidas fijas y proporcionales. Se evita top+bottom simultáneo,
+   que era lo que estiraba el palo vertical según la altura disponible. */
 .part.base{
   left:34px!important; top:242px!important; bottom:auto!important;
   width:150px!important; height:14px!important;
@@ -218,7 +218,7 @@ body:before{
   .part.beam{left:49px!important;top:21px!important;width:99px!important;height:10px!important}
   .part.brace{left:56px!important;top:43px!important;width:53px!important;height:7px!important}
 }
-/* Sustituye la fotografÃ­a por un gran icono/emoticono oculto por bloques. */
+/* Sustituye la fotografía por un gran icono/emoticono oculto por bloques. */
 .photo-frame{
   background:linear-gradient(180deg,#fffdf6,#fff2c8)!important;
   display:flex!important;align-items:center!important;justify-content:center!important;
@@ -242,7 +242,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
 
 
 <style id="direct-icons-and-word-fit-fix">
-/* Las palabras siempre permanecen en una sola lÃ­nea y reducen su tamaÃ±o segÃºn su longitud. */
+/* Las palabras siempre permanecen en una sola línea y reducen su tamaño según su longitud. */
 .letters{
   flex-wrap:nowrap!important;
   white-space:nowrap!important;
@@ -259,7 +259,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
 }
 .cell,.prompt{min-width:0!important;overflow:hidden!important}
 .cell.ref{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
-/* El icono es texto Unicode directo, sin imÃ¡genes, fondos, rutas ni carpetas. */
+/* El icono es texto Unicode directo, sin imágenes, fondos, rutas ni carpetas. */
 .photo-image{
   background:none!important;
   display:flex!important;
@@ -277,7 +277,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
 :root{
   --learn-word-size:22px;
 }
-/* Todas las palabras de Aprendizaje usan exactamente el mismo tamaÃ±o. */
+/* Todas las palabras de Aprendizaje usan exactamente el mismo tamaño. */
 .learn-table .cell.ref,
 .learn-table .letters .char{
   font-size:var(--learn-word-size)!important;
@@ -442,7 +442,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
   transform:scale(.98)!important;
 }
 
-/* Guess debajo del icono: el recuadro no cambia de tamaÃ±o al abrir respuestas. */
+/* Guess debajo del icono: el recuadro no cambia de tamaño al abrir respuestas. */
 .learn-right{
   display:flex!important;
   flex-direction:column!important;
@@ -516,7 +516,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
 
 
 
-/* CorrecciÃ³n anti-rendijas: los bloques se solapan, pero la mÃ¡scara no tiene fondo que tape lo revelado. */
+/* Corrección anti-rendijas: los bloques se solapan, pero la máscara no tiene fondo que tape lo revelado. */
 #photoMask.photo-mask{
   gap:0!important;
   padding:0!important;
@@ -541,25 +541,130 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
 }
 @media(max-width:760px){#iconGlyph.icon-glyph{font-size:clamp(78px,27vw,145px)!important;}}
 </style>
+
+<style id="learn-like-hangman-ipad-patch">
+/* Aprendizaje adopta la estructura visual de Ahorcado para iPad en vertical con teclado activo. */
+.learn-layout{grid-template-columns:minmax(350px,1fr) minmax(300px,.95fr)!important;gap:8px!important;}
+.learn-left,.learn-right{gap:7px!important;}
+.learn-table{display:block!important;}
+.learn-stack{display:flex;flex-direction:column;gap:7px;min-height:0;width:100%;}
+.learn-card{padding:8px!important;text-align:center;}
+.learn-card .rowtop{margin-bottom:5px;}
+.learn-forms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-items:stretch;}
+.learn-form-box{min-width:0;border-radius:16px;background:linear-gradient(180deg,#fff,#f8fbff);box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);padding:6px 4px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;min-height:58px;}
+.learn-form-box .th{font-size:9px;line-height:1.05;margin:0;}
+.learn-form-box .letters{gap:2px;min-height:34px;width:100%;}
+.learn-card-ref .learn-form-box{background:#fff!important;}
+.learn-card-ref .char,.learn-card .char{font-size:clamp(24px,4.2vw,40px)!important;line-height:1.16!important;}
+.learn-card .cell{width:100%;min-height:34px!important;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:14px!important;}
+.learn-card .cell.editable.active{transform:none!important;box-shadow:inset 0 0 0 3px var(--blue)!important;border-radius:16px!important;background:linear-gradient(180deg,#fff,#f8fbff)!important;}
+.learn-card .cell.good{border-radius:16px!important;background:linear-gradient(135deg,#e9f9ef,#c8f7d8)!important;box-shadow:inset 0 0 0 3px #60d78a!important;}
+.learn-card .cell.bad{border-radius:16px!important;background:linear-gradient(135deg,#fff0ed,#ffd5ce)!important;box-shadow:inset 0 0 0 3px #f2a39a!important;}
+.learn-card .cell.locked{opacity:.42;filter:grayscale(.25);}
+.learn-card .pill{min-width:72px;}
+.learn-left .message,.learn-left .hint{flex:0 0 auto;}
+@media (min-width:761px) and (orientation:portrait){
+  .learn-layout{grid-template-columns:minmax(0,1fr) minmax(260px,.78fr)!important;}
+  .photo-controls .btn{font-size:10px!important;padding:6px 8px!important;}
+  .learn-card{padding:7px!important;}
+  .learn-forms{gap:5px!important;}
+  .learn-form-box{min-height:48px!important;padding:5px 3px!important;}
+  .learn-form-box .th{font-size:8px!important;}
+  .learn-card-ref .char,.learn-card .char{font-size:clamp(21px,3.8vw,34px)!important;}
+  .hint{font-size:10.5px!important;line-height:1.18!important;}
+  .photo-frame{flex-basis:clamp(170px,25vh,260px)!important;height:clamp(170px,25vh,260px)!important;min-height:170px!important;}
+}
+@media (min-width:761px) and (max-height:760px){
+  .learn-layout{grid-template-columns:minmax(350px,1fr) minmax(300px,.95fr)!important;}
+  .learn-card{padding:6px!important;}
+  .learn-form-box{min-height:42px!important;}
+  .learn-card .cell{min-height:28px!important;}
+  .learn-card-ref .char,.learn-card .char{font-size:clamp(20px,3.5vw,32px)!important;}
+  .learn-form-box .letters{min-height:28px!important;}
+  .hint{font-size:10px!important;padding:5px 7px!important;}
+}
+@media (max-width:760px){
+  .learn-stack{gap:6px!important;}
+  .learn-card{padding:6px!important;}
+  .learn-forms{gap:4px!important;}
+  .learn-form-box{min-height:38px!important;padding:4px 2px!important;border-radius:11px!important;}
+  .learn-card .cell{min-height:26px!important;}
+  .learn-form-box .th{font-size:7px!important;}
+  .learn-card-ref .char,.learn-card .char{font-size:18px!important;}
+}
+</style>
+
+
+<style id="learn-cleaner-and-solid-mask-patch">
+/* Ajuste final de Aprendizaje: filas compactas y cajas limpias para comparar verticalmente. */
+.learn-stack{gap:4px!important;}
+.learn-card{padding:6px!important;}
+.learn-card-entry{padding:5px 6px!important;}
+.learn-card-entry .learn-form-box{min-height:42px!important;padding:3px 4px!important;gap:0!important;}
+.learn-card-entry .letters{min-height:30px!important;}
+.learn-card-entry .char{font-size:clamp(23px,4vw,38px)!important;}
+.learn-card-ref{padding-bottom:6px!important;}
+.learn-card-ref .learn-form-box{min-height:50px!important;}
+@media (min-width:761px) and (orientation:portrait){
+  .learn-stack{gap:3px!important;}
+  .learn-card{padding:5px!important;}
+  .learn-card-entry .learn-form-box{min-height:38px!important;padding:2px 3px!important;}
+  .learn-card-entry .letters{min-height:28px!important;}
+  .learn-card-entry .char{font-size:clamp(21px,3.7vw,34px)!important;}
+}
+@media (min-width:761px) and (max-height:760px){
+  .learn-stack{gap:3px!important;}
+  .learn-card-entry .learn-form-box{min-height:34px!important;}
+  .learn-card-entry .letters{min-height:25px!important;}
+}
+/* Mascara opaca y solapada: evita rendijas de subpixel y variaciones de color que delatan el icono. */
+#photoMask.photo-mask{inset:-1px!important;gap:0!important;padding:0!important;background:transparent!important;overflow:hidden!important;}
+#photoMask .tile,#photoMask .tile:nth-child(2n),#photoMask .tile:nth-child(3n),#photoMask .tile:nth-child(5n){
+  background:#e6d19e!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:0 0 0 1.5px #e6d19e!important;
+  transform:scale(1.12)!important;
+  opacity:1!important;
+}
+#photoMask .tile.revealed{opacity:0!important;transform:scale(1.02)!important;box-shadow:none!important;}
+</style>
+
+
+<style id="photo-mask-reveal-fix">
+/* El contenedor debe ser transparente: solo los bloques tapan el icono. */
+#photoMask.photo-mask{background:transparent!important;}
+#photoMask .tile,#photoMask .tile:nth-child(2n),#photoMask .tile:nth-child(3n),#photoMask .tile:nth-child(5n){
+  background:#e6d19e!important;
+  box-shadow:0 0 0 2px #e6d19e!important;
+  transform:scale(1.14)!important;
+}
+#photoMask .tile.revealed,#photoMask .tile.revealed:nth-child(2n),#photoMask .tile.revealed:nth-child(3n),#photoMask .tile.revealed:nth-child(5n){
+  opacity:0!important;
+  visibility:hidden!important;
+  box-shadow:none!important;
+  transform:scale(1)!important;
+}
+</style>
 </head>
 <body>
 <div class="app">
   <header class="top">
-    <div class="brand"><span class="star">â­</span><h1>Irregular Verbs</h1></div>
-    <div class="meta"><button id="homeBtn" class="btn home">ðŸ </button><div class="stat"><div class="lab">Aciertos</div><div id="good" class="val">0</div></div><div class="stat"><div class="lab">Errores</div><div id="bad" class="val">0</div></div><div class="stat"><div class="lab">Verbo</div><div class="val"><span id="idx">1</span>/<span id="total">0</span></div></div><div class="stat"><div class="lab">Conjunto</div><div id="setName" class="val">Studying</div></div></div>
-    <nav class="nav"><button id="learnBtn" class="btn good active">ðŸŽ“ Aprendizaje</button><button id="hangBtn" class="btn">ðŸŽ¯ Ahorcado</button><span class="gap"></span><button id="filterNew" class="btn active">Studying</button><button id="filterStudied" class="btn">Studied</button><button id="filterAll" class="btn">All</button><button id="shuffleBtn" class="btn">ðŸ”€ Mezclar</button></nav>
+    <div class="brand"><span class="star">⭐</span><h1>Irregular Verbs</h1></div>
+    <div class="meta"><button id="homeBtn" class="btn home">🏠</button><div class="stat"><div class="lab">Aciertos</div><div id="good" class="val">0</div></div><div class="stat"><div class="lab">Errores</div><div id="bad" class="val">0</div></div><div class="stat"><div class="lab">Verbo</div><div class="val"><span id="idx">1</span>/<span id="total">0</span></div></div><div class="stat"><div class="lab">Conjunto</div><div id="setName" class="val">Studying</div></div></div>
+    <nav class="nav"><button id="learnBtn" class="btn good active">🎓 Aprendizaje</button><button id="hangBtn" class="btn">🎯 Ahorcado</button><span class="gap"></span><button id="filterNew" class="btn active">Studying</button><button id="filterStudied" class="btn">Studied</button><button id="filterAll" class="btn">All</button><button id="shuffleBtn" class="btn">🔀 Mezclar</button></nav>
   </header>
   <main class="main" id="main">
     <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" autofocus>
     <section id="hangView" class="view">
       <div class="hangman-layout">
         <div class="hang-left">
-          <div class="actions"><button id="revealBtn" class="btn good">SoluciÃ³n</button><button id="solutionOkBtn" class="btn good" style="display:none">OK</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button></div>
+          <div class="actions"><button id="revealBtn" class="btn good">Solución</button><button id="solutionOkBtn" class="btn good" style="display:none">OK</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button><button id="blindBtn" class="btn">Blind</button></div>
           <div class="base-card"><div class="label">Base form</div><div id="baseWord" class="base-word">write</div></div>
           <div id="psCard" class="prompt active"><div class="rowtop"><div class="rowtitle">Past simple</div><div id="psStatus" class="pill">Pendiente</div></div><div id="psLetters" class="letters"></div></div>
           <div id="ppCard" class="prompt"><div class="rowtop"><div class="rowtitle">Past participle</div><div id="ppStatus" class="pill">Pendiente</div></div><div id="ppLetters" class="letters"></div></div>
           <div id="hangMsg" class="message">Escribe con el teclado.</div>
-          <div class="tools"><button id="deleteBtn" class="btn">Borrar Ãºltima</button><button id="restartVerbBtn" class="btn">Reiniciar verbo</button><label class="btn">Importar Excel<input type="file" id="fileInput" style="display:none" accept=".xlsx,.xls,.xlsm,.json"></label><button id="exportBtn" class="btn">Exportar</button></div>
+          <div class="tools"><button id="deleteBtn" class="btn">Borrar última</button><button id="restartVerbBtn" class="btn">Reiniciar verbo</button><label class="btn">Importar Excel<input type="file" id="fileInput" style="display:none" accept=".xlsx,.xls,.xlsm,.json"></label><button id="exportBtn" class="btn">Exportar</button></div>
         </div>
         <div class="hang-right"><div class="stage-card"><div class="stage-head"><div class="stage-title">Ahorcado</div><div class="stage-stats"><div class="mini"><span>Vidas</span><b id="lives">0</b></div><div class="mini"><span>Partes</span><b><span id="damage">0</span>/<span id="partsTotal">15</span></b></div></div></div><div id="stage" class="stage"><div id="result" class="result"><div class="result-card"><div id="resultTitle" style="font-size:34px"></div><div id="resultText"></div></div></div></div></div></div>
       </div>
@@ -567,14 +672,14 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
     <section id="learnView" class="view active">
       <div class="learn-layout">
         <div class="learn-left">
-          <div class="photo-controls"><button id="photoToggle" class="btn active">Iconos sÃ­</button><button id="guessBtn" class="btn warn">ðŸ§  Guess!</button><button id="blocksBtn" class="btn active">1200 bloques</button></div>
+          <div class="photo-controls"><button id="photoToggle" class="btn active">Iconos sí</button><button id="guessBtn" class="btn warn">🧠 Guess!</button><button id="blocksBtn" class="btn active">1200 bloques</button></div>
           <div id="learnTable" class="learn-table"></div>
-          <div id="learnMsg" class="message">Completa las celdas. Toca una celda para escribir ahÃ­.</div>
-          <div id="hint" class="hint">AquÃ­ aparecerÃ¡ una ayuda visual.</div>
+          <div id="learnMsg" class="message">Completa las celdas. Toca una celda para escribir ahí.</div>
+          <div id="hint" class="hint">Aquí aparecerá una ayuda visual.</div>
         </div>
         <div class="learn-right">
-          <div id="photoCard" class="photo-card"><div id="photoFrame" class="photo-frame"><div id="photoImage" class="photo-image"><span id="iconGlyph" class="icon-glyph" aria-hidden="true">âš½</span></div><div id="photoMask" class="photo-mask"></div></div><div id="photoCaption" class="caption">Icono oculto</div></div>
-          <div id="guessPanel" class="guess-panel"><div class="guess-top"><div class="guess-title">Â¿QuÃ© icono?</div><div id="hearts" class="hearts">â¤ï¸â¤ï¸â¤ï¸</div></div><div id="choices" class="choices"></div></div>
+          <div id="photoCard" class="photo-card"><div id="photoFrame" class="photo-frame"><div id="photoImage" class="photo-image"><span id="iconGlyph" class="icon-glyph" aria-hidden="true">⚽</span></div><div id="photoMask" class="photo-mask"></div></div><div id="photoCaption" class="caption">Icono oculto</div></div>
+          <div id="guessPanel" class="guess-panel"><div class="guess-top"><div class="guess-title">¿Qué icono?</div><div id="hearts" class="hearts">❤️❤️❤️</div></div><div id="choices" class="choices"></div></div>
         </div>
       </div>
     </section>
@@ -582,214 +687,215 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
   </main>
 </div>
 <script>
-const D=[{"baseForm":"write","pastSimple":"wrote","pastSimplePattern":"wr_te","pastParticiple":"written","pastParticiplePattern":"writ_e_","studyVisual":"i â†’ o â†’ i+t+n","studyHint":"Piensa en WRITE con la i atrapada. La i cambia a o en wrote, y en written vuelve el sonido i y aparecen dos t + en.","psHighlight":"o","ppHighlight":"tn","isNew":"new_studied"},{"baseForm":"give","pastSimple":"gave","pastSimplePattern":"g_ve","pastParticiple":"given","pastParticiplePattern":"give_","studyVisual":"i â†’ a â†’ i+n","studyHint":"En GIVE, la i salta a una a en gave. DespuÃ©s vuelve la i en given y se aÃ±ade -n.","psHighlight":"a","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"see","pastSimple":"saw","pastSimplePattern":"s__","pastParticiple":"seen","pastParticiplePattern":"see_","studyVisual":"ee â†’ aw â†’ ee+n","studyHint":"SEE se abre mucho y aparece una a en saw. Luego vuelve el ee largo y se pega una n: seen.","psHighlight":"aw","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"break","pastSimple":"broke","pastSimplePattern":"br___","pastParticiple":"broken","pastParticiplePattern":"br____","studyVisual":"ea â†’ o â†’ o+n","studyHint":"BREAK se rompe: ea cambia a o en broke. Luego a broke se le aÃ±ade -n para formar broken.","psHighlight":"o","ppHighlight":"on","isNew":"new_studied"},{"baseForm":"be","pastSimple":"was/were","pastSimplePattern":"w__/w___","pastParticiple":"been","pastParticiplePattern":"be__","studyVisual":"be â†’ was/were â†’ bee+n","studyHint":"BE es especial: en pasado puede ser was o were. En participio se queda been, con bee + n.","psHighlight":"was/were","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"eat","pastSimple":"ate","pastSimplePattern":"___","pastParticiple":"eaten","pastParticiplePattern":"eat__","studyVisual":"eat â†’ ate â†’ eat+en","studyHint":"EAT pierde la e inicial larga y queda ate. Luego vuelve eat y se aÃ±ade -en: eaten.","psHighlight":"ate","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"drink","pastSimple":"drank","pastSimplePattern":"dr_nk","pastParticiple":"drunk","pastParticiplePattern":"dr_nk","studyVisual":"i â†’ a â†’ u","studyHint":"DRINK cambia i por a en drank. DespuÃ©s la a se convierte en u en drunk.","psHighlight":"a","ppHighlight":"u","isNew":"new_studied"},{"baseForm":"go","pastSimple":"went","pastSimplePattern":"w___","pastParticiple":"gone","pastParticiplePattern":"go__","studyVisual":"go â†’ went â†’ go+n","studyHint":"GO desaparece y aparece WENT. Luego vuelve GO y se aÃ±ade una n.","psHighlight":"went","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"do","pastSimple":"did","pastSimplePattern":"d__","pastParticiple":"done","pastParticiplePattern":"do__","studyVisual":"do â†’ did â†’ do+ne","studyHint":"DO cambia la o por i en DID. Luego vuelve DO y se aÃ±ade -ne.","psHighlight":"id","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"come","pastSimple":"came","pastSimplePattern":"c_me","pastParticiple":"come","pastParticiplePattern":"c_me","studyVisual":"o â†’ a â†’ o","studyHint":"COME cambia la o por a en CAME. Luego vuelve a COME igual.","psHighlight":"a","ppHighlight":"","isNew":"old_studied"},{"baseForm":"take","pastSimple":"took","pastSimplePattern":"t___","pastParticiple":"taken","pastParticiplePattern":"take_","studyVisual":"a â†’ oo â†’ a+en","studyHint":"TAKE cambia a por oo en TOOK. Luego vuelve la a y se aÃ±ade -en.","psHighlight":"oo","ppHighlight":"en","isNew":"old_studied"},{"baseForm":"have","pastSimple":"had","pastSimplePattern":"ha_","pastParticiple":"had","pastParticiplePattern":"ha_","studyVisual":"ve â†’ d â†’ d","studyHint":"HAVE se corta: desaparece ve y queda HAD, igual en participio.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"make","pastSimple":"made","pastSimplePattern":"ma_e","pastParticiple":"made","pastParticiplePattern":"ma_e","studyVisual":"k â†’ d â†’ d","studyHint":"MAKE cambia la k por d en MADE, y se mantiene igual despuÃ©s.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"say","pastSimple":"said","pastSimplePattern":"sa__","pastParticiple":"said","pastParticiplePattern":"sa__","studyVisual":"y â†’ id â†’ id","studyHint":"SAY cambia la y por id en SAID y ya no cambia mÃ¡s.","psHighlight":"id","ppHighlight":"id","isNew":"old_studied"},{"baseForm":"begin","pastSimple":"began","pastSimplePattern":"beg_n","pastParticiple":"begun","pastParticiplePattern":"beg_n","studyVisual":"i â†’ a â†’ u","studyHint":"BEGIN cambia i por a en began y luego por u en begun.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"become","pastSimple":"became","pastSimplePattern":"bec_me","pastParticiple":"become","pastParticiplePattern":"bec_me","studyVisual":"o â†’ a â†’ o","studyHint":"BECOME cambia o por a en became y luego vuelve a become.","psHighlight":"a","ppHighlight":"","isNew":"not_studied"},{"baseForm":"bring","pastSimple":"brought","pastSimplePattern":"br_____","pastParticiple":"brought","pastParticiplePattern":"br_____","studyVisual":"ing â†’ ought","studyHint":"BRING cambia completamente a brought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"build","pastSimple":"built","pastSimplePattern":"buil_","pastParticiple":"built","pastParticiplePattern":"buil_","studyVisual":"d â†’ t","studyHint":"BUILD pierde la i y aparece ui en built.","psHighlight":"ui","ppHighlight":"ui","isNew":"not_studied"},{"baseForm":"buy","pastSimple":"bought","pastSimplePattern":"b_____","pastParticiple":"bought","pastParticiplePattern":"b_____","studyVisual":"uy â†’ ought","studyHint":"BUY cambia a bought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"catch","pastSimple":"caught","pastSimplePattern":"c_____","pastParticiple":"caught","pastParticiplePattern":"c_____","studyVisual":"atch â†’ aught","studyHint":"CATCH cambia a caught y se mantiene igual.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"choose","pastSimple":"chose","pastSimplePattern":"ch__s","pastParticiple":"chosen","pastParticiplePattern":"ch__se","studyVisual":"oo â†’ o â†’ o+en","studyHint":"CHOOSE pierde una o en chose y aÃ±ade -en en chosen.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"cut","pastSimple":"cut","pastSimplePattern":"c_t","pastParticiple":"cut","pastParticiplePattern":"c_t","studyVisual":"igual","studyHint":"CUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"draw","pastSimple":"drew","pastSimplePattern":"dr_w","pastParticiple":"drawn","pastParticiplePattern":"draw_","studyVisual":"aw â†’ ew â†’ aw+n","studyHint":"DRAW cambia a drew y luego aÃ±ade n en drawn.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"drive","pastSimple":"drove","pastSimplePattern":"dr_ve","pastParticiple":"driven","pastParticiplePattern":"drive_","studyVisual":"i â†’ o â†’ i+n","studyHint":"DRIVE cambia i por o y luego vuelve i con n.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"fall","pastSimple":"fell","pastSimplePattern":"f_ll","pastParticiple":"fallen","pastParticiplePattern":"fall__","studyVisual":"a â†’ e â†’ a+en","studyHint":"FALL cambia a e en fell y luego aÃ±ade -en.","psHighlight":"e","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"feel","pastSimple":"felt","pastSimplePattern":"f___","pastParticiple":"felt","pastParticiplePattern":"f___","studyVisual":"eel â†’ elt","studyHint":"FEEL pierde una e y queda felt.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"find","pastSimple":"found","pastSimplePattern":"f__nd","pastParticiple":"found","pastParticiplePattern":"f__nd","studyVisual":"i â†’ ou","studyHint":"FIND cambia i por ou en found.","psHighlight":"ou","ppHighlight":"ou","isNew":"not_studied"},{"baseForm":"fly","pastSimple":"flew","pastSimplePattern":"fl__","pastParticiple":"flown","pastParticiplePattern":"fl___","studyVisual":"y â†’ ew â†’ ow+n","studyHint":"FLY cambia a flew y luego a flown.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"forget","pastSimple":"forgot","pastSimplePattern":"forg_t","pastParticiple":"forgotten","pastParticiplePattern":"forg_t___","studyVisual":"e â†’ o â†’ o+ten","studyHint":"FORGET cambia e por o y luego aÃ±ade -ten.","psHighlight":"o","ppHighlight":"tten","isNew":"not_studied"},{"baseForm":"get","pastSimple":"got","pastSimplePattern":"g_t","pastParticiple":"got/gotten","pastParticiplePattern":"g_t/g_t___","studyVisual":"e â†’ o â†’ o / o+ten","studyHint":"GET cambia e por o.","psHighlight":"o","ppHighlight":"otten","isNew":"not_studied"},{"baseForm":"grow","pastSimple":"grew","pastSimplePattern":"gr_w","pastParticiple":"grown","pastParticiplePattern":"grow_","studyVisual":"o â†’ e â†’ ow+n","studyHint":"GROW cambia a grew y luego aÃ±ade n.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"hear","pastSimple":"heard","pastSimplePattern":"hear_","pastParticiple":"heard","pastParticiplePattern":"hear_","studyVisual":"r â†’ rd","studyHint":"HEAR cambia a heard y se mantiene.","psHighlight":"ear","ppHighlight":"ear","isNew":"not_studied"},{"baseForm":"hide","pastSimple":"hid","pastSimplePattern":"h_d","pastParticiple":"hidden","pastParticiplePattern":"hid___","studyVisual":"ide â†’ id â†’ id+den","studyHint":"HIDE se acorta a hid y luego aÃ±ade -den.","psHighlight":"i","ppHighlight":"den","isNew":"not_studied"},{"baseForm":"hold","pastSimple":"held","pastSimplePattern":"h_ld","pastParticiple":"held","pastParticiplePattern":"h_ld","studyVisual":"o â†’ e","studyHint":"HOLD cambia o por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"keep","pastSimple":"kept","pastSimplePattern":"ke__","pastParticiple":"kept","pastParticiplePattern":"ke__","studyVisual":"ee â†’ ept","studyHint":"KEEP pierde una e en kept.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"know","pastSimple":"knew","pastSimplePattern":"kn_w","pastParticiple":"known","pastParticiplePattern":"kno__","studyVisual":"o â†’ e â†’ ow+n","studyHint":"KNOW cambia a knew y luego aÃ±ade n.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"leave","pastSimple":"left","pastSimplePattern":"le__","pastParticiple":"left","pastParticiplePattern":"le__","studyVisual":"eave â†’ eft","studyHint":"LEAVE cambia ea por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"lose","pastSimple":"lost","pastSimplePattern":"los_","pastParticiple":"lost","pastParticiplePattern":"los_","studyVisual":"e â†’ t","studyHint":"LOSE cambia a lost.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"meet","pastSimple":"met","pastSimplePattern":"m_t","pastParticiple":"met","pastParticiplePattern":"m_t","studyVisual":"ee â†’ e","studyHint":"MEET pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"pay","pastSimple":"paid","pastSimplePattern":"pa__","pastParticiple":"paid","pastParticiplePattern":"pa__","studyVisual":"y â†’ id","studyHint":"PAY cambia y por i.","psHighlight":"i","ppHighlight":"i","isNew":"not_studied"},{"baseForm":"put","pastSimple":"put","pastSimplePattern":"p_t","pastParticiple":"put","pastParticiplePattern":"p_t","studyVisual":"igual","studyHint":"PUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"read","pastSimple":"read","pastSimplePattern":"r__d","pastParticiple":"read","pastParticiplePattern":"r__d","studyVisual":"ea pronunciaciÃ³n","studyHint":"READ se escribe igual pero cambia la pronunciaciÃ³n.","psHighlight":"ea","ppHighlight":"ea","isNew":"not_studied"},{"baseForm":"ride","pastSimple":"rode","pastSimplePattern":"r_de","pastParticiple":"ridden","pastParticiplePattern":"ri__e_","studyVisual":"i â†’ o â†’ i+den","studyHint":"RIDE cambia i por o y luego aÃ±ade -den.","psHighlight":"o","ppHighlight":"dden","isNew":"not_studied"},{"baseForm":"ring","pastSimple":"rang","pastSimplePattern":"r_ng","pastParticiple":"rung","pastParticiplePattern":"r_ng","studyVisual":"i â†’ a â†’ u","studyHint":"RING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"run","pastSimple":"ran","pastSimplePattern":"r_n","pastParticiple":"run","pastParticiplePattern":"r_n","studyVisual":"u â†’ a â†’ u","studyHint":"RUN cambia a ran y vuelve a run.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sell","pastSimple":"sold","pastSimplePattern":"s___","pastParticiple":"sold","pastParticiplePattern":"s___","studyVisual":"ell â†’ old","studyHint":"SELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"send","pastSimple":"sent","pastSimplePattern":"sen_","pastParticiple":"sent","pastParticiplePattern":"sen_","studyVisual":"d â†’ t","studyHint":"SEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"sing","pastSimple":"sang","pastSimplePattern":"s_ng","pastParticiple":"sung","pastParticiplePattern":"s_ng","studyVisual":"i â†’ a â†’ u","studyHint":"SING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sit","pastSimple":"sat","pastSimplePattern":"s_t","pastParticiple":"sat","pastParticiplePattern":"s_t","studyVisual":"i â†’ a","studyHint":"SIT cambia i por a.","psHighlight":"a","ppHighlight":"a","isNew":"not_studied"},{"baseForm":"sleep","pastSimple":"slept","pastSimplePattern":"sl___","pastParticiple":"slept","pastParticiplePattern":"sl___","studyVisual":"eep â†’ ept","studyHint":"SLEEP pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"speak","pastSimple":"spoke","pastSimplePattern":"sp_k_","pastParticiple":"spoken","pastParticiplePattern":"sp_k__","studyVisual":"ea â†’ o+e â†’ o+en","studyHint":"SPEAK cambia ea por o y aÃ±ade n.","psHighlight":"o","ppHighlight":"on","isNew":"not_studied"},{"baseForm":"spend","pastSimple":"spent","pastSimplePattern":"spen_","pastParticiple":"spent","pastParticiplePattern":"spen_","studyVisual":"d â†’ t","studyHint":"SPEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"stand","pastSimple":"stood","pastSimplePattern":"st__d","pastParticiple":"stood","pastParticiplePattern":"st__d","studyVisual":"an â†’ oo","studyHint":"STAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"steal","pastSimple":"stole","pastSimplePattern":"st_l_","pastParticiple":"stolen","pastParticiplePattern":"st_l__","studyVisual":"eal â†’ ole â†’ ole+n","studyHint":"STEAL cambia ea por o y aÃ±ade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"swim","pastSimple":"swam","pastSimplePattern":"sw_m","pastParticiple":"swum","pastParticiplePattern":"sw_m","studyVisual":"i â†’ a â†’ u","studyHint":"SWIM cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each â†’ aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"tell","pastSimple":"told","pastSimplePattern":"t___","pastParticiple":"told","pastParticiplePattern":"t___","studyVisual":"ell â†’ old","studyHint":"TELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"think","pastSimple":"thought","pastSimplePattern":"th_____","pastParticiple":"thought","pastParticiplePattern":"th_____","studyVisual":"ink â†’ ought","studyHint":"THINK cambia a thought.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"understand","pastSimple":"understood","pastSimplePattern":"underst__d","pastParticiple":"understood","pastParticiplePattern":"underst__d","studyVisual":"an â†’ oo","studyHint":"UNDERSTAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"wear","pastSimple":"wore","pastSimplePattern":"w___","pastParticiple":"worn","pastParticiplePattern":"w___","studyVisual":"ea â†’ ore â†’ ore+n","studyHint":"WEAR cambia a wore y luego a worn.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"win","pastSimple":"won","pastSimplePattern":"w_n","pastParticiple":"won","pastParticiplePattern":"w_n","studyVisual":"i â†’ o","studyHint":"WIN cambia i por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"wake","pastSimple":"woke","pastSimplePattern":"w_ke","pastParticiple":"woken","pastParticiplePattern":"w_ken","studyVisual":"a â†’ o â†’ o+n","studyHint":"WAKE cambia a woke y aÃ±ade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each â†’ aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"}];
+const D=[{"baseForm":"write","pastSimple":"wrote","pastSimplePattern":"wr_te","pastParticiple":"written","pastParticiplePattern":"writ_e_","studyVisual":"i → o → i+t+n","studyHint":"Piensa en WRITE con la i atrapada. La i cambia a o en wrote, y en written vuelve el sonido i y aparecen dos t + en.","psHighlight":"o","ppHighlight":"tn","isNew":"new_studied"},{"baseForm":"give","pastSimple":"gave","pastSimplePattern":"g_ve","pastParticiple":"given","pastParticiplePattern":"give_","studyVisual":"i → a → i+n","studyHint":"En GIVE, la i salta a una a en gave. Después vuelve la i en given y se añade -n.","psHighlight":"a","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"see","pastSimple":"saw","pastSimplePattern":"s__","pastParticiple":"seen","pastParticiplePattern":"see_","studyVisual":"ee → aw → ee+n","studyHint":"SEE se abre mucho y aparece una a en saw. Luego vuelve el ee largo y se pega una n: seen.","psHighlight":"aw","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"break","pastSimple":"broke","pastSimplePattern":"br___","pastParticiple":"broken","pastParticiplePattern":"br____","studyVisual":"ea → o → o+n","studyHint":"BREAK se rompe: ea cambia a o en broke. Luego a broke se le añade -n para formar broken.","psHighlight":"o","ppHighlight":"on","isNew":"new_studied"},{"baseForm":"be","pastSimple":"was/were","pastSimplePattern":"w__/w___","pastParticiple":"been","pastParticiplePattern":"be__","studyVisual":"be → was/were → bee+n","studyHint":"BE es especial: en pasado puede ser was o were. En participio se queda been, con bee + n.","psHighlight":"was/were","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"eat","pastSimple":"ate","pastSimplePattern":"___","pastParticiple":"eaten","pastParticiplePattern":"eat__","studyVisual":"eat → ate → eat+en","studyHint":"EAT pierde la e inicial larga y queda ate. Luego vuelve eat y se añade -en: eaten.","psHighlight":"ate","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"drink","pastSimple":"drank","pastSimplePattern":"dr_nk","pastParticiple":"drunk","pastParticiplePattern":"dr_nk","studyVisual":"i → a → u","studyHint":"DRINK cambia i por a en drank. Después la a se convierte en u en drunk.","psHighlight":"a","ppHighlight":"u","isNew":"new_studied"},{"baseForm":"go","pastSimple":"went","pastSimplePattern":"w___","pastParticiple":"gone","pastParticiplePattern":"go__","studyVisual":"go → went → go+n","studyHint":"GO desaparece y aparece WENT. Luego vuelve GO y se añade una n.","psHighlight":"went","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"do","pastSimple":"did","pastSimplePattern":"d__","pastParticiple":"done","pastParticiplePattern":"do__","studyVisual":"do → did → do+ne","studyHint":"DO cambia la o por i en DID. Luego vuelve DO y se añade -ne.","psHighlight":"id","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"come","pastSimple":"came","pastSimplePattern":"c_me","pastParticiple":"come","pastParticiplePattern":"c_me","studyVisual":"o → a → o","studyHint":"COME cambia la o por a en CAME. Luego vuelve a COME igual.","psHighlight":"a","ppHighlight":"","isNew":"old_studied"},{"baseForm":"take","pastSimple":"took","pastSimplePattern":"t___","pastParticiple":"taken","pastParticiplePattern":"take_","studyVisual":"a → oo → a+en","studyHint":"TAKE cambia a por oo en TOOK. Luego vuelve la a y se añade -en.","psHighlight":"oo","ppHighlight":"en","isNew":"old_studied"},{"baseForm":"have","pastSimple":"had","pastSimplePattern":"ha_","pastParticiple":"had","pastParticiplePattern":"ha_","studyVisual":"ve → d → d","studyHint":"HAVE se corta: desaparece ve y queda HAD, igual en participio.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"make","pastSimple":"made","pastSimplePattern":"ma_e","pastParticiple":"made","pastParticiplePattern":"ma_e","studyVisual":"k → d → d","studyHint":"MAKE cambia la k por d en MADE, y se mantiene igual después.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"say","pastSimple":"said","pastSimplePattern":"sa__","pastParticiple":"said","pastParticiplePattern":"sa__","studyVisual":"y → id → id","studyHint":"SAY cambia la y por id en SAID y ya no cambia más.","psHighlight":"id","ppHighlight":"id","isNew":"old_studied"},{"baseForm":"begin","pastSimple":"began","pastSimplePattern":"beg_n","pastParticiple":"begun","pastParticiplePattern":"beg_n","studyVisual":"i → a → u","studyHint":"BEGIN cambia i por a en began y luego por u en begun.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"become","pastSimple":"became","pastSimplePattern":"bec_me","pastParticiple":"become","pastParticiplePattern":"bec_me","studyVisual":"o → a → o","studyHint":"BECOME cambia o por a en became y luego vuelve a become.","psHighlight":"a","ppHighlight":"","isNew":"not_studied"},{"baseForm":"bring","pastSimple":"brought","pastSimplePattern":"br_____","pastParticiple":"brought","pastParticiplePattern":"br_____","studyVisual":"ing → ought","studyHint":"BRING cambia completamente a brought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"build","pastSimple":"built","pastSimplePattern":"buil_","pastParticiple":"built","pastParticiplePattern":"buil_","studyVisual":"d → t","studyHint":"BUILD pierde la i y aparece ui en built.","psHighlight":"ui","ppHighlight":"ui","isNew":"not_studied"},{"baseForm":"buy","pastSimple":"bought","pastSimplePattern":"b_____","pastParticiple":"bought","pastParticiplePattern":"b_____","studyVisual":"uy → ought","studyHint":"BUY cambia a bought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"catch","pastSimple":"caught","pastSimplePattern":"c_____","pastParticiple":"caught","pastParticiplePattern":"c_____","studyVisual":"atch → aught","studyHint":"CATCH cambia a caught y se mantiene igual.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"choose","pastSimple":"chose","pastSimplePattern":"ch__s","pastParticiple":"chosen","pastParticiplePattern":"ch__se","studyVisual":"oo → o → o+en","studyHint":"CHOOSE pierde una o en chose y añade -en en chosen.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"cut","pastSimple":"cut","pastSimplePattern":"c_t","pastParticiple":"cut","pastParticiplePattern":"c_t","studyVisual":"igual","studyHint":"CUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"draw","pastSimple":"drew","pastSimplePattern":"dr_w","pastParticiple":"drawn","pastParticiplePattern":"draw_","studyVisual":"aw → ew → aw+n","studyHint":"DRAW cambia a drew y luego añade n en drawn.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"drive","pastSimple":"drove","pastSimplePattern":"dr_ve","pastParticiple":"driven","pastParticiplePattern":"drive_","studyVisual":"i → o → i+n","studyHint":"DRIVE cambia i por o y luego vuelve i con n.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"fall","pastSimple":"fell","pastSimplePattern":"f_ll","pastParticiple":"fallen","pastParticiplePattern":"fall__","studyVisual":"a → e → a+en","studyHint":"FALL cambia a e en fell y luego añade -en.","psHighlight":"e","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"feel","pastSimple":"felt","pastSimplePattern":"f___","pastParticiple":"felt","pastParticiplePattern":"f___","studyVisual":"eel → elt","studyHint":"FEEL pierde una e y queda felt.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"find","pastSimple":"found","pastSimplePattern":"f__nd","pastParticiple":"found","pastParticiplePattern":"f__nd","studyVisual":"i → ou","studyHint":"FIND cambia i por ou en found.","psHighlight":"ou","ppHighlight":"ou","isNew":"not_studied"},{"baseForm":"fly","pastSimple":"flew","pastSimplePattern":"fl__","pastParticiple":"flown","pastParticiplePattern":"fl___","studyVisual":"y → ew → ow+n","studyHint":"FLY cambia a flew y luego a flown.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"forget","pastSimple":"forgot","pastSimplePattern":"forg_t","pastParticiple":"forgotten","pastParticiplePattern":"forg_t___","studyVisual":"e → o → o+ten","studyHint":"FORGET cambia e por o y luego añade -ten.","psHighlight":"o","ppHighlight":"tten","isNew":"not_studied"},{"baseForm":"get","pastSimple":"got","pastSimplePattern":"g_t","pastParticiple":"got/gotten","pastParticiplePattern":"g_t/g_t___","studyVisual":"e → o → o / o+ten","studyHint":"GET cambia e por o.","psHighlight":"o","ppHighlight":"otten","isNew":"not_studied"},{"baseForm":"grow","pastSimple":"grew","pastSimplePattern":"gr_w","pastParticiple":"grown","pastParticiplePattern":"grow_","studyVisual":"o → e → ow+n","studyHint":"GROW cambia a grew y luego añade n.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"hear","pastSimple":"heard","pastSimplePattern":"hear_","pastParticiple":"heard","pastParticiplePattern":"hear_","studyVisual":"r → rd","studyHint":"HEAR cambia a heard y se mantiene.","psHighlight":"ear","ppHighlight":"ear","isNew":"not_studied"},{"baseForm":"hide","pastSimple":"hid","pastSimplePattern":"h_d","pastParticiple":"hidden","pastParticiplePattern":"hid___","studyVisual":"ide → id → id+den","studyHint":"HIDE se acorta a hid y luego añade -den.","psHighlight":"i","ppHighlight":"den","isNew":"not_studied"},{"baseForm":"hold","pastSimple":"held","pastSimplePattern":"h_ld","pastParticiple":"held","pastParticiplePattern":"h_ld","studyVisual":"o → e","studyHint":"HOLD cambia o por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"keep","pastSimple":"kept","pastSimplePattern":"ke__","pastParticiple":"kept","pastParticiplePattern":"ke__","studyVisual":"ee → ept","studyHint":"KEEP pierde una e en kept.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"know","pastSimple":"knew","pastSimplePattern":"kn_w","pastParticiple":"known","pastParticiplePattern":"kno__","studyVisual":"o → e → ow+n","studyHint":"KNOW cambia a knew y luego añade n.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"leave","pastSimple":"left","pastSimplePattern":"le__","pastParticiple":"left","pastParticiplePattern":"le__","studyVisual":"eave → eft","studyHint":"LEAVE cambia ea por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"lose","pastSimple":"lost","pastSimplePattern":"los_","pastParticiple":"lost","pastParticiplePattern":"los_","studyVisual":"e → t","studyHint":"LOSE cambia a lost.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"meet","pastSimple":"met","pastSimplePattern":"m_t","pastParticiple":"met","pastParticiplePattern":"m_t","studyVisual":"ee → e","studyHint":"MEET pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"pay","pastSimple":"paid","pastSimplePattern":"pa__","pastParticiple":"paid","pastParticiplePattern":"pa__","studyVisual":"y → id","studyHint":"PAY cambia y por i.","psHighlight":"i","ppHighlight":"i","isNew":"not_studied"},{"baseForm":"put","pastSimple":"put","pastSimplePattern":"p_t","pastParticiple":"put","pastParticiplePattern":"p_t","studyVisual":"igual","studyHint":"PUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"read","pastSimple":"read","pastSimplePattern":"r__d","pastParticiple":"read","pastParticiplePattern":"r__d","studyVisual":"ea pronunciación","studyHint":"READ se escribe igual pero cambia la pronunciación.","psHighlight":"ea","ppHighlight":"ea","isNew":"not_studied"},{"baseForm":"ride","pastSimple":"rode","pastSimplePattern":"r_de","pastParticiple":"ridden","pastParticiplePattern":"ri__e_","studyVisual":"i → o → i+den","studyHint":"RIDE cambia i por o y luego añade -den.","psHighlight":"o","ppHighlight":"dden","isNew":"not_studied"},{"baseForm":"ring","pastSimple":"rang","pastSimplePattern":"r_ng","pastParticiple":"rung","pastParticiplePattern":"r_ng","studyVisual":"i → a → u","studyHint":"RING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"run","pastSimple":"ran","pastSimplePattern":"r_n","pastParticiple":"run","pastParticiplePattern":"r_n","studyVisual":"u → a → u","studyHint":"RUN cambia a ran y vuelve a run.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sell","pastSimple":"sold","pastSimplePattern":"s___","pastParticiple":"sold","pastParticiplePattern":"s___","studyVisual":"ell → old","studyHint":"SELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"send","pastSimple":"sent","pastSimplePattern":"sen_","pastParticiple":"sent","pastParticiplePattern":"sen_","studyVisual":"d → t","studyHint":"SEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"sing","pastSimple":"sang","pastSimplePattern":"s_ng","pastParticiple":"sung","pastParticiplePattern":"s_ng","studyVisual":"i → a → u","studyHint":"SING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sit","pastSimple":"sat","pastSimplePattern":"s_t","pastParticiple":"sat","pastParticiplePattern":"s_t","studyVisual":"i → a","studyHint":"SIT cambia i por a.","psHighlight":"a","ppHighlight":"a","isNew":"not_studied"},{"baseForm":"sleep","pastSimple":"slept","pastSimplePattern":"sl___","pastParticiple":"slept","pastParticiplePattern":"sl___","studyVisual":"eep → ept","studyHint":"SLEEP pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"speak","pastSimple":"spoke","pastSimplePattern":"sp_k_","pastParticiple":"spoken","pastParticiplePattern":"sp_k__","studyVisual":"ea → o+e → o+en","studyHint":"SPEAK cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"on","isNew":"not_studied"},{"baseForm":"spend","pastSimple":"spent","pastSimplePattern":"spen_","pastParticiple":"spent","pastParticiplePattern":"spen_","studyVisual":"d → t","studyHint":"SPEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"stand","pastSimple":"stood","pastSimplePattern":"st__d","pastParticiple":"stood","pastParticiplePattern":"st__d","studyVisual":"an → oo","studyHint":"STAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"steal","pastSimple":"stole","pastSimplePattern":"st_l_","pastParticiple":"stolen","pastParticiplePattern":"st_l__","studyVisual":"eal → ole → ole+n","studyHint":"STEAL cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"swim","pastSimple":"swam","pastSimplePattern":"sw_m","pastParticiple":"swum","pastParticiplePattern":"sw_m","studyVisual":"i → a → u","studyHint":"SWIM cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"tell","pastSimple":"told","pastSimplePattern":"t___","pastParticiple":"told","pastParticiplePattern":"t___","studyVisual":"ell → old","studyHint":"TELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"think","pastSimple":"thought","pastSimplePattern":"th_____","pastParticiple":"thought","pastParticiplePattern":"th_____","studyVisual":"ink → ought","studyHint":"THINK cambia a thought.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"understand","pastSimple":"understood","pastSimplePattern":"underst__d","pastParticiple":"understood","pastParticiplePattern":"underst__d","studyVisual":"an → oo","studyHint":"UNDERSTAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"wear","pastSimple":"wore","pastSimplePattern":"w___","pastParticiple":"worn","pastParticiplePattern":"w___","studyVisual":"ea → ore → ore+n","studyHint":"WEAR cambia a wore y luego a worn.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"win","pastSimple":"won","pastSimplePattern":"w_n","pastParticiple":"won","pastParticiplePattern":"w_n","studyVisual":"i → o","studyHint":"WIN cambia i por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"wake","pastSimple":"woke","pastSimplePattern":"w_ke","pastParticiple":"woken","pastParticiplePattern":"w_ken","studyVisual":"a → o → o+n","studyHint":"WAKE cambia a woke y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"}];
 const HIDDEN_ICONS=[
- {title:"Cara feliz",html:"&#x1F600;",fallback:"ðŸ˜€"},
- {title:"Sonrisa",html:"&#x1F603;",fallback:"ðŸ˜ƒ"},
- {title:"Risa",html:"&#x1F604;",fallback:"ðŸ˜„"},
- {title:"GuiÃ±o",html:"&#x1F609;",fallback:"ðŸ˜‰"},
- {title:"Sonrojado",html:"&#x1F60A;",fallback:"ðŸ˜Š"},
- {title:"Carcajada",html:"&#x1F602;",fallback:"ðŸ˜‚"},
- {title:"Ojos corazÃ³n",html:"&#x1F60D;",fallback:"ðŸ˜"},
- {title:"Estrella ojos",html:"&#x1F929;",fallback:"ðŸ¤©"},
- {title:"Beso",html:"&#x1F618;",fallback:"ðŸ˜˜"},
- {title:"Lengua",html:"&#x1F61B;",fallback:"ðŸ˜›"},
- {title:"Pensando",html:"&#x1F914;",fallback:"ðŸ¤”"},
- {title:"Silencio",html:"&#x1F92B;",fallback:"ðŸ¤«"},
- {title:"Dormido",html:"&#x1F634;",fallback:"ðŸ˜´"},
- {title:"Sorpresa",html:"&#x1F62E;",fallback:"ðŸ˜®"},
- {title:"Gafas",html:"&#x1F60E;",fallback:"ðŸ˜Ž"},
- {title:"Fiesta",html:"&#x1F973;",fallback:"ðŸ¥³"},
- {title:"Llorando",html:"&#x1F622;",fallback:"ðŸ˜¢"},
- {title:"Enfadado",html:"&#x1F620;",fallback:"ðŸ˜ "},
- {title:"Fantasma",html:"&#x1F47B;",fallback:"ðŸ‘»"},
- {title:"Alien",html:"&#x1F47D;",fallback:"ðŸ‘½"},
- {title:"Mono",html:"&#x1F435;",fallback:"ðŸµ"},
- {title:"Perro",html:"&#x1F436;",fallback:"ðŸ¶"},
- {title:"Lobo",html:"&#x1F43A;",fallback:"ðŸº"},
- {title:"Zorro",html:"&#x1F98A;",fallback:"ðŸ¦Š"},
- {title:"Gato",html:"&#x1F431;",fallback:"ðŸ±"},
- {title:"LeÃ³n",html:"&#x1F981;",fallback:"ðŸ¦"},
- {title:"Tigre",html:"&#x1F42F;",fallback:"ðŸ¯"},
- {title:"Caballo",html:"&#x1F434;",fallback:"ðŸ´"},
- {title:"Unicornio",html:"&#x1F984;",fallback:"ðŸ¦„"},
- {title:"Vaca",html:"&#x1F42E;",fallback:"ðŸ®"},
- {title:"Cerdo",html:"&#x1F437;",fallback:"ðŸ·"},
- {title:"RatÃ³n",html:"&#x1F42D;",fallback:"ðŸ­"},
- {title:"HÃ¡mster",html:"&#x1F439;",fallback:"ðŸ¹"},
- {title:"Conejo",html:"&#x1F430;",fallback:"ðŸ°"},
- {title:"Oso",html:"&#x1F43B;",fallback:"ðŸ»"},
- {title:"Panda",html:"&#x1F43C;",fallback:"ðŸ¼"},
- {title:"Koala",html:"&#x1F428;",fallback:"ðŸ¨"},
- {title:"Pollo",html:"&#x1F414;",fallback:"ðŸ”"},
- {title:"PingÃ¼ino",html:"&#x1F427;",fallback:"ðŸ§"},
- {title:"PÃ¡jaro",html:"&#x1F426;",fallback:"ðŸ¦"},
- {title:"Pollito",html:"&#x1F424;",fallback:"ðŸ¤"},
- {title:"Rana",html:"&#x1F438;",fallback:"ðŸ¸"},
- {title:"Cocodrilo",html:"&#x1F40A;",fallback:"ðŸŠ"},
- {title:"Tortuga",html:"&#x1F422;",fallback:"ðŸ¢"},
- {title:"Lagarto",html:"&#x1F98E;",fallback:"ðŸ¦Ž"},
- {title:"Serpiente",html:"&#x1F40D;",fallback:"ðŸ"},
- {title:"DragÃ³n",html:"&#x1F409;",fallback:"ðŸ‰"},
- {title:"Ballena",html:"&#x1F433;",fallback:"ðŸ³"},
- {title:"DelfÃ­n",html:"&#x1F42C;",fallback:"ðŸ¬"},
- {title:"Pez",html:"&#x1F41F;",fallback:"ðŸŸ"},
- {title:"Pulpo",html:"&#x1F419;",fallback:"ðŸ™"},
- {title:"Mariposa",html:"&#x1F98B;",fallback:"ðŸ¦‹"},
- {title:"Caracol",html:"&#x1F40C;",fallback:"ðŸŒ"},
- {title:"Abeja",html:"&#x1F41D;",fallback:"ðŸ"},
- {title:"Hormiga",html:"&#x1F41C;",fallback:"ðŸœ"},
- {title:"AraÃ±a",html:"&#x1F577;",fallback:"ðŸ•·"},
- {title:"Cangrejo",html:"&#x1F980;",fallback:"ðŸ¦€"},
- {title:"CamarÃ³n",html:"&#x1F990;",fallback:"ðŸ¦"},
- {title:"Calamar",html:"&#x1F991;",fallback:"ðŸ¦‘"},
- {title:"Dinosaurio",html:"&#x1F996;",fallback:"ðŸ¦–"},
- {title:"Manzana",html:"&#x1F34E;",fallback:"ðŸŽ"},
- {title:"Pera",html:"&#x1F350;",fallback:"ðŸ"},
- {title:"Naranja",html:"&#x1F34A;",fallback:"ðŸŠ"},
- {title:"LimÃ³n",html:"&#x1F34B;",fallback:"ðŸ‹"},
- {title:"PlÃ¡tano",html:"&#x1F34C;",fallback:"ðŸŒ"},
- {title:"SandÃ­a",html:"&#x1F349;",fallback:"ðŸ‰"},
- {title:"Uvas",html:"&#x1F347;",fallback:"ðŸ‡"},
- {title:"Fresa",html:"&#x1F353;",fallback:"ðŸ“"},
- {title:"MelÃ³n",html:"&#x1F348;",fallback:"ðŸˆ"},
- {title:"Cereza",html:"&#x1F352;",fallback:"ðŸ’"},
- {title:"PiÃ±a",html:"&#x1F34D;",fallback:"ðŸ"},
- {title:"Kiwi",html:"&#x1F95D;",fallback:"ðŸ¥"},
- {title:"Tomate",html:"&#x1F345;",fallback:"ðŸ…"},
- {title:"Aguacate",html:"&#x1F951;",fallback:"ðŸ¥‘"},
- {title:"Zanahoria",html:"&#x1F955;",fallback:"ðŸ¥•"},
- {title:"MaÃ­z",html:"&#x1F33D;",fallback:"ðŸŒ½"},
- {title:"Patata",html:"&#x1F954;",fallback:"ðŸ¥”"},
- {title:"Pan",html:"&#x1F35E;",fallback:"ðŸž"},
- {title:"Queso",html:"&#x1F9C0;",fallback:"ðŸ§€"},
- {title:"Huevo",html:"&#x1F95A;",fallback:"ðŸ¥š"},
- {title:"Bacon",html:"&#x1F953;",fallback:"ðŸ¥“"},
- {title:"Hamburguesa",html:"&#x1F354;",fallback:"ðŸ”"},
- {title:"Patatas fritas",html:"&#x1F35F;",fallback:"ðŸŸ"},
- {title:"Pizza",html:"&#x1F355;",fallback:"ðŸ•"},
- {title:"Hot dog",html:"&#x1F32D;",fallback:"ðŸŒ­"},
- {title:"Taco",html:"&#x1F32E;",fallback:"ðŸŒ®"},
- {title:"Burrito",html:"&#x1F32F;",fallback:"ðŸŒ¯"},
- {title:"Palomitas",html:"&#x1F37F;",fallback:"ðŸ¿"},
- {title:"Arroz",html:"&#x1F35A;",fallback:"ðŸš"},
- {title:"Sushi",html:"&#x1F363;",fallback:"ðŸ£"},
- {title:"Helado",html:"&#x1F366;",fallback:"ðŸ¦"},
- {title:"Tarta",html:"&#x1F370;",fallback:"ðŸ°"},
- {title:"Cupcake",html:"&#x1F9C1;",fallback:"ðŸ§"},
- {title:"Chocolate",html:"&#x1F36B;",fallback:"ðŸ«"},
- {title:"Caramelo",html:"&#x1F36C;",fallback:"ðŸ¬"},
- {title:"PirulÃ­",html:"&#x1F36D;",fallback:"ðŸ­"},
- {title:"Galleta",html:"&#x1F36A;",fallback:"ðŸª"},
- {title:"Leche",html:"&#x1F95B;",fallback:"ðŸ¥›"},
- {title:"CafÃ©",html:"&#x2615;&#xFE0F;",fallback:"â˜•ï¸"},
- {title:"TÃ©",html:"&#x1F375;",fallback:"ðŸµ"},
- {title:"FÃºtbol",html:"&#x26BD;&#xFE0F;",fallback:"âš½ï¸"},
- {title:"Baloncesto",html:"&#x1F3C0;",fallback:"ðŸ€"},
- {title:"FÃºtbol americano",html:"&#x1F3C8;",fallback:"ðŸˆ"},
- {title:"BÃ©isbol",html:"&#x26BE;&#xFE0F;",fallback:"âš¾ï¸"},
- {title:"Tenis",html:"&#x1F3BE;",fallback:"ðŸŽ¾"},
- {title:"Voleibol",html:"&#x1F3D0;",fallback:"ðŸ"},
- {title:"Rugby",html:"&#x1F3C9;",fallback:"ðŸ‰"},
- {title:"Billar",html:"&#x1F3B1;",fallback:"ðŸŽ±"},
- {title:"Ping pong",html:"&#x1F3D3;",fallback:"ðŸ“"},
- {title:"BÃ¡dminton",html:"&#x1F3F8;",fallback:"ðŸ¸"},
- {title:"Hockey",html:"&#x1F3D2;",fallback:"ðŸ’"},
- {title:"Cricket",html:"&#x1F3CF;",fallback:"ðŸ"},
- {title:"Golf",html:"&#x26F3;&#xFE0F;",fallback:"â›³ï¸"},
- {title:"Arco",html:"&#x1F3F9;",fallback:"ðŸ¹"},
- {title:"CaÃ±a pesca",html:"&#x1F3A3;",fallback:"ðŸŽ£"},
- {title:"PatÃ­n hielo",html:"&#x26F8;&#xFE0F;",fallback:"â›¸ï¸"},
- {title:"EsquÃ­",html:"&#x1F3BF;",fallback:"ðŸŽ¿"},
- {title:"Trineo",html:"&#x1F6F7;",fallback:"ðŸ›·"},
- {title:"Diana",html:"&#x1F3AF;",fallback:"ðŸŽ¯"},
- {title:"Dados",html:"&#x1F3B2;",fallback:"ðŸŽ²"},
- {title:"Ajedrez",html:"&#x265F;&#xFE0F;",fallback:"â™Ÿï¸"},
- {title:"Puzzle",html:"&#x1F9E9;",fallback:"ðŸ§©"},
- {title:"Bowling",html:"&#x1F3B3;",fallback:"ðŸŽ³"},
- {title:"Trompeta",html:"&#x1F3BA;",fallback:"ðŸŽº"},
- {title:"Guitarra",html:"&#x1F3B8;",fallback:"ðŸŽ¸"},
- {title:"Piano",html:"&#x1F3B9;",fallback:"ðŸŽ¹"},
- {title:"Tambor",html:"&#x1F941;",fallback:"ðŸ¥"},
- {title:"MicrÃ³fono",html:"&#x1F3A4;",fallback:"ðŸŽ¤"},
- {title:"Coche",html:"&#x1F697;",fallback:"ðŸš—"},
- {title:"Taxi",html:"&#x1F695;",fallback:"ðŸš•"},
- {title:"AutobÃºs",html:"&#x1F68C;",fallback:"ðŸšŒ"},
- {title:"CamiÃ³n",html:"&#x1F69A;",fallback:"ðŸšš"},
- {title:"Tractor",html:"&#x1F69C;",fallback:"ðŸšœ"},
- {title:"Moto",html:"&#x1F3CD;",fallback:"ðŸ"},
- {title:"Bici",html:"&#x1F6B2;",fallback:"ðŸš²"},
- {title:"Patinete",html:"&#x1F6F4;",fallback:"ðŸ›´"},
- {title:"Tren",html:"&#x1F686;",fallback:"ðŸš†"},
- {title:"TranvÃ­a",html:"&#x1F68A;",fallback:"ðŸšŠ"},
- {title:"Cohete",html:"&#x1F680;",fallback:"ðŸš€"},
- {title:"AviÃ³n",html:"&#x2708;&#xFE0F;",fallback:"âœˆï¸"},
- {title:"HelicÃ³ptero",html:"&#x1F681;",fallback:"ðŸš"},
- {title:"Barco",html:"&#x26F5;&#xFE0F;",fallback:"â›µï¸"},
- {title:"Ancla",html:"&#x2693;&#xFE0F;",fallback:"âš“ï¸"},
- {title:"Casa",html:"&#x1F3E0;",fallback:"ðŸ "},
- {title:"Castillo",html:"&#x1F3F0;",fallback:"ðŸ°"},
- {title:"Tienda",html:"&#x1F3EA;",fallback:"ðŸª"},
- {title:"Escuela",html:"&#x1F3EB;",fallback:"ðŸ«"},
- {title:"Hospital",html:"&#x1F3E5;",fallback:"ðŸ¥"},
- {title:"Banco",html:"&#x1F3E6;",fallback:"ðŸ¦"},
- {title:"FÃ¡brica",html:"&#x1F3ED;",fallback:"ðŸ­"},
- {title:"Rueda feria",html:"&#x1F3A1;",fallback:"ðŸŽ¡"},
- {title:"MontaÃ±a rusa",html:"&#x1F3A2;",fallback:"ðŸŽ¢"},
- {title:"Circo",html:"&#x1F3AA;",fallback:"ðŸŽª"},
- {title:"Sol",html:"&#x2600;&#xFE0F;",fallback:"â˜€ï¸"},
- {title:"Luna",html:"&#x1F319;",fallback:"ðŸŒ™"},
- {title:"Estrella",html:"&#x2B50;&#xFE0F;",fallback:"â­ï¸"},
- {title:"Rayo",html:"&#x26A1;&#xFE0F;",fallback:"âš¡ï¸"},
- {title:"Fuego",html:"&#x1F525;",fallback:"ðŸ”¥"},
- {title:"ArcoÃ­ris",html:"&#x1F308;",fallback:"ðŸŒˆ"},
- {title:"Nube",html:"&#x2601;&#xFE0F;",fallback:"â˜ï¸"},
- {title:"Nieve",html:"&#x2744;&#xFE0F;",fallback:"â„ï¸"},
- {title:"MuÃ±eco nieve",html:"&#x26C4;&#xFE0F;",fallback:"â›„ï¸"},
- {title:"Ola",html:"&#x1F30A;",fallback:"ðŸŒŠ"},
- {title:"Gota",html:"&#x1F4A7;",fallback:"ðŸ’§"},
- {title:"Flor",html:"&#x1F33C;",fallback:"ðŸŒ¼"},
- {title:"Rosa",html:"&#x1F339;",fallback:"ðŸŒ¹"},
- {title:"TulipÃ¡n",html:"&#x1F337;",fallback:"ðŸŒ·"},
- {title:"Ãrbol",html:"&#x1F333;",fallback:"ðŸŒ³"},
- {title:"Palmera",html:"&#x1F334;",fallback:"ðŸŒ´"},
- {title:"Cactus",html:"&#x1F335;",fallback:"ðŸŒµ"},
- {title:"Seta",html:"&#x1F344;",fallback:"ðŸ„"},
- {title:"Tierra",html:"&#x1F30D;",fallback:"ðŸŒ"},
- {title:"VolcÃ¡n",html:"&#x1F30B;",fallback:"ðŸŒ‹"},
- {title:"Bombilla",html:"&#x1F4A1;",fallback:"ðŸ’¡"},
- {title:"Linterna",html:"&#x1F526;",fallback:"ðŸ”¦"},
- {title:"Libro",html:"&#x1F4D8;",fallback:"ðŸ“˜"},
- {title:"Cuaderno",html:"&#x1F4D3;",fallback:"ðŸ““"},
- {title:"LÃ¡piz",html:"&#x270F;&#xFE0F;",fallback:"âœï¸"},
- {title:"Pincel",html:"&#x1F58C;",fallback:"ðŸ–Œ"},
- {title:"Tijeras",html:"&#x2702;&#xFE0F;",fallback:"âœ‚ï¸"},
- {title:"Regla",html:"&#x1F4CF;",fallback:"ðŸ“"},
- {title:"Mochila",html:"&#x1F392;",fallback:"ðŸŽ’"},
- {title:"Gafas sol",html:"&#x1F576;",fallback:"ðŸ•¶"},
- {title:"Corona",html:"&#x1F451;",fallback:"ðŸ‘‘"},
- {title:"Sombrero",html:"&#x1F3A9;",fallback:"ðŸŽ©"},
- {title:"Camiseta",html:"&#x1F455;",fallback:"ðŸ‘•"},
- {title:"Zapatilla",html:"&#x1F45F;",fallback:"ðŸ‘Ÿ"},
- {title:"Paraguas",html:"&#x2602;&#xFE0F;",fallback:"â˜‚ï¸"},
- {title:"Reloj",html:"&#x231A;&#xFE0F;",fallback:"âŒšï¸"},
- {title:"CÃ¡mara",html:"&#x1F4F7;",fallback:"ðŸ“·"},
- {title:"TelÃ©fono",html:"&#x1F4F1;",fallback:"ðŸ“±"},
- {title:"Ordenador",html:"&#x1F4BB;",fallback:"ðŸ’»"},
- {title:"Impresora",html:"&#x1F5A8;",fallback:"ðŸ–¨"},
- {title:"Radio",html:"&#x1F4FB;",fallback:"ðŸ“»"},
- {title:"TelevisiÃ³n",html:"&#x1F4FA;",fallback:"ðŸ“º"},
- {title:"Candado",html:"&#x1F512;",fallback:"ðŸ”’"},
- {title:"Llave",html:"&#x1F511;",fallback:"ðŸ”‘"},
- {title:"Martillo",html:"&#x1F528;",fallback:"ðŸ”¨"},
- {title:"Engranaje",html:"&#x2699;&#xFE0F;",fallback:"âš™ï¸"},
- {title:"ImÃ¡n",html:"&#x1F9F2;",fallback:"ðŸ§²"}
+ {title:"Cara feliz",html:"&#x1F600;",fallback:"😀"},
+ {title:"Sonrisa",html:"&#x1F603;",fallback:"😃"},
+ {title:"Risa",html:"&#x1F604;",fallback:"😄"},
+ {title:"Guiño",html:"&#x1F609;",fallback:"😉"},
+ {title:"Sonrojado",html:"&#x1F60A;",fallback:"😊"},
+ {title:"Carcajada",html:"&#x1F602;",fallback:"😂"},
+ {title:"Ojos corazón",html:"&#x1F60D;",fallback:"😍"},
+ {title:"Estrella ojos",html:"&#x1F929;",fallback:"🤩"},
+ {title:"Beso",html:"&#x1F618;",fallback:"😘"},
+ {title:"Lengua",html:"&#x1F61B;",fallback:"😛"},
+ {title:"Pensando",html:"&#x1F914;",fallback:"🤔"},
+ {title:"Silencio",html:"&#x1F92B;",fallback:"🤫"},
+ {title:"Dormido",html:"&#x1F634;",fallback:"😴"},
+ {title:"Sorpresa",html:"&#x1F62E;",fallback:"😮"},
+ {title:"Gafas",html:"&#x1F60E;",fallback:"😎"},
+ {title:"Fiesta",html:"&#x1F973;",fallback:"🥳"},
+ {title:"Llorando",html:"&#x1F622;",fallback:"😢"},
+ {title:"Enfadado",html:"&#x1F620;",fallback:"😠"},
+ {title:"Fantasma",html:"&#x1F47B;",fallback:"👻"},
+ {title:"Alien",html:"&#x1F47D;",fallback:"👽"},
+ {title:"Mono",html:"&#x1F435;",fallback:"🐵"},
+ {title:"Perro",html:"&#x1F436;",fallback:"🐶"},
+ {title:"Lobo",html:"&#x1F43A;",fallback:"🐺"},
+ {title:"Zorro",html:"&#x1F98A;",fallback:"🦊"},
+ {title:"Gato",html:"&#x1F431;",fallback:"🐱"},
+ {title:"León",html:"&#x1F981;",fallback:"🦁"},
+ {title:"Tigre",html:"&#x1F42F;",fallback:"🐯"},
+ {title:"Caballo",html:"&#x1F434;",fallback:"🐴"},
+ {title:"Unicornio",html:"&#x1F984;",fallback:"🦄"},
+ {title:"Vaca",html:"&#x1F42E;",fallback:"🐮"},
+ {title:"Cerdo",html:"&#x1F437;",fallback:"🐷"},
+ {title:"Ratón",html:"&#x1F42D;",fallback:"🐭"},
+ {title:"Hámster",html:"&#x1F439;",fallback:"🐹"},
+ {title:"Conejo",html:"&#x1F430;",fallback:"🐰"},
+ {title:"Oso",html:"&#x1F43B;",fallback:"🐻"},
+ {title:"Panda",html:"&#x1F43C;",fallback:"🐼"},
+ {title:"Koala",html:"&#x1F428;",fallback:"🐨"},
+ {title:"Pollo",html:"&#x1F414;",fallback:"🐔"},
+ {title:"Pingüino",html:"&#x1F427;",fallback:"🐧"},
+ {title:"Pájaro",html:"&#x1F426;",fallback:"🐦"},
+ {title:"Pollito",html:"&#x1F424;",fallback:"🐤"},
+ {title:"Rana",html:"&#x1F438;",fallback:"🐸"},
+ {title:"Cocodrilo",html:"&#x1F40A;",fallback:"🐊"},
+ {title:"Tortuga",html:"&#x1F422;",fallback:"🐢"},
+ {title:"Lagarto",html:"&#x1F98E;",fallback:"🦎"},
+ {title:"Serpiente",html:"&#x1F40D;",fallback:"🐍"},
+ {title:"Dragón",html:"&#x1F409;",fallback:"🐉"},
+ {title:"Ballena",html:"&#x1F433;",fallback:"🐳"},
+ {title:"Delfín",html:"&#x1F42C;",fallback:"🐬"},
+ {title:"Pez",html:"&#x1F41F;",fallback:"🐟"},
+ {title:"Pulpo",html:"&#x1F419;",fallback:"🐙"},
+ {title:"Mariposa",html:"&#x1F98B;",fallback:"🦋"},
+ {title:"Caracol",html:"&#x1F40C;",fallback:"🐌"},
+ {title:"Abeja",html:"&#x1F41D;",fallback:"🐝"},
+ {title:"Hormiga",html:"&#x1F41C;",fallback:"🐜"},
+ {title:"Araña",html:"&#x1F577;",fallback:"🕷"},
+ {title:"Cangrejo",html:"&#x1F980;",fallback:"🦀"},
+ {title:"Camarón",html:"&#x1F990;",fallback:"🦐"},
+ {title:"Calamar",html:"&#x1F991;",fallback:"🦑"},
+ {title:"Dinosaurio",html:"&#x1F996;",fallback:"🦖"},
+ {title:"Manzana",html:"&#x1F34E;",fallback:"🍎"},
+ {title:"Pera",html:"&#x1F350;",fallback:"🍐"},
+ {title:"Naranja",html:"&#x1F34A;",fallback:"🍊"},
+ {title:"Limón",html:"&#x1F34B;",fallback:"🍋"},
+ {title:"Plátano",html:"&#x1F34C;",fallback:"🍌"},
+ {title:"Sandía",html:"&#x1F349;",fallback:"🍉"},
+ {title:"Uvas",html:"&#x1F347;",fallback:"🍇"},
+ {title:"Fresa",html:"&#x1F353;",fallback:"🍓"},
+ {title:"Melón",html:"&#x1F348;",fallback:"🍈"},
+ {title:"Cereza",html:"&#x1F352;",fallback:"🍒"},
+ {title:"Piña",html:"&#x1F34D;",fallback:"🍍"},
+ {title:"Kiwi",html:"&#x1F95D;",fallback:"🥝"},
+ {title:"Tomate",html:"&#x1F345;",fallback:"🍅"},
+ {title:"Aguacate",html:"&#x1F951;",fallback:"🥑"},
+ {title:"Zanahoria",html:"&#x1F955;",fallback:"🥕"},
+ {title:"Maíz",html:"&#x1F33D;",fallback:"🌽"},
+ {title:"Patata",html:"&#x1F954;",fallback:"🥔"},
+ {title:"Pan",html:"&#x1F35E;",fallback:"🍞"},
+ {title:"Queso",html:"&#x1F9C0;",fallback:"🧀"},
+ {title:"Huevo",html:"&#x1F95A;",fallback:"🥚"},
+ {title:"Bacon",html:"&#x1F953;",fallback:"🥓"},
+ {title:"Hamburguesa",html:"&#x1F354;",fallback:"🍔"},
+ {title:"Patatas fritas",html:"&#x1F35F;",fallback:"🍟"},
+ {title:"Pizza",html:"&#x1F355;",fallback:"🍕"},
+ {title:"Hot dog",html:"&#x1F32D;",fallback:"🌭"},
+ {title:"Taco",html:"&#x1F32E;",fallback:"🌮"},
+ {title:"Burrito",html:"&#x1F32F;",fallback:"🌯"},
+ {title:"Palomitas",html:"&#x1F37F;",fallback:"🍿"},
+ {title:"Arroz",html:"&#x1F35A;",fallback:"🍚"},
+ {title:"Sushi",html:"&#x1F363;",fallback:"🍣"},
+ {title:"Helado",html:"&#x1F366;",fallback:"🍦"},
+ {title:"Tarta",html:"&#x1F370;",fallback:"🍰"},
+ {title:"Cupcake",html:"&#x1F9C1;",fallback:"🧁"},
+ {title:"Chocolate",html:"&#x1F36B;",fallback:"🍫"},
+ {title:"Caramelo",html:"&#x1F36C;",fallback:"🍬"},
+ {title:"Pirulí",html:"&#x1F36D;",fallback:"🍭"},
+ {title:"Galleta",html:"&#x1F36A;",fallback:"🍪"},
+ {title:"Leche",html:"&#x1F95B;",fallback:"🥛"},
+ {title:"Café",html:"&#x2615;&#xFE0F;",fallback:"☕️"},
+ {title:"Té",html:"&#x1F375;",fallback:"🍵"},
+ {title:"Fútbol",html:"&#x26BD;&#xFE0F;",fallback:"⚽️"},
+ {title:"Baloncesto",html:"&#x1F3C0;",fallback:"🏀"},
+ {title:"Fútbol americano",html:"&#x1F3C8;",fallback:"🏈"},
+ {title:"Béisbol",html:"&#x26BE;&#xFE0F;",fallback:"⚾️"},
+ {title:"Tenis",html:"&#x1F3BE;",fallback:"🎾"},
+ {title:"Voleibol",html:"&#x1F3D0;",fallback:"🏐"},
+ {title:"Rugby",html:"&#x1F3C9;",fallback:"🏉"},
+ {title:"Billar",html:"&#x1F3B1;",fallback:"🎱"},
+ {title:"Ping pong",html:"&#x1F3D3;",fallback:"🏓"},
+ {title:"Bádminton",html:"&#x1F3F8;",fallback:"🏸"},
+ {title:"Hockey",html:"&#x1F3D2;",fallback:"🏒"},
+ {title:"Cricket",html:"&#x1F3CF;",fallback:"🏏"},
+ {title:"Golf",html:"&#x26F3;&#xFE0F;",fallback:"⛳️"},
+ {title:"Arco",html:"&#x1F3F9;",fallback:"🏹"},
+ {title:"Caña pesca",html:"&#x1F3A3;",fallback:"🎣"},
+ {title:"Patín hielo",html:"&#x26F8;&#xFE0F;",fallback:"⛸️"},
+ {title:"Esquí",html:"&#x1F3BF;",fallback:"🎿"},
+ {title:"Trineo",html:"&#x1F6F7;",fallback:"🛷"},
+ {title:"Diana",html:"&#x1F3AF;",fallback:"🎯"},
+ {title:"Dados",html:"&#x1F3B2;",fallback:"🎲"},
+ {title:"Ajedrez",html:"&#x265F;&#xFE0F;",fallback:"♟️"},
+ {title:"Puzzle",html:"&#x1F9E9;",fallback:"🧩"},
+ {title:"Bowling",html:"&#x1F3B3;",fallback:"🎳"},
+ {title:"Trompeta",html:"&#x1F3BA;",fallback:"🎺"},
+ {title:"Guitarra",html:"&#x1F3B8;",fallback:"🎸"},
+ {title:"Piano",html:"&#x1F3B9;",fallback:"🎹"},
+ {title:"Tambor",html:"&#x1F941;",fallback:"🥁"},
+ {title:"Micrófono",html:"&#x1F3A4;",fallback:"🎤"},
+ {title:"Coche",html:"&#x1F697;",fallback:"🚗"},
+ {title:"Taxi",html:"&#x1F695;",fallback:"🚕"},
+ {title:"Autobús",html:"&#x1F68C;",fallback:"🚌"},
+ {title:"Camión",html:"&#x1F69A;",fallback:"🚚"},
+ {title:"Tractor",html:"&#x1F69C;",fallback:"🚜"},
+ {title:"Moto",html:"&#x1F3CD;",fallback:"🏍"},
+ {title:"Bici",html:"&#x1F6B2;",fallback:"🚲"},
+ {title:"Patinete",html:"&#x1F6F4;",fallback:"🛴"},
+ {title:"Tren",html:"&#x1F686;",fallback:"🚆"},
+ {title:"Tranvía",html:"&#x1F68A;",fallback:"🚊"},
+ {title:"Cohete",html:"&#x1F680;",fallback:"🚀"},
+ {title:"Avión",html:"&#x2708;&#xFE0F;",fallback:"✈️"},
+ {title:"Helicóptero",html:"&#x1F681;",fallback:"🚁"},
+ {title:"Barco",html:"&#x26F5;&#xFE0F;",fallback:"⛵️"},
+ {title:"Ancla",html:"&#x2693;&#xFE0F;",fallback:"⚓️"},
+ {title:"Casa",html:"&#x1F3E0;",fallback:"🏠"},
+ {title:"Castillo",html:"&#x1F3F0;",fallback:"🏰"},
+ {title:"Tienda",html:"&#x1F3EA;",fallback:"🏪"},
+ {title:"Escuela",html:"&#x1F3EB;",fallback:"🏫"},
+ {title:"Hospital",html:"&#x1F3E5;",fallback:"🏥"},
+ {title:"Banco",html:"&#x1F3E6;",fallback:"🏦"},
+ {title:"Fábrica",html:"&#x1F3ED;",fallback:"🏭"},
+ {title:"Rueda feria",html:"&#x1F3A1;",fallback:"🎡"},
+ {title:"Montaña rusa",html:"&#x1F3A2;",fallback:"🎢"},
+ {title:"Circo",html:"&#x1F3AA;",fallback:"🎪"},
+ {title:"Sol",html:"&#x2600;&#xFE0F;",fallback:"☀️"},
+ {title:"Luna",html:"&#x1F319;",fallback:"🌙"},
+ {title:"Estrella",html:"&#x2B50;&#xFE0F;",fallback:"⭐️"},
+ {title:"Rayo",html:"&#x26A1;&#xFE0F;",fallback:"⚡️"},
+ {title:"Fuego",html:"&#x1F525;",fallback:"🔥"},
+ {title:"Arcoíris",html:"&#x1F308;",fallback:"🌈"},
+ {title:"Nube",html:"&#x2601;&#xFE0F;",fallback:"☁️"},
+ {title:"Nieve",html:"&#x2744;&#xFE0F;",fallback:"❄️"},
+ {title:"Muñeco nieve",html:"&#x26C4;&#xFE0F;",fallback:"⛄️"},
+ {title:"Ola",html:"&#x1F30A;",fallback:"🌊"},
+ {title:"Gota",html:"&#x1F4A7;",fallback:"💧"},
+ {title:"Flor",html:"&#x1F33C;",fallback:"🌼"},
+ {title:"Rosa",html:"&#x1F339;",fallback:"🌹"},
+ {title:"Tulipán",html:"&#x1F337;",fallback:"🌷"},
+ {title:"Árbol",html:"&#x1F333;",fallback:"🌳"},
+ {title:"Palmera",html:"&#x1F334;",fallback:"🌴"},
+ {title:"Cactus",html:"&#x1F335;",fallback:"🌵"},
+ {title:"Seta",html:"&#x1F344;",fallback:"🍄"},
+ {title:"Tierra",html:"&#x1F30D;",fallback:"🌍"},
+ {title:"Volcán",html:"&#x1F30B;",fallback:"🌋"},
+ {title:"Bombilla",html:"&#x1F4A1;",fallback:"💡"},
+ {title:"Linterna",html:"&#x1F526;",fallback:"🔦"},
+ {title:"Libro",html:"&#x1F4D8;",fallback:"📘"},
+ {title:"Cuaderno",html:"&#x1F4D3;",fallback:"📓"},
+ {title:"Lápiz",html:"&#x270F;&#xFE0F;",fallback:"✏️"},
+ {title:"Pincel",html:"&#x1F58C;",fallback:"🖌"},
+ {title:"Tijeras",html:"&#x2702;&#xFE0F;",fallback:"✂️"},
+ {title:"Regla",html:"&#x1F4CF;",fallback:"📏"},
+ {title:"Mochila",html:"&#x1F392;",fallback:"🎒"},
+ {title:"Gafas sol",html:"&#x1F576;",fallback:"🕶"},
+ {title:"Corona",html:"&#x1F451;",fallback:"👑"},
+ {title:"Sombrero",html:"&#x1F3A9;",fallback:"🎩"},
+ {title:"Camiseta",html:"&#x1F455;",fallback:"👕"},
+ {title:"Zapatilla",html:"&#x1F45F;",fallback:"👟"},
+ {title:"Paraguas",html:"&#x2602;&#xFE0F;",fallback:"☂️"},
+ {title:"Reloj",html:"&#x231A;&#xFE0F;",fallback:"⌚️"},
+ {title:"Cámara",html:"&#x1F4F7;",fallback:"📷"},
+ {title:"Teléfono",html:"&#x1F4F1;",fallback:"📱"},
+ {title:"Ordenador",html:"&#x1F4BB;",fallback:"💻"},
+ {title:"Impresora",html:"&#x1F5A8;",fallback:"🖨"},
+ {title:"Radio",html:"&#x1F4FB;",fallback:"📻"},
+ {title:"Televisión",html:"&#x1F4FA;",fallback:"📺"},
+ {title:"Candado",html:"&#x1F512;",fallback:"🔒"},
+ {title:"Llave",html:"&#x1F511;",fallback:"🔑"},
+ {title:"Martillo",html:"&#x1F528;",fallback:"🔨"},
+ {title:"Engranaje",html:"&#x2699;&#xFE0F;",fallback:"⚙️"},
+ {title:"Imán",html:"&#x1F9F2;",fallback:"🧲"}
 ];
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const PARTS=['base','pole','beam','brace','rope','head','neck','bodyTop','bodyBottom','leftArm','rightArm','leftForearm','rightForearm','leftLeg','rightLeg'];
 let rawData=[...D], dataset=[], idx=0, mode='learn', filter='new', score={good:0,bad:0}, activeTarget='pastSimple', seen=new Set(), solutionPending=false;
 let hang={damage:4,lives:0,status:'playing'};
+let hangPromptMode='tricky';
 let learn={phase:'tricky', col:0, cells:{}, done:{}, activeKey:'tricky_baseForm'};
 let photo={on:true,blocks:1200,revealed:0,order:[],iconIdx:Math.floor(Math.random()*HIDDEN_ICONS.length),guessOpen:false,guessTries:3,guessSolved:false,streak:0,verbHits:0,choices:[],choicesKey:""};
 function esc(x){return String(x??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
@@ -823,7 +929,7 @@ function insert(ch){
  if(!dataset.length)return;
  if(mode==='learn') return learnInsert(ch);
  let it=cur(), s=it.state[activeTarget], i=nextBlank(s);
- if(i<0){showMsg('Ese recuadro ya estÃ¡ completo.');return}
+ if(i<0){showMsg('Ese recuadro ya está completo.');return}
  s.guessed[i]=ch;
  let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]);
  if(done){
@@ -832,7 +938,7 @@ function insert(ch){
    s.ok=ok;
    if(!it.meta.scored[activeTarget]){score[ok?'good':'bad']++;it.meta.scored[activeTarget]=true;}
    let hmsg=ok?hangSuccess():hangFail();
-   showMsg((hmsg?hmsg+' ':'')+(ok?'Bien. Pasamos a la siguiente.':'EstÃ¡ mal, pero pasamos a la siguiente.'));
+   showMsg((hmsg?hmsg+' ':'')+(ok?'Bien. Pasamos a la siguiente.':'Está mal, pero pasamos a la siguiente.'));
    activeTarget=activeTarget==='pastSimple'?'pastParticiple':'pastSimple';
    let bothComplete=it.state.pastSimple.ok!==null&&it.state.pastParticiple.ok!==null;
    if(bothComplete)setTimeout(nextVerb,750);
@@ -841,20 +947,47 @@ function insert(ch){
 }
 function del(){if(!dataset.length)return; if(mode==='learn') return learnDelete(); let s=cur().state[activeTarget], i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
 function setActiveTarget(t){activeTarget=t;render();focusInput()}
-function renderHang(){if(!dataset.length)return; let it=cur(); $('#baseWord').textContent=it.baseForm; renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); renderHangman()}
+function renderHang(){if(!dataset.length)return; let it=cur(); $('#baseWord').textContent=it.baseForm; renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); let blindBtn=$('#blindBtn'); if(blindBtn)blindBtn.textContent=hangPromptMode==='blind'?'Tricky':'Blind'; renderHangman()}
 function initHangmanParts(){let stage=$('#stage'); if(stage.querySelector('.part'))return; PARTS.forEach(p=>{let d=document.createElement('div');d.className='part '+p;d.dataset.part=p;stage.appendChild(d)}); $('#partsTotal').textContent=PARTS.length}
-function renderHangman(){initHangmanParts(); PARTS.forEach((p,i)=>{$(`[data-part="${p}"]`).classList.toggle('visible',i<hang.damage)}); $('#lives').textContent=hang.lives; $('#damage').textContent=hang.damage; let res=$('#result'); res.classList.toggle('show',hang.status!=='playing'); $('#resultTitle').textContent=hang.status==='won'?'GANASTE!':hang.status==='lost'?'PERDISTE!':''; $('#resultText').textContent=hang.status==='won'?'Has desmontado el ahorcado.':hang.status==='lost'?'Se completÃ³ el ahorcado.':''}
-function hangSuccess(){if(hang.status!=='playing')return ''; if(hang.damage>0) hang.damage--; else hang.lives++; if(hang.damage<=0){hang.damage=0;hang.status='won';return 'Â¡Ganaste!'} return 'Quitas una pieza.'}
+function renderHangman(){initHangmanParts(); PARTS.forEach((p,i)=>{$(`[data-part="${p}"]`).classList.toggle('visible',i<hang.damage)}); $('#lives').textContent=hang.lives; $('#damage').textContent=hang.damage; let res=$('#result'); res.classList.toggle('show',hang.status!=='playing'); $('#resultTitle').textContent=hang.status==='won'?'GANASTE!':hang.status==='lost'?'PERDISTE!':''; $('#resultText').textContent=hang.status==='won'?'Has desmontado el ahorcado.':hang.status==='lost'?'Se completó el ahorcado.':''}
+function hangSuccess(){if(hang.status!=='playing')return ''; if(hang.damage>0) hang.damage--; else hang.lives++; if(hang.damage<=0){hang.damage=0;hang.status='won';return '¡Ganaste!'} return 'Quitas una pieza.'}
 function hangFail(){if(hang.status!=='playing')return ''; if(hang.lives>0){hang.lives--;return 'Una vida te protege.'} hang.damage++; if(hang.damage>=PARTS.length){hang.damage=PARTS.length;hang.status='lost';return 'Ahorcado completo.'} return 'Aparece una pieza.'}
-function reveal(){if(mode!=='hang'||!dataset.length)return; let it=cur(); ['pastSimple','pastParticiple'].forEach(k=>{let s=it.state[k]; [...s.answer].forEach((ch,i)=>{if(s.pattern[i]==='_')s.guessed[i]=ch});s.ok=true}); solutionPending=true; $('#solutionOkBtn').style.display='inline-block'; render(); showMsg('SoluciÃ³n mostrada. Pulsa OK.')} 
-function restartVerb(){if(!dataset.length)return; resetItem(cur()); if(mode==='learn')resetLearn(false); activeTarget='pastSimple'; render(); showMsg('Reiniciado.')}
-function restartGame(){score={good:0,bad:0}; hang={damage:4,lives:0,status:'playing'}; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
+function reveal(){if(mode!=='hang'||!dataset.length)return; let it=cur(); ['pastSimple','pastParticiple'].forEach(k=>{let s=it.state[k]; [...s.answer].forEach((ch,i)=>{if(s.pattern[i]==='_')s.guessed[i]=ch});s.ok=true}); solutionPending=true; $('#solutionOkBtn').style.display='inline-block'; render(); showMsg('Solución mostrada. Pulsa OK.')} 
+function restartVerb(){if(!dataset.length)return; resetItem(cur()); hangPromptMode='tricky'; if(mode==='learn')resetLearn(false); activeTarget='pastSimple'; render(); showMsg('Reiniciado.')}
+function restartGame(){score={good:0,bad:0}; hang={damage:4,lives:0,status:'playing'}; hangPromptMode='tricky'; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
 function markSeen(){if(dataset.length)seen.add(keyOf(cur()))}
-function nextVerb(){if(!dataset.length)return; markSeen(); let ni=-1; for(let step=1;step<=dataset.length;step++){let c=(idx+step)%dataset.length;if(!seen.has(keyOf(dataset[c]))){ni=c;break}} if(ni<0){seen.clear();ni=(idx+1)%dataset.length} idx=ni; resetItem(cur()); resetLearn(false); activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render(); showMsg(mode==='learn'?'Nuevo verbo de aprendizaje.':'Nuevo verbo.')}
-function shuffleVerbs(){if(!dataset.length)return; let currentKey=keyOf(cur()); let unseen=dataset.filter(x=>!seen.has(keyOf(x))&&keyOf(x)!==currentKey); let seenItems=dataset.filter(x=>seen.has(keyOf(x))||keyOf(x)===currentKey); unseen.sort(()=>Math.random()-.5); seenItems.sort(()=>Math.random()-.5); dataset=[...unseen,...seenItems]; idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Mezclado sin repetir hasta agotar el conjunto.')}
+function nextVerb(){if(!dataset.length)return; markSeen(); let ni=-1; for(let step=1;step<=dataset.length;step++){let c=(idx+step)%dataset.length;if(!seen.has(keyOf(dataset[c]))){ni=c;break}} if(ni<0){seen.clear();ni=(idx+1)%dataset.length} idx=ni; resetItem(cur()); resetLearn(false); hangPromptMode='tricky'; activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render(); showMsg(mode==='learn'?'Nuevo verbo de aprendizaje.':'Nuevo verbo.')}
+function shuffleVerbs(){if(!dataset.length)return; let currentKey=keyOf(cur()); let unseen=dataset.filter(x=>!seen.has(keyOf(x))&&keyOf(x)!==currentKey); let seenItems=dataset.filter(x=>seen.has(keyOf(x))||keyOf(x)===currentKey); unseen.sort(()=>Math.random()-.5); seenItems.sort(()=>Math.random()-.5); dataset=[...unseen,...seenItems]; idx=0; dataset.forEach(resetItem); hangPromptMode='tricky'; resetLearn(); render(); showMsg('Mezclado sin repetir hasta agotar el conjunto.')}
+function setHangPromptMode(nextMode){if(!dataset.length)return; let it=cur(); let blind=nextMode==='blind'; ['pastSimple','pastParticiple'].forEach(k=>{let pattern=blind?blindPattern(it[k]):ensureBlank(it[k],k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); it.state[k]=makeState(it[k],pattern); it.meta.scored[k]=false}); hangPromptMode=nextMode; activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render()}
+function toggleHangPromptMode(){if(!dataset.length)return; if(mode!=='hang')setMode('hang'); let nextMode=hangPromptMode==='blind'?'tricky':'blind'; setHangPromptMode(nextMode); showMsg(nextMode==='blind'?'Blind: todas las letras estan ocultas.':'Tricky: vuelven las pistas.')}
 function resetLearn(resetPhoto=false){if(!dataset.length)return; let it=cur(); learn={phase:'tricky',col:0,cells:{},done:{},activeKey:'tricky_baseForm'}; ['baseForm','pastSimple','pastParticiple'].forEach(k=>{let ans=it[k]; let pat=k==='baseForm'?ensureBlank(ans,ans):ensureBlank(ans,k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); learn.cells['tricky_'+k]=makeState(ans,pat); learn.cells['blind_'+k]=makeState(ans,blindPattern(ans)); learn.done['tricky_'+k]=false; learn.done['blind_'+k]=false}); if(resetPhoto){resetPhotoProgress()}}
-function renderLearn(){if(!dataset.length)return; let it=cur(); let cols=['baseForm','pastSimple','pastParticiple']; let labels={baseForm:'Base Form',pastSimple:'Past Simple',pastParticiple:'Past Participle'}; let html='<div></div>'+cols.map(c=>`<div class="th">${labels[c]}</div>`).join(''); html+=`<div class="rlabel">Base Form</div>`+cols.map(c=>`<div class="cell ref"><div class="letters refLetters" id="learn_ref_${c}"></div></div>`).join(''); ['tricky','blind'].forEach(ph=>{html+=`<div class="rlabel ${ph}">${ph==='tricky'?'ðŸŸ© Tricky':'ðŸŸ¨ Blind'}</div>`; cols.forEach(c=>{let k=ph+'_'+c, locked=ph==='blind' && !cols.every(x=>learn.done['tricky_'+x]); let cls='cell editable '+(learn.activeKey===k?'active ':'')+(learn.done[k]?'good ':'')+(locked?'locked ':''); html+=`<div class="${cls}" data-key="${k}"><div class="letters" id="learn_${k}"></div></div>`})}); $('#learnTable').innerHTML=html; cols.forEach(c=>renderStaticLetters($('#learn_ref_'+c),it[c])); Object.entries(learn.cells).forEach(([k,s])=>renderLetters($('#learn_'+k),s)); $$('#learnTable .editable').forEach(el=>el.onclick=()=>{if(el.classList.contains('locked'))return; learn.activeKey=el.dataset.key; render(); focusInput()}); $('#hint').textContent=it.studyHint||'Mira la forma completa, completa Tricky y despuÃ©s escribe Blind de memoria.'; renderPhoto(); renderGuess()}
-function learnInsert(ch){let s=learn.cells[learn.activeKey]; if(!s)return; let i=nextBlank(s); if(i<0){showMsg('Esta celda ya estÃ¡ completa.');return} s.guessed[i]=ch; let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]); if(done){let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase(); let ok=guess===s.answer.toLowerCase(); s.ok=ok; if(ok){ if(!learn.done[learn.activeKey]){score.good++; learn.done[learn.activeKey]=true; let amount=registerPhotoHit(); revealProgress(amount);} moveNextLearnCell(); showMsg(photo.lastBoostMsg||'Bien. Se descubre un poco mÃ¡s.'); photo.lastBoostMsg=''; } else {score.bad++; photo.streak=0; showMsg('Casi. Borra y corrige.')} } render()}
+function renderLearn(){
+ if(!dataset.length)return;
+ let it=cur();
+ let cols=['baseForm','pastSimple','pastParticiple'];
+ let labels={baseForm:'Base Form',pastSimple:'Past Simple',pastParticiple:'Past Participle'};
+ let html='<div class="learn-stack">';
+ html+=`<div class="base-card learn-card learn-card-ref"><div class="label">Base Form</div><div class="learn-forms">`+cols.map(c=>`<div class="learn-form-box"><div class="th">${labels[c]}</div><div class="letters refLetters" id="learn_ref_${c}"></div></div>`).join('')+`</div></div>`;
+ ['tricky','blind'].forEach(ph=>{
+   let lockedRow=ph==='blind' && !cols.every(c=>learn.done['tricky_'+c]);
+   html+=`<div class="prompt learn-card learn-card-entry ${lockedRow?'locked ':''}"><div class="learn-forms">`;
+   cols.forEach(c=>{
+     let k=ph+'_'+c, locked=ph==='blind' && !cols.every(x=>learn.done['tricky_'+x]);
+     let cls='cell editable '+(learn.activeKey===k?'active ':'')+(learn.done[k]?'good ':'')+(locked?'locked ':'');
+     html+=`<div class="learn-form-box"><div class="${cls}" data-key="${k}"><div class="letters" id="learn_${k}"></div></div></div>`;
+   });
+   html+='</div></div>';
+ });
+ html+='</div>';
+ $('#learnTable').innerHTML=html;
+ cols.forEach(c=>renderStaticLetters($('#learn_ref_'+c),it[c]));
+ Object.entries(learn.cells).forEach(([k,s])=>renderLetters($('#learn_'+k),s));
+ $$('#learnTable .editable').forEach(el=>el.onclick=()=>{if(el.classList.contains('locked'))return; learn.activeKey=el.dataset.key; render(); focusInput()});
+ $('#hint').textContent=it.studyHint||'Mira la forma completa, completa Tricky y despues escribe Blind de memoria.';
+ renderPhoto();
+ renderGuess()
+}
+function learnInsert(ch){let s=learn.cells[learn.activeKey]; if(!s)return; let i=nextBlank(s); if(i<0){showMsg('Esta celda ya está completa.');return} s.guessed[i]=ch; let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]); if(done){let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase(); let ok=guess===s.answer.toLowerCase(); s.ok=ok; if(ok){ if(!learn.done[learn.activeKey]){score.good++; learn.done[learn.activeKey]=true; let amount=registerPhotoHit(); revealProgress(amount);} moveNextLearnCell(); showMsg(photo.lastBoostMsg||'Bien. Se descubre un poco más.'); photo.lastBoostMsg=''; } else {score.bad++; photo.streak=0; showMsg('Casi. Borra y corrige.')} } render()}
 function learnDelete(){let s=learn.cells[learn.activeKey]; if(!s)return; let i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
 function moveNextLearnCell(){let cols=['baseForm','pastSimple','pastParticiple']; let keys=[...cols.map(c=>'tricky_'+c),...cols.map(c=>'blind_'+c)]; let i=keys.indexOf(learn.activeKey); for(let j=i+1;j<keys.length;j++){if(!learn.done[keys[j]] && !(keys[j].startsWith('blind')&&!cols.every(c=>learn.done['tricky_'+c]))){learn.activeKey=keys[j];return}} if(keys.every(k=>learn.done[k])) setTimeout(nextVerb,650)}
 function photoObj(){return HIDDEN_ICONS[photo.iconIdx%HIDDEN_ICONS.length]}
@@ -866,10 +999,10 @@ function chooseNewIcon(){
  photo.iconIdx=next;
 }
 
-function gridForTarget(){let tiles=photo.blocks||1200; if(tiles===600)return {cols:30,rows:20,tiles}; if(tiles===1200)return {cols:40,rows:30,tiles}; return {cols:60,rows:30,tiles}}
+function gridForTarget(){let tiles=photo.blocks||1200; if(tiles===300)return {cols:20,rows:15,tiles}; if(tiles===600)return {cols:30,rows:20,tiles}; if(tiles===1200)return {cols:40,rows:30,tiles}; return {cols:60,rows:30,tiles}}
 function resetPhotoProgress(newIcon=false){photo.revealed=0;photo.order=[];photo.guessOpen=false;photo.guessTries=3;photo.guessSolved=false;photo.streak=0;photo.verbHits=0;photo.lastBoostMsg="";photo.choices=[];photo.choicesKey="";if(newIcon)chooseNewIcon()}
 function ensurePhotoOrder(total){if(photo.order&&photo.order.length===total)return; photo.order=[...Array(total).keys()]; for(let i=photo.order.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[photo.order[i],photo.order[j]]=[photo.order[j],photo.order[i]]}}
-function registerPhotoHit(){if(!photo.on||photo.guessSolved)return 0; photo.streak=(photo.streak||0)+1; photo.verbHits=(photo.verbHits||0)+1; let amount=2; let boosts=[]; if(photo.verbHits%6===0){amount+=5;boosts.push('Perfect Verb +5')} if(photo.streak>0&&photo.streak%9===0){amount+=8;boosts.push('Racha +8')} photo.lastBoostMsg=boosts.length?`Â¡Boost! ${boosts.join(' Â· ')}. Se descubren ${amount} bloques.`:'Bien. Se descubren 2 bloques.'; return amount}
+function registerPhotoHit(){if(!photo.on||photo.guessSolved)return 0; photo.streak=(photo.streak||0)+1; photo.verbHits=(photo.verbHits||0)+1; let amount=2; let boosts=[]; if(photo.verbHits%6===0){amount+=5;boosts.push('Perfect Verb +5')} if(photo.streak>0&&photo.streak%9===0){amount+=8;boosts.push('Racha +8')} photo.lastBoostMsg=boosts.length?`¡Boost! ${boosts.join(' · ')}. Se descubren ${amount} bloques.`:'Bien. Se descubren 2 bloques.'; return amount}
 function renderPhoto(){
  const card=$('#photoCard');
  card.classList.toggle('off',!photo.on);
@@ -879,12 +1012,20 @@ function renderPhoto(){
  ensurePhotoOrder(g.tiles);
  const frame=$('#photoFrame');
  const img=$('#photoImage');
- const glyph=$('#iconGlyph');
+ let glyph=$('#iconGlyph');
  const mask=$('#photoMask');
  if(frame) frame.setAttribute('data-icon-title',photoTitle(p));
  if(img) img.setAttribute('aria-label',photoTitle(p));
+ if(img && !glyph){
+   glyph=document.createElement('span');
+   glyph.id='iconGlyph';
+   glyph.className='icon-glyph';
+   glyph.setAttribute('aria-hidden','true');
+   img.appendChild(glyph);
+ }
  if(glyph){
    glyph.innerHTML=p.html||esc(p.fallback||'?');
+   if(!glyph.textContent.trim()) glyph.textContent=p.fallback||'?';
    glyph.setAttribute('data-fallback',p.fallback||'?');
    glyph.setAttribute('title',photoTitle(p));
  }
@@ -901,7 +1042,7 @@ function renderPhoto(){
  }
  mask.appendChild(frag);
  $('#photoCaption').classList.toggle('done',revealed>=g.tiles);
- $('#photoCaption').innerHTML=revealed>=g.tiles?`Icono descubierto: <strong>${esc(photoTitle(p))}</strong>`:`Icono oculto Â· ${revealed}/${g.tiles} bloques`;
+ $('#photoCaption').innerHTML=revealed>=g.tiles?`Icono descubierto: <strong>${esc(photoTitle(p))}</strong>`:`Icono oculto · ${revealed}/${g.tiles} bloques`;
 }
 function revealProgress(amount=2){if(!photo.on)return; let g=gridForTarget(); ensurePhotoOrder(g.tiles); photo.revealed=Math.min(g.tiles,(photo.revealed||0)+Math.max(0,amount||0)); if(photo.revealed>=g.tiles && !photo.guessSolved){showMsg('Icono descubierto. Pulsa Guess cuando quieras responder.')}}
 function buildChoices(){
@@ -914,7 +1055,7 @@ function buildChoices(){
  photo.choicesKey=key;
  return photo.choices;
 }
-function renderGuess(){let panel=$('#guessPanel'); panel.classList.toggle('show',photo.guessOpen&&photo.on); $('#guessBtn').classList.toggle('active',photo.guessOpen); $('#hearts').textContent='â¤ï¸'.repeat(photo.guessTries)+'ðŸ–¤'.repeat(Math.max(0,3-photo.guessTries)); if(!photo.guessOpen)return; let choices=buildChoices(); $('#choices').innerHTML=''; choices.forEach(ch=>{let b=document.createElement('button');b.className='choice';b.textContent=ch;b.onclick=()=>guess(ch,b);$('#choices').appendChild(b)})}
+function renderGuess(){let panel=$('#guessPanel'); panel.classList.toggle('show',photo.guessOpen&&photo.on); $('#guessBtn').classList.toggle('active',photo.guessOpen); $('#hearts').textContent='❤️'.repeat(photo.guessTries)+'🖤'.repeat(Math.max(0,3-photo.guessTries)); if(!photo.guessOpen)return; let choices=buildChoices(); $('#choices').innerHTML=''; choices.forEach(ch=>{let b=document.createElement('button');b.className='choice';b.textContent=ch;b.onclick=()=>guess(ch,b);$('#choices').appendChild(b)})}
 function guess(ch,b){
  let correct=photoTitle(),ok=ch.toLowerCase()===correct.toLowerCase();
  photo.guessOpen=false;
@@ -925,7 +1066,7 @@ function guess(ch,b){
    score.good++;
    celebrate();
    renderPhoto();
-   showMsg('Â¡Correcto! Empieza un nuevo icono.');
+   showMsg('¡Correcto! Empieza un nuevo icono.');
    setTimeout(()=>{resetPhotoProgress(true);render()},650);
  }else{
    score.bad++;
@@ -938,8 +1079,8 @@ function celebrate(){let c=$('#confetti'); c.innerHTML=''; let colors=['#4f8cff'
 function render(){updateStats(); if(mode==='hang')renderHang(); else renderLearn(); focusInput()}
 function exportJson(){let blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'}); let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='irregular_verbs_lucyago.json';a.click();URL.revokeObjectURL(a.href)}
 function importFile(file){let r=new FileReader(); r.onload=e=>{try{if(file.name.endsWith('.json')) rawData=JSON.parse(e.target.result); else {let wb=XLSX.read(e.target.result,{type:'binary'}), ws=wb.Sheets[wb.SheetNames[0]], rows=XLSX.utils.sheet_to_json(ws,{defval:''}); rawData=rows.map(x=>({baseForm:x.baseForm||x.Base||x['Base Form']||x.base||'',pastSimple:x.pastSimple||x['Past Simple']||x.Past||'',pastSimplePattern:x.pastSimplePattern||x['Past Simple Pattern']||'',pastParticiple:x.pastParticiple||x['Past Participle']||x.Participle||'',pastParticiplePattern:x.pastParticiplePattern||x['Past Participle Pattern']||'',studyHint:x.studyHint||x.Hint||'',isNew:x.isNew||x.Status||''}))} rebuild();render();showMsg('Conjunto importado.')}catch(err){showMsg('No he podido importar el archivo.')}}; if(file.name.endsWith('.json'))r.readAsText(file);else r.readAsBinaryString(file)}
-$('#learnBtn').onclick=()=>setMode('learn'); $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#solutionOkBtn').onclick=()=>{solutionPending=false;$('#solutionOkBtn').style.display='none';nextVerb()}; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Iconos sÃ­':'Iconos no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $('#blocksBtn').onclick=()=>{
-  const levels=[600,1200,1800];
+$('#learnBtn').onclick=()=>setMode('learn'); $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#blindBtn').onclick=toggleHangPromptMode; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#solutionOkBtn').onclick=()=>{solutionPending=false;$('#solutionOkBtn').style.display='none';nextVerb()}; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='../index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Iconos sí':'Iconos no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $('#blocksBtn').onclick=()=>{
+  const levels=[300,600,1200,1800];
   const current=levels.indexOf(photo.blocks);
   photo.blocks=levels[(current+1)%levels.length];
   $('#blocksBtn').textContent=photo.blocks+' bloques';
@@ -967,5 +1108,6 @@ render();
 </script>
 </body>
 </html>
+
 
 
