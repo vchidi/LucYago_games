@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -426,7 +426,7 @@ const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time
 const START_LIVES=5;
 let WIN_TARGET=15;
 let QUESTION_SECONDS=30;
-const WIN_TARGET_OPTIONS=[15,20,25];
+const WIN_TARGET_OPTIONS=[15,20,25,30];
 const QUESTION_SECONDS_OPTIONS=[30,5,10,15];
 const OPERATION_OPTIONS=["multiply","divide","mixed"];
 const GOOD_ITEMS=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","crab","plant","plant_tall","seaweed","rock","stone","shell","coral","pearl","starfish"];
@@ -525,8 +525,8 @@ function waterGradient(){if(aquarium.status==="lost")return"linear-gradient(180d
 function rewardAquariumCleanup(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const canCleanWater=(aquarium.dirt||0)>0;const canRemoveBad=(aquarium.badItems||[]).length>0;if(!canCleanWater&&!canRemoveBad)return;const removeBad=canRemoveBad&&(!canCleanWater||Math.random()<.5);if(removeBad){aquarium.badItems.splice(0,1);aquarium.lastEvent="Has acertado: desaparece un animal gris."}else{aquarium.dirt=Math.max(0,(aquarium.dirt||0)-rand(1,2));aquarium.lastEvent="Has acertado: el agua se limpia un poco."}}
 function aquariumReadyToWin(){return aquarium.progress>=WIN_TARGET&&session.finalReviewDone}
 function updateAquariumWinState(){if(state.aquariumEnabled&&aquarium.status==="playing"&&aquariumReadyToWin()){completeFinalWin()}}
-function aquariumProgressBar(){const filled=Math.min(WIN_TARGET,aquarium.progress||0);const empty=Math.max(0,WIN_TARGET-filled);let bar=(filled>0?"🐠".repeat(filled):"🐠")+"░".repeat(empty);if(filled>=WIN_TARGET&&session.finalReviewMode)bar+=" ";if(aquarium.status==="won")bar+=" 🐬";return bar}
-function renderWinProgress(){const el=$("#winProgressBar"),box=$("#winProgressBox");if(!el||!box)return;box.style.display=state.aquariumEnabled?"flex":"none";const filled=Math.min(WIN_TARGET,Math.max(0,aquarium.progress||0));const empty=Math.max(0,WIN_TARGET-filled);let txt=(filled>0?"🐠".repeat(filled):"🐠")+"░".repeat(empty);if(filled>=WIN_TARGET&&session.finalReviewMode)txt+=" ";if(filled>=WIN_TARGET&&!session.finalReviewDone&&session.mistakesThisRun.length)txt+=" ❓";if(aquarium.status==="won")txt="🏆 "+txt+" 🐬";el.textContent=txt}
+function aquariumProgressBar(){const filled=Math.min(WIN_TARGET,aquarium.progress||0);const empty=Math.max(0,WIN_TARGET-filled);let bar="🐠".repeat(filled)+"░".repeat(empty);if(filled>=WIN_TARGET&&session.finalReviewMode)bar+=" ";if(aquarium.status==="won")bar+=" 🐬";return bar}
+function renderWinProgress(){const el=$("#winProgressBar"),box=$("#winProgressBox");if(!el||!box)return;box.style.display=state.aquariumEnabled?"flex":"none";const filled=Math.min(WIN_TARGET,Math.max(0,aquarium.progress||0));const empty=Math.max(0,WIN_TARGET-filled);let txt="🐠".repeat(filled)+"░".repeat(empty);if(filled>=WIN_TARGET&&session.finalReviewMode)txt+=" ";if(filled>=WIN_TARGET&&!session.finalReviewDone&&session.mistakesThisRun.length)txt+=" ❓";if(aquarium.status==="won")txt="🏆 "+txt+" 🐬";el.textContent=txt}
 function uniqueQuestions(list){const seen=new Set();const out=[];(list||[]).forEach(item=>{const q=normalizeQuestion(item);const key=questionKey(q);if(!seen.has(key)){seen.add(key);out.push(q)}});return out}
 function rememberSessionMistake(question){const q=normalizeQuestion(question);const key=questionKey(q);if(!session.mistakesThisRun.some(item=>questionKey(item)===key))session.mistakesThisRun.push(q)}
 function addFinalWinnerFish(){if(aquarium.finalFishAdded)return;const finalFish=makeAquariumItem("winner_fish");finalFish.size=112;finalFish.x=88;finalFish.y=34;aquarium.goodItems.push(finalFish);aquarium.finalFishAdded=true}
@@ -605,7 +605,7 @@ $("#difficultBtn").addEventListener("click",()=>setSourceMode("difficult"));
 $("#editDifficultBtn").addEventListener("click",toggleDifficultEditor);
 $("#checkBtn").addEventListener("click",checkAnswer);
 $("#skipBtn").addEventListener("click",skipQuestion);
-$("#resetBtn").addEventListener("click",resetSession);
+$("#resetBtn").addEventListener("click",()=>{if(window.confirm("Seguro que quieres volver a empezar?"))resetSession()});
 $("#deleteBtn").addEventListener("click",deleteDigit);
 $("#okPadBtn").addEventListener("click",checkAnswer);
 $("#continueBtn").addEventListener("click",acknowledgeCorrect);
@@ -643,7 +643,7 @@ window.addEventListener("load",()=>{render();setMode(state.mode);setMessage("Par
 
 <style id="valentina-math-ipad-final-css">
 html,body{height:var(--ios-vh,100dvh);min-height:var(--ios-vh,100dvh);overscroll-behavior:none;-webkit-text-size-adjust:100%;}
-@media (pointer:coarse) and (orientation:landscape){.app{height:var(--ios-vh,100dvh)!important;overflow:hidden!important;padding:6px!important}.hero{padding:8px!important}.title-wrap h1{font-size:28px!important}.subtitle{display:none!important}.toolbar{margin-top:7px!important;gap:5px!important}.mode-btn,.action-btn,.tiny-btn{padding:7px 9px!important;font-size:11px!important}.layout{height:calc(var(--ios-vh,100dvh) - 84px)!important;grid-template-columns:minmax(0,.95fr) minmax(300px,.75fr)!important;gap:8px!important;margin-top:6px!important;overflow:hidden!important}.card,.table-panel{padding:8px!important;border-radius:18px!important;min-height:0!important;overflow:hidden!important}.score-grid{gap:5px!important}.score-card{padding:6px 8px!important}.score-value{font-size:18px!important}.question-stage{margin-top:6px!important;padding:10px!important}.question{font-size:54px!important}.answer-value{font-size:48px!important}.controls{margin-top:6px!important}.answer-pad-shell{margin-top:6px!important;padding:6px!important}.answer-pad{gap:5px!important}.answer-pad .pad-btn{min-height:36px!important;font-size:18px!important}.aquarium-card{margin-top:6px!important;padding:8px!important}.aquarium-tank{min-height:230px!important;padding:8px!important;display:flex!important;flex-direction:column!important}.aquarium-stage{flex:1 1 auto!important;height:auto!important;min-height:210px!important}.table-grid{max-height:calc(var(--ios-vh,100dvh) - 210px)!important;overflow:auto!important}}
+@media (pointer:coarse) and (orientation:landscape){.app{height:var(--ios-vh,100dvh)!important;overflow:hidden!important;padding:6px!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(290px,.72fr)!important;grid-template-rows:auto minmax(0,1fr)!important;gap:8px!important;max-width:1180px!important}.hero{grid-column:1/-1!important;padding:8px!important}.title-wrap h1{font-size:28px!important}.subtitle{display:none!important}.toolbar{margin-top:7px!important;gap:5px!important}.mode-btn,.action-btn,.tiny-btn{padding:7px 9px!important;font-size:11px!important}.layout{grid-column:1!important;grid-row:2!important;height:auto!important;min-height:0!important;display:grid!important;grid-template-columns:1fr!important;gap:0!important;margin-top:0!important;overflow:hidden!important}.card,.table-panel{padding:8px!important;border-radius:18px!important;min-height:0!important;overflow:hidden!important}.table-panel{display:none!important}.score-grid{gap:5px!important}.score-card{padding:6px 8px!important}.score-value{font-size:18px!important}.question-stage{margin-top:6px!important;padding:10px!important}.question{font-size:54px!important}.answer-value{font-size:48px!important}.controls{margin-top:6px!important}.answer-pad-shell{margin-top:6px!important;padding:6px!important}.answer-pad{gap:5px!important}.answer-pad .pad-btn{min-height:36px!important;font-size:18px!important}.aquarium-card{grid-column:2!important;grid-row:2!important;display:flex!important;flex-direction:column!important;min-height:0!important;margin-top:0!important;padding:8px!important;border-radius:18px!important;overflow:hidden!important}.aquarium-tank{flex:1 1 auto!important;min-height:0!important;margin-top:5px!important;padding:8px!important;display:flex!important;flex-direction:column!important}.aquarium-stage{flex:1 1 auto!important;height:auto!important;min-height:210px!important}.table-grid{max-height:calc(var(--ios-vh,100dvh) - 210px)!important;overflow:auto!important}}
 @media (pointer:coarse) and (orientation:portrait){html,body{overflow:auto!important}.app{height:auto!important;min-height:var(--ios-vh,100dvh)!important}.layout{grid-template-columns:1fr!important}.table-panel{display:none}.table-panel.open{display:block}}
 
 .question-stage.final-review{
