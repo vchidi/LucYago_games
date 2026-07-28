@@ -1,725 +1,1118 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#ff7b2c">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Multiplicaciones">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Multiplicaciones</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4f8cff">
+<title>Irregular Verbs v2.0 · LucYago</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
-  --bg-1:#fff3d8;--bg-2:#dff2ff;--surface:rgba(255,255,255,.82);--ink:#21314c;--muted:#66738e;
-  --orange:#ff7b2c;--orange-deep:#df5b12;--blue:#3772ff;--blue-deep:#2548d8;--green:#22b56f;
-  --red:#e25555;--red-deep:#b92e2e;--shadow:0 24px 60px rgba(26,45,78,.16);--shadow-soft:0 12px 26px rgba(26,45,78,.12)
+  --blue:#4f8cff;--blue2:#7c5cff;--ink:#172033;--muted:#667085;--green:#25c96f;--red:#ef4444;--orange:#ff9f43;--yellow:#ffd34f;--teal:#10b7c4;--pink:#ff6fb5;--panel:#ffffffee;--line:rgba(79,140,255,.14);--shadow:0 14px 32px rgba(31,42,68,.13);
+  --safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom);
 }
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;touch-action:manipulation}
-body{
-  font-family:"Trebuchet MS","Avenir Next","Segoe UI",sans-serif;color:var(--ink);
+*{box-sizing:border-box} html,body{margin:0;height:100%;overflow:hidden} body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:radial-gradient(circle at 12% 6%,rgba(255,211,79,.45),transparent 24%),radial-gradient(circle at 90% 20%,rgba(255,111,181,.26),transparent 24%),linear-gradient(135deg,#fff3c7,#dff7ff 55%,#ffe7f4);-webkit-font-smoothing:antialiased;touch-action:manipulation}.app{height:100dvh;display:flex;flex-direction:column;padding:calc(6px + var(--safe-top)) 8px calc(6px + var(--safe-bottom));gap:6px;max-width:1220px;margin:0 auto}.top{background:var(--panel);border:2px solid rgba(255,255,255,.72);border-radius:20px;box-shadow:var(--shadow);padding:7px 9px;display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}.brand{display:flex;align-items:center;gap:9px;white-space:nowrap}.brand h1{font-size:clamp(20px,2.7vw,34px);line-height:1;margin:0;font-weight:950;letter-spacing:-.04em;background:linear-gradient(90deg,#172033,#4f8cff,#7c5cff);-webkit-background-clip:text;background-clip:text;color:transparent}.brand .star{font-size:24px;filter:drop-shadow(0 4px 8px rgba(255,159,67,.28))}.meta{display:flex;gap:5px;justify-content:flex-end;align-items:center;min-width:0}.stat{background:linear-gradient(180deg,#fff,#f6f9ff);border-radius:13px;padding:4px 7px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07);min-width:64px;text-align:center}.stat .lab{font-size:8px;color:var(--muted);font-weight:800}.stat .val{font-size:12px;color:#1e3a8a;font-weight:950;margin-top:1px}.home{min-width:34px;height:31px;border-radius:12px!important;padding:0!important}.nav{grid-column:1/-1;display:flex;align-items:center;gap:6px;min-width:0}.nav .gap{width:34px;flex:0 0 34px}.btn{border:0;border-radius:999px;background:#fff;color:var(--ink);box-shadow:0 8px 16px rgba(31,42,68,.09),inset 0 0 0 1px rgba(79,140,255,.10);font-weight:900;font-size:12px;padding:8px 11px;cursor:pointer;white-space:nowrap;transition:transform .12s ease,filter .12s ease}.btn:active{transform:scale(.96)}.btn.active{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 10px 20px rgba(79,140,255,.30)}.btn.good{background:linear-gradient(135deg,#dffbe9,#9cf2bd);color:#0b6230}.btn.warn{background:linear-gradient(135deg,#fff4c4,#ffd34f);color:#6b4b00}.btn.bad{background:linear-gradient(135deg,#ffe2dc,#ffb4a8);color:#872214}.main{flex:1;min-height:0;background:var(--panel);border:2px solid rgba(255,255,255,.72);border-radius:22px;box-shadow:var(--shadow);padding:8px;display:flex;flex-direction:column;position:relative;overflow:hidden}.view{display:none;min-height:0;height:100%}.view.active{display:flex}.message{background:linear-gradient(135deg,#fff7d6,#fff);border:1px solid rgba(255,211,79,.5);border-radius:14px;padding:7px 10px;font-size:12px;font-weight:800;color:#6b4b00;min-height:32px;display:flex;align-items:center}.message:before{content:"💬";margin-right:6px}.hidden-input{position:fixed;left:1px;top:1px;width:2px;height:2px;opacity:.01;border:0;background:transparent;color:transparent}
+/* Hangman */
+.hangman-layout{display:grid;grid-template-columns:minmax(350px,1fr) minmax(300px,.95fr);gap:8px;height:100%;min-height:0}.hang-left,.hang-right{min-height:0;display:flex;flex-direction:column;gap:7px}.actions{display:flex;gap:6px;flex-wrap:nowrap}.actions .btn{font-size:11px;padding:7px 10px}.base-card{border-radius:18px;background:linear-gradient(135deg,#f7fbff,#fff7df);box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);padding:8px;text-align:center}.label{font-size:10px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.04em}.base-word{font-size:clamp(30px,5vw,52px);font-weight:950;line-height:1.18;letter-spacing:-.03em;background:linear-gradient(90deg,#172033,#4f8cff);-webkit-background-clip:text;background-clip:text;color:transparent}.prompt{border-radius:18px;background:linear-gradient(135deg,#fff,#f7fbff);border:2px solid rgba(79,140,255,.11);box-shadow:0 7px 16px rgba(31,42,68,.06);padding:8px}.prompt.active{border-color:var(--blue);box-shadow:0 12px 24px rgba(79,140,255,.16)}.prompt.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);border-color:#60d78a}.prompt.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);border-color:#f2a39a}.rowtop{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:3px}.rowtitle{font-size:13px;font-weight:950}.pill{font-size:10px;font-weight:900;color:#475467;background:#eef2ff;border-radius:999px;padding:4px 8px;min-width:62px;text-align:center}.letters{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1px;min-height:36px}.char{font-size:clamp(24px,4.2vw,40px);font-weight:950;line-height:1.16;padding:0 1px}.char.fixed{color:#344054}.char.blank{color:#ffb300;min-width:.54em;text-align:center}.char.filled{color:#172033}.stage-card{flex:1;min-height:0;background:linear-gradient(135deg,#fff8e1,#f1fbff 50%,#fff0f7);border:2px solid rgba(79,140,255,.13);border-radius:20px;padding:9px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.9)}.stage-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.stage-title{font-weight:950;color:#364152}.stage-title:before{content:"🪄 "}.stage-stats{display:flex;gap:6px}.mini{background:#fff;border-radius:13px;padding:5px 8px;min-width:74px;text-align:center;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07)}.mini span{display:block;font-size:8px;color:var(--muted);font-weight:850}.mini b{font-size:13px;color:#1e3a8a}.stage{position:relative;height:100%;min-height:190px;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 18% 15%,#fff,transparent 25%),radial-gradient(circle at 84% 17%,rgba(255,211,79,.34),transparent 23%),linear-gradient(180deg,#dff7ff 0%,#f8fbff 62%,#fff5d6 100%);border:2px solid rgba(255,255,255,.75)}.part{position:absolute;opacity:.12;transition:opacity .25s,transform .25s;filter:drop-shadow(0 6px 10px rgba(31,42,68,.16));border-radius:999px}.part.visible{opacity:1}.part.base{left:32px;bottom:28px;width:125px;height:10px;background:#a66a34}.part.pole{left:72px;bottom:35px;width:12px;height:170px;background:#b9783b}.part.beam{left:72px;top:32px;width:145px;height:10px;background:#bd7a3f}.part.brace{left:82px;top:62px;width:74px;height:8px;background:#d39351;transform:rotate(-40deg);transform-origin:left center}.part.rope{left:207px;top:42px;width:7px;height:35px;background:#f2aa21}.part.head{left:184px;top:76px;width:52px;height:52px;border:6px solid var(--pink);background:#ffffff44}.part.neck{left:206px;top:127px;width:9px;height:13px;background:#ff6fb5}.part.bodyTop{left:206px;top:139px;width:9px;height:40px;background:var(--teal)}.part.bodyBottom{left:206px;top:177px;width:9px;height:36px;background:#1786c6}.part.leftArm{left:166px;top:155px;width:44px;height:7px;background:#4f8cff;transform:rotate(-34deg)}.part.rightArm{left:209px;top:155px;width:44px;height:7px;background:#4f8cff;transform:rotate(34deg)}.part.leftForearm{left:153px;top:177px;width:35px;height:7px;background:#7bb8ff;transform:rotate(22deg)}.part.rightForearm{left:232px;top:177px;width:35px;height:7px;background:#7bb8ff;transform:rotate(-22deg)}.part.leftLeg{left:171px;top:214px;width:48px;height:7px;background:#28a745;transform:rotate(40deg)}.part.rightLeg{left:203px;top:214px;width:48px;height:7px;background:#28a745;transform:rotate(-40deg)}.result{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;opacity:0;pointer-events:none;transform:scale(.94);transition:.25s}.result.show{opacity:1;transform:scale(1)}.result-card{border-radius:22px;padding:18px 24px;font-weight:950;background:#fff;box-shadow:0 18px 34px rgba(31,42,68,.2)}.tools{display:flex;gap:6px;flex-wrap:wrap}.tools .btn{font-size:11px;padding:7px 10px}
+/* Learning */
+.learn-layout{display:grid;grid-template-columns:minmax(440px,1.15fr) minmax(300px,.85fr);gap:8px;height:100%;min-height:0}.learn-left,.learn-right{min-height:0;display:flex;flex-direction:column;gap:7px}.photo-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;background:#fff;border-radius:16px;padding:6px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.07)}.photo-controls .btn{font-size:10.5px;padding:6px 9px}.learn-table{display:grid;grid-template-columns:86px repeat(3,1fr);gap:6px;align-items:stretch}.th{font-size:10px;font-weight:950;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.04em}.rlabel{font-size:11px;font-weight:950;color:var(--muted);display:flex;align-items:center}.cell{min-height:54px;border-radius:15px;background:linear-gradient(180deg,#fff,#f8fbff);display:flex;align-items:center;justify-content:center;padding:8px 6px;box-shadow:0 7px 16px rgba(31,42,68,.06),inset 0 0 0 2px rgba(79,140,255,.08);position:relative;overflow:visible}.cell.ref{font-size:clamp(22px,3.8vw,36px);font-weight:950;line-height:1.18;color:#172033;background:#fff}.cell.editable{cursor:pointer}.cell.editable.active{transform:translateY(-2px);box-shadow:0 14px 26px rgba(79,140,255,.18),inset 0 0 0 3px var(--blue)}.cell.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);box-shadow:0 10px 20px rgba(38,201,111,.13),inset 0 0 0 3px #60d78a}.cell.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);box-shadow:inset 0 0 0 3px #f2a39a;animation:shake .18s linear 0s 2}.cell.locked{opacity:.42;filter:grayscale(.25)}@keyframes shake{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}.cell .char{font-size:clamp(20px,3.6vw,34px)}.hint{background:linear-gradient(135deg,#fff,#fff7df);border:1px solid rgba(255,211,79,.38);border-radius:15px;padding:8px 10px;font-size:12px;line-height:1.25;font-weight:780;color:#5b4700}.hint:before{content:"💡 ";}.photo-card{flex:1;min-height:0;background:linear-gradient(135deg,#fff,#f7fbff);border-radius:20px;padding:8px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.10),0 8px 18px rgba(31,42,68,.07);display:flex;flex-direction:column}.photo-card.off{display:none}.photo-frame{position:relative;flex:1;min-height:120px;border-radius:17px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.9)}.photo-image{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center bottom}.photo-mask{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--photo-cols,5),1fr);grid-template-rows:repeat(var(--photo-rows,3),1fr);gap:2px;padding:2px}.tile{border-radius:9px;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.22),transparent 38%),linear-gradient(135deg,#172033,#293b63 55%,#4f8cff);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 2px 4px rgba(31,42,68,.18);transition:opacity .28s ease,transform .28s ease}.tile.revealed{opacity:0;transform:scale(.72) rotate(5deg)}.caption{text-align:center;margin-top:5px;font-size:11px;font-weight:950;color:var(--muted)}.caption.done{color:#126b2d}.guess-panel{display:none;background:#fff;border-radius:18px;padding:8px;box-shadow:inset 0 0 0 2px rgba(79,140,255,.10),0 8px 18px rgba(31,42,68,.08)}.guess-panel.show{display:block}.guess-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}.guess-title{font-weight:950}.hearts{color:#ef4444;font-size:15px;letter-spacing:1px}.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.choice{font-size:clamp(13px,1.9vw,18px);font-weight:950;border:0;border-radius:14px;padding:9px 5px;background:linear-gradient(180deg,#fff,#f6f9ff);box-shadow:0 7px 16px rgba(31,42,68,.08),inset 0 0 0 2px rgba(79,140,255,.08);cursor:pointer}.choice.good{background:linear-gradient(135deg,#e9f9ef,#c8f7d8);box-shadow:inset 0 0 0 3px #60d78a}.choice.bad{background:linear-gradient(135deg,#fff0ed,#ffd5ce);box-shadow:inset 0 0 0 3px #f2a39a}.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}.confetti i{position:absolute;width:8px;height:12px;border-radius:3px;animation:fall .9s ease forwards}@keyframes fall{to{transform:translateY(90vh) rotate(420deg);opacity:0}}
+@media (max-width:760px){.app{padding:calc(4px + var(--safe-top)) 5px calc(4px + var(--safe-bottom));gap:4px}.top{border-radius:16px;padding:5px;grid-template-columns:1fr}.brand{justify-content:center}.brand h1{font-size:20px}.meta{justify-content:center;flex-wrap:wrap}.stat{min-width:58px;padding:3px 5px}.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.nav .gap{display:none}.btn{font-size:10px;padding:7px 5px}.main{padding:6px;border-radius:16px}.hangman-layout,.learn-layout{display:flex;flex-direction:column;gap:6px}.actions{display:grid;grid-template-columns:repeat(3,1fr)}.actions .btn:nth-child(5){grid-column:span 2}.base-card{padding:6px}.base-word{font-size:28px}.prompt{padding:6px}.rowtitle{font-size:11px}.letters{min-height:28px}.char{font-size:24px}.stage-card{padding:6px;min-height:100px}.stage-head{display:none}.stage{min-height:112px}.part{transform:scale(.62);transform-origin:left top}.message{font-size:10.5px;min-height:26px;padding:5px 7px}.tools{display:grid;grid-template-columns:repeat(2,1fr)}.learn-table{grid-template-columns:64px repeat(3,1fr);gap:4px}.th{font-size:8px}.rlabel{font-size:9px}.cell{min-height:38px;padding:4px;border-radius:11px}.cell.ref{font-size:18px}.cell .char{font-size:18px}.photo-controls{padding:4px;gap:4px}.photo-controls .btn{font-size:9px;padding:5px 6px}.hint{font-size:10px;padding:5px 7px}.photo-card{padding:5px;border-radius:14px;min-height:100px}.photo-frame{min-height:88px;border-radius:12px}.caption{display:none}.guess-panel{padding:5px}.choices{grid-template-columns:repeat(2,1fr);gap:5px}.choice{font-size:12px;padding:7px 4px}.learn-right{flex:1}.hang-right{flex:1}}
+@media (min-width:761px) and (max-height:720px){.app{gap:4px;padding-top:4px;padding-bottom:4px}.top{padding:5px 7px}.brand h1{font-size:24px}.stat{padding:3px 6px}.nav{gap:5px}.btn{font-size:10.5px;padding:6px 8px}.main{padding:6px}.actions .btn,.tools .btn{font-size:10px;padding:6px 8px}.base-card{padding:5px}.base-word{font-size:32px}.prompt{padding:5px}.rowtop{margin-bottom:1px}.char{font-size:27px}.message{font-size:10.5px;min-height:25px;padding:5px 7px}.stage-card{padding:6px}.stage-head{margin-bottom:4px}.stage{min-height:150px}.learn-table{gap:5px}.cell{min-height:38px;padding:4px 5px}.cell.ref{font-size:23px}.cell .char{font-size:22px}.hint{font-size:10.5px;padding:5px 7px}.photo-controls{padding:4px}.photo-card{padding:5px}.caption{font-size:9px}.choices{gap:5px}.choice{font-size:13px;padding:6px 4px}}
+
+/* PATCH: cabeza del ahorcado siempre visible */
+.part.head{
+  border:6px solid #ff6fb5!important;
+  background:rgba(255,255,255,.45)!important;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.45),0 6px 12px rgba(31,42,68,.16)!important;
+  z-index:6!important;
+}
+.part.rope{z-index:5!important;}
+.part.neck,.part.bodyTop,.part.bodyBottom,.part.leftArm,.part.rightArm,.part.leftForearm,.part.rightForearm,.part.leftLeg,.part.rightLeg{z-index:4!important;}
+@media (max-width:760px){.part.head{border-width:6px!important;}}
+</style>
+
+<style id="ipad-keyboard-and-letter-sizing-patch">
+/* Mantiene el teclado listo en iPad y alinea el tamano de letras entre Base Form, Past Simple y Past Participle. */
+#psLetters .char,#ppLetters .char{font-size:clamp(30px,5vw,52px)!important;line-height:1.18!important;}
+.cell.ref .letters{gap:4px;min-height:0;}
+.cell.ref .char{font-size:inherit!important;line-height:1.18!important;padding:0 1px;}
+@media (max-width:760px){#psLetters .char,#ppLetters .char{font-size:28px!important;}}
+</style>
+<style id="v2-photo-blocks-and-hangman-fix">
+/* v2.0 patch: ahorcado proporcional y foto realmente oculta */
+@media (min-width:761px){
+  .stage{min-height:260px!important;}
+  .stage-card{min-height:310px!important;}
+}
+@media (min-width:761px) and (max-height:720px){
+  .stage{min-height:230px!important;}
+  .stage-card{min-height:250px!important;}
+}
+.photo-mask{gap:0!important;padding:0!important;background:#172033!important;}
+.tile{border-radius:0!important;box-shadow:none!important;background:linear-gradient(135deg,#172033,#263a64 55%,#345fa4)!important;outline:1px solid rgba(255,255,255,.015)!important;}
+.tile.revealed{opacity:0!important;transform:scale(.92)!important;}
+.photo-controls .target{min-width:72px;}
+.photo-card .caption{font-size:10.5px;}
+.boost-flash{animation:boostPulse .55s ease;}
+@keyframes boostPulse{0%{transform:scale(1)}45%{transform:scale(1.025)}100%{transform:scale(1)}}
+</style>
+
+<style id="lucyago-edition-visual-system">
+/* =====================================================
+   LucYago Edition — primera capa estable de identidad
+   Objetivo: materiales táctiles + máxima legibilidad.
+   No modifica la lógica del juego.
+   ===================================================== */
+:root{
+  --ly-ink:#182033;
+  --ly-muted:#667085;
+  --ly-paper:#fffdf6;
+  --ly-card:#ffffff;
+  --ly-cream:#fff5dc;
+  --ly-blue:#3f7cff;
+  --ly-blue-2:#7557ff;
+  --ly-green:#20bf6b;
+  --ly-orange:#ff9f43;
+  --ly-yellow:#ffd166;
+  --ly-red:#ef476f;
+  --ly-wood-1:#f3c686;
+  --ly-wood-2:#d99a55;
+  --ly-shadow:0 14px 0 rgba(109,72,33,.10),0 24px 42px rgba(40,44,70,.18);
+  --ly-soft:0 8px 18px rgba(40,44,70,.12);
+}
+html,body{
   background:
-    radial-gradient(circle at 12% 8%,rgba(255,208,110,.8),transparent 20%),
-    radial-gradient(circle at 88% 10%,rgba(113,191,255,.72),transparent 18%),
-    radial-gradient(circle at 82% 88%,rgba(255,150,111,.4),transparent 20%),
-    linear-gradient(155deg,var(--bg-1),var(--bg-2))
+    radial-gradient(circle at 9% 12%,rgba(255,255,255,.72) 0 2.5%,transparent 2.7%),
+    radial-gradient(circle at 91% 16%,rgba(255,255,255,.45) 0 2.2%,transparent 2.4%),
+    radial-gradient(circle at 14% 88%,rgba(255,255,255,.35) 0 2.1%,transparent 2.3%),
+    linear-gradient(135deg,#f6d58f 0%,#e8b969 38%,#d69a55 100%)!important;
 }
-button,.pad-btn,.action-btn,.mode-btn,.table-btn,.tiny-btn,.continue-btn{touch-action:manipulation}
-button{font:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .14s ease,box-shadow .18s ease,background .18s ease,opacity .18s ease}
-button:active{transform:scale(.97)}
-button:disabled{opacity:.42;cursor:not-allowed}
-.app{max-width:1180px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 12px calc(18px + env(safe-area-inset-bottom))}
-.hero,.card,.table-panel{background:var(--surface);backdrop-filter:blur(16px);border-radius:28px;box-shadow:var(--shadow)}
-.hero{padding:16px;position:relative;overflow:hidden}
-.hero::before,.hero::after{content:"";position:absolute;border-radius:999px;pointer-events:none}
-.hero::before{width:180px;height:180px;right:-50px;top:-60px;background:radial-gradient(circle,rgba(255,211,72,.55),transparent 68%)}
-.hero::after{width:220px;height:220px;left:-70px;bottom:-90px;background:radial-gradient(circle,rgba(55,114,255,.22),transparent 70%)}
-.hero-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;position:relative;z-index:1}
-.title-wrap h1{margin:0;font-size:clamp(32px,5vw,48px);line-height:.95}
-.subtitle{margin-top:8px;font-size:15px;font-weight:800;color:var(--muted);max-width:520px}
-.hero-badge{padding:10px 14px;border-radius:18px;background:linear-gradient(135deg,#fff3d4,#ffffff);box-shadow:var(--shadow-soft);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--orange-deep);white-space:nowrap}
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;position:relative;z-index:1}
-.mode-btn,.action-btn,.table-btn,.tiny-btn,.pad-btn{border-radius:16px;background:#fff;box-shadow:var(--shadow-soft);color:var(--ink);font-weight:900}
-.mode-btn,.action-btn,.tiny-btn{padding:11px 14px;font-size:14px}
-.mode-btn.active,.table-btn.active{outline:3px solid rgba(255,123,44,.2)}
-.primary{background:linear-gradient(135deg,var(--orange),#ff9b4d);color:#fff}
-.secondary{background:#fff;color:var(--ink)}
-.ghost{background:#fff1dd;color:var(--orange-deep)}
-.blue{background:linear-gradient(135deg,#edf3ff,#dbe6ff);color:var(--blue-deep)}
-.danger{background:linear-gradient(135deg,#fff0ef,#ffd7d3);color:var(--red-deep)}
-.op-green{background:linear-gradient(135deg,#dffbe9,#9be8bd);color:#0f6d3b}
-.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.86fr);gap:14px;margin-top:14px}
-.card,.table-panel{padding:14px}
-.section-title{margin:0 0 8px;font-size:16px}
-.score-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.score-card{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(245,248,255,.95));border-radius:18px;padding:10px 12px;box-shadow:inset 0 0 0 2px rgba(55,114,255,.08)}
-.score-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.score-value{margin-top:3px;font-size:24px;font-weight:900}
-.score-burst{margin-top:2px;font-size:11px;font-weight:900;color:var(--orange-deep)}
-.win-progress-box{margin:8px 0 4px;padding:8px 10px;border-radius:16px;background:linear-gradient(135deg,#fffdf1,#eef9ff);box-shadow:inset 0 0 0 2px rgba(55,114,255,.08);font-weight:900;color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:8px}
-.win-progress-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);white-space:nowrap}
-.win-progress-bar{font-size:19px;line-height:1.15;letter-spacing:1px;white-space:normal;overflow:visible;text-overflow:clip}
-.question-stage{position:relative;overflow:hidden;margin-top:10px;padding:18px;border-radius:26px;color:#fff;background:radial-gradient(circle at top right,rgba(255,255,255,.24),transparent 24%),linear-gradient(140deg,#6a51ff 0%,#3772ff 58%,#24c0ff 100%);box-shadow:0 18px 36px rgba(55,114,255,.28)}
-.question-stage.good{animation:pulseGood .42s ease;box-shadow:0 0 0 5px rgba(34,181,111,.25),0 18px 38px rgba(34,181,111,.24)}
-.question-stage.bad{animation:shakeBad .34s ease;box-shadow:0 0 0 5px rgba(226,85,85,.24),0 18px 38px rgba(226,85,85,.22)}
-.question-stage::after{content:"";position:absolute;inset:auto -70px -100px auto;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%)}
-.stage-top{display:flex;justify-content:space-between;gap:10px;align-items:center;position:relative;z-index:1}
-.stage-tag,.lives{background:rgba(255,255,255,.14);backdrop-filter:blur(10px)}
-.stage-tag{padding:7px 12px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
-.lives{padding:7px 10px;border-radius:999px;font-size:16px}
-.question{position:relative;z-index:1;margin-top:12px;text-align:center;font-size:clamp(46px,8vw,82px);font-weight:900;line-height:.9;text-shadow:0 8px 20px rgba(0,0,0,.16)}
-.answer-box{position:relative;z-index:1;margin-top:12px;padding:14px 14px 16px;border-radius:24px;background:rgba(255,255,255,.18);border:3px solid rgba(255,255,255,.22);text-align:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
-.question-stage.good .answer-box{background:rgba(34,181,111,.22);border-color:rgba(255,255,255,.4)}
-.question-stage.bad .answer-box{background:rgba(121,18,18,.34);border-color:#ffe38a;transform:scale(1.02);box-shadow:0 0 0 5px rgba(255,227,138,.18),inset 0 0 0 1px rgba(255,255,255,.18)}
-.answer-label{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#dce9ff}
-.question-stage.bad .answer-label{color:#fff0a8}
-.answer-value{margin-top:6px;min-height:1.05em;font-size:clamp(52px,9vw,84px);font-weight:900;letter-spacing:.02em;text-shadow:0 6px 14px rgba(0,0,0,.18)}
-.question-stage.bad .answer-value{color:#ffd4d4}
-.correct-answer-row{display:none;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:12px}
-.correct-answer-row.show{display:grid;animation:revealCorrect .22s ease}
-.correct-answer{padding:12px 14px;border-radius:18px;background:linear-gradient(135deg,#fff6af,#ffd34f);color:#6e4100;font-size:22px;font-weight:900;box-shadow:0 10px 24px rgba(0,0,0,.16)}
-.continue-btn{padding:12px 16px;border-radius:18px;background:linear-gradient(135deg,#2fbf7c,#53dd99);color:#fff;font-size:20px;font-weight:900;box-shadow:0 12px 24px rgba(34,181,111,.28)}
-.feedback-banner{margin-top:10px;border-radius:18px;padding:10px 14px;font-size:18px;font-weight:900;text-align:center;display:flex;align-items:center;justify-content:center;min-height:58px;box-shadow:var(--shadow-soft)}
-.feedback-banner.good{background:linear-gradient(135deg,#dffbe9,#bff1d3);color:#0f6d3b}
-.feedback-banner.bad{background:linear-gradient(135deg,#fff1ef,#ffd1cb);color:#9c2c2c}
-.feedback-banner.neutral{background:linear-gradient(135deg,#fff8df,#fff1bf);color:#7e5a00}
-.feedback-row{display:flex;gap:8px;margin-top:8px}
-.badge{padding:9px 11px;border-radius:14px;font-size:12px;font-weight:900;background:#eef3ff;color:#3658ca;box-shadow:var(--shadow-soft)}
-.controls{display:flex;gap:8px;margin-top:10px}
-.controls .action-btn{flex:1 1 0}
-.table-mode-controls{margin-top:12px}
-.answer-pad-shell{margin-top:12px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(245,247,255,.96));border-radius:20px;padding:8px 9px;box-shadow:0 10px 18px rgba(26,45,78,.08)}
-.answer-pad-title{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}
-.answer-pad-title strong{font-size:12px}
-.answer-pad-title span{font-size:9px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.answer-pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.answer-pad .pad-btn{min-height:42px;font-size:20px;border-radius:14px;background:linear-gradient(180deg,#ffffff,#eef3ff)}
-.answer-pad .pad-btn:hover{box-shadow:0 18px 28px rgba(55,114,255,.14)}
-.pad-btn.delete{font-size:13px;background:linear-gradient(135deg,#fff0ef,#ffd6d2);color:var(--red-deep)}
-.pad-btn.ok{font-size:17px;background:linear-gradient(135deg,var(--green),#43d98f);color:#fff}
-.aquarium-card{margin-top:14px;padding:16px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(243,249,255,.98));box-shadow:inset 0 0 0 2px rgba(55,114,255,.08),var(--shadow-soft)}
-.aquarium-card.hidden{display:none}
-.aquarium-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.aquarium-title{font-size:16px;font-weight:900}
-.aquarium-meta{font-size:12px;font-weight:900;color:var(--muted)}
-.aquarium-tank{position:relative;display:flex;flex-direction:column;margin-top:10px;border-radius:28px;padding:16px;background:var(--tank-water,linear-gradient(180deg,#dff6ff 0%,#9fe3ff 42%,#4ab7ef 100%));border:1px solid #c5edf7;overflow:hidden;min-height:360px;box-shadow:inset 0 0 0 6px rgba(255,255,255,.28);transition:background .35s ease,filter .35s ease}
-.aquarium-tank.dead{--tank-water:linear-gradient(180deg,#cfd4d8 0%,#9aa4ab 52%,#7d878f 100%);filter:saturate(.35)}
-.aquarium-tank::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 16%,rgba(255,255,255,.65),transparent 18%),radial-gradient(circle at 82% 14%,rgba(255,255,255,.45),transparent 16%);pointer-events:none}
-.aquarium-tank::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(180deg,rgba(255,244,191,0),rgba(255,226,143,.88));pointer-events:none}
-.aquarium-stage{position:relative;flex:1 1 auto;height:324px;min-height:0;border-radius:22px;overflow:hidden}
-.tank-sand{position:absolute;left:0;right:0;bottom:0;height:48px;background:linear-gradient(180deg,#ffe8a3,#f5d47d);border-top:3px solid rgba(255,255,255,.38);z-index:1;pointer-events:none}
-.tank-bubble{position:absolute;z-index:0;bottom:-24px;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.58);animation:floatup linear infinite}
-.aqua-item{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 10px 14px rgba(0,64,96,.12));user-select:none;line-height:1;width:1.25em;height:1.25em;transform:translate(-50%,-50%)}.aqua-emoji{display:block;line-height:1;transform:scaleX(var(--look-dir,1));transform-origin:center center}
-.aqua-item.bad{filter:grayscale(1) brightness(.68) contrast(1.08) drop-shadow(0 12px 18px rgba(52,16,16,.22));animation:dangerbob 2.4s ease-in-out infinite}
-.aqua-item.bottom,.aqua-item.middle,.aqua-item.top{bottom:auto}
-.aqua-item.fish_orange,.aqua-item.fish_blue,.aqua-item.fish_puffer,.aqua-item.fish_tropical,.aqua-item.dolphin,.aqua-item.turtle,.aqua-item.crab{animation:swim 4.8s ease-in-out infinite alternate}
-.tank-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;opacity:0;transform:scale(.96);pointer-events:none;transition:all .25s ease}
-.tank-overlay.visible{opacity:1;transform:scale(1)}
-.tank-overlay .panel-win{padding:22px 26px;border-radius:24px;background:linear-gradient(135deg,#fff9be,#fff2a3,#e8ffe5);box-shadow:0 16px 34px rgba(20,69,75,.18);font-weight:900;color:#195d44}
-.tank-overlay.lose .panel-win{background:linear-gradient(135deg,#2a2a2a,#111,#4a1111);color:#fff;box-shadow:0 18px 44px rgba(0,0,0,.38);border:3px solid rgba(255,255,255,.24)}
-.tank-overlay.lose .overlay-big{font-size:clamp(54px,9vw,96px);line-height:.9;text-shadow:0 8px 22px rgba(0,0,0,.45)}
-.tank-overlay.lose .overlay-small{font-size:clamp(18px,2.4vw,26px);color:#ffd7d7}
-.overlay-big{font-size:clamp(26px,4vw,38px);line-height:1}
-.overlay-small{margin-top:10px;font-size:14px;line-height:1.35}
-.aquarium-log{margin-top:10px;padding:12px 14px;border-radius:18px;background:#fff;border:1px solid rgba(55,114,255,.12);font-weight:800;color:var(--ink)}
-.hint{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.35}
-.records-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.record-card{background:#fff;border-radius:18px;padding:10px;box-shadow:inset 0 0 0 2px rgba(255,123,44,.08)}
-.record-label{font-size:9px;text-transform:uppercase;color:var(--muted);letter-spacing:.08em}
-.record-value{margin-top:4px;font-size:22px;font-weight:900}
-.error-list{display:grid;gap:8px;margin-top:10px;max-height:380px;overflow:auto;padding-right:2px}
-.error-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border-radius:16px;background:#fff;box-shadow:var(--shadow-soft)}
-.error-main{font-weight:900;font-size:15px}
-.error-sub{margin-top:3px;font-size:11px;color:var(--muted)}
-.error-points{min-width:64px;text-align:center;padding:7px 8px;border-radius:12px;background:#fff5de;color:#a5660b;font-weight:900;font-size:11px}
-.table-panel{align-self:start}
-.table-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
-.table-btn{min-width:0;padding:12px 6px;text-align:center}
-.table-btn strong{display:block;font-size:22px;line-height:1}
-.table-btn span{display:block;margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.difficult-panel{display:none;margin-top:12px;padding:12px;border-radius:22px;background:linear-gradient(180deg,#fffdf8,#f2f7ff);box-shadow:inset 0 0 0 2px rgba(55,114,255,.08)}
-.difficult-panel.open{display:block}
-.difficult-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}
-.difficult-count{font-size:12px;font-weight:900;color:var(--blue-deep)}
-.fact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-height:320px;overflow:auto;padding-right:2px}
-.fact-btn{padding:10px 6px;border-radius:14px;background:#fff;color:var(--ink);font-size:15px;font-weight:900;box-shadow:var(--shadow-soft)}
-.fact-btn.active{background:linear-gradient(135deg,#ffe8d8,#fff3c1);outline:3px solid rgba(255,123,44,.22);color:var(--orange-deep)}
-.row{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.spark{position:absolute;width:14px;height:14px;border-radius:50%;opacity:0}
-.show-spark{animation:sparkFly .95s ease-out}
-.firework{position:absolute;width:12px;height:12px;border-radius:50%;opacity:0;box-shadow:0 0 0 0 currentColor}
-.show-firework{animation:fireworkBoom 1s ease-out}
-@keyframes sparkFly{0%{opacity:0;transform:translateY(18px) scale(.25)}18%{opacity:1}100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(280deg) scale(1.35)}}
-@keyframes fireworkBoom{0%{opacity:0;transform:scale(.2)}18%{opacity:1}100%{opacity:0;transform:scale(1.2);box-shadow:0 -44px 0 4px currentColor,31px -31px 0 3px currentColor,44px 0 0 4px currentColor,31px 31px 0 3px currentColor,0 44px 0 4px currentColor,-31px 31px 0 3px currentColor,-44px 0 0 4px currentColor,-31px -31px 0 3px currentColor}}
-@keyframes pulseGood{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
-@keyframes shakeBad{0%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
-@keyframes revealCorrect{0%{opacity:0;transform:translateY(8px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes swim{0%{transform:translate(-50%,-50%) translateX(0)}50%{transform:translate(-50%,-50%) translateX(0)}100%{transform:translate(-50%,-50%) translateX(10px)}}
-@keyframes floatup{0%{transform:translateY(0) scale(.9);opacity:.2}20%{opacity:.7}100%{transform:translateY(-220px) scale(1.15);opacity:0}}
-@keyframes dangerbob{0%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(7px)}100%{transform:translate(-50%,-50%) translateY(0)}}
-@media (max-width:980px){.layout{grid-template-columns:1fr}.table-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
-@media (max-width:680px){
-  .app{padding-left:10px;padding-right:10px}.hero,.card,.table-panel,.question-stage,.answer-pad-shell{border-radius:22px}
-  .hero-top{flex-direction:column;align-items:flex-start}.table-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .controls{flex-wrap:wrap}.controls .action-btn{flex-basis:calc(33.333% - 8px)}.answer-pad .pad-btn{min-height:38px;font-size:18px}
-  .fact-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-@media (max-width:480px){
-  .question{font-size:clamp(40px,13vw,60px)}.answer-value{font-size:clamp(48px,14vw,70px)}.feedback-banner{font-size:15px}
-  .answer-pad .pad-btn{min-height:34px;font-size:16px;border-radius:14px}.pad-btn.delete{font-size:11px}.pad-btn.ok{font-size:14px}.table-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .correct-answer-row{grid-template-columns:1fr}
-  .fact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-
-/* Compactación iPad: todo el juego principal visible sin scroll */
-@media (min-width:681px) and (max-width:1180px){
-  html,body{height:100%;overflow:hidden}
-  .app{height:100dvh;max-width:1024px;padding:6px 8px 8px;display:flex;flex-direction:column;gap:6px}
-  .hero{padding:8px 10px;border-radius:18px;flex:0 0 auto}
-  .hero-top{display:block}
-  .title-wrap h1{font-size:28px;line-height:1;margin:0}
-  .subtitle,.hero-badge{display:none!important}
-  .toolbar{margin-top:6px;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:5px;flex-wrap:nowrap}
-  .toolbar button{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:7px 5px;font-size:11px;border-radius:11px;box-shadow:0 5px 12px rgba(26,45,78,.10)}
-  .layout{flex:0 0 auto;min-height:0;margin-top:0;gap:6px;grid-template-columns:minmax(0,1.08fr) minmax(230px,.72fr);align-items:stretch}
-  .card,.table-panel{padding:7px;border-radius:18px;box-shadow:0 8px 20px rgba(26,45,78,.10)}
-  .section-title{display:none}
-  .score-grid{gap:5px;grid-template-columns:repeat(3,minmax(0,1fr))}
-  .score-card{padding:5px 8px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:4px;min-height:34px}
-  .score-label{font-size:9px;letter-spacing:.04em}
-  .score-value{font-size:19px;margin:0;line-height:1}
-  .score-burst{display:none}.win-progress-box{margin:5px 0;padding:5px 7px;border-radius:12px}.win-progress-label{font-size:9px}.win-progress-bar{font-size:15px;letter-spacing:0}
-  .question-stage{margin-top:6px;padding:8px 10px;border-radius:18px;box-shadow:0 8px 18px rgba(55,114,255,.18)}
-  .stage-top{gap:5px}
-  .stage-tag{padding:4px 8px;font-size:9px}
-  .lives{padding:4px 7px;font-size:12px}
-  .question{margin-top:4px;font-size:clamp(42px,7vw,66px);line-height:.9}
-  .answer-box{margin-top:5px;padding:7px 8px 8px;border-radius:16px;border-width:2px}
-  .answer-label{font-size:9px}
-  .answer-value{margin-top:1px;font-size:clamp(42px,6vw,62px);line-height:.9;min-height:.9em}
-  .correct-answer-row{margin-top:5px;grid-template-columns:minmax(0,1fr) auto;gap:5px}
-  .correct-answer{padding:6px 8px;border-radius:12px;font-size:16px}
-  .continue-btn{padding:6px 9px;border-radius:12px;font-size:14px}
-  .feedback-banner{margin-top:5px;padding:5px 8px;min-height:30px;font-size:13px;border-radius:12px}
-  .feedback-row.compact-hidden{display:none!important}
-  .controls{gap:5px;margin-top:5px}
-  .controls .action-btn{padding:7px 6px;font-size:11px;border-radius:11px;box-shadow:0 5px 12px rgba(26,45,78,.10)}
-  .answer-pad-shell{margin-top:5px;padding:5px;border-radius:14px}
-  .answer-pad-title{display:none}
-  .answer-pad{gap:4px;grid-template-columns:repeat(6,minmax(0,1fr))}
-  .answer-pad .pad-btn{min-height:30px;font-size:17px;border-radius:10px;box-shadow:0 4px 10px rgba(26,45,78,.08)}
-  .pad-btn.delete{font-size:10px}
-  .pad-btn.ok{font-size:13px}
-  .aquarium-card{display:flex!important;flex:1 1 auto;min-height:0;margin-top:0;padding:7px;border-radius:18px;flex-direction:column;box-shadow:0 8px 20px rgba(26,45,78,.10)}
-  .aquarium-head{flex:0 0 auto}
-  .aquarium-title{font-size:13px}.aquarium-meta{font-size:10px}
-  .aquarium-tank{flex:1 1 auto;min-height:0;margin-top:5px;padding:8px;border-radius:18px;box-shadow:inset 0 0 0 4px rgba(255,255,255,.25);display:flex;flex-direction:column}
-  .aquarium-stage{flex:1 1 auto;height:auto;min-height:120px;border-radius:14px}
-  .aquarium-log{display:none}
-  .aquarium-card.hidden{display:none!important}
-  .table-panel{align-self:stretch;min-height:0;overflow:hidden}
-  .table-panel .row{margin-bottom:4px}
-  .table-panel .section-title{display:block;font-size:13px;margin:0}
-  #selectedTablesFooterText{font-size:11px}
-  .table-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:5px}
-  .table-btn{padding:7px 3px;border-radius:10px;box-shadow:0 5px 12px rgba(26,45,78,.10)}
-  .table-btn strong{font-size:17px}
-  .table-btn span{display:none}
-  .table-mode-controls{margin-top:5px}
-  .difficult-panel{margin-top:5px;padding:6px;border-radius:14px}
-  .difficult-head{margin-bottom:4px;font-size:11px}
-  .difficult-count{font-size:10px}
-  .fact-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;max-height:180px}
-  .fact-btn{padding:5px 3px;border-radius:9px;font-size:11px}
-  .hint{display:none}
-  body>.app>section.card:last-child{display:none!important}
-}
-@media (max-width:680px){
-  .toolbar{flex-wrap:nowrap;overflow-x:auto;gap:5px}.toolbar button{white-space:nowrap;padding:8px 9px;font-size:12px}
-  .score-card{padding:7px 8px}.score-value{font-size:20px}.answer-pad{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.answer-pad .pad-btn{min-height:30px}
-  .subtitle,.hero-badge,.feedback-row.compact-hidden{display:none!important}
-}
-
-
-.question-stage.final-review{
+body:before{
+  content:"";
+  position:fixed;
+  inset:12px;
+  border-radius:34px;
+  pointer-events:none;
+  z-index:-1;
   background:
-    radial-gradient(circle at top right,rgba(255,255,255,.28),transparent 24%),
-    linear-gradient(140deg,#d4a017 0%,#f3c74a 45%,#ffef9a 100%) !important;
-  box-shadow:0 18px 36px rgba(212,160,23,.35) !important;
+    linear-gradient(90deg,rgba(255,255,255,.11) 1px,transparent 1px),
+    linear-gradient(0deg,rgba(110,68,26,.07) 1px,transparent 1px);
+  background-size:42px 42px,42px 42px;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.16), inset 0 0 80px rgba(91,52,17,.12);
 }
-.question-stage.final-review .answer-box{
-  background:rgba(255,255,255,.22);
-  border-color:rgba(255,245,180,.7);
+.app{max-width:1240px!important;gap:8px!important;padding:calc(8px + var(--safe-top)) 10px calc(8px + var(--safe-bottom))!important}
+.top,.main{
+  background:linear-gradient(180deg,rgba(255,253,246,.96),rgba(255,248,226,.93))!important;
+  border:3px solid rgba(255,255,255,.84)!important;
+  box-shadow:var(--ly-shadow)!important;
+}
+.top{border-radius:26px!important;padding:9px 11px!important;position:relative;overflow:hidden}
+.top:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 8% 20%,rgba(255,255,255,.65),transparent 22%),linear-gradient(90deg,rgba(255,255,255,.38),transparent 34%);
+}
+.brand,.meta,.nav{position:relative;z-index:1}.brand .star{font-size:26px!important}.brand .star:before{content:"🧭"}.brand .star{font-size:0!important}.brand .star:before{font-size:26px;filter:drop-shadow(0 4px 5px rgba(130,72,20,.25))}
+.brand h1{
+  color:var(--ly-ink)!important;background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
+  letter-spacing:-.055em!important;font-weight:1000!important;
+}
+.stat{
+  background:linear-gradient(180deg,#fff,#fff8e9)!important;border:2px solid rgba(121,78,30,.08)!important;
+  border-radius:15px!important;box-shadow:0 5px 0 rgba(109,72,33,.08),inset 0 0 0 1px rgba(255,255,255,.85)!important;
+}
+.stat .val{color:#2d3b68!important}.stat .lab{color:#7a6b55!important}
+.nav{background:rgba(255,255,255,.52);border-radius:20px;padding:6px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.74)}
+.btn{
+  background:linear-gradient(180deg,#ffffff,#fff5de)!important;
+  color:var(--ly-ink)!important;border:2px solid rgba(113,74,28,.08)!important;
+  border-radius:16px!important;box-shadow:0 5px 0 rgba(112,76,35,.16),0 9px 18px rgba(40,44,70,.08)!important;
+  font-weight:950!important;letter-spacing:-.01em!important;
+}
+.btn:active{transform:translateY(3px) scale(.99)!important;box-shadow:0 2px 0 rgba(112,76,35,.16),0 5px 12px rgba(40,44,70,.07)!important}
+.btn.active{
+  background:linear-gradient(135deg,#3f7cff,#7557ff)!important;color:#fff!important;border-color:rgba(255,255,255,.24)!important;
+  box-shadow:0 5px 0 rgba(35,55,145,.35),0 12px 20px rgba(63,124,255,.25)!important;
+}
+.btn.good{background:linear-gradient(180deg,#dffbe9,#9cf2bd)!important;color:#075b2b!important}.btn.warn{background:linear-gradient(180deg,#fff5b8,#ffd166)!important;color:#6b4b00!important}.btn.bad{background:linear-gradient(180deg,#ffe1e7,#ffb0c2)!important;color:#8e1735!important}
+.main{border-radius:30px!important;padding:12px!important;position:relative;overflow:hidden!important}
+.main:before{content:"";position:absolute;left:18px;top:16px;width:72px;height:18px;border-radius:999px;background:rgba(255,255,255,.45);transform:rotate(-8deg);pointer-events:none}.main:after{content:"";position:absolute;right:26px;bottom:20px;width:78px;height:20px;border-radius:999px;background:rgba(80,52,23,.08);transform:rotate(8deg);pointer-events:none}
+/* Tarjeta LucYago: reto */
+.base-card,.prompt,.cell,.hint,.stage-card,.photo-card,.guess-panel,.message,.tools,.photo-controls{
+  border-radius:22px!important;background:var(--ly-card)!important;border:3px solid rgba(90,61,26,.07)!important;
+  box-shadow:0 8px 0 rgba(109,72,33,.08),0 14px 25px rgba(40,44,70,.09),inset 0 0 0 1px rgba(255,255,255,.88)!important;
+}
+.base-card{background:linear-gradient(180deg,#ffffff,#fff8e9)!important}.base-word{background:none!important;color:var(--ly-blue)!important;text-shadow:0 2px 0 rgba(63,124,255,.09)}
+.prompt.active,.cell.editable.active{border-color:rgba(63,124,255,.58)!important;box-shadow:0 8px 0 rgba(63,124,255,.13),0 16px 26px rgba(63,124,255,.18),inset 0 0 0 2px rgba(63,124,255,.12)!important}
+.prompt.good,.cell.good{background:linear-gradient(180deg,#edfff3,#d7f8e3)!important;border-color:rgba(32,191,107,.42)!important}.prompt.bad,.cell.bad{background:linear-gradient(180deg,#fff0f3,#ffe0e7)!important;border-color:rgba(239,71,111,.42)!important}
+.rowtitle,.stage-title,.guess-title{color:var(--ly-ink)!important}.pill,.label,.th,.rlabel,.caption{color:#7a6b55!important}.message{background:linear-gradient(180deg,#fff9df,#fffdf6)!important;color:#74520c!important;min-height:34px!important}
+/* Ahorcado: siempre unido y centrado como pieza física */
+.stage{background:linear-gradient(180deg,#e8f6ff 0%,#fdfdf9 62%,#fff0bd 100%)!important;border-radius:24px!important;border:3px solid rgba(255,255,255,.82)!important;overflow:hidden!important;box-shadow:inset 0 -18px 35px rgba(255,209,102,.18)!important}
+.part{filter:drop-shadow(0 5px 4px rgba(80,47,18,.18))!important}
+.part.base{left:34px!important;bottom:28px!important;width:142px!important;height:13px!important;background:linear-gradient(180deg,#b98249,#80512d)!important;border-radius:12px!important}
+.part.pole{left:78px!important;top:34px!important;bottom:32px!important;height:auto!important;width:15px!important;background:linear-gradient(90deg,#89562f,#c9894a 54%,#7d4e2b)!important;border-radius:12px!important}
+.part.beam{left:78px!important;top:34px!important;width:158px!important;height:15px!important;background:linear-gradient(180deg,#c98a4e,#86542d)!important;border-radius:12px!important}
+.part.brace{left:89px!important;top:68px!important;width:84px!important;height:10px!important;background:linear-gradient(180deg,#d99a55,#8c5729)!important}
+.part.rope{left:228px!important;top:48px!important;width:7px!important;height:38px!important;background:#c48422!important}
+.part.head{left:204px!important;top:86px!important}.part.neck{left:226px!important;top:137px!important}.part.bodyTop{left:226px!important;top:149px!important}.part.bodyBottom{left:226px!important;top:187px!important}.part.leftArm{left:186px!important;top:165px!important}.part.rightArm{left:229px!important;top:165px!important}.part.leftForearm{left:173px!important;top:187px!important}.part.rightForearm{left:252px!important;top:187px!important}.part.leftLeg{left:191px!important;top:224px!important}.part.rightLeg{left:223px!important;top:224px!important}
+/* Foto LucYago: objeto físico, sin fondo visible entre bloques */
+.photo-card{background:linear-gradient(180deg,#fff,#fff8e9)!important;padding:12px!important;transform:rotate(.2deg)}
+.photo-frame{
+  border-radius:18px!important;background:#fff!important;border:8px solid #fff!important;
+  box-shadow:0 8px 0 rgba(109,72,33,.09),0 15px 24px rgba(40,44,70,.16),inset 0 0 0 2px rgba(38,39,55,.05)!important;
+  min-height:220px!important;max-height:260px!important;height:clamp(220px,31vh,260px)!important;flex:0 0 auto!important;
+}
+.photo-frame:before{content:"";position:absolute;left:50%;top:-10px;width:84px;height:22px;border-radius:4px;background:rgba(255,245,205,.75);transform:translateX(-50%) rotate(-2deg);box-shadow:0 2px 5px rgba(90,61,26,.12);z-index:4;pointer-events:none}.photo-image{background-color:#fff!important}.photo-mask{gap:0!important;padding:0!important;background:#172033!important}.tile{border-radius:0!important;box-shadow:none!important;outline:0!important;background:#182033!important;transition:opacity .22s ease,transform .22s ease!important}.tile:nth-child(3n){background:#1f2a44!important}.tile:nth-child(5n){background:#243759!important}.tile.revealed{opacity:0!important;transform:scale(.96)!important}
+.caption{font-size:12px!important;margin-top:9px!important;font-weight:950!important}.guess-panel{background:linear-gradient(180deg,#fffdf6,#fff3d5)!important}.choice{border-radius:17px!important;border:2px solid rgba(113,74,28,.08)!important;background:linear-gradient(180deg,#fff,#fff6e4)!important;box-shadow:0 5px 0 rgba(112,76,35,.14),0 9px 15px rgba(40,44,70,.08)!important;color:var(--ly-ink)!important}.choice:active{transform:translateY(2px)}
+/* Letras como piezas limpias */
+.char.fixed{color:#2d3748!important}.char.blank{color:#d49b00!important;text-shadow:0 2px 0 rgba(255,255,255,.55)}.char.filled{color:var(--ly-ink)!important}.cell.ref{background:#fff!important;color:var(--ly-ink)!important}
+/* Ajustes responsive para no romper iPad/iPhone */
+@media (max-width:760px){
+  .app{padding:calc(5px + var(--safe-top)) 6px calc(5px + var(--safe-bottom))!important}.top{border-radius:20px!important}.main{border-radius:22px!important;padding:7px!important}.nav{grid-template-columns:repeat(3,1fr)!important}.btn{border-radius:14px!important}.photo-frame{min-height:130px!important;height:clamp(130px,22vh,170px)!important;border-width:6px!important}.photo-frame:before{width:58px;height:16px;top:-8px}.cell,.prompt,.base-card,.stage-card,.photo-card,.guess-panel{border-radius:16px!important}.part{transform:scale(.62)!important;transform-origin:left top!important}.part.pole{top:34px!important;bottom:auto!important;height:180px!important}
+}
+@media (min-width:761px) and (max-height:760px){.photo-frame{min-height:160px!important;height:clamp(160px,24vh,205px)!important}.cell{min-height:46px!important}.stage{min-height:170px!important}}
+</style>
+
+<style id="final-photo-layout-fix">
+/* Corrección final: el layout de Aprendizaje ocupa siempre todo el ancho y la foto mantiene tamaño estable. */
+.view.active{display:flex!important;align-items:stretch!important;width:100%!important;}
+.learn-layout,.hangman-layout{width:100%!important;flex:1 1 auto!important;min-width:0!important;}
+.learn-layout{grid-template-columns:minmax(0,1.08fr) minmax(430px,.92fr)!important;align-items:stretch!important;}
+.learn-left,.learn-right{min-width:0!important;width:100%!important;}
+.learn-right{align-self:stretch!important;}
+.photo-card{width:100%!important;height:100%!important;min-height:0!important;flex:1 1 auto!important;}
+.photo-frame{flex:0 0 clamp(230px,34vh,390px)!important;height:clamp(230px,34vh,390px)!important;min-height:230px!important;background:#fffaf0!important;}
+.photo-image{background-size:cover!important;background-repeat:no-repeat!important;background-position:center 28%!important;background-color:#fffaf0!important;}
+/* La cubierta ya no es negra: son bloques opacos de cartulina sin huecos entre ellos. */
+.photo-mask{gap:0!important;padding:0!important;background:#efe0b7!important;}
+.tile{border-radius:0!important;box-shadow:none!important;outline:0!important;background:#efe0b7!important;transition:opacity .18s ease,transform .18s ease!important;}
+.tile:nth-child(2n){background:#f3e7c7!important;}
+.tile:nth-child(3n){background:#ead9aa!important;}
+.tile:nth-child(5n){background:#f7edcf!important;}
+.tile.revealed{opacity:0!important;transform:scale(.99)!important;}
+.photo-frame:after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 2px rgba(255,255,255,.88);pointer-events:none;z-index:6;}
+@media (min-width:1200px){.learn-layout{grid-template-columns:minmax(0,1.04fr) minmax(520px,.96fr)!important}.photo-frame{flex-basis:clamp(260px,36vh,430px)!important;height:clamp(260px,36vh,430px)!important;min-height:260px!important}}
+@media (min-width:761px) and (max-height:760px){.photo-frame{flex-basis:clamp(190px,29vh,280px)!important;height:clamp(190px,29vh,280px)!important;min-height:190px!important}.learn-layout{grid-template-columns:minmax(0,1.15fr) minmax(390px,.85fr)!important}}
+@media (max-width:760px){.learn-layout{display:flex!important;flex-direction:column!important}.photo-frame{flex:0 0 150px!important;height:150px!important;min-height:150px!important}.photo-image{background-size:cover!important}}
+</style>
+
+<style id="final-gallows-and-icons-patch">
+/* Horca: medidas fijas y proporcionales. Se evita top+bottom simultáneo,
+   que era lo que estiraba el palo vertical según la altura disponible. */
+.part.base{
+  left:34px!important; top:242px!important; bottom:auto!important;
+  width:150px!important; height:14px!important;
+  display:block!important; opacity:.12;
+  z-index:3!important;
+}
+.part.base.visible{opacity:1!important}
+.part.pole{
+  left:78px!important; top:34px!important; bottom:auto!important;
+  width:15px!important; height:215px!important;
+  display:block!important;
+}
+.part.beam{left:78px!important;top:34px!important;width:158px!important;height:15px!important}
+.part.brace{left:89px!important;top:68px!important;width:84px!important;height:10px!important}
+@media(max-width:760px){
+  .part.base{left:22px!important;top:150px!important;width:94px!important;height:9px!important}
+  .part.pole{left:49px!important;top:21px!important;height:134px!important;width:10px!important}
+  .part.beam{left:49px!important;top:21px!important;width:99px!important;height:10px!important}
+  .part.brace{left:56px!important;top:43px!important;width:53px!important;height:7px!important}
+}
+/* Sustituye la fotografía por un gran icono/emoticono oculto por bloques. */
+.photo-frame{
+  background:linear-gradient(180deg,#fffdf6,#fff2c8)!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+}
+.photo-image{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  font-size:clamp(110px,18vw,220px)!important;
+  line-height:1!important;
+  filter:drop-shadow(0 12px 8px rgba(40,44,70,.16));
 }
 
+</style>
+
+
+<style id="controls-clickability-fix">
+.top,.main,.view,.learn-layout,.learn-left,.learn-right,.photo-controls,.nav{position:relative}
+.nav,.photo-controls,.actions,.tools,.guess-panel,.learn-table{z-index:20}
+button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:relative;z-index:21}
+.main:before,.main:after,.top:before,.photo-frame:before,.photo-frame:after{pointer-events:none!important}
+</style>
+
+
+<style id="direct-icons-and-word-fit-fix">
+/* Las palabras siempre permanecen en una sola línea y reducen su tamaño según su longitud. */
+.letters{
+  flex-wrap:nowrap!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  width:100%!important;
+  min-width:0!important;
+  container-type:inline-size;
+}
+.letters .char{
+  flex:0 1 auto!important;
+  min-width:0!important;
+  font-size:clamp(12px,calc(92cqw / var(--char-count,8)),34px)!important;
+  line-height:1.05!important;
+}
+.cell,.prompt{min-width:0!important;overflow:hidden!important}
+.cell.ref{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}
+/* El icono es texto Unicode directo, sin imágenes, fondos, rutas ni carpetas. */
+.photo-image{
+  background:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+  font-size:clamp(100px,18vw,220px)!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+</style>
+
+
+<style id="final-equal-type-and-real-icon-system">
+:root{
+  --learn-word-size:22px;
+}
+/* Todas las palabras de Aprendizaje usan exactamente el mismo tamaño. */
+.learn-table .cell.ref,
+.learn-table .letters .char{
+  font-size:var(--learn-word-size)!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-weight:950!important;
+  line-height:1.25!important;
+  letter-spacing:-.015em!important;
+}
+.learn-table .cell{
+  min-width:0!important;
+  min-height:62px!important;
+  height:62px!important;
+  padding:9px 5px 10px!important;
+  overflow:visible!important;
+}
+.learn-table .cell.ref{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+.learn-table .letters{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  padding:1px 0 2px!important;
+}
+.learn-table .letters .char{
+  flex:0 1 auto!important;
+  min-width:0!important;
+  padding:0 1px!important;
+  white-space:nowrap!important;
+}
+/* Icono Unicode real, con capas claramente ordenadas. */
+.photo-frame{
+  isolation:isolate!important;
+}
+.photo-image{
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:visible!important;
+  background:none!important;
+}
+.icon-glyph{
+  display:block!important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;
+  font-size:clamp(110px,18vw,220px)!important;
+  line-height:1!important;
+  text-align:center!important;
+  transform:translateY(2px);
+  filter:drop-shadow(0 12px 10px rgba(40,44,70,.16));
+}
+.photo-mask{
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+}
+.photo-frame:before{z-index:3!important}
+.photo-frame:after{z-index:4!important;pointer-events:none!important}
+
+@media(max-width:760px){
+  :root{--learn-word-size:17px}
+  .learn-table .cell{
+    min-height:48px!important;
+    height:48px!important;
+    padding:6px 3px 7px!important;
+  }
+  .icon-glyph{font-size:clamp(84px,24vw,145px)!important}
+}
+@media(min-width:761px) and (max-height:760px){
+  :root{--learn-word-size:19px}
+  .learn-table .cell{
+    min-height:52px!important;
+    height:52px!important;
+    padding:7px 4px 8px!important;
+  }
+}
+</style>
+<style id="hidden-icon-clean-system">
+/* Sistema limpio y definitivo para el icono oculto: sin fotos, sin rutas, sin fondos externos. */
+#photoCard{display:flex!important;}
+#photoCard.off{display:none!important;}
+#photoFrame.photo-frame{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  background:linear-gradient(180deg,#fffdf6,#fff2c8)!important;
+}
+#photoImage.photo-image{
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  opacity:1!important;
+  visibility:visible!important;
+  color:#182033!important;
+  background:transparent!important;
+  transform:none!important;
+  text-indent:0!important;
+}
+#iconGlyph.icon-glyph{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  opacity:1!important;
+  visibility:visible!important;
+  color:#182033!important;
+  font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",Arial,sans-serif!important;
+  font-size:clamp(96px,18vw,220px)!important;
+  line-height:1!important;
+  text-align:center!important;
+  transform:none!important;
+  filter:drop-shadow(0 12px 10px rgba(40,44,70,.18))!important;
+}
+#iconGlyph.icon-glyph:empty::after{
+  content:attr(data-fallback);
+}
+#photoMask.photo-mask{
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+  display:grid!important;
+  grid-template-columns:repeat(var(--photo-cols,5),1fr)!important;
+  grid-template-rows:repeat(var(--photo-rows,2),1fr)!important;
+  gap:0!important;
+  padding:0!important;
+  background:transparent!important;
+  pointer-events:none!important;
+}
+#photoMask .tile{
+  border-radius:0!important;
+  background:#efe0b7!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)!important;
+  opacity:1!important;
+  transform:none!important;
+  transition:opacity .18s ease,transform .18s ease!important;
+}
+#photoMask .tile:nth-child(2n){background:#f3e7c7!important;}
+#photoMask .tile:nth-child(3n){background:#ead9aa!important;}
+#photoMask .tile.revealed{
+  opacity:0!important;
+  transform:scale(.98)!important;
+}
+
+/* Guess debajo del icono: el recuadro no cambia de tamaño al abrir respuestas. */
+.learn-right{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:7px!important;
+  min-height:0!important;
+}
+#photoCard.photo-card{
+  order:1!important;
+  flex:0 0 auto!important;
+  height:auto!important;
+  min-height:0!important;
+}
+#guessPanel.guess-panel{
+  order:2!important;
+  flex:0 0 auto!important;
+  margin-top:0!important;
+  padding:6px!important;
+  border-radius:16px!important;
+  max-height:138px!important;
+  overflow:auto!important;
+}
+#guessPanel .guess-top{
+  margin-bottom:4px!important;
+  gap:6px!important;
+}
+#guessPanel .guess-title{
+  font-size:11px!important;
+  line-height:1.1!important;
+}
+#guessPanel .hearts{
+  font-size:11px!important;
+  letter-spacing:0!important;
+  white-space:nowrap!important;
+}
+#guessPanel .choices{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:4px!important;
+}
+#guessPanel .choice{
+  min-width:0!important;
+  min-height:30px!important;
+  padding:5px 4px!important;
+  border-radius:11px!important;
+  font-size:clamp(9px,1.05vw,12px)!important;
+  line-height:1.05!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  box-shadow:0 3px 0 rgba(112,76,35,.12),0 6px 10px rgba(40,44,70,.07)!important;
+}
+@media (min-width:761px) and (max-width:1180px){
+  #photoFrame.photo-frame{
+    flex:0 0 clamp(210px,31vh,300px)!important;
+    height:clamp(210px,31vh,300px)!important;
+    min-height:210px!important;
+  }
+  #guessPanel.guess-panel{max-height:124px!important;padding:5px!important;}
+  #guessPanel .choice{font-size:10px!important;min-height:28px!important;padding:4px 3px!important;}
+}
+@media(max-width:760px){
+  #photoFrame.photo-frame{
+    flex:0 0 145px!important;
+    height:145px!important;
+    min-height:145px!important;
+  }
+  #guessPanel.guess-panel{max-height:112px!important;padding:4px!important;}
+  #guessPanel .choices{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important;}
+  #guessPanel .choice{font-size:9.5px!important;min-height:25px!important;padding:3px!important;border-radius:9px!important;}
+  #guessPanel .guess-title,#guessPanel .hearts{font-size:10px!important;}
+}
+
+
+
+/* Corrección anti-rendijas: los bloques se solapan, pero la máscara no tiene fondo que tape lo revelado. */
+#photoMask.photo-mask{
+  gap:0!important;
+  padding:0!important;
+  background:transparent!important;
+  overflow:hidden!important;
+}
+#photoMask .tile{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:#ead9aa!important;
+  transform:scale(1.035)!important;
+  transform-origin:center!important;
+  backface-visibility:hidden!important;
+}
+#photoMask .tile:nth-child(2n){background:#efe0b7!important;}
+#photoMask .tile:nth-child(3n){background:#f3e7c7!important;}
+#photoMask .tile:nth-child(5n){background:#e6d19e!important;}
+#photoMask .tile.revealed{
+  opacity:0!important;
+  transform:scale(1)!important;
+}
+@media(max-width:760px){#iconGlyph.icon-glyph{font-size:clamp(78px,27vw,145px)!important;}}
+</style>
+
+<style id="learn-like-hangman-ipad-patch">
+/* Aprendizaje adopta la estructura visual de Ahorcado para iPad en vertical con teclado activo. */
+.learn-layout{grid-template-columns:minmax(350px,1fr) minmax(300px,.95fr)!important;gap:8px!important;}
+.learn-left,.learn-right{gap:7px!important;}
+.learn-table{display:block!important;}
+.learn-stack{display:flex;flex-direction:column;gap:7px;min-height:0;width:100%;}
+.learn-card{padding:8px!important;text-align:center;}
+.learn-card .rowtop{margin-bottom:5px;}
+.learn-forms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-items:stretch;}
+.learn-form-box{min-width:0;border-radius:16px;background:linear-gradient(180deg,#fff,#f8fbff);box-shadow:inset 0 0 0 2px rgba(79,140,255,.08);padding:6px 4px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;min-height:58px;}
+.learn-form-box .th{font-size:9px;line-height:1.05;margin:0;}
+.learn-form-box .letters{gap:2px;min-height:34px;width:100%;}
+.learn-card-ref .learn-form-box{background:#fff!important;}
+.learn-card-ref .char,.learn-card .char{font-size:clamp(24px,4.2vw,40px)!important;line-height:1.16!important;}
+.learn-card .cell{width:100%;min-height:34px!important;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:14px!important;}
+.learn-card .cell.editable.active{transform:none!important;box-shadow:inset 0 0 0 3px var(--blue)!important;border-radius:16px!important;background:linear-gradient(180deg,#fff,#f8fbff)!important;}
+.learn-card .cell.good{border-radius:16px!important;background:linear-gradient(135deg,#e9f9ef,#c8f7d8)!important;box-shadow:inset 0 0 0 3px #60d78a!important;}
+.learn-card .cell.bad{border-radius:16px!important;background:linear-gradient(135deg,#fff0ed,#ffd5ce)!important;box-shadow:inset 0 0 0 3px #f2a39a!important;}
+.learn-card .cell.locked{opacity:.42;filter:grayscale(.25);}
+.learn-card .pill{min-width:72px;}
+.learn-left .message,.learn-left .hint{flex:0 0 auto;}
+@media (min-width:761px) and (orientation:portrait){
+  .learn-layout{grid-template-columns:minmax(0,1fr) minmax(260px,.78fr)!important;}
+  .photo-controls .btn{font-size:10px!important;padding:6px 8px!important;}
+  .learn-card{padding:7px!important;}
+  .learn-forms{gap:5px!important;}
+  .learn-form-box{min-height:48px!important;padding:5px 3px!important;}
+  .learn-form-box .th{font-size:8px!important;}
+  .learn-card-ref .char,.learn-card .char{font-size:clamp(21px,3.8vw,34px)!important;}
+  .hint{font-size:10.5px!important;line-height:1.18!important;}
+  .photo-frame{flex-basis:clamp(170px,25vh,260px)!important;height:clamp(170px,25vh,260px)!important;min-height:170px!important;}
+}
+@media (min-width:761px) and (max-height:760px){
+  .learn-layout{grid-template-columns:minmax(350px,1fr) minmax(300px,.95fr)!important;}
+  .learn-card{padding:6px!important;}
+  .learn-form-box{min-height:42px!important;}
+  .learn-card .cell{min-height:28px!important;}
+  .learn-card-ref .char,.learn-card .char{font-size:clamp(20px,3.5vw,32px)!important;}
+  .learn-form-box .letters{min-height:28px!important;}
+  .hint{font-size:10px!important;padding:5px 7px!important;}
+}
+@media (max-width:760px){
+  .learn-stack{gap:6px!important;}
+  .learn-card{padding:6px!important;}
+  .learn-forms{gap:4px!important;}
+  .learn-form-box{min-height:38px!important;padding:4px 2px!important;border-radius:11px!important;}
+  .learn-card .cell{min-height:26px!important;}
+  .learn-form-box .th{font-size:7px!important;}
+  .learn-card-ref .char,.learn-card .char{font-size:18px!important;}
+}
+</style>
+
+
+<style id="learn-cleaner-and-solid-mask-patch">
+/* Ajuste final de Aprendizaje: filas compactas y cajas limpias para comparar verticalmente. */
+.learn-stack{gap:4px!important;}
+.learn-card{padding:6px!important;}
+.learn-card-entry{padding:5px 6px!important;}
+.learn-card-entry .learn-form-box{min-height:42px!important;padding:3px 4px!important;gap:0!important;}
+.learn-card-entry .letters{min-height:30px!important;}
+.learn-card-entry .char{font-size:clamp(23px,4vw,38px)!important;}
+.learn-card-ref{padding-bottom:6px!important;}
+.learn-card-ref .learn-form-box{min-height:50px!important;}
+@media (min-width:761px) and (orientation:portrait){
+  .learn-stack{gap:3px!important;}
+  .learn-card{padding:5px!important;}
+  .learn-card-entry .learn-form-box{min-height:38px!important;padding:2px 3px!important;}
+  .learn-card-entry .letters{min-height:28px!important;}
+  .learn-card-entry .char{font-size:clamp(21px,3.7vw,34px)!important;}
+}
+@media (min-width:761px) and (max-height:760px){
+  .learn-stack{gap:3px!important;}
+  .learn-card-entry .learn-form-box{min-height:34px!important;}
+  .learn-card-entry .letters{min-height:25px!important;}
+}
+/* Mascara opaca y solapada: evita rendijas de subpixel y variaciones de color que delatan el icono. */
+#photoMask.photo-mask{inset:-1px!important;gap:0!important;padding:0!important;background:transparent!important;overflow:hidden!important;}
+#photoMask .tile,#photoMask .tile:nth-child(2n),#photoMask .tile:nth-child(3n),#photoMask .tile:nth-child(5n){
+  background:#e6d19e!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:0 0 0 1.5px #e6d19e!important;
+  transform:scale(1.12)!important;
+  opacity:1!important;
+}
+#photoMask .tile.revealed{opacity:0!important;transform:scale(1.02)!important;box-shadow:none!important;}
+</style>
+
+
+<style id="photo-mask-reveal-fix">
+/* El contenedor debe ser transparente: solo los bloques tapan el icono. */
+#photoMask.photo-mask{background:transparent!important;}
+#photoMask .tile,#photoMask .tile:nth-child(2n),#photoMask .tile:nth-child(3n),#photoMask .tile:nth-child(5n){
+  background:#e6d19e!important;
+  box-shadow:0 0 0 2px #e6d19e!important;
+  transform:scale(1.14)!important;
+}
+#photoMask .tile.revealed,#photoMask .tile.revealed:nth-child(2n),#photoMask .tile.revealed:nth-child(3n),#photoMask .tile.revealed:nth-child(5n){
+  opacity:0!important;
+  visibility:hidden!important;
+  box-shadow:none!important;
+  transform:scale(1)!important;
+}
+</style>
+
+<style id="hang-base-form-letter-spacing-patch">
+#baseWord.base-word.letters{gap:4px;min-height:auto;}
+#baseWord.base-word .char{font-size:inherit!important;line-height:inherit!important;padding:0 1px;}
 </style>
 </head>
 <body>
 <div class="app">
-  <section class="hero">
-    <div class="hero-top">
-      <div class="title-wrap">
-        <h1>Multiplicaciones</h1>
-        
-      </div>
-      
-    </div>
-    <div class="toolbar">
-      <button class="action-btn secondary" id="menuBtn">🏠</button>
-      <button class="action-btn op-green" id="operationBtn">× Multiplicar</button>
-      <button class="mode-btn primary active" data-mode="practice">Practica</button>
-      <button class="mode-btn ghost" data-mode="time">Contrarreloj</button>
-      <button class="action-btn secondary" id="targetBtn">Meta 15</button>
-      <button class="action-btn secondary" id="secondsBtn">30 s</button>
-      <button class="action-btn secondary" id="reviewBtn">Errores</button>
-      <button class="action-btn secondary" id="aquariumToggleBtn">Pecera</button>
-      <button class="action-btn secondary" id="chooseTablesBtn">Tablas</button>
-      <button class="action-btn primary" id="startBtn">Jugar</button>
-    </div>
-  </section>
-
-  <div class="layout">
-    <section class="card" id="gameSection">
-      <h2 class="section-title">Partida</h2>
-      <div class="score-grid">
-        <div class="score-card">
-          <div class="score-label">Puntos</div>
-          <div class="score-value" id="scoreValue">0</div>
-          <div class="score-burst" id="scoreBurst">+0</div>
+  <header class="top">
+    <div class="brand"><span class="star">⭐</span><h1>Irregular Verbs</h1></div>
+    <div class="meta"><button id="homeBtn" class="btn home">🏠</button><div class="stat"><div class="lab">Aciertos</div><div id="good" class="val">0</div></div><div class="stat"><div class="lab">Errores</div><div id="bad" class="val">0</div></div><div class="stat"><div class="lab">Verbo</div><div class="val"><span id="idx">1</span>/<span id="total">0</span></div></div><div class="stat"><div class="lab">Conjunto</div><div id="setName" class="val">Studying</div></div></div>
+    <nav class="nav"><button id="learnBtn" class="btn good active">🎓 Aprendizaje</button><button id="hangBtn" class="btn">🎯 Ahorcado</button><span class="gap"></span><button id="filterNew" class="btn active">Studying</button><button id="filterStudied" class="btn">Studied</button><button id="filterAll" class="btn">All</button><button id="shuffleBtn" class="btn">🔀 Mezclar</button></nav>
+  </header>
+  <main class="main" id="main">
+    <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" autofocus>
+    <section id="hangView" class="view">
+      <div class="hangman-layout">
+        <div class="hang-left">
+          <div class="actions"><button id="revealBtn" class="btn good">Solución</button><button id="solutionOkBtn" class="btn good" style="display:none">OK</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button><button id="blindBtn" class="btn">Blind</button></div>
+          <div class="base-card"><div class="label">Base form</div><div id="baseWord" class="base-word letters">write</div></div>
+          <div id="psCard" class="prompt active"><div class="rowtop"><div class="rowtitle">Past simple</div><div id="psStatus" class="pill">Pendiente</div></div><div id="psLetters" class="letters"></div></div>
+          <div id="ppCard" class="prompt"><div class="rowtop"><div class="rowtitle">Past participle</div><div id="ppStatus" class="pill">Pendiente</div></div><div id="ppLetters" class="letters"></div></div>
+          <div id="hangMsg" class="message"></div>
+          <div class="tools"><button id="deleteBtn" class="btn">Borrar</button><button id="restartVerbBtn" class="btn">Reiniciar</button><label class="btn">Import Excel<input type="file" id="fileInput" style="display:none" accept=".xlsx,.xls,.xlsm,.json"></label><button id="exportBtn" class="btn">Export</button></div>
         </div>
-        <div class="score-card">
-          <div class="score-label">Tiempo</div>
-          <div class="score-value" id="timeValue">-</div>
-        </div>
-        <div class="score-card">
-          <div class="score-label">Racha</div>
-          <div class="score-value" id="streakValue">0</div>
-        </div>
+        <div class="hang-right"><div class="stage-card"><div class="stage-head"><div class="stage-title">Ahorcado</div><div class="stage-stats"><div class="mini"><span>Vidas</span><b id="lives">0</b></div><div class="mini"><span>Partes</span><b><span id="damage">0</span>/<span id="partsTotal">15</span></b></div></div></div><div id="stage" class="stage"><div id="result" class="result"><div class="result-card"><div id="resultTitle" style="font-size:34px"></div><div id="resultText"></div></div></div></div></div></div>
       </div>
-      <div class="win-progress-box" id="winProgressBox">
-        <div class="win-progress-label">Para ganar</div>
-        <div class="win-progress-bar" id="winProgressBar">░░░░░░░░░░░░░░░</div>
-      </div>
-
-      <div class="question-stage" id="questionStage">
-        <div class="confetti" id="confetti"></div>
-        <div class="stage-top">
-          <div class="stage-tag" id="questionLabel">Listo para jugar</div>
-          <div class="lives" id="starsView">&#9734; &#9734; &#9734;</div>
-        </div>
-        <div class="question" id="questionText">2 x 7</div>
-        <div class="answer-box" id="answerBox">
-          <div class="answer-label" id="answerLabel">Tu respuesta</div>
-          <div class="answer-value" id="answerValue">_</div>
-          <div class="correct-answer-row" id="correctAnswerRow">
-            <div class="correct-answer" id="correctAnswerBanner"></div>
-            <button class="continue-btn" id="continueBtn">Cierto!</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="feedback-banner neutral" id="messageBox">Tablas y pulsa Jugar.</div>
-      <div class="feedback-row compact-hidden">
-        <div class="badge" id="statusBadge">Esperando partida</div>
-      </div>
-
-      <div class="controls">
-        <button class="action-btn secondary" id="checkBtn">OK</button>
-        <button class="action-btn secondary" id="skipBtn">Saltar</button>
-        <button class="action-btn danger" id="resetBtn">Reset</button>
-      </div>
-
-      <div class="answer-pad-shell">
-        <div class="answer-pad-title">
-          <strong>Teclado</strong>
-          <span></span>
-        </div>
-        <div class="answer-pad">
-          <button class="pad-btn" data-digit="1">1</button>
-          <button class="pad-btn" data-digit="2">2</button>
-          <button class="pad-btn" data-digit="3">3</button>
-          <button class="pad-btn" data-digit="4">4</button>
-          <button class="pad-btn" data-digit="5">5</button>
-          <button class="pad-btn" data-digit="6">6</button>
-          <button class="pad-btn" data-digit="7">7</button>
-          <button class="pad-btn" data-digit="8">8</button>
-          <button class="pad-btn" data-digit="9">9</button>
-          <button class="pad-btn" data-digit="0">0</button>
-          <button class="pad-btn delete" id="deleteBtn">Borrar</button>
-          <button class="pad-btn ok" id="okPadBtn">OK</button>
-        </div>
-      </div>
-
     </section>
-
-    <aside class="table-panel" id="tablesSection">
-      <div class="row">
-        <h2 class="section-title" style="margin:0">Tablas</h2>
-        <span id="selectedTablesFooterText" style="color:var(--muted);font-weight:900">2</span>
-      </div>
-      <div class="table-grid" id="tableGrid"></div>
-      <div class="controls table-mode-controls">
-        <button class="action-btn blue" id="difficultBtn">Difíciles</button>
-        <button class="action-btn secondary" id="editDifficultBtn">Editar difíciles</button>
-      </div>
-      <div class="difficult-panel" id="difficultPanel">
-        <div class="difficult-head">
-          <strong>Multiplicaciones difíciles</strong>
-          <span class="difficult-count" id="difficultCount">0 seleccionadas</span>
+    <section id="learnView" class="view active">
+      <div class="learn-layout">
+        <div class="learn-left">
+          <div class="photo-controls"><button id="photoToggle" class="btn active">Iconos sí</button><button id="guessBtn" class="btn warn">🧠 Guess!</button><button id="blocksBtn" class="btn active">1200 bloques</button></div>
+          <div id="learnTable" class="learn-table"></div>
+          <div id="learnMsg" class="message">Completa las celdas. Toca una celda para escribir ahí.</div>
+          <div id="hint" class="hint">Aquí aparecerá una ayuda visual.</div>
         </div>
-        <div class="fact-grid" id="difficultGrid"></div>
-      </div>
-      <div class="controls">
-        <button class="action-btn secondary" id="selectAllBtn">Todas</button>
-        <button class="action-btn secondary" id="clearBtn">Limpiar</button>
-        <button class="action-btn primary" id="playFromTablesBtn">Jugar</button>
-      </div>
-      <div class="hint">Puedes jugar con tablas completas o con una lista personalizada de multiplicaciones difíciles como 8x7, 4x8 o las que quieras.</div>
-    </aside>
-  </div>
-
-  <div class="aquarium-card" id="aquariumCard">
-        <div class="aquarium-head">
-          <div>
-            <div class="aquarium-title">Pecera</div>
-            <div class="aquarium-meta" id="aquariumStateLabel">Pecera viva</div>
-          </div>
-          <div class="aquarium-meta" id="aquariumCounter">0/8 · ❤❤❤</div>
+        <div class="learn-right">
+          <div id="photoCard" class="photo-card"><div id="photoFrame" class="photo-frame"><div id="photoImage" class="photo-image"><span id="iconGlyph" class="icon-glyph" aria-hidden="true">⚽</span></div><div id="photoMask" class="photo-mask"></div></div><div id="photoCaption" class="caption">Icono oculto</div></div>
+          <div id="guessPanel" class="guess-panel"><div class="guess-top"><div class="guess-title">¿Qué icono?</div><div id="hearts" class="hearts">❤️❤️❤️</div></div><div id="choices" class="choices"></div></div>
         </div>
-        <div class="aquarium-tank" id="aquariumTank">
-          <div class="aquarium-stage" id="aquariumStage">
-            <div class="tank-sand"></div>
-          </div>
-          <div class="tank-overlay" id="tankOverlay">
-            <div class="panel-win">
-              <div class="overlay-big" id="overlayTitle"></div>
-              <div class="overlay-small" id="overlayText"></div>
-            </div>
-          </div>
-        </div>
-        <div class="aquarium-log" id="aquariumEvent">La pecera espera tu primera cuenta.</div>
       </div>
-
-
-  <section class="card" style="margin-top:14px">
-    <div class="row">
-      <h2 class="section-title" style="margin:0">Records y</h2>
-      <button class="tiny-btn secondary" id="clearErrorsBtn">Borrar</button>
-    </div>
-    <div class="records-grid">
-      <div class="record-card"><div class="record-label">Record practica</div><div class="record-value" id="practiceRecord">0</div></div>
-      <div class="record-card"><div class="record-label">Record contrarreloj</div><div class="record-value" id="timeRecord">0</div></div>
-      <div class="record-card"><div class="record-label">Respondidas</div><div class="record-value" id="answeredValue">0</div></div>
-      <div class="record-card"><div class="record-label">Errores guardados</div><div class="record-value" id="errorCount">0</div></div>
-    </div>
-    <div class="error-list" id="errorList"></div>
-  </section>
+    </section>
+    <div id="confetti" class="confetti"></div>
+  </main>
 </div>
-
 <script>
-const STORAGE_KEY="multiplicaciones_iphone_v3";
-const DEFAULT_STATE={selectedTables:[2],mode:"practice",records:{practice:0,time:0},errors:[],totalAnswered:0,sourceMode:"tables",difficultFacts:[],difficultEditorOpen:false,aquariumEnabled:true,winTarget:15,questionSeconds:30,operationMode:"multiply"};
-const START_LIVES=5;
-let WIN_TARGET=15;
-let QUESTION_SECONDS=30;
-const WIN_TARGET_OPTIONS=[15,20,25,30];
-const QUESTION_SECONDS_OPTIONS=[30,5,10,15];
-const OPERATION_OPTIONS=["multiply","divide","mixed"];
-const GOOD_ITEMS=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","crab","plant","plant_tall","seaweed","rock","stone","shell","coral","pearl","starfish"];
-const FISH_TYPES=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","crab"];
-const BAD_CREATURES=["big_octopus","bad_fish","bad_puffer","eel","piranha","bad_crab","bad_turtle","bad_octopus"];
-const BAD_SYMBOLS=[];
-const BAD_ITEMS=[...BAD_CREATURES];
-const ITEM_UI={
-  fish_orange:{emoji:"🐠",label:"pez naranja",zone:"middle",size:[48,72]},
-  fish_blue:{emoji:"🐟",label:"pez azul",zone:"middle",size:[48,72]},
-  fish_puffer:{emoji:"🐡",label:"pez globo",zone:"middle",size:[50,74]},
-  fish_tropical:{emoji:"🐠",label:"pez tropical",zone:"middle",size:[50,76]},
-  winner_fish:{emoji:"🐬",label:"pez ganador",zone:"middle",size:[92,118]},
-  dolphin:{emoji:"🐬",label:"delfin",zone:"middle",size:[52,78]},
-  turtle:{emoji:"🐢",label:"tortuga",zone:"middle",size:[46,70]},
-  crab:{emoji:"🦀",label:"cangrejo",zone:"bottom",size:[42,64]},
-  plant:{emoji:"🌿",label:"planta",zone:"bottom",size:[44,66]},
-  plant_tall:{emoji:"🌿",label:"alga alta",zone:"bottom",size:[56,78]},
-  seaweed:{emoji:"🌱",label:"alga",zone:"bottom",size:[42,64]},
-  rock:{emoji:"⚫",label:"piedra",zone:"bottom",size:[28,42]},
-  stone:{emoji:"⚪",label:"piedra clara",zone:"bottom",size:[26,40]},
-  starfish:{emoji:"⭐",label:"estrella de mar",zone:"bottom",size:[36,52]},
-  shell:{emoji:"🐚",label:"concha",zone:"bottom",size:[36,52]},
-  coral:{emoji:"🌱",label:"coral",zone:"bottom",size:[42,62]},
-  pearl:{emoji:"⚪",label:"perla",zone:"bottom",size:[24,36]},
-  big_octopus:{emoji:"🐙",label:"pulpo gigante",zone:"middle",size:[68,88]},
-  bad_octopus:{emoji:"🐙",label:"pulpo",zone:"middle",size:[66,86]},
-  bad_fish:{emoji:"🐟",label:"pez gris",zone:"middle",size:[66,86]},
-  bad_puffer:{emoji:"🐡",label:"pez globo gris",zone:"middle",size:[66,86]},
-  eel:{emoji:"🐍",label:"anguila",zone:"middle",size:[66,86]},
-  piranha:{emoji:"🐟",label:"piraña",zone:"middle",size:[66,86]},
-  bad_crab:{emoji:"🦀",label:"cangrejo",zone:"middle",size:[64,84]},
-  bad_turtle:{emoji:"🐢",label:"tortuga gris",zone:"middle",size:[64,84]}
+const D=[{"baseForm":"write","pastSimple":"wrote","pastSimplePattern":"wr_te","pastParticiple":"written","pastParticiplePattern":"writ_e_","studyVisual":"i → o → i+t+n","studyHint":"Piensa en WRITE con la i atrapada. La i cambia a o en wrote, y en written vuelve el sonido i y aparecen dos t + en.","psHighlight":"o","ppHighlight":"tn","isNew":"new_studied"},{"baseForm":"give","pastSimple":"gave","pastSimplePattern":"g_ve","pastParticiple":"given","pastParticiplePattern":"give_","studyVisual":"i → a → i+n","studyHint":"En GIVE, la i salta a una a en gave. Después vuelve la i en given y se añade -n.","psHighlight":"a","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"see","pastSimple":"saw","pastSimplePattern":"s__","pastParticiple":"seen","pastParticiplePattern":"see_","studyVisual":"ee → aw → ee+n","studyHint":"SEE se abre mucho y aparece una a en saw. Luego vuelve el ee largo y se pega una n: seen.","psHighlight":"aw","ppHighlight":"n","isNew":"new_studied"},{"baseForm":"break","pastSimple":"broke","pastSimplePattern":"br___","pastParticiple":"broken","pastParticiplePattern":"br____","studyVisual":"ea → o → o+n","studyHint":"BREAK se rompe: ea cambia a o en broke. Luego a broke se le añade -n para formar broken.","psHighlight":"o","ppHighlight":"on","isNew":"new_studied"},{"baseForm":"be","pastSimple":"was/were","pastSimplePattern":"w__/w___","pastParticiple":"been","pastParticiplePattern":"be__","studyVisual":"be → was/were → bee+n","studyHint":"BE es especial: en pasado puede ser was o were. En participio se queda been, con bee + n.","psHighlight":"was/were","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"eat","pastSimple":"ate","pastSimplePattern":"___","pastParticiple":"eaten","pastParticiplePattern":"eat__","studyVisual":"eat → ate → eat+en","studyHint":"EAT pierde la e inicial larga y queda ate. Luego vuelve eat y se añade -en: eaten.","psHighlight":"ate","ppHighlight":"en","isNew":"new_studied"},{"baseForm":"drink","pastSimple":"drank","pastSimplePattern":"dr_nk","pastParticiple":"drunk","pastParticiplePattern":"dr_nk","studyVisual":"i → a → u","studyHint":"DRINK cambia i por a en drank. Después la a se convierte en u en drunk.","psHighlight":"a","ppHighlight":"u","isNew":"new_studied"},{"baseForm":"go","pastSimple":"went","pastSimplePattern":"w___","pastParticiple":"gone","pastParticiplePattern":"go__","studyVisual":"go → went → go+n","studyHint":"GO desaparece y aparece WENT. Luego vuelve GO y se añade una n.","psHighlight":"went","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"do","pastSimple":"did","pastSimplePattern":"d__","pastParticiple":"done","pastParticiplePattern":"do__","studyVisual":"do → did → do+ne","studyHint":"DO cambia la o por i en DID. Luego vuelve DO y se añade -ne.","psHighlight":"id","ppHighlight":"ne","isNew":"old_studied"},{"baseForm":"come","pastSimple":"came","pastSimplePattern":"c_me","pastParticiple":"come","pastParticiplePattern":"c_me","studyVisual":"o → a → o","studyHint":"COME cambia la o por a en CAME. Luego vuelve a COME igual.","psHighlight":"a","ppHighlight":"","isNew":"old_studied"},{"baseForm":"take","pastSimple":"took","pastSimplePattern":"t___","pastParticiple":"taken","pastParticiplePattern":"take_","studyVisual":"a → oo → a+en","studyHint":"TAKE cambia a por oo en TOOK. Luego vuelve la a y se añade -en.","psHighlight":"oo","ppHighlight":"en","isNew":"old_studied"},{"baseForm":"have","pastSimple":"had","pastSimplePattern":"ha_","pastParticiple":"had","pastParticiplePattern":"ha_","studyVisual":"ve → d → d","studyHint":"HAVE se corta: desaparece ve y queda HAD, igual en participio.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"make","pastSimple":"made","pastSimplePattern":"ma_e","pastParticiple":"made","pastParticiplePattern":"ma_e","studyVisual":"k → d → d","studyHint":"MAKE cambia la k por d en MADE, y se mantiene igual después.","psHighlight":"d","ppHighlight":"d","isNew":"old_studied"},{"baseForm":"say","pastSimple":"said","pastSimplePattern":"sa__","pastParticiple":"said","pastParticiplePattern":"sa__","studyVisual":"y → id → id","studyHint":"SAY cambia la y por id en SAID y ya no cambia más.","psHighlight":"id","ppHighlight":"id","isNew":"old_studied"},{"baseForm":"begin","pastSimple":"began","pastSimplePattern":"beg_n","pastParticiple":"begun","pastParticiplePattern":"beg_n","studyVisual":"i → a → u","studyHint":"BEGIN cambia i por a en began y luego por u en begun.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"become","pastSimple":"became","pastSimplePattern":"bec_me","pastParticiple":"become","pastParticiplePattern":"bec_me","studyVisual":"o → a → o","studyHint":"BECOME cambia o por a en became y luego vuelve a become.","psHighlight":"a","ppHighlight":"","isNew":"not_studied"},{"baseForm":"bring","pastSimple":"brought","pastSimplePattern":"br_____","pastParticiple":"brought","pastParticiplePattern":"br_____","studyVisual":"ing → ought","studyHint":"BRING cambia completamente a brought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"build","pastSimple":"built","pastSimplePattern":"buil_","pastParticiple":"built","pastParticiplePattern":"buil_","studyVisual":"d → t","studyHint":"BUILD pierde la i y aparece ui en built.","psHighlight":"ui","ppHighlight":"ui","isNew":"not_studied"},{"baseForm":"buy","pastSimple":"bought","pastSimplePattern":"b_____","pastParticiple":"bought","pastParticiplePattern":"b_____","studyVisual":"uy → ought","studyHint":"BUY cambia a bought y se mantiene igual.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"catch","pastSimple":"caught","pastSimplePattern":"c_____","pastParticiple":"caught","pastParticiplePattern":"c_____","studyVisual":"atch → aught","studyHint":"CATCH cambia a caught y se mantiene igual.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"choose","pastSimple":"chose","pastSimplePattern":"ch__s","pastParticiple":"chosen","pastParticiplePattern":"ch__se","studyVisual":"oo → o → o+en","studyHint":"CHOOSE pierde una o en chose y añade -en en chosen.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"cut","pastSimple":"cut","pastSimplePattern":"c_t","pastParticiple":"cut","pastParticiplePattern":"c_t","studyVisual":"igual","studyHint":"CUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"draw","pastSimple":"drew","pastSimplePattern":"dr_w","pastParticiple":"drawn","pastParticiplePattern":"draw_","studyVisual":"aw → ew → aw+n","studyHint":"DRAW cambia a drew y luego añade n en drawn.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"drive","pastSimple":"drove","pastSimplePattern":"dr_ve","pastParticiple":"driven","pastParticiplePattern":"drive_","studyVisual":"i → o → i+n","studyHint":"DRIVE cambia i por o y luego vuelve i con n.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"fall","pastSimple":"fell","pastSimplePattern":"f_ll","pastParticiple":"fallen","pastParticiplePattern":"fall__","studyVisual":"a → e → a+en","studyHint":"FALL cambia a e en fell y luego añade -en.","psHighlight":"e","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"feel","pastSimple":"felt","pastSimplePattern":"f___","pastParticiple":"felt","pastParticiplePattern":"f___","studyVisual":"eel → elt","studyHint":"FEEL pierde una e y queda felt.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"find","pastSimple":"found","pastSimplePattern":"f__nd","pastParticiple":"found","pastParticiplePattern":"f__nd","studyVisual":"i → ou","studyHint":"FIND cambia i por ou en found.","psHighlight":"ou","ppHighlight":"ou","isNew":"not_studied"},{"baseForm":"fly","pastSimple":"flew","pastSimplePattern":"fl__","pastParticiple":"flown","pastParticiplePattern":"fl___","studyVisual":"y → ew → ow+n","studyHint":"FLY cambia a flew y luego a flown.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"forget","pastSimple":"forgot","pastSimplePattern":"forg_t","pastParticiple":"forgotten","pastParticiplePattern":"forg_t___","studyVisual":"e → o → o+ten","studyHint":"FORGET cambia e por o y luego añade -ten.","psHighlight":"o","ppHighlight":"tten","isNew":"not_studied"},{"baseForm":"get","pastSimple":"got","pastSimplePattern":"g_t","pastParticiple":"got/gotten","pastParticiplePattern":"g_t/g_t___","studyVisual":"e → o → o / o+ten","studyHint":"GET cambia e por o.","psHighlight":"o","ppHighlight":"otten","isNew":"not_studied"},{"baseForm":"grow","pastSimple":"grew","pastSimplePattern":"gr_w","pastParticiple":"grown","pastParticiplePattern":"grow_","studyVisual":"o → e → ow+n","studyHint":"GROW cambia a grew y luego añade n.","psHighlight":"ew","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"hear","pastSimple":"heard","pastSimplePattern":"hear_","pastParticiple":"heard","pastParticiplePattern":"hear_","studyVisual":"r → rd","studyHint":"HEAR cambia a heard y se mantiene.","psHighlight":"ear","ppHighlight":"ear","isNew":"not_studied"},{"baseForm":"hide","pastSimple":"hid","pastSimplePattern":"h_d","pastParticiple":"hidden","pastParticiplePattern":"hid___","studyVisual":"ide → id → id+den","studyHint":"HIDE se acorta a hid y luego añade -den.","psHighlight":"i","ppHighlight":"den","isNew":"not_studied"},{"baseForm":"hold","pastSimple":"held","pastSimplePattern":"h_ld","pastParticiple":"held","pastParticiplePattern":"h_ld","studyVisual":"o → e","studyHint":"HOLD cambia o por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"keep","pastSimple":"kept","pastSimplePattern":"ke__","pastParticiple":"kept","pastParticiplePattern":"ke__","studyVisual":"ee → ept","studyHint":"KEEP pierde una e en kept.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"know","pastSimple":"knew","pastSimplePattern":"kn_w","pastParticiple":"known","pastParticiplePattern":"kno__","studyVisual":"o → e → ow+n","studyHint":"KNOW cambia a knew y luego añade n.","psHighlight":"ew","ppHighlight":"wn","isNew":"not_studied"},{"baseForm":"leave","pastSimple":"left","pastSimplePattern":"le__","pastParticiple":"left","pastParticiplePattern":"le__","studyVisual":"eave → eft","studyHint":"LEAVE cambia ea por e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"lose","pastSimple":"lost","pastSimplePattern":"los_","pastParticiple":"lost","pastParticiplePattern":"los_","studyVisual":"e → t","studyHint":"LOSE cambia a lost.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"meet","pastSimple":"met","pastSimplePattern":"m_t","pastParticiple":"met","pastParticiplePattern":"m_t","studyVisual":"ee → e","studyHint":"MEET pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"pay","pastSimple":"paid","pastSimplePattern":"pa__","pastParticiple":"paid","pastParticiplePattern":"pa__","studyVisual":"y → id","studyHint":"PAY cambia y por i.","psHighlight":"i","ppHighlight":"i","isNew":"not_studied"},{"baseForm":"put","pastSimple":"put","pastSimplePattern":"p_t","pastParticiple":"put","pastParticiplePattern":"p_t","studyVisual":"igual","studyHint":"PUT no cambia.","psHighlight":"","ppHighlight":"","isNew":"not_studied"},{"baseForm":"read","pastSimple":"read","pastSimplePattern":"r__d","pastParticiple":"read","pastParticiplePattern":"r__d","studyVisual":"ea pronunciación","studyHint":"READ se escribe igual pero cambia la pronunciación.","psHighlight":"ea","ppHighlight":"ea","isNew":"not_studied"},{"baseForm":"ride","pastSimple":"rode","pastSimplePattern":"r_de","pastParticiple":"ridden","pastParticiplePattern":"ri__e_","studyVisual":"i → o → i+den","studyHint":"RIDE cambia i por o y luego añade -den.","psHighlight":"o","ppHighlight":"dden","isNew":"not_studied"},{"baseForm":"ring","pastSimple":"rang","pastSimplePattern":"r_ng","pastParticiple":"rung","pastParticiplePattern":"r_ng","studyVisual":"i → a → u","studyHint":"RING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"run","pastSimple":"ran","pastSimplePattern":"r_n","pastParticiple":"run","pastParticiplePattern":"r_n","studyVisual":"u → a → u","studyHint":"RUN cambia a ran y vuelve a run.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sell","pastSimple":"sold","pastSimplePattern":"s___","pastParticiple":"sold","pastParticiplePattern":"s___","studyVisual":"ell → old","studyHint":"SELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"send","pastSimple":"sent","pastSimplePattern":"sen_","pastParticiple":"sent","pastParticiplePattern":"sen_","studyVisual":"d → t","studyHint":"SEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"sing","pastSimple":"sang","pastSimplePattern":"s_ng","pastParticiple":"sung","pastParticiplePattern":"s_ng","studyVisual":"i → a → u","studyHint":"SING cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"sit","pastSimple":"sat","pastSimplePattern":"s_t","pastParticiple":"sat","pastParticiplePattern":"s_t","studyVisual":"i → a","studyHint":"SIT cambia i por a.","psHighlight":"a","ppHighlight":"a","isNew":"not_studied"},{"baseForm":"sleep","pastSimple":"slept","pastSimplePattern":"sl___","pastParticiple":"slept","pastParticiplePattern":"sl___","studyVisual":"eep → ept","studyHint":"SLEEP pierde una e.","psHighlight":"e","ppHighlight":"e","isNew":"not_studied"},{"baseForm":"speak","pastSimple":"spoke","pastSimplePattern":"sp_k_","pastParticiple":"spoken","pastParticiplePattern":"sp_k__","studyVisual":"ea → o+e → o+en","studyHint":"SPEAK cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"on","isNew":"not_studied"},{"baseForm":"spend","pastSimple":"spent","pastSimplePattern":"spen_","pastParticiple":"spent","pastParticiplePattern":"spen_","studyVisual":"d → t","studyHint":"SPEND cambia d por t.","psHighlight":"t","ppHighlight":"t","isNew":"not_studied"},{"baseForm":"stand","pastSimple":"stood","pastSimplePattern":"st__d","pastParticiple":"stood","pastParticiplePattern":"st__d","studyVisual":"an → oo","studyHint":"STAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"steal","pastSimple":"stole","pastSimplePattern":"st_l_","pastParticiple":"stolen","pastParticiplePattern":"st_l__","studyVisual":"eal → ole → ole+n","studyHint":"STEAL cambia ea por o y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"swim","pastSimple":"swam","pastSimplePattern":"sw_m","pastParticiple":"swum","pastParticiplePattern":"sw_m","studyVisual":"i → a → u","studyHint":"SWIM cambia i por a y luego u.","psHighlight":"a","ppHighlight":"u","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"},{"baseForm":"tell","pastSimple":"told","pastSimplePattern":"t___","pastParticiple":"told","pastParticiplePattern":"t___","studyVisual":"ell → old","studyHint":"TELL cambia e por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"think","pastSimple":"thought","pastSimplePattern":"th_____","pastParticiple":"thought","pastParticiplePattern":"th_____","studyVisual":"ink → ought","studyHint":"THINK cambia a thought.","psHighlight":"ought","ppHighlight":"ought","isNew":"not_studied"},{"baseForm":"understand","pastSimple":"understood","pastSimplePattern":"underst__d","pastParticiple":"understood","pastParticiplePattern":"underst__d","studyVisual":"an → oo","studyHint":"UNDERSTAND cambia a oo.","psHighlight":"oo","ppHighlight":"oo","isNew":"not_studied"},{"baseForm":"wear","pastSimple":"wore","pastSimplePattern":"w___","pastParticiple":"worn","pastParticiplePattern":"w___","studyVisual":"ea → ore → ore+n","studyHint":"WEAR cambia a wore y luego a worn.","psHighlight":"o","ppHighlight":"n","isNew":"not_studied"},{"baseForm":"win","pastSimple":"won","pastSimplePattern":"w_n","pastParticiple":"won","pastParticiplePattern":"w_n","studyVisual":"i → o","studyHint":"WIN cambia i por o.","psHighlight":"o","ppHighlight":"o","isNew":"not_studied"},{"baseForm":"wake","pastSimple":"woke","pastSimplePattern":"w_ke","pastParticiple":"woken","pastParticiplePattern":"w_ken","studyVisual":"a → o → o+n","studyHint":"WAKE cambia a woke y añade n.","psHighlight":"o","ppHighlight":"en","isNew":"not_studied"},{"baseForm":"teach","pastSimple":"taught","pastSimplePattern":"t_____","pastParticiple":"taught","pastParticiplePattern":"t_____","studyVisual":"each → aught","studyHint":"TEACH cambia a taught.","psHighlight":"aught","ppHighlight":"aught","isNew":"not_studied"}];
+const HIDDEN_ICONS=[
+ {title:"Cara feliz",html:"&#x1F600;",fallback:"😀"},
+ {title:"Sonrisa",html:"&#x1F603;",fallback:"😃"},
+ {title:"Risa",html:"&#x1F604;",fallback:"😄"},
+ {title:"Guiño",html:"&#x1F609;",fallback:"😉"},
+ {title:"Sonrojado",html:"&#x1F60A;",fallback:"😊"},
+ {title:"Carcajada",html:"&#x1F602;",fallback:"😂"},
+ {title:"Ojos corazón",html:"&#x1F60D;",fallback:"😍"},
+ {title:"Estrella ojos",html:"&#x1F929;",fallback:"🤩"},
+ {title:"Beso",html:"&#x1F618;",fallback:"😘"},
+ {title:"Lengua",html:"&#x1F61B;",fallback:"😛"},
+ {title:"Pensando",html:"&#x1F914;",fallback:"🤔"},
+ {title:"Silencio",html:"&#x1F92B;",fallback:"🤫"},
+ {title:"Dormido",html:"&#x1F634;",fallback:"😴"},
+ {title:"Sorpresa",html:"&#x1F62E;",fallback:"😮"},
+ {title:"Gafas",html:"&#x1F60E;",fallback:"😎"},
+ {title:"Fiesta",html:"&#x1F973;",fallback:"🥳"},
+ {title:"Llorando",html:"&#x1F622;",fallback:"😢"},
+ {title:"Enfadado",html:"&#x1F620;",fallback:"😠"},
+ {title:"Fantasma",html:"&#x1F47B;",fallback:"👻"},
+ {title:"Alien",html:"&#x1F47D;",fallback:"👽"},
+ {title:"Mono",html:"&#x1F435;",fallback:"🐵"},
+ {title:"Perro",html:"&#x1F436;",fallback:"🐶"},
+ {title:"Lobo",html:"&#x1F43A;",fallback:"🐺"},
+ {title:"Zorro",html:"&#x1F98A;",fallback:"🦊"},
+ {title:"Gato",html:"&#x1F431;",fallback:"🐱"},
+ {title:"León",html:"&#x1F981;",fallback:"🦁"},
+ {title:"Tigre",html:"&#x1F42F;",fallback:"🐯"},
+ {title:"Caballo",html:"&#x1F434;",fallback:"🐴"},
+ {title:"Unicornio",html:"&#x1F984;",fallback:"🦄"},
+ {title:"Vaca",html:"&#x1F42E;",fallback:"🐮"},
+ {title:"Cerdo",html:"&#x1F437;",fallback:"🐷"},
+ {title:"Ratón",html:"&#x1F42D;",fallback:"🐭"},
+ {title:"Hámster",html:"&#x1F439;",fallback:"🐹"},
+ {title:"Conejo",html:"&#x1F430;",fallback:"🐰"},
+ {title:"Oso",html:"&#x1F43B;",fallback:"🐻"},
+ {title:"Panda",html:"&#x1F43C;",fallback:"🐼"},
+ {title:"Koala",html:"&#x1F428;",fallback:"🐨"},
+ {title:"Pollo",html:"&#x1F414;",fallback:"🐔"},
+ {title:"Pingüino",html:"&#x1F427;",fallback:"🐧"},
+ {title:"Pájaro",html:"&#x1F426;",fallback:"🐦"},
+ {title:"Pollito",html:"&#x1F424;",fallback:"🐤"},
+ {title:"Rana",html:"&#x1F438;",fallback:"🐸"},
+ {title:"Cocodrilo",html:"&#x1F40A;",fallback:"🐊"},
+ {title:"Tortuga",html:"&#x1F422;",fallback:"🐢"},
+ {title:"Lagarto",html:"&#x1F98E;",fallback:"🦎"},
+ {title:"Serpiente",html:"&#x1F40D;",fallback:"🐍"},
+ {title:"Dragón",html:"&#x1F409;",fallback:"🐉"},
+ {title:"Ballena",html:"&#x1F433;",fallback:"🐳"},
+ {title:"Delfín",html:"&#x1F42C;",fallback:"🐬"},
+ {title:"Pez",html:"&#x1F41F;",fallback:"🐟"},
+ {title:"Pulpo",html:"&#x1F419;",fallback:"🐙"},
+ {title:"Mariposa",html:"&#x1F98B;",fallback:"🦋"},
+ {title:"Caracol",html:"&#x1F40C;",fallback:"🐌"},
+ {title:"Abeja",html:"&#x1F41D;",fallback:"🐝"},
+ {title:"Hormiga",html:"&#x1F41C;",fallback:"🐜"},
+ {title:"Araña",html:"&#x1F577;",fallback:"🕷"},
+ {title:"Cangrejo",html:"&#x1F980;",fallback:"🦀"},
+ {title:"Camarón",html:"&#x1F990;",fallback:"🦐"},
+ {title:"Calamar",html:"&#x1F991;",fallback:"🦑"},
+ {title:"Dinosaurio",html:"&#x1F996;",fallback:"🦖"},
+ {title:"Manzana",html:"&#x1F34E;",fallback:"🍎"},
+ {title:"Pera",html:"&#x1F350;",fallback:"🍐"},
+ {title:"Naranja",html:"&#x1F34A;",fallback:"🍊"},
+ {title:"Limón",html:"&#x1F34B;",fallback:"🍋"},
+ {title:"Plátano",html:"&#x1F34C;",fallback:"🍌"},
+ {title:"Sandía",html:"&#x1F349;",fallback:"🍉"},
+ {title:"Uvas",html:"&#x1F347;",fallback:"🍇"},
+ {title:"Fresa",html:"&#x1F353;",fallback:"🍓"},
+ {title:"Melón",html:"&#x1F348;",fallback:"🍈"},
+ {title:"Cereza",html:"&#x1F352;",fallback:"🍒"},
+ {title:"Piña",html:"&#x1F34D;",fallback:"🍍"},
+ {title:"Kiwi",html:"&#x1F95D;",fallback:"🥝"},
+ {title:"Tomate",html:"&#x1F345;",fallback:"🍅"},
+ {title:"Aguacate",html:"&#x1F951;",fallback:"🥑"},
+ {title:"Zanahoria",html:"&#x1F955;",fallback:"🥕"},
+ {title:"Maíz",html:"&#x1F33D;",fallback:"🌽"},
+ {title:"Patata",html:"&#x1F954;",fallback:"🥔"},
+ {title:"Pan",html:"&#x1F35E;",fallback:"🍞"},
+ {title:"Queso",html:"&#x1F9C0;",fallback:"🧀"},
+ {title:"Huevo",html:"&#x1F95A;",fallback:"🥚"},
+ {title:"Bacon",html:"&#x1F953;",fallback:"🥓"},
+ {title:"Hamburguesa",html:"&#x1F354;",fallback:"🍔"},
+ {title:"Patatas fritas",html:"&#x1F35F;",fallback:"🍟"},
+ {title:"Pizza",html:"&#x1F355;",fallback:"🍕"},
+ {title:"Hot dog",html:"&#x1F32D;",fallback:"🌭"},
+ {title:"Taco",html:"&#x1F32E;",fallback:"🌮"},
+ {title:"Burrito",html:"&#x1F32F;",fallback:"🌯"},
+ {title:"Palomitas",html:"&#x1F37F;",fallback:"🍿"},
+ {title:"Arroz",html:"&#x1F35A;",fallback:"🍚"},
+ {title:"Sushi",html:"&#x1F363;",fallback:"🍣"},
+ {title:"Helado",html:"&#x1F366;",fallback:"🍦"},
+ {title:"Tarta",html:"&#x1F370;",fallback:"🍰"},
+ {title:"Cupcake",html:"&#x1F9C1;",fallback:"🧁"},
+ {title:"Chocolate",html:"&#x1F36B;",fallback:"🍫"},
+ {title:"Caramelo",html:"&#x1F36C;",fallback:"🍬"},
+ {title:"Pirulí",html:"&#x1F36D;",fallback:"🍭"},
+ {title:"Galleta",html:"&#x1F36A;",fallback:"🍪"},
+ {title:"Leche",html:"&#x1F95B;",fallback:"🥛"},
+ {title:"Café",html:"&#x2615;&#xFE0F;",fallback:"☕️"},
+ {title:"Té",html:"&#x1F375;",fallback:"🍵"},
+ {title:"Fútbol",html:"&#x26BD;&#xFE0F;",fallback:"⚽️"},
+ {title:"Baloncesto",html:"&#x1F3C0;",fallback:"🏀"},
+ {title:"Fútbol americano",html:"&#x1F3C8;",fallback:"🏈"},
+ {title:"Béisbol",html:"&#x26BE;&#xFE0F;",fallback:"⚾️"},
+ {title:"Tenis",html:"&#x1F3BE;",fallback:"🎾"},
+ {title:"Voleibol",html:"&#x1F3D0;",fallback:"🏐"},
+ {title:"Rugby",html:"&#x1F3C9;",fallback:"🏉"},
+ {title:"Billar",html:"&#x1F3B1;",fallback:"🎱"},
+ {title:"Ping pong",html:"&#x1F3D3;",fallback:"🏓"},
+ {title:"Bádminton",html:"&#x1F3F8;",fallback:"🏸"},
+ {title:"Hockey",html:"&#x1F3D2;",fallback:"🏒"},
+ {title:"Cricket",html:"&#x1F3CF;",fallback:"🏏"},
+ {title:"Golf",html:"&#x26F3;&#xFE0F;",fallback:"⛳️"},
+ {title:"Arco",html:"&#x1F3F9;",fallback:"🏹"},
+ {title:"Caña pesca",html:"&#x1F3A3;",fallback:"🎣"},
+ {title:"Patín hielo",html:"&#x26F8;&#xFE0F;",fallback:"⛸️"},
+ {title:"Esquí",html:"&#x1F3BF;",fallback:"🎿"},
+ {title:"Trineo",html:"&#x1F6F7;",fallback:"🛷"},
+ {title:"Diana",html:"&#x1F3AF;",fallback:"🎯"},
+ {title:"Dados",html:"&#x1F3B2;",fallback:"🎲"},
+ {title:"Ajedrez",html:"&#x265F;&#xFE0F;",fallback:"♟️"},
+ {title:"Puzzle",html:"&#x1F9E9;",fallback:"🧩"},
+ {title:"Bowling",html:"&#x1F3B3;",fallback:"🎳"},
+ {title:"Trompeta",html:"&#x1F3BA;",fallback:"🎺"},
+ {title:"Guitarra",html:"&#x1F3B8;",fallback:"🎸"},
+ {title:"Piano",html:"&#x1F3B9;",fallback:"🎹"},
+ {title:"Tambor",html:"&#x1F941;",fallback:"🥁"},
+ {title:"Micrófono",html:"&#x1F3A4;",fallback:"🎤"},
+ {title:"Coche",html:"&#x1F697;",fallback:"🚗"},
+ {title:"Taxi",html:"&#x1F695;",fallback:"🚕"},
+ {title:"Autobús",html:"&#x1F68C;",fallback:"🚌"},
+ {title:"Camión",html:"&#x1F69A;",fallback:"🚚"},
+ {title:"Tractor",html:"&#x1F69C;",fallback:"🚜"},
+ {title:"Moto",html:"&#x1F3CD;",fallback:"🏍"},
+ {title:"Bici",html:"&#x1F6B2;",fallback:"🚲"},
+ {title:"Patinete",html:"&#x1F6F4;",fallback:"🛴"},
+ {title:"Tren",html:"&#x1F686;",fallback:"🚆"},
+ {title:"Tranvía",html:"&#x1F68A;",fallback:"🚊"},
+ {title:"Cohete",html:"&#x1F680;",fallback:"🚀"},
+ {title:"Avión",html:"&#x2708;&#xFE0F;",fallback:"✈️"},
+ {title:"Helicóptero",html:"&#x1F681;",fallback:"🚁"},
+ {title:"Barco",html:"&#x26F5;&#xFE0F;",fallback:"⛵️"},
+ {title:"Ancla",html:"&#x2693;&#xFE0F;",fallback:"⚓️"},
+ {title:"Casa",html:"&#x1F3E0;",fallback:"🏠"},
+ {title:"Castillo",html:"&#x1F3F0;",fallback:"🏰"},
+ {title:"Tienda",html:"&#x1F3EA;",fallback:"🏪"},
+ {title:"Escuela",html:"&#x1F3EB;",fallback:"🏫"},
+ {title:"Hospital",html:"&#x1F3E5;",fallback:"🏥"},
+ {title:"Banco",html:"&#x1F3E6;",fallback:"🏦"},
+ {title:"Fábrica",html:"&#x1F3ED;",fallback:"🏭"},
+ {title:"Rueda feria",html:"&#x1F3A1;",fallback:"🎡"},
+ {title:"Montaña rusa",html:"&#x1F3A2;",fallback:"🎢"},
+ {title:"Circo",html:"&#x1F3AA;",fallback:"🎪"},
+ {title:"Sol",html:"&#x2600;&#xFE0F;",fallback:"☀️"},
+ {title:"Luna",html:"&#x1F319;",fallback:"🌙"},
+ {title:"Estrella",html:"&#x2B50;&#xFE0F;",fallback:"⭐️"},
+ {title:"Rayo",html:"&#x26A1;&#xFE0F;",fallback:"⚡️"},
+ {title:"Fuego",html:"&#x1F525;",fallback:"🔥"},
+ {title:"Arcoíris",html:"&#x1F308;",fallback:"🌈"},
+ {title:"Nube",html:"&#x2601;&#xFE0F;",fallback:"☁️"},
+ {title:"Nieve",html:"&#x2744;&#xFE0F;",fallback:"❄️"},
+ {title:"Muñeco nieve",html:"&#x26C4;&#xFE0F;",fallback:"⛄️"},
+ {title:"Ola",html:"&#x1F30A;",fallback:"🌊"},
+ {title:"Gota",html:"&#x1F4A7;",fallback:"💧"},
+ {title:"Flor",html:"&#x1F33C;",fallback:"🌼"},
+ {title:"Rosa",html:"&#x1F339;",fallback:"🌹"},
+ {title:"Tulipán",html:"&#x1F337;",fallback:"🌷"},
+ {title:"Árbol",html:"&#x1F333;",fallback:"🌳"},
+ {title:"Palmera",html:"&#x1F334;",fallback:"🌴"},
+ {title:"Cactus",html:"&#x1F335;",fallback:"🌵"},
+ {title:"Seta",html:"&#x1F344;",fallback:"🍄"},
+ {title:"Tierra",html:"&#x1F30D;",fallback:"🌍"},
+ {title:"Volcán",html:"&#x1F30B;",fallback:"🌋"},
+ {title:"Bombilla",html:"&#x1F4A1;",fallback:"💡"},
+ {title:"Linterna",html:"&#x1F526;",fallback:"🔦"},
+ {title:"Libro",html:"&#x1F4D8;",fallback:"📘"},
+ {title:"Cuaderno",html:"&#x1F4D3;",fallback:"📓"},
+ {title:"Lápiz",html:"&#x270F;&#xFE0F;",fallback:"✏️"},
+ {title:"Pincel",html:"&#x1F58C;",fallback:"🖌"},
+ {title:"Tijeras",html:"&#x2702;&#xFE0F;",fallback:"✂️"},
+ {title:"Regla",html:"&#x1F4CF;",fallback:"📏"},
+ {title:"Mochila",html:"&#x1F392;",fallback:"🎒"},
+ {title:"Gafas sol",html:"&#x1F576;",fallback:"🕶"},
+ {title:"Corona",html:"&#x1F451;",fallback:"👑"},
+ {title:"Sombrero",html:"&#x1F3A9;",fallback:"🎩"},
+ {title:"Camiseta",html:"&#x1F455;",fallback:"👕"},
+ {title:"Zapatilla",html:"&#x1F45F;",fallback:"👟"},
+ {title:"Paraguas",html:"&#x2602;&#xFE0F;",fallback:"☂️"},
+ {title:"Reloj",html:"&#x231A;&#xFE0F;",fallback:"⌚️"},
+ {title:"Cámara",html:"&#x1F4F7;",fallback:"📷"},
+ {title:"Teléfono",html:"&#x1F4F1;",fallback:"📱"},
+ {title:"Ordenador",html:"&#x1F4BB;",fallback:"💻"},
+ {title:"Impresora",html:"&#x1F5A8;",fallback:"🖨"},
+ {title:"Radio",html:"&#x1F4FB;",fallback:"📻"},
+ {title:"Televisión",html:"&#x1F4FA;",fallback:"📺"},
+ {title:"Candado",html:"&#x1F512;",fallback:"🔒"},
+ {title:"Llave",html:"&#x1F511;",fallback:"🔑"},
+ {title:"Martillo",html:"&#x1F528;",fallback:"🔨"},
+ {title:"Engranaje",html:"&#x2699;&#xFE0F;",fallback:"⚙️"},
+ {title:"Imán",html:"&#x1F9F2;",fallback:"🧲"}
+];
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const PARTS=['base','pole','beam','brace','rope','head','neck','bodyTop','bodyBottom','leftArm','rightArm','leftForearm','rightForearm','leftLeg','rightLeg'];
+let rawData=[...D], dataset=[], idx=0, mode='learn', filter='new', score={good:0,bad:0}, activeTarget='pastSimple', seen=new Set(), solutionPending=false;
+let hang={damage:4,lives:0,status:'playing'};
+let hangPromptMode='tricky';
+let learn={phase:'tricky', col:0, cells:{}, done:{}, activeKey:'tricky_baseForm'};
+let photo={on:true,blocks:1200,revealed:0,order:[],iconIdx:Math.floor(Math.random()*HIDDEN_ICONS.length),guessOpen:false,guessTries:3,guessSolved:false,streak:0,verbHits:0,choices:[],choicesKey:""};
+function esc(x){return String(x??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function clean(e){let c={baseForm:String(e.baseForm||'').trim(),pastSimple:String(e.pastSimple||'').trim(),pastSimplePattern:String(e.pastSimplePattern||e.pastSimple||'').trim(),pastParticiple:String(e.pastParticiple||'').trim(),pastParticiplePattern:String(e.pastParticiplePattern||e.pastParticiple||'').trim(),studyHint:String(e.studyHint||'').trim(),isNew:String(e.isNew||'').trim().toLowerCase()}; if(!c.baseForm||!c.pastSimple||!c.pastParticiple)return null; c.pastSimplePattern=norm(c.pastSimple,c.pastSimplePattern); c.pastParticiplePattern=norm(c.pastParticiple,c.pastParticiplePattern); return c}
+function norm(a,p){a=String(a||'');p=String(p||a);if(p.length>a.length)p=p.slice(0,a.length);if(p.length<a.length)p+=a.slice(p.length);return p}
+function ensureBlank(answer,pattern){pattern=norm(answer,pattern); if(pattern.includes('_')) return pattern; let chars=[...answer]; for(let i=chars.length-1;i>=0;i--){ if(chars[i]!=='/'){chars[i]='_'; return chars.join('')}} return pattern}
+function blindPattern(answer){return [...answer].map(ch=>ch==='/'?'/':'_').join('')}
+function keyOf(it){return `${it.baseForm}|${it.pastSimple}|${it.pastParticiple}`.toLowerCase()}
+function rebuild(){let b=rawData.map(clean).filter(Boolean); if(filter==='new') b=b.filter(x=>x.isNew==='new_studied'); else if(filter==='studied') b=b.filter(x=>['new_studied','old_studied'].includes(x.isNew)); dataset=b; idx=0; seen.clear(); dataset.forEach(resetItem); resetLearn(); updateStats()}
+function resetItem(it){it.state={pastSimple:makeState(it.pastSimple,ensureBlank(it.pastSimple,it.pastSimplePattern)),pastParticiple:makeState(it.pastParticiple,ensureBlank(it.pastParticiple,it.pastParticiplePattern))}; it.meta={revealed:false,scored:{pastSimple:false,pastParticiple:false}}}
+function makeState(answer,pattern){return {answer,pattern,guessed:[...pattern].map(ch=>ch==='_?'?'':(ch==='_'?'':ch)),ok:null}}
+function cur(){return dataset[idx]}
+function updateStats(){ $('#good').textContent=score.good; $('#bad').textContent=score.bad; $('#idx').textContent=dataset.length?idx+1:0; $('#total').textContent=dataset.length; $('#setName').textContent=filter==='new'?'Studying':filter==='studied'?'Studied':'All'}
+function focusInput(){
+  const el=$('#hiddenInput');
+  if(!el)return;
+  el.removeAttribute('readonly');
+  try{el.focus({preventScroll:true})}catch{el.focus()}
+  setTimeout(()=>{try{el.focus({preventScroll:true})}catch{el.focus()}},80);
+  setTimeout(()=>{try{el.focus({preventScroll:true})}catch{el.focus()}},260)
+}
+function showMsg(t){(mode==='learn'?$('#learnMsg'):$('#hangMsg')).textContent=t}
+function setMode(m){mode=m; $('#hangView').classList.toggle('active',m==='hang'); $('#learnView').classList.toggle('active',m==='learn'); $('#hangBtn').classList.toggle('active',m==='hang'); $('#learnBtn').classList.toggle('active',m==='learn'); if(m==='learn') resetLearn(false); render(); focusInput()}
+function setFilter(f){filter=f; $$('.nav .btn').forEach(()=>{}); $('#filterNew').classList.toggle('active',f==='new'); $('#filterStudied').classList.toggle('active',f==='studied'); $('#filterAll').classList.toggle('active',f==='all'); rebuild(); render();}
+function chars(s){return [...s.answer].map((ch,i)=>ch==='/'?{c:'slash',v:'/'}:s.pattern[i]==='_'?{c:(s.guessed[i]?'blank filled':'blank'),v:s.guessed[i]||'_'}:{c:'fixed',v:ch})}
+function renderLetters(el,s){el.innerHTML='';let items=chars(s);el.style.setProperty('--char-count',Math.max(3,items.length));items.forEach(it=>{let d=document.createElement('span');d.className='char '+it.c;d.textContent=it.v;el.appendChild(d)})}
+function renderStaticLetters(el,word){el.innerHTML='';let items=[...String(word||'')];el.style.setProperty('--char-count',Math.max(3,items.length));items.forEach(ch=>{let d=document.createElement('span');d.className='char fixed';d.textContent=ch;el.appendChild(d)})}
+function nextBlank(s){return s.pattern.split('').findIndex((ch,i)=>ch==='_'&&!s.guessed[i])}
+function lastFilled(s){for(let i=s.guessed.length-1;i>=0;i--)if(s.pattern[i]==='_'&&s.guessed[i])return i;return -1}
+function insert(ch){
+ if(!dataset.length)return;
+ if(mode==='learn') return learnInsert(ch);
+ let it=cur(), s=it.state[activeTarget], i=nextBlank(s);
+ if(i<0){showMsg('Ese recuadro ya está completo.');return}
+ s.guessed[i]=ch;
+ let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]);
+ if(done){
+   let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase();
+   let ok=guess===it[activeTarget].toLowerCase();
+   s.ok=ok;
+   if(!it.meta.scored[activeTarget]){score[ok?'good':'bad']++;it.meta.scored[activeTarget]=true;}
+   let hmsg=ok?hangSuccess():hangFail();
+   showMsg((hmsg?hmsg+' ':'')+(ok?'Bien. Pasamos a la siguiente.':'Está mal, pero pasamos a la siguiente.'));
+   activeTarget=activeTarget==='pastSimple'?'pastParticiple':'pastSimple';
+   let bothComplete=it.state.pastSimple.ok!==null&&it.state.pastParticiple.ok!==null;
+   if(bothComplete)setTimeout(nextVerb,750);
+ }
+ render()
+}
+function del(){if(!dataset.length)return; if(mode==='learn') return learnDelete(); let s=cur().state[activeTarget], i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
+function setActiveTarget(t){activeTarget=t;render();focusInput()}
+function renderHang(){if(!dataset.length)return; let it=cur(); renderStaticLetters($('#baseWord'),it.baseForm); renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); let blindBtn=$('#blindBtn'); if(blindBtn)blindBtn.textContent=hangPromptMode==='blind'?'Tricky':'Blind'; renderHangman()}
+function initHangmanParts(){let stage=$('#stage'); if(stage.querySelector('.part'))return; PARTS.forEach(p=>{let d=document.createElement('div');d.className='part '+p;d.dataset.part=p;stage.appendChild(d)}); $('#partsTotal').textContent=PARTS.length}
+function renderHangman(){initHangmanParts(); PARTS.forEach((p,i)=>{$(`[data-part="${p}"]`).classList.toggle('visible',i<hang.damage)}); $('#lives').textContent=hang.lives; $('#damage').textContent=hang.damage; let res=$('#result'); res.classList.toggle('show',hang.status!=='playing'); $('#resultTitle').textContent=hang.status==='won'?'GANASTE!':hang.status==='lost'?'PERDISTE!':''; $('#resultText').textContent=hang.status==='won'?'Has desmontado el ahorcado.':hang.status==='lost'?'Se completó el ahorcado.':''}
+function hangSuccess(){if(hang.status!=='playing')return ''; if(hang.damage>0) hang.damage--; else hang.lives++; if(hang.damage<=0){hang.damage=0;hang.status='won';return '¡Ganaste!'} return 'Quitas una pieza.'}
+function hangFail(){if(hang.status!=='playing')return ''; if(hang.lives>0){hang.lives--;return 'Una vida te protege.'} hang.damage++; if(hang.damage>=PARTS.length){hang.damage=PARTS.length;hang.status='lost';return 'Ahorcado completo.'} return 'Aparece una pieza.'}
+function reveal(){if(mode!=='hang'||!dataset.length)return; let it=cur(); ['pastSimple','pastParticiple'].forEach(k=>{let s=it.state[k]; [...s.answer].forEach((ch,i)=>{if(s.pattern[i]==='_')s.guessed[i]=ch});s.ok=true}); solutionPending=true; $('#solutionOkBtn').style.display='inline-block'; render(); showMsg('Solución mostrada. Pulsa OK.')} 
+function restartVerb(){if(!dataset.length)return; resetItem(cur()); hangPromptMode='tricky'; if(mode==='learn')resetLearn(false); activeTarget='pastSimple'; render(); showMsg('Reiniciado.')}
+function restartGame(){score={good:0,bad:0}; hang={damage:4,lives:0,status:'playing'}; hangPromptMode='tricky'; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
+function markSeen(){if(dataset.length)seen.add(keyOf(cur()))}
+function nextVerb(){if(!dataset.length)return; markSeen(); let ni=-1; for(let step=1;step<=dataset.length;step++){let c=(idx+step)%dataset.length;if(!seen.has(keyOf(dataset[c]))){ni=c;break}} if(ni<0){seen.clear();ni=(idx+1)%dataset.length} idx=ni; resetItem(cur()); resetLearn(false); hangPromptMode='tricky'; activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render(); showMsg(mode==='learn'?'Nuevo verbo de aprendizaje.':'Nuevo verbo.')}
+function shuffleVerbs(){if(!dataset.length)return; let currentKey=keyOf(cur()); let unseen=dataset.filter(x=>!seen.has(keyOf(x))&&keyOf(x)!==currentKey); let seenItems=dataset.filter(x=>seen.has(keyOf(x))||keyOf(x)===currentKey); unseen.sort(()=>Math.random()-.5); seenItems.sort(()=>Math.random()-.5); dataset=[...unseen,...seenItems]; idx=0; dataset.forEach(resetItem); hangPromptMode='tricky'; resetLearn(); render(); showMsg('Mezclado sin repetir hasta agotar el conjunto.')}
+function setHangPromptMode(nextMode){if(!dataset.length)return; let it=cur(); let blind=nextMode==='blind'; ['pastSimple','pastParticiple'].forEach(k=>{let pattern=blind?blindPattern(it[k]):ensureBlank(it[k],k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); it.state[k]=makeState(it[k],pattern); it.meta.scored[k]=false}); hangPromptMode=nextMode; activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render()}
+function toggleHangPromptMode(){if(!dataset.length)return; if(mode!=='hang')setMode('hang'); let nextMode=hangPromptMode==='blind'?'tricky':'blind'; setHangPromptMode(nextMode); showMsg(nextMode==='blind'?'Blind: todas las letras estan ocultas.':'Tricky: vuelven las pistas.')}
+function resetLearn(resetPhoto=false){if(!dataset.length)return; let it=cur(); learn={phase:'tricky',col:0,cells:{},done:{},activeKey:'tricky_baseForm'}; ['baseForm','pastSimple','pastParticiple'].forEach(k=>{let ans=it[k]; let pat=k==='baseForm'?ensureBlank(ans,ans):ensureBlank(ans,k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); learn.cells['tricky_'+k]=makeState(ans,pat); learn.cells['blind_'+k]=makeState(ans,blindPattern(ans)); learn.done['tricky_'+k]=false; learn.done['blind_'+k]=false}); if(resetPhoto){resetPhotoProgress()}}
+function renderLearn(){
+ if(!dataset.length)return;
+ let it=cur();
+ let cols=['baseForm','pastSimple','pastParticiple'];
+ let labels={baseForm:'Base Form',pastSimple:'Past Simple',pastParticiple:'Past Participle'};
+ let html='<div class="learn-stack">';
+ html+=`<div class="base-card learn-card learn-card-ref"><div class="label">Base Form</div><div class="learn-forms">`+cols.map(c=>`<div class="learn-form-box"><div class="th">${labels[c]}</div><div class="letters refLetters" id="learn_ref_${c}"></div></div>`).join('')+`</div></div>`;
+ ['tricky','blind'].forEach(ph=>{
+   let lockedRow=ph==='blind' && !cols.every(c=>learn.done['tricky_'+c]);
+   html+=`<div class="prompt learn-card learn-card-entry ${lockedRow?'locked ':''}"><div class="learn-forms">`;
+   cols.forEach(c=>{
+     let k=ph+'_'+c, locked=ph==='blind' && !cols.every(x=>learn.done['tricky_'+x]);
+     let cls='cell editable '+(learn.activeKey===k?'active ':'')+(learn.done[k]?'good ':'')+(locked?'locked ':'');
+     html+=`<div class="learn-form-box"><div class="${cls}" data-key="${k}"><div class="letters" id="learn_${k}"></div></div></div>`;
+   });
+   html+='</div></div>';
+ });
+ html+='</div>';
+ $('#learnTable').innerHTML=html;
+ cols.forEach(c=>renderStaticLetters($('#learn_ref_'+c),it[c]));
+ Object.entries(learn.cells).forEach(([k,s])=>renderLetters($('#learn_'+k),s));
+ $$('#learnTable .editable').forEach(el=>el.onclick=()=>{if(el.classList.contains('locked'))return; learn.activeKey=el.dataset.key; render(); focusInput()});
+ $('#hint').textContent=it.studyHint||'Mira la forma completa, completa Tricky y despues escribe Blind de memoria.';
+ renderPhoto();
+ renderGuess()
+}
+function learnInsert(ch){let s=learn.cells[learn.activeKey]; if(!s)return; let i=nextBlank(s); if(i<0){showMsg('Esta celda ya está completa.');return} s.guessed[i]=ch; let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]); if(done){let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase(); let ok=guess===s.answer.toLowerCase(); s.ok=ok; if(ok){ if(!learn.done[learn.activeKey]){score.good++; learn.done[learn.activeKey]=true; let amount=registerPhotoHit(); revealProgress(amount);} moveNextLearnCell(); showMsg(photo.lastBoostMsg||'Bien. Se descubre un poco más.'); photo.lastBoostMsg=''; } else {score.bad++; photo.streak=0; showMsg('Casi. Borra y corrige.')} } render()}
+function learnDelete(){let s=learn.cells[learn.activeKey]; if(!s)return; let i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
+function moveNextLearnCell(){let cols=['baseForm','pastSimple','pastParticiple']; let keys=[...cols.map(c=>'tricky_'+c),...cols.map(c=>'blind_'+c)]; let i=keys.indexOf(learn.activeKey); for(let j=i+1;j<keys.length;j++){if(!learn.done[keys[j]] && !(keys[j].startsWith('blind')&&!cols.every(c=>learn.done['tricky_'+c]))){learn.activeKey=keys[j];return}} if(keys.every(k=>learn.done[k])) setTimeout(nextVerb,650)}
+function photoObj(){return HIDDEN_ICONS[photo.iconIdx%HIDDEN_ICONS.length]}
+function photoTitle(p=photoObj()){return String(p.title||'Icono')}
+function shuffleArray(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function chooseNewIcon(){
+ let next=photo.iconIdx;
+ if(HIDDEN_ICONS.length>1){while(next===photo.iconIdx)next=Math.floor(Math.random()*HIDDEN_ICONS.length)}
+ photo.iconIdx=next;
+}
+
+function gridForTarget(){let tiles=photo.blocks||1200; if(tiles===300)return {cols:20,rows:15,tiles}; if(tiles===600)return {cols:30,rows:20,tiles}; if(tiles===1200)return {cols:40,rows:30,tiles}; return {cols:60,rows:30,tiles}}
+function resetPhotoProgress(newIcon=false){photo.revealed=0;photo.order=[];photo.guessOpen=false;photo.guessTries=3;photo.guessSolved=false;photo.streak=0;photo.verbHits=0;photo.lastBoostMsg="";photo.choices=[];photo.choicesKey="";if(newIcon)chooseNewIcon()}
+function ensurePhotoOrder(total){if(photo.order&&photo.order.length===total)return; photo.order=[...Array(total).keys()]; for(let i=photo.order.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[photo.order[i],photo.order[j]]=[photo.order[j],photo.order[i]]}}
+function registerPhotoHit(){if(!photo.on||photo.guessSolved)return 0; photo.streak=(photo.streak||0)+1; photo.verbHits=(photo.verbHits||0)+1; let amount=2; let boosts=[]; if(photo.verbHits%6===0){amount+=5;boosts.push('Perfect Verb +5')} if(photo.streak>0&&photo.streak%9===0){amount+=8;boosts.push('Racha +8')} photo.lastBoostMsg=boosts.length?`¡Boost! ${boosts.join(' · ')}. Se descubren ${amount} bloques.`:'Bien. Se descubren 2 bloques.'; return amount}
+function renderPhoto(){
+ const card=$('#photoCard');
+ card.classList.toggle('off',!photo.on);
+ if(!photo.on)return;
+ const p=photoObj();
+ const g=gridForTarget();
+ ensurePhotoOrder(g.tiles);
+ const frame=$('#photoFrame');
+ const img=$('#photoImage');
+ let glyph=$('#iconGlyph');
+ const mask=$('#photoMask');
+ if(frame) frame.setAttribute('data-icon-title',photoTitle(p));
+ if(img) img.setAttribute('aria-label',photoTitle(p));
+ if(img && !glyph){
+   glyph=document.createElement('span');
+   glyph.id='iconGlyph';
+   glyph.className='icon-glyph';
+   glyph.setAttribute('aria-hidden','true');
+   img.appendChild(glyph);
+ }
+ if(glyph){
+   glyph.innerHTML=p.html||esc(p.fallback||'?');
+   if(!glyph.textContent.trim()) glyph.textContent=p.fallback||'?';
+   glyph.setAttribute('data-fallback',p.fallback||'?');
+   glyph.setAttribute('title',photoTitle(p));
+ }
+ mask.style.setProperty('--photo-cols',g.cols);
+ mask.style.setProperty('--photo-rows',g.rows);
+ const revealed=Math.min(g.tiles,photo.guessSolved?g.tiles:(photo.revealed||0));
+ const revealedSet=new Set(photo.order.slice(0,revealed));
+ mask.innerHTML='';
+ const frag=document.createDocumentFragment();
+ for(let i=0;i<g.tiles;i++){
+   const d=document.createElement('div');
+   d.className='tile '+(revealedSet.has(i)?'revealed':'');
+   frag.appendChild(d);
+ }
+ mask.appendChild(frag);
+ $('#photoCaption').classList.toggle('done',revealed>=g.tiles);
+ $('#photoCaption').innerHTML=revealed>=g.tiles?`Icono descubierto: <strong>${esc(photoTitle(p))}</strong>`:`Icono oculto · ${revealed}/${g.tiles} bloques`;
+}
+function revealProgress(amount=2){if(!photo.on)return; let g=gridForTarget(); ensurePhotoOrder(g.tiles); photo.revealed=Math.min(g.tiles,(photo.revealed||0)+Math.max(0,amount||0)); if(photo.revealed>=g.tiles && !photo.guessSolved){showMsg('Icono descubierto. Pulsa Guess cuando quieras responder.')}}
+function buildChoices(){
+ const correct=photoTitle();
+ const key=photo.iconIdx+'|'+correct;
+ if(photo.choicesKey===key && photo.choices && photo.choices.length)return photo.choices;
+ const pool=HIDDEN_ICONS.map(x=>x.title).filter(x=>x!==correct);
+ shuffleArray(pool);
+ photo.choices=shuffleArray([...pool.slice(0,7),correct]);
+ photo.choicesKey=key;
+ return photo.choices;
+}
+function renderGuess(){let panel=$('#guessPanel'); panel.classList.toggle('show',photo.guessOpen&&photo.on); $('#guessBtn').classList.toggle('active',photo.guessOpen); $('#hearts').textContent='❤️'.repeat(photo.guessTries)+'🖤'.repeat(Math.max(0,3-photo.guessTries)); if(!photo.guessOpen)return; let choices=buildChoices(); $('#choices').innerHTML=''; choices.forEach(ch=>{let b=document.createElement('button');b.className='choice';b.textContent=ch;b.onclick=()=>guess(ch,b);$('#choices').appendChild(b)})}
+function guess(ch,b){
+ let correct=photoTitle(),ok=ch.toLowerCase()===correct.toLowerCase();
+ photo.guessOpen=false;
+ renderGuess();
+ if(ok){
+   photo.guessSolved=true;
+   photo.revealed=gridForTarget().tiles;
+   score.good++;
+   celebrate();
+   renderPhoto();
+   showMsg('¡Correcto! Empieza un nuevo icono.');
+   setTimeout(()=>{resetPhotoProgress(true);render()},650);
+ }else{
+   score.bad++;
+   photo.guessTries=Math.max(0,photo.guessTries-1);
+   showMsg('No era ese. Guess se ha cerrado y puedes seguir jugando.');
+   updateStats();
+ }
+}
+function celebrate(){let c=$('#confetti'); c.innerHTML=''; let colors=['#4f8cff','#25c96f','#ffd34f','#ff6fb5','#7c5cff']; for(let i=0;i<42;i++){let el=document.createElement('i');el.style.left=Math.random()*100+'%';el.style.top='-20px';el.style.background=colors[i%colors.length];el.style.animationDelay=(Math.random()*0.25)+'s';c.appendChild(el)} setTimeout(()=>c.innerHTML='',1100)}
+function render(){updateStats(); if(mode==='hang')renderHang(); else renderLearn(); focusInput()}
+function exportJson(){let blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'}); let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='irregular_verbs_lucyago.json';a.click();URL.revokeObjectURL(a.href)}
+function importFile(file){let r=new FileReader(); r.onload=e=>{try{if(file.name.endsWith('.json')) rawData=JSON.parse(e.target.result); else {let wb=XLSX.read(e.target.result,{type:'binary'}), ws=wb.Sheets[wb.SheetNames[0]], rows=XLSX.utils.sheet_to_json(ws,{defval:''}); rawData=rows.map(x=>({baseForm:x.baseForm||x.Base||x['Base Form']||x.base||'',pastSimple:x.pastSimple||x['Past Simple']||x.Past||'',pastSimplePattern:x.pastSimplePattern||x['Past Simple Pattern']||'',pastParticiple:x.pastParticiple||x['Past Participle']||x.Participle||'',pastParticiplePattern:x.pastParticiplePattern||x['Past Participle Pattern']||'',studyHint:x.studyHint||x.Hint||'',isNew:x.isNew||x.Status||''}))} rebuild();render();showMsg('Conjunto importado.')}catch(err){showMsg('No he podido importar el archivo.')}}; if(file.name.endsWith('.json'))r.readAsText(file);else r.readAsBinaryString(file)}
+$('#learnBtn').onclick=()=>setMode('learn'); $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#blindBtn').onclick=toggleHangPromptMode; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#solutionOkBtn').onclick=()=>{solutionPending=false;$('#solutionOkBtn').style.display='none';nextVerb()}; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='../index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Iconos sí':'Iconos no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $('#blocksBtn').onclick=()=>{
+  const levels=[300,600,1200,1800];
+  const current=levels.indexOf(photo.blocks);
+  photo.blocks=levels[(current+1)%levels.length];
+  $('#blocksBtn').textContent=photo.blocks+' bloques';
+  resetPhotoProgress();
+  render();
+  showMsg('Icono ajustado a '+photo.blocks+' bloques.');
 };
-const state=loadState();
-WIN_TARGET=state.winTarget||15;
-const LUCYAGO_RETO_PARAMS=new URLSearchParams(location.search);
-const LUCYAGO_RETO_ACTIVE=LUCYAGO_RETO_PARAMS.get('reto')==='1';
-const LUCYAGO_RETO_TARGET=Math.max(1,parseInt(LUCYAGO_RETO_PARAMS.get('preguntas')||WIN_TARGET,10));
-if(LUCYAGO_RETO_ACTIVE){
-  WIN_TARGET=LUCYAGO_RETO_TARGET;
-  state.aquariumEnabled=true;
-  state.winTarget=WIN_TARGET;
-}
-QUESTION_SECONDS=state.questionSeconds||30;
-let session=freshSession();
-let aquarium=freshAquarium();
-const $=s=>document.querySelector(s),$$=s=>Array.from(document.querySelectorAll(s));
-
-function clone(obj){return JSON.parse(JSON.stringify(obj))}
-function loadState(){
-  try{
-    const raw=localStorage.getItem(STORAGE_KEY);
-    if(!raw)return clone(DEFAULT_STATE);
-    const parsed=JSON.parse(raw);
-    return{
-      selectedTables:Array.isArray(parsed.selectedTables)&&parsed.selectedTables.length?parsed.selectedTables:[2],
-      mode:parsed.mode==="time"?"time":"practice",
-      records:{practice:Number(parsed.records&&parsed.records.practice||0),time:Number(parsed.records&&parsed.records.time||0)},
-      errors:Array.isArray(parsed.errors)?parsed.errors:[],
-      totalAnswered:Number(parsed.totalAnswered||0),
-      sourceMode:parsed.sourceMode==="difficult"?"difficult":"tables",
-      difficultFacts:Array.isArray(parsed.difficultFacts)?parsed.difficultFacts.filter(item=>item&&Number.isFinite(Number(item.table))&&Number.isFinite(Number(item.factor))).map(item=>({table:Number(item.table),factor:Number(item.factor),result:Number(item.table)*Number(item.factor)})):[],
-      difficultEditorOpen:Boolean(parsed.difficultEditorOpen),
-      aquariumEnabled:parsed.aquariumEnabled!==false,
-      winTarget:WIN_TARGET_OPTIONS.includes(Number(parsed.winTarget))?Number(parsed.winTarget):15,
-      questionSeconds:QUESTION_SECONDS_OPTIONS.includes(Number(parsed.questionSeconds))?Number(parsed.questionSeconds):30,
-      operationMode:OPERATION_OPTIONS.includes(parsed.operationMode)?parsed.operationMode:"multiply"
-    }
-  }catch{return clone(DEFAULT_STATE)}
-}
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function freshSession(){return{running:false,reviewMode:false,finalReviewMode:false,finalReviewDone:false,score:0,streak:0,timeLeft:QUESTION_SECONDS,timeDeadline:null,answered:0,hits:0,answer:"",current:null,queue:[],mistakesThisRun:[],timerId:null,lastDelta:0,lastTone:"neutral",lastMessage:"Tablas y pulsa Jugar.",showCorrectAnswer:false,awaitingContinue:false,repeatCurrentOnContinue:false,neutralCurrent:false}}
-function freshAquarium(){return{goodItems:[],badItems:[],lives:START_LIVES,progress:0,status:"playing",dirt:0,finalFishAdded:false,lastEvent:"La pecera espera tu primera cuenta."}}
-function buildBaseBank(tables){const bank=[];tables.forEach(table=>{for(let factor=1;factor<=10;factor+=1)bank.push({table,factor,result:table*factor})});return bank}
-function buildBank(tables){return applyOperationMode(buildBaseBank(tables))}
-function buildFactKey(table,factor){return table+"x"+factor}
-function operationLabel(mode){return mode==="divide"?"÷ Dividir":mode==="mixed"?"×÷ Mixto":"× Multiplicar"}
-function questionKey(q){q=normalizeQuestion(q);return (q.operation||"multiply")+":"+q.table+"x"+q.factor}
-function normalizeQuestion(q){const table=Number(q.table),factor=Number(q.factor),result=Number(q.result||table*factor);const operation=q.operation||"multiply";const answer=operation==="divide"?factor:result;return{...q,table,factor,result,operation,answer}}
-function makeOperationQuestion(base,operation){base=normalizeQuestion(base);return normalizeQuestion({...base,operation})}
-function applyOperationMode(baseFacts){const mode=state.operationMode||"multiply";const out=[];baseFacts.forEach(fact=>{if(mode==="mixed"){out.push(makeOperationQuestion(fact,"multiply"));out.push(makeOperationQuestion(fact,"divide"))}else out.push(makeOperationQuestion(fact,mode))});return out}
-function buildSourceBank(){const base=state.sourceMode==="difficult"?state.difficultFacts.map(item=>clone(item)):buildBaseBank(state.selectedTables);return applyOperationMode(base)}
-function displayQuestion(q){q=normalizeQuestion(q);return q.operation==="divide"?q.result+" ÷ "+q.table:q.table+" x "+q.factor}
-function displayEquation(q){q=normalizeQuestion(q);return displayQuestion(q)+" = "+q.answer}
-function shuffle(list){const copy=list.slice();for(let i=copy.length-1;i>0;i-=1){const j=Math.floor(Math.random()*(i+1));const temp=copy[i];copy[i]=copy[j];copy[j]=temp}return copy}
-function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-function clamp(value,min,max){return Math.max(min,Math.min(max,value))}
-function safeAquariumPercent(value,size,total){const margin=Math.min(34,Math.max(8,((size*.7)/Math.max(total,1))*100+2));return clamp(value,margin,100-margin)}
-function aquariumExistingItems(){return [...(aquarium.goodItems||[]),...(aquarium.badItems||[])]}
-function candidatePosition(type,size){const meta=ITEM_UI[type];const isBad=BAD_ITEMS.includes(type);let x,y;if(type==="pearl"){x=rand(12,88);y=rand(86,92)}else if(isBad){x=rand(16,84);y=rand(18,70)}else if(meta.zone==="bottom"){x=rand(12,88);y=rand(72,86)}else if(meta.zone==="top"){x=rand(12,88);y=rand(18,32)}else{x=rand(12,88);y=rand(18,70)}return{x:safeAquariumPercent(x,size,320),y:safeAquariumPercent(y,size,240)}}
-function overlapPenalty(candidate,others){let penalty=0;others.forEach(other=>{const dx=Math.abs(candidate.x-(other.x??other.left??50));const dy=Math.abs(candidate.y-(other.y??50));const minX=Math.max(13,((candidate.size+(other.size||54))/2)*0.34);const minY=Math.max(11,((candidate.size+(other.size||54))/2)*0.28);if(dx<minX&&dy<minY)penalty+=(minX-dx)*(minY-dy)});return penalty}
-function makeAquariumItem(type){const meta=ITEM_UI[type];const size=rand(meta.size[0],meta.size[1]);const others=aquariumExistingItems();let best=null,bestPenalty=Infinity;for(let i=0;i<90;i+=1){const pos=candidatePosition(type,size);const item={type,size,x:pos.x,y:pos.y,left:pos.x,depth:pos.y,dir:Math.random()<0.5?-1:1};const penalty=overlapPenalty(item,others);if(penalty<bestPenalty){best=item;bestPenalty=penalty;if(penalty===0)break}}return best||{type,size,x:50,y:50,left:50,depth:50,dir:Math.random()<0.5?-1:1}}
-function waterGradient(){if(aquarium.status==="lost")return"linear-gradient(180deg,#cfd4d8 0%,#9aa4ab 52%,#7d878f 100%)";const danger=aquarium.dirt||0;const top=[223-Math.min(danger*10,92),246-Math.min(danger*13,120),255-Math.min(danger*18,150)];const mid=[159-Math.min(danger*12,108),227-Math.min(danger*18,138),255-Math.min(danger*26,185)];const bot=[74-Math.min(danger*10,64),183-Math.min(danger*16,118),239-Math.min(danger*22,156)];return `linear-gradient(180deg,rgb(${top.join(",")}) 0%,rgb(${mid.join(",")}) 42%,rgb(${bot.join(",")}) 100%)`}
-function rewardAquariumCleanup(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const canCleanWater=(aquarium.dirt||0)>0;const canRemoveBad=(aquarium.badItems||[]).length>0;if(!canCleanWater&&!canRemoveBad)return;const removeBad=canRemoveBad&&(!canCleanWater||Math.random()<.5);if(removeBad){aquarium.badItems.splice(0,1);aquarium.lastEvent="Has acertado: desaparece un animal gris."}else{aquarium.dirt=Math.max(0,(aquarium.dirt||0)-rand(1,2));aquarium.lastEvent="Has acertado: el agua se limpia un poco."}}
-function aquariumReadyToWin(){return aquarium.progress>=WIN_TARGET&&session.finalReviewDone}
-function updateAquariumWinState(){if(state.aquariumEnabled&&aquarium.status==="playing"&&aquariumReadyToWin()){completeFinalWin()}}
-function aquariumProgressBar(){const filled=Math.min(WIN_TARGET,aquarium.progress||0);const empty=Math.max(0,WIN_TARGET-filled);let bar="🐠".repeat(filled)+"░".repeat(empty);if(filled>=WIN_TARGET&&session.finalReviewMode)bar+=" ";if(aquarium.status==="won")bar+=" 🐬";return bar}
-function renderWinProgress(){const el=$("#winProgressBar"),box=$("#winProgressBox");if(!el||!box)return;box.style.display=state.aquariumEnabled?"flex":"none";const filled=Math.min(WIN_TARGET,Math.max(0,aquarium.progress||0));const empty=Math.max(0,WIN_TARGET-filled);let txt="🐠".repeat(filled)+"░".repeat(empty);if(filled>=WIN_TARGET&&session.finalReviewMode)txt+=" ";if(filled>=WIN_TARGET&&!session.finalReviewDone&&session.mistakesThisRun.length)txt+=" ❓";if(aquarium.status==="won")txt="🏆 "+txt+" 🐬";el.textContent=txt}
-function uniqueQuestions(list){const seen=new Set();const out=[];(list||[]).forEach(item=>{const q=normalizeQuestion(item);const key=questionKey(q);if(!seen.has(key)){seen.add(key);out.push(q)}});return out}
-function rememberSessionMistake(question){const q=normalizeQuestion(question);const key=questionKey(q);if(!session.mistakesThisRun.some(item=>questionKey(item)===key))session.mistakesThisRun.push(q)}
-function addFinalWinnerFish(){if(aquarium.finalFishAdded)return;const finalFish=makeAquariumItem("winner_fish");finalFish.size=112;finalFish.x=88;finalFish.y=34;aquarium.goodItems.push(finalFish);aquarium.finalFishAdded=true}
-function completeFinalWin(){if(!state.aquariumEnabled)return;session.finalReviewDone=true;session.finalReviewMode=false;session.reviewMode=false;session.running=false;stopTimer();aquarium.progress=WIN_TARGET;aquarium.badItems=[];aquarium.dirt=0;addFinalWinnerFish();aquarium.status="won";aquarium.lastEvent="Has corregido los: aparece el pez grande definitivo.";setMessage("Has ganado: linea completa, corregidos y pez final conseguido.","good");render();celebrate()}
-function maybeStartFinalReview(){if(!session.running||session.finalReviewMode||session.finalReviewDone||aquarium.progress<WIN_TARGET)return false;const mistakes=uniqueQuestions(session.mistakesThisRun);if(!mistakes.length){completeFinalWin();return true}session.finalReviewMode=true;session.reviewMode=true;session.queue=shuffle(mistakes);session.current=null;session.answer="";session.showCorrectAnswer=false;session.awaitingContinue=false;setMessage("Linea completa. Ahora corrige los de esta partida para conseguir el pez final.","neutral");nextQuestion();return true}
-function addAquariumLife(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;aquarium.progress=Math.min(WIN_TARGET,aquarium.progress+1);if((aquarium.badItems||[]).length>0){aquarium.badItems.splice(0,1);aquarium.lastEvent="Has acertado: desaparece un animal gris.";return}const mainFish=randomFrom(FISH_TYPES);const extraPool=GOOD_ITEMS.filter(x=>x!==mainFish);const secondType=randomFrom(extraPool);const thirdType=session.streak>0&&session.streak%5===0?randomFrom(extraPool):null;aquarium.goodItems.push(makeAquariumItem(mainFish));aquarium.goodItems.push(makeAquariumItem(secondType));if(thirdType)aquarium.goodItems.push(makeAquariumItem(thirdType));const entryText=`Han entrado ${ITEM_UI[mainFish].label} y ${ITEM_UI[secondType].label}.`;aquarium.lastEvent=entryText;rewardAquariumCleanup();if(aquarium.lastEvent!==entryText)aquarium.lastEvent=entryText+" "+aquarium.lastEvent;}
-function addAquariumProblem(){if(!state.aquariumEnabled||aquarium.status!=="playing")return;const creature=randomFrom(BAD_CREATURES);let second=randomFrom(BAD_CREATURES);if(BAD_CREATURES.length>1){while(second===creature)second=randomFrom(BAD_CREATURES)}aquarium.badItems.push(makeAquariumItem(creature));aquarium.badItems.push(makeAquariumItem(second));aquarium.lives=Math.max(0,aquarium.lives-1);aquarium.dirt=(aquarium.dirt||0)+1;aquarium.lastEvent=`Han aparecido ${ITEM_UI[creature].label} y ${ITEM_UI[second].label}.`;if(aquarium.lives===0){aquarium.status="lost";aquarium.lastEvent="La pecera se ha estropeado. Reinicia para empezar otra vez.";}}
-function resetAquarium(){aquarium=freshAquarium()}
-function toggleAquarium(){state.aquariumEnabled=!state.aquariumEnabled;saveState();if(state.aquariumEnabled)resetAquarium();render();setMessage(state.aquariumEnabled?"Pecera activada.":"Pecera desactivada.","neutral")}
-function settleAquariumPositions(){const items=[...(aquarium.goodItems||[]),...(aquarium.badItems||[])];for(let pass=0;pass<5;pass+=1){let changed=false;for(let i=0;i<items.length;i+=1){for(let j=i+1;j<items.length;j+=1){const a=items[i],b=items[j];const dx=(a.x??50)-(b.x??50),dy=(a.y??50)-(b.y??50);const minX=Math.max(12,((a.size||54)+(b.size||54))/2*.30);const minY=Math.max(10,((a.size||54)+(b.size||54))/2*.25);if(Math.abs(dx)<minX&&Math.abs(dy)<minY){const pushX=(dx===0?(Math.random()<.5?-1:1):Math.sign(dx))*2.8;const pushY=(dy===0?(Math.random()<.5?-1:1):Math.sign(dy))*2.2;a.x=safeAquariumPercent((a.x??50)+pushX,a.size||54,320);b.x=safeAquariumPercent((b.x??50)-pushX,b.size||54,320);if(a.type!=="pearl")a.y=safeAquariumPercent((a.y??50)+pushY,a.size||54,240);else a.y=88;if(b.type!=="pearl")b.y=safeAquariumPercent((b.y??50)-pushY,b.size||54,240);else b.y=88;changed=true}}}if(!changed)break}}
-function renderAquarium(){const card=$("#aquariumCard");if(!card)return;card.classList.toggle("hidden",!state.aquariumEnabled);if(!state.aquariumEnabled)return;const tank=$("#aquariumTank"),stage=$("#aquariumStage"),overlay=$("#tankOverlay");updateAquariumWinState();settleAquariumPositions();tank.style.setProperty("--tank-water",waterGradient());tank.classList.toggle("dead",aquarium.status==="lost");stage.querySelectorAll(".aqua-item,.tank-bubble").forEach(n=>n.remove());for(let i=0;i<(aquarium.status==="lost"?9:28);i+=1){const b=document.createElement("div");b.className="tank-bubble";b.style.left=rand(4,94)+"%";b.style.animationDuration=rand(1800,5600)/1000+"s";b.style.animationDelay=rand(0,1800)/1000+"s";b.style.width=b.style.height=rand(6,19)+"px";if(aquarium.status==="lost")b.style.background="rgba(60,60,60,.35)";stage.appendChild(b)}[...aquarium.goodItems,...aquarium.badItems].forEach(item=>{const meta=ITEM_UI[item.type];if(!meta)return;if(!item.dir)item.dir=Math.random()<0.5?-1:1;const el=document.createElement("div");el.className=`aqua-item ${item.type} ${meta.zone}${BAD_ITEMS.includes(item.type)?" bad":""}`;const emoji=document.createElement("span");emoji.className="aqua-emoji";emoji.textContent=meta.emoji;emoji.style.setProperty("--look-dir",(item.dir||(Math.random()<0.5?-1:1)));el.appendChild(emoji);const safeX=safeAquariumPercent(item.x??item.left??50,item.size,stage.clientWidth||320);const safeY=safeAquariumPercent(item.y??50,item.size,stage.clientHeight||240);el.style.left=safeX+"%";el.style.top=safeY+"%";el.style.fontSize=item.size+"px";stage.appendChild(el)});const won=aquarium.status==="won",lost=aquarium.status==="lost";overlay.className="tank-overlay"+(won||lost?" visible":"")+(lost?" lose":"");$("#aquariumStateLabel").textContent=won?"Pecera perfecta":lost?"Pecera rota":"Pecera viva";$("#overlayTitle").textContent=won?"GANASTE":"";if(lost)$("#overlayTitle").textContent="☠️";$("#overlayText").textContent=won?"La has llenado de vida.":lost?"MUERTE EN LA PECERA":"";$("#aquariumCounter").textContent=aquariumProgressBar();$("#aquariumEvent").textContent=aquarium.lastEvent}
-function nextQuestion(){if(session.finalReviewMode&&!session.queue.length){completeFinalWin();return}if(!session.queue.length){const source=session.reviewMode?state.errors.map(item=>clone(item)):buildSourceBank();session.queue=shuffle(source)}session.current=session.queue.shift()||null;if(session.current)session.current=normalizeQuestion(session.current);session.neutralCurrent=Boolean(session.current&&session.current.neutral);session.answer="";session.showCorrectAnswer=false;session.awaitingContinue=false;render();startQuestionTimer()}
-function startGame(reviewMode){if(!reviewMode&&state.sourceMode==="tables"&&!state.selectedTables.length){setMessage("Elige al menos una tabla para empezar.","bad");return}if(!reviewMode&&state.sourceMode==="difficult"&&!state.difficultFacts.length){setMessage("Primero elige alguna multiplicacion dificil.","bad");return}if(reviewMode&&!state.errors.length){setMessage("Todavia no hay para repasar.","bad");return}stopTimer();session=freshSession();resetAquarium();session.running=true;session.reviewMode=reviewMode;setMessage(reviewMode?"Modo repaso activado. Corrige esos fallos.":"Partida iniciada. A por muchos puntos.","good");nextQuestion()}
-function stopTimer(){if(session.timerId){clearInterval(session.timerId);session.timerId=null}session.timeDeadline=null}
-function startQuestionTimer(){stopTimer();if(!session.running||state.mode!=="time"||session.reviewMode||session.awaitingContinue||!session.current){session.timeLeft=QUESTION_SECONDS;renderStats();return}session.timeLeft=QUESTION_SECONDS;session.timeDeadline=Date.now()+QUESTION_SECONDS*1000;renderStats();session.timerId=window.setInterval(updateTimer,250)}
-function updateTimer(){if(!session.running||state.mode!=="time"||session.reviewMode||session.awaitingContinue||!session.timeDeadline)return;const remainingMs=session.timeDeadline-Date.now();const nextTime=Math.max(0,Math.ceil(remainingMs/1000));if(nextTime!==session.timeLeft){session.timeLeft=nextTime;renderStats()}if(remainingMs<=0)timeOutQuestion()}
-function timeOutQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;stopTimer();session.timeLeft=0;session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,"tiempo");addAquariumProblem();saveState();setMessage("Tiempo agotado. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render()}
-function finishTimedGame(){stopTimer();session.running=false;if(session.score>state.records.time){state.records.time=session.score;saveState();setMessage("Nuevo record en contrarreloj.","good")}else setMessage("Buen intento. Vamos otra vez.","neutral");render()}
-function registerError(question,typed){question=normalizeQuestion(question);rememberSessionMistake(question);const key=questionKey(question);const exists=state.errors.some(item=>questionKey(item)===key);if(!exists)state.errors.unshift({table:question.table,factor:question.factor,result:question.result,operation:question.operation,answer:question.answer,lastWrong:typed});else state.errors=state.errors.map(item=>{if(questionKey(item)!==key)return item;return{...normalizeQuestion(item),lastWrong:typed}});state.errors=state.errors.slice(0,50);saveState()}
-function removeError(question){const key=questionKey(question);state.errors=state.errors.filter(item=>questionKey(item)!==key);saveState()}
-function comboBonus(){if(session.streak>=10)return 5;if(session.streak>=7)return 4;if(session.streak>=5)return 3;if(session.streak>=3)return 2;return 1}
-function celebrate(){const host=$("#confetti");host.innerHTML="";const colors=["#ffd84d","#ff8c42","#ffffff","#8ef0bf","#ffd2c8","#6ee7ff"];for(let i=0;i<22;i+=1){const spark=document.createElement("span");spark.className="spark show-spark";spark.style.left=10+Math.random()*80+"%";spark.style.top=30+Math.random()*42+"%";spark.style.background=colors[i%colors.length];spark.style.setProperty("--tx",-70+Math.random()*140+"px");spark.style.setProperty("--ty",-110-Math.random()*90+"px");spark.style.animationDelay=i*.018+"s";host.appendChild(spark)}for(let i=0;i<3;i+=1){const firework=document.createElement("span");firework.className="firework show-firework";firework.style.left=18+i*28+Math.random()*8+"%";firework.style.top=18+Math.random()*18+"%";firework.style.color=colors[(i*2)%colors.length];firework.style.animationDelay=.08+i*.12+"s";host.appendChild(firework)}setTimeout(()=>{host.innerHTML=""},1200)}
-function flashStage(tone){const stage=$("#questionStage");stage.classList.remove("good","bad");void stage.offsetWidth;if(tone==="good"||tone==="bad")stage.classList.add(tone)}
-function advanceAfterFeedback(){if(!session.running)return;if(maybeStartFinalReview())return;nextQuestion()}
-function acknowledgeCorrect(){if(!session.awaitingContinue)return;if(session.repeatCurrentOnContinue&&session.current){const repeated=clone(session.current);repeated.neutral=true;session.queue.unshift(repeated)}session.repeatCurrentOnContinue=false;advanceAfterFeedback()}
-function checkAnswer(){if(!session.running||!session.current){setMessage("Pulsa Jugar para empezar.","neutral");return}if(session.awaitingContinue){setMessage("Pulsa Cierto! para seguir.","neutral");return}if(!session.answer.length){setMessage("Escribe un numero antes de comprobar.","bad");return}session.current=normalizeQuestion(session.current);const typed=Number(session.answer),ok=typed===session.current.answer;
-if(window.LucYagoReto && !session.neutralCurrent){ window.LucYagoReto.record(ok); }
-if(ok&&session.neutralCurrent){stopTimer();session.lastDelta=0;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;setMessage("Ahora sí :-)","neutral");flashStage("good");render();setTimeout(advanceAfterFeedback,700);return}session.answered+=1;state.totalAnswered+=1;if(ok){stopTimer();session.streak+=1;session.hits+=1;session.showCorrectAnswer=false;session.repeatCurrentOnContinue=false;const gained=state.mode==="time"&&!session.reviewMode?6+comboBonus():comboBonus();session.lastDelta=gained;session.score+=gained;removeError(session.current);if(!session.finalReviewMode)addAquariumLife();if(state.mode==="practice"&&!session.reviewMode&&session.score>state.records.practice)state.records.practice=session.score;if(state.mode==="time"&&!session.reviewMode&&session.score>state.records.time)state.records.time=session.score;saveState();if(session.finalReviewMode){session.queue=session.queue.filter(item=>questionKey(item)!==questionKey(session.current));setMessage("Error corregido. Quedan "+session.queue.length+" para el pez final.","good")}else{setMessage("Muy bien. "+displayEquation(session.current)+". +"+gained+" puntos.","good")}flashStage("good");celebrate();render();setTimeout(advanceAfterFeedback,700);return}stopTimer();session.lastDelta=0;session.streak=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;registerError(session.current,session.answer);addAquariumProblem();saveState();setMessage("No pasa nada. Mira la correcta y pulsa Cierto! para repetirla.","bad");flashStage("bad");render()}
-function setMessage(text,tone){session.lastMessage=text;session.lastTone=tone||"neutral";const box=$("#messageBox");box.textContent=text;box.className="feedback-banner "+(tone||"neutral");$("#statusBadge").textContent=tone==="good"?"OK":tone==="bad"?"Revisar":"Listo"}
-function toggleTable(value){const set=new Set(state.selectedTables);if(set.has(value))set.delete(value);else set.add(value);state.selectedTables=Array.from(set).sort((a,b)=>a-b);state.sourceMode="tables";saveState();render()}
-function toggleDifficultFact(table,factor){const key=buildFactKey(table,factor);const exists=state.difficultFacts.some(item=>buildFactKey(item.table,item.factor)===key);if(exists)state.difficultFacts=state.difficultFacts.filter(item=>buildFactKey(item.table,item.factor)!==key);else state.difficultFacts=[...state.difficultFacts,{table,factor,result:table*factor}].sort((a,b)=>a.table-b.table||a.factor-b.factor);saveState();render()}
-function setSourceMode(mode){state.sourceMode=mode;saveState();render()}
-function toggleDifficultEditor(){state.difficultEditorOpen=!state.difficultEditorOpen;saveState();render()}
-function cycleWinTarget(){const current=WIN_TARGET_OPTIONS.indexOf(WIN_TARGET);WIN_TARGET=WIN_TARGET_OPTIONS[(current+1)%WIN_TARGET_OPTIONS.length];state.winTarget=WIN_TARGET;saveState();updateAquariumWinState();render();setMessage("Meta para ganar: "+WIN_TARGET+" peces.","neutral")}
-function cycleQuestionSeconds(){const current=QUESTION_SECONDS_OPTIONS.indexOf(QUESTION_SECONDS);QUESTION_SECONDS=QUESTION_SECONDS_OPTIONS[(current+1)%QUESTION_SECONDS_OPTIONS.length];state.questionSeconds=QUESTION_SECONDS;saveState();if(session.running&&state.mode==="time"&&!session.reviewMode&&!session.awaitingContinue)startQuestionTimer();else{session.timeLeft=QUESTION_SECONDS;renderStats()}renderToolbar();setMessage("Tiempo por respuesta: "+QUESTION_SECONDS+" segundos.","neutral")}
-function cycleOperationMode(){const current=OPERATION_OPTIONS.indexOf(state.operationMode||"multiply");state.operationMode=OPERATION_OPTIONS[(current+1)%OPERATION_OPTIONS.length];saveState();if(session.running&&!session.reviewMode){session.queue=[];nextQuestion()}else render();setMessage("Tipo de cuentas: "+operationLabel(state.operationMode)+".","neutral")}
-function setMode(mode){state.mode=mode;saveState();$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode);btn.classList.toggle("primary",btn.dataset.mode===mode);btn.classList.toggle("ghost",btn.dataset.mode!==mode)});renderStats()}
-function inputDigit(digit){if(!session.running||session.awaitingContinue||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
-function deleteDigit(){if(!session.running||session.awaitingContinue)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
-function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;stopTimer();session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;session.neutralCurrent=true;saveState();setMessage("Solucion mostrada. Pulsa Cierto! y repitela: no sumara ni restara puntos.","neutral");render()}
-function resetSession(){stopTimer();session=freshSession();resetAquarium();render();setMessage("Sesion reiniciada. Prepara una nueva partida.","neutral")}
-function scrollToTables(){const section=$("#tablesSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
-function scrollToGame(){const section=$("#gameSection");if(section)section.scrollIntoView({behavior:"smooth",block:"start"})}
-function renderTables(){const grid=$("#tableGrid"),difficultGrid=$("#difficultGrid");grid.innerHTML="";difficultGrid.innerHTML="";for(let n=1;n<=12;n+=1){const btn=document.createElement("button");btn.className="table-btn secondary"+(state.selectedTables.indexOf(n)>=0?" active":"");btn.innerHTML="<strong>"+n+"</strong><span>tabla</span>";btn.addEventListener("click",()=>toggleTable(n));grid.appendChild(btn)}for(let table=1;table<=12;table+=1){for(let factor=1;factor<=10;factor+=1){const btn=document.createElement("button");const active=state.difficultFacts.some(item=>item.table===table&&item.factor===factor);btn.className="fact-btn"+(active?" active":"");btn.textContent=table+"x"+factor;btn.addEventListener("click",()=>toggleDifficultFact(table,factor));difficultGrid.appendChild(btn)}}$("#difficultBtn").classList.toggle("primary",state.sourceMode==="difficult");$("#difficultBtn").classList.toggle("blue",state.sourceMode!=="difficult");$("#editDifficultBtn").classList.toggle("primary",state.difficultEditorOpen);$("#editDifficultBtn").classList.toggle("secondary",!state.difficultEditorOpen);$("#difficultPanel").classList.toggle("open",state.difficultEditorOpen);$("#difficultCount").textContent=state.difficultFacts.length+" seleccionadas";const selected=state.sourceMode==="difficult"?(state.difficultFacts.length?state.difficultFacts.length+" dificiles":"ninguna dificil"):state.selectedTables.length?state.selectedTables.join(", "):"ninguna";$("#selectedTablesFooterText").textContent=selected}
-function renderStats(){$("#timeValue").textContent=session.reviewMode?"-":state.mode==="time"?session.running?session.timeLeft+"s":QUESTION_SECONDS+"s":"-";$("#scoreValue").textContent=session.score;$("#streakValue").textContent=session.streak;$("#scoreBurst").textContent="+"+session.lastDelta;$("#practiceRecord").textContent=state.records.practice;$("#timeRecord").textContent=state.records.time;$("#answeredValue").textContent=state.totalAnswered;$("#errorCount").textContent=state.errors.length;$("#starsView").innerHTML=session.streak>=6?"&#11088;&#11088;&#11088;":session.streak>=3?"&#11088;&#11088;&#9734;":session.streak>=1?"&#11088;&#9734;&#9734;":"&#9734;&#9734;&#9734;"}
-
-function updateFinalReviewVisual(){
-  const stage=document.getElementById('questionStage');
-  if(!stage)return;
-  if(window.finalReviewMode){
-    stage.classList.add('final-review');
-  }else{
-    stage.classList.remove('final-review');
-  }
-}
-
-function renderQuestion(){const label=$("#questionLabel"),question=$("#questionText");if(!session.current){label.textContent="Listo para jugar";question.textContent="2 x 7";return}label.textContent=session.finalReviewMode?"Error final":session.reviewMode?"Repasa este error":"Resuelve ahora";question.textContent=displayQuestion(session.current)}
-function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Correcta: "+normalizeQuestion(session.current).answer;row.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show")}}
-function renderErrors(){const list=$("#errorList");list.innerHTML="";if(!state.errors.length){const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>Sin guardados</div><div class='error-sub'>Cuando falle una cuenta aparecera aqui para repasar.</div></div><div class='error-points'>OK</div>";list.appendChild(item);return}state.errors.forEach(err=>{err=normalizeQuestion(err);const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>"+displayEquation(err)+"</div><div class='error-sub'>Ultimo fallo: "+err.lastWrong+"</div></div><div class='error-points'>Repasar</div>";list.appendChild(item)})}
-function renderControls(){const playing=session.running,locked=session.awaitingContinue;$("#checkBtn").disabled=!playing||locked;$("#skipBtn").disabled=!playing||locked;$("#deleteBtn").disabled=!playing||locked;$("#okPadBtn").disabled=!playing||locked;$("#continueBtn").disabled=!playing||!locked;$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing||locked});$("#reviewBtn").disabled=false}
-function renderToolbar(){if(typeof LUCYAGO_RETO_ACTIVE!=="undefined" && LUCYAGO_RETO_ACTIVE){const tb=$("#targetBtn"); if(tb){tb.textContent="Meta "+WIN_TARGET; tb.disabled=true;}}const btn=$("#aquariumToggleBtn");if(btn){btn.textContent=state.aquariumEnabled?"Pecera":"Pecera no";btn.classList.toggle("primary",state.aquariumEnabled);btn.classList.toggle("secondary",!state.aquariumEnabled)}const targetBtn=$("#targetBtn");if(targetBtn)targetBtn.textContent="Meta "+WIN_TARGET;const secondsBtn=$("#secondsBtn");if(secondsBtn)secondsBtn.textContent=QUESTION_SECONDS+" s";const operationBtn=$("#operationBtn");if(operationBtn)operationBtn.textContent=operationLabel(state.operationMode||"multiply");}
-function render(){renderTables();renderStats();renderQuestion();updateFinalReviewVisual();renderAnswer();renderErrors();renderControls();renderToolbar();renderAquarium();renderWinProgress()}
-
-$("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");
-$("#startBtn").addEventListener("click",()=>startGame(false));
-$("#reviewBtn").addEventListener("click",()=>startGame(true));
-$("#aquariumToggleBtn").addEventListener("click",toggleAquarium);
-$("#targetBtn").addEventListener("click",cycleWinTarget);
-$("#secondsBtn").addEventListener("click",cycleQuestionSeconds);
-$("#operationBtn").addEventListener("click",cycleOperationMode);
-$("#chooseTablesBtn").addEventListener("click",scrollToTables);
-$("#playFromTablesBtn").addEventListener("click",()=>{scrollToGame();startGame(false)});
-$("#selectAllBtn").addEventListener("click",()=>{state.selectedTables=Array.from({length:12},(_,i)=>i+1);state.sourceMode="tables";saveState();render()});
-$("#clearBtn").addEventListener("click",()=>{state.selectedTables=[];state.sourceMode="tables";saveState();render()});
-$("#difficultBtn").addEventListener("click",()=>setSourceMode("difficult"));
-$("#editDifficultBtn").addEventListener("click",toggleDifficultEditor);
-$("#checkBtn").addEventListener("click",checkAnswer);
-$("#skipBtn").addEventListener("click",skipQuestion);
-$("#resetBtn").addEventListener("click",()=>{if(window.confirm("Seguro que quieres volver a empezar?"))resetSession()});
-$("#deleteBtn").addEventListener("click",deleteDigit);
-$("#okPadBtn").addEventListener("click",checkAnswer);
-$("#continueBtn").addEventListener("click",acknowledgeCorrect);
-$("#clearErrorsBtn").addEventListener("click",()=>{state.errors=[];saveState();render();setMessage("Errores borrados.","neutral")});
-$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.addEventListener("click",()=>setMode(btn.dataset.mode))});
-$$(".answer-pad button[data-digit]").forEach(btn=>btn.addEventListener("click",()=>inputDigit(btn.dataset.digit)));
-
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-let lastTouchEnd=0;
-document.addEventListener("touchend",event=>{const now=Date.now();if(now-lastTouchEnd<300)event.preventDefault();lastTouchEnd=now;},{passive:false});
-document.addEventListener("dblclick",event=>event.preventDefault(),{passive:false});
-window.addEventListener("load",()=>{render();setMode(state.mode);setMessage("Partida lista.","neutral");if((state.sourceMode==="tables"&&state.selectedTables.length)||(state.sourceMode==="difficult"&&state.difficultFacts.length))startGame(false)});
+$('#guessBtn').onclick=()=>{
+  if(!photo.on)return;
+  photo.guessOpen=!photo.guessOpen;
+  renderGuess();
+}; document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();del()} else if(e.key.length===1 && /[a-zA-Z]/.test(e.key)){e.preventDefault();insert(e.key.toLowerCase())}}); document.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button,.cell,label,input')) return;
+  focusInput();
+}); document.addEventListener('DOMContentLoaded',focusInput); window.addEventListener('pageshow',focusInput); document.addEventListener('touchend',focusInput,{passive:true}); document.addEventListener('pointerup',focusInput,{passive:true});
+rebuild();
+mode='learn';
+idx=0;
+$('#hangView').classList.remove('active');
+$('#learnView').classList.add('active');
+$('#hangBtn').classList.remove('active');
+$('#learnBtn').classList.add('active');
+resetLearn(false);
+render();
 </script>
-
-<!-- Valentina iPad final patch: teclado, viewport y Safari -->
-<script id="valentina-ios-viewport-fix">
-(function(){
-  function setVH(){
-    var vv=window.visualViewport;
-    var h=vv?vv.height:window.innerHeight;
-    document.documentElement.style.setProperty('--ios-vh',h+'px');
-    if(vv){
-      var kb=Math.max(0,window.innerHeight-vv.height-vv.offsetTop);
-      document.documentElement.style.setProperty('--ios-keyboard',Math.round(kb)+'px');
-      document.body.classList.toggle('keyboard-open',kb>80);
-    }
-  }
-  setVH();
-  window.addEventListener('resize',setVH,{passive:true});
-  window.addEventListener('orientationchange',function(){setTimeout(setVH,80);setTimeout(setVH,350);},{passive:true});
-  if(window.visualViewport){visualViewport.addEventListener('resize',setVH,{passive:true});visualViewport.addEventListener('scroll',setVH,{passive:true});}
-})();
-</script>
-
-
-<style id="valentina-math-ipad-final-css">
-html,body{height:var(--ios-vh,100dvh);min-height:var(--ios-vh,100dvh);overscroll-behavior:none;-webkit-text-size-adjust:100%;}
-@media (pointer:coarse) and (orientation:landscape){.app{height:var(--ios-vh,100dvh)!important;overflow:hidden!important;padding:6px!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(290px,.72fr)!important;grid-template-rows:auto minmax(0,1fr)!important;gap:8px!important;max-width:1180px!important}.hero{grid-column:1/-1!important;padding:8px!important}.title-wrap h1{font-size:28px!important}.subtitle{display:none!important}.toolbar{margin-top:7px!important;gap:5px!important}.mode-btn,.action-btn,.tiny-btn{padding:7px 9px!important;font-size:11px!important}.layout{grid-column:1!important;grid-row:2!important;height:auto!important;min-height:0!important;display:grid!important;grid-template-columns:1fr!important;gap:0!important;margin-top:0!important;overflow:hidden!important}.card,.table-panel{padding:8px!important;border-radius:18px!important;min-height:0!important;overflow:hidden!important}.table-panel{display:none!important}.score-grid{gap:5px!important}.score-card{padding:6px 8px!important}.score-value{font-size:18px!important}.question-stage{margin-top:6px!important;padding:10px!important}.question{font-size:54px!important}.answer-value{font-size:48px!important}.controls{margin-top:6px!important}.answer-pad-shell{margin-top:6px!important;padding:6px!important}.answer-pad{gap:5px!important}.answer-pad .pad-btn{min-height:36px!important;font-size:18px!important}.aquarium-card{grid-column:2!important;grid-row:2!important;display:flex!important;flex-direction:column!important;min-height:0!important;margin-top:0!important;padding:8px!important;border-radius:18px!important;overflow:hidden!important}.aquarium-tank{flex:1 1 auto!important;min-height:0!important;margin-top:5px!important;padding:8px!important;display:flex!important;flex-direction:column!important}.aquarium-stage{flex:1 1 auto!important;height:auto!important;min-height:210px!important}.table-grid{max-height:calc(var(--ios-vh,100dvh) - 210px)!important;overflow:auto!important}}
-@media (pointer:coarse) and (orientation:portrait){html,body{overflow:auto!important}.app{height:auto!important;min-height:var(--ios-vh,100dvh)!important}.layout{grid-template-columns:1fr!important}.table-panel{display:none}.table-panel.open{display:block}}
-
-.question-stage.final-review{
-  background:
-    radial-gradient(circle at top right,rgba(255,255,255,.28),transparent 24%),
-    linear-gradient(140deg,#d4a017 0%,#f3c74a 45%,#ffef9a 100%) !important;
-  box-shadow:0 18px 36px rgba(212,160,23,.35) !important;
-}
-.question-stage.final-review .answer-box{
-  background:rgba(255,255,255,.22);
-  border-color:rgba(255,245,180,.7);
-}
-
-</style>
-<script id="valentina-math-ipad-final-js">
-(function(){
-  var btn=document.getElementById('chooseTablesBtn'), panel=document.getElementById('tablesSection');
-  if(btn&&panel){btn.addEventListener('click',function(){panel.classList.toggle('open');}, {capture:false});}
-})();
-</script>
-
-
-<script id="lucyago-reto-common">
-/* LucYagoReto Common v1 */
-(function(){
-  const params=new URLSearchParams(location.search);
-  const active=params.get('reto')==='1';
-  if(!active) return;
-  const game=params.get('game')||document.title||'juego';
-  const target=Math.max(1,parseInt(params.get('preguntas')||'10',10));
-  const returnUrl=params.get('return')||'../reto_mixto.html';
-  const sessionKey=params.get('session')||'lucyago_reto_session';
-  let locked=false;
-  function getSession(){try{return JSON.parse(localStorage.getItem(sessionKey)||'{}')}catch(e){return {}}}
-  function setSession(s){localStorage.setItem(sessionKey,JSON.stringify(s));}
-  function ensureGame(s){
-    s.results=s.results||{};
-    if(!s.results[game]) s.results[game]={ok:0,bad:0,total:target,target:target,done:false,name:game};
-    s.results[game].total=target; s.results[game].target=target;
-    return s.results[game];
-  }
-  function total(r){return (r.ok||0)+(r.bad||0)}
-  function paint(){
-    const s=getSession(), r=ensureGame(s);
-    let bar=document.getElementById('lucyagoRetoBar');
-    if(!bar){
-      bar=document.createElement('div');bar.id='lucyagoRetoBar';
-      bar.style.cssText='position:fixed;left:10px;right:10px;bottom:10px;z-index:999999;background:#fffdf8;color:#21314c;border:3px solid #ffd84d;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:8px 12px;font-family:Arial,sans-serif;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:8px;';
-      document.body.appendChild(bar);
-    }
-    const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
-    setSession(s);
-  }
-  function finish(){
-    if(locked) return; locked=true;
-    const s=getSession(), r=ensureGame(s); r.done=true; s.lastFinished=game; setSession(s);
-    paint();
-    setTimeout(()=>{location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);},450);
-  }
-  window.LucYagoReto={
-    active:true, game, target, sessionKey,
-    record:function(ok){
-      if(locked) return;
-      const s=getSession(), r=ensureGame(s);
-      if((r.ok||0)>=target) {finish(); return;}
-      if(ok) r.ok=(r.ok||0)+1; else r.bad=(r.bad||0)+1;
-      setSession(s); paint();
-      if((r.ok||0)>=target) finish();
-    },
-    finish:finish,
-    progress:function(){const s=getSession(), r=ensureGame(s); return {ok:r.ok||0,bad:r.bad||0,total:target,done:total(r)}}
-  };
-  window.addEventListener('load',()=>setTimeout(paint,250));
-})();
-</script>
-<script>window.addEventListener('load',function(){if(window.LucYagoReto){setTimeout(function(){try{if(typeof startGame==='function') startGame(false);}catch(e){}},500);}});</script>
 </body>
 </html>
+
+
+
