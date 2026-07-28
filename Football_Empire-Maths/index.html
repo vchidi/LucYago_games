@@ -3658,21 +3658,22 @@ updateControlAvailability();
 </style>
 <style id="codex-ipad-operation-layout-final">
 /* Ajustes finales iPad: operación, teclado, división y manager */
-.opButtons{left:8px!important;right:8px!important;justify-content:flex-end!important;flex-wrap:wrap!important}
+.opButtons{position:absolute!important;left:8px!important;right:8px!important;top:2px!important;justify-content:flex-end!important;flex-wrap:wrap!important}
 .opButtons button,.opButtons .smallPlay{
   max-width:none!important;min-width:0!important;min-height:30px!important;
   padding:5px 8px!important;font-size:11px!important;line-height:1!important;
 }
 #fullEraserBtn,#clearFullInkBtn{max-width:none!important;min-width:54px!important}
-.workArea{justify-content:flex-start!important;align-items:center!important;overflow:hidden!important}
+.workArea{justify-content:flex-start!important;align-items:center!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important}
 #operationArea.verticalWrap{
-  max-width:100%!important;max-height:calc(100% - 76px)!important;
-  margin:auto auto 8px!important;overflow:visible!important;
+  width:100%!important;max-width:100%!important;max-height:none!important;
+  margin:34px auto 8px!important;overflow:visible!important;
 }
 #screenKeypad.keypad{
-  align-self:center!important;justify-self:end!important;margin:0 auto 2px!important;
-  width:max-content!important;max-width:min(96%,560px)!important;min-height:0!important;
-  padding:7px 9px!important;gap:6px!important;flex-wrap:nowrap!important;border-radius:18px!important;
+  align-self:center!important;justify-self:center!important;margin:8px auto 4px!important;
+  width:fit-content!important;max-width:calc(100% - 20px)!important;min-height:0!important;
+  padding:7px 9px!important;gap:6px!important;flex-wrap:wrap!important;border-radius:18px!important;
+  justify-content:center!important;align-items:center!important;
 }
 #screenKeypad.keypad button{
   width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
@@ -3690,6 +3691,14 @@ updateControlAvailability();
 .blank input{font-size:22px!important}
 .carryBlank input{font-size:15px!important}
 .divBlank input{font-size:20px!important}
+.divSchool{
+  box-sizing:border-box!important;width:max-content!important;max-width:none!important;
+  min-width:min(100%,760px)!important;margin-left:auto!important;margin-right:auto!important;
+  padding-left:46px!important;padding-right:28px!important;
+  overflow:visible!important;
+}
+.divLeftGrid{overflow:visible!important}
+.divMinus{width:28px!important;min-width:28px!important;transform:translateX(-72%)!important;z-index:3!important}
 .cmPanel,.cmNotice,.cmTabs button,.cmAction,.cmCard,.cmTour,.cmKit,.cmEvent,.cmObjective{
   min-width:0!important;overflow-wrap:anywhere!important;word-break:normal!important;
 }
@@ -3712,15 +3721,15 @@ updateControlAvailability();
 
 @media (min-width:700px) and (max-width:1199px){
   .main{grid-template-columns:minmax(0,1fr) minmax(300px,.42fr)!important;gap:8px!important}
-  .workArea{height:calc(100dvh - 190px)!important;min-height:0!important;padding:40px 8px 8px!important}
-  #operationArea.verticalWrap{transform:none!important;padding:10px 12px!important}
-  #screenKeypad.keypad{position:relative!important;bottom:auto!important}
+  .workArea{height:calc(100dvh - 190px)!important;min-height:0!important;padding:32px 8px 12px!important;overflow-y:auto!important}
+  #operationArea.verticalWrap{transform:none!important;padding:10px 8px!important;margin-top:26px!important}
+  #screenKeypad.keypad{position:sticky!important;bottom:4px!important;left:auto!important;right:auto!important}
   .digit,.blank,.locked{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;font-size:21px!important}
   .blank input{font-size:21px!important}
   .carryBlank{width:36px!important;height:24px!important}
   .divSchool{
-    --dcell:34px!important;min-width:0!important;width:max-content!important;max-width:100%!important;
-    padding:8px!important;column-gap:6px!important;row-gap:3px!important;transform-origin:center top!important;
+    --dcell:34px!important;min-width:660px!important;width:max-content!important;max-width:none!important;
+    padding:8px 24px 8px 44px!important;column-gap:8px!important;row-gap:3px!important;transform-origin:center top!important;
   }
   .divCell,.divBlank,.divDot,.divGuideCell{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;font-size:19px!important}
   .divBlank input{font-size:19px!important}
@@ -3730,15 +3739,15 @@ updateControlAvailability();
   .main{display:grid!important;grid-template-columns:1fr!important;grid-template-rows:minmax(0,1fr) 300px!important}
   .right{height:300px!important;min-height:0!important}
   .footballPanel,.rightPhotoPanel{height:300px!important;min-height:0!important}
-  .workArea{height:calc(100dvh - 455px)!important;padding-top:38px!important}
-  #operationArea.verticalWrap{max-height:calc(100% - 58px)!important;padding:6px 8px!important}
-  #screenKeypad.keypad{padding:5px 7px!important;gap:4px!important}
+  .workArea{height:calc(100dvh - 455px)!important;padding-top:30px!important;overflow-y:auto!important}
+  #operationArea.verticalWrap{max-height:none!important;padding:5px 6px!important;margin-top:20px!important}
+  #screenKeypad.keypad{padding:5px 7px!important;gap:4px!important;margin-left:auto!important;margin-right:auto!important}
   #screenKeypad.keypad button{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;font-size:14px!important}
   #screenKeypad.keypad button.wide{width:52px!important;min-width:52px!important}
-  .divSchool{--dcell:28px!important;padding:5px!important;column-gap:4px!important;row-gap:2px!important}
+  .divSchool{--dcell:28px!important;min-width:560px!important;padding:5px 18px 5px 36px!important;column-gap:6px!important;row-gap:2px!important}
   .divCell,.divBlank,.divDot,.divGuideCell{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;font-size:16px!important}
   .divBlank input{font-size:16px!important}
-  .divMinus{width:18px!important;font-size:18px!important}
+  .divMinus{width:22px!important;min-width:22px!important;font-size:18px!important;transform:translateX(-68%)!important}
   .cmPitch{min-height:178px!important;margin-bottom:4px!important}
   .cmSlot{width:48px!important;min-width:48px!important;min-height:50px!important;padding:2px!important}
   .cmDoll{transform:scale(.78)!important;transform-origin:top center!important;margin-bottom:-6px!important}
