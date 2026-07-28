@@ -84,7 +84,7 @@ button:disabled{opacity:.48;cursor:not-allowed}
   color:var(--ink);
   font-weight:900;
 }
-.home-btn{width:52px;height:52px;font-size:25px}
+.home-btn{width:52px;height:52px;font-size:25px;margin-right:8px}
 .brand h1{margin:2px 0 0;font-size:clamp(28px,4vw,48px);line-height:.94;letter-spacing:0}
 .eyebrow{
   display:inline-flex;
@@ -120,7 +120,7 @@ button:disabled{opacity:.48;cursor:not-allowed}
   background:linear-gradient(135deg,#20b86f,#39d38a);
 }
 .game-toggle-btn.off{background:linear-gradient(135deg,#6d7891,#9aa4b8)}
-body.no-adventure .right-panel{display:none}
+body.no-adventure .right-panel{display:none!important}
 body.no-adventure .game{grid-template-columns:minmax(330px,760px);justify-content:center}
 body.no-adventure .adventure-stat{display:none}
 body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
@@ -688,13 +688,16 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .stat-value{font-size:12px!important}
   .coin-bar{font-size:11px!important;max-width:82px!important}
   .top-stats{gap:3px!important}
-  .game{grid-template-columns:minmax(330px,.9fr) minmax(360px,1.1fr)!important;gap:5px!important;min-height:0!important;overflow:hidden!important}
+  .game{grid-template-columns:minmax(300px,.82fr) minmax(400px,1.18fr)!important;gap:5px!important;min-height:0!important;overflow:hidden!important}
   .panel{padding:6px!important;border-radius:16px!important}
   .left-panel{min-height:0!important;overflow:hidden!important}
   .question-card{min-height:112px!important}
   .test-selector{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   .test-btn{font-size:9px!important}
   .right-panel{grid-template-columns:1fr!important;grid-template-rows:minmax(0,1fr) auto auto!important;gap:5px!important;min-height:0!important}
+  .match-grid{gap:4px!important}
+  .match-column{gap:4px!important}
+  .match-card{min-width:0!important;min-height:28px!important;padding:5px 4px!important;border-radius:10px!important;font-size:10px!important;line-height:1.05!important;box-shadow:0 5px 10px rgba(32,48,74,.10)!important}
   .map-wrap{min-height:0!important}
   .side-panel{display:grid!important;grid-template-columns:92px minmax(0,1fr)!important;grid-template-rows:auto!important;gap:5px!important}
   .crew-list{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important}
@@ -807,8 +810,8 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .unit-cell{min-height:34px!important;border-radius:10px!important}
 }
 @media (min-width:901px) and (max-width:1180px) and (orientation:landscape){
-  .game{grid-template-columns:minmax(360px,.9fr) minmax(430px,1.1fr)!important}
-  .right-panel{grid-template-columns:1fr 104px!important;gap:5px!important}
+  .game{grid-template-columns:minmax(320px,.78fr) minmax(500px,1.22fr)!important}
+  .right-panel{grid-template-columns:1fr 88px!important;gap:5px!important}
   .map-wrap{min-height:0!important;border-radius:16px!important}
   .side-panel{gap:5px!important}
   .ship-card{padding:5px!important;border-radius:12px!important}
@@ -822,11 +825,14 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .mini-card .stat-value{font-size:16px!important}
 }
 @media (min-width:700px) and (max-width:900px) and (orientation:portrait){
-  .game{grid-template-columns:1fr!important;grid-template-rows:minmax(0,1fr) 255px!important}
-  .right-panel{display:grid!important;grid-template-columns:1fr 98px!important;grid-template-rows:minmax(0,1fr)!important;gap:5px!important}
+  .game{grid-template-columns:1fr!important;grid-template-rows:minmax(0,.82fr) minmax(310px,1.18fr)!important}
+  .right-panel{display:grid!important;grid-template-columns:1fr 78px!important;grid-template-rows:minmax(0,1fr)!important;gap:5px!important}
   .map-wrap{min-height:0!important}
   .side-panel{display:grid!important;grid-template-columns:1fr!important;gap:4px!important;overflow:hidden!important}
   .ship-card{display:none!important}
+  .match-grid{gap:4px!important}
+  .match-column{gap:4px!important}
+  .match-card{min-width:0!important;min-height:27px!important;padding:4px 3px!important;border-radius:9px!important;font-size:9.5px!important;line-height:1.05!important}
   .crew-list{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important}
   .crew-card{grid-template-columns:1fr!important;text-align:center!important;padding:3px!important;border-radius:10px!important}
   .crew-icon{width:25px!important;height:25px!important;font-size:15px!important;margin:0 auto!important}
@@ -834,6 +840,11 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .spanish-keyboard{gap:3px!important}
   .spanish-keyboard-row{gap:3px!important}
   .spanish-keyboard .unit-key{height:30px!important;min-height:30px!important;font-size:12px!important;border-radius:9px!important}
+}
+</style>
+<style id="valentina-home-game-gap-20260728">
+@media (min-width:700px) and (max-width:1180px){
+  .home-btn{margin-right:10px!important}
 }
 </style>
 </head>
@@ -2368,6 +2379,7 @@ function placePawn(id,point,offset){
   const el=$("#"+id);
   el.style.left=point.x+"%";
   el.style.top=(point.y+offset)+"%";
+  el.style.transform="translate3d(-50%,-80%,0)";
 }
 function renderCrew(){
   const list=$("#crewList");
@@ -2471,6 +2483,8 @@ function toggleGameMode(){
 function renderGameMode(){
   const on=isGameOn();
   document.body.classList.toggle("no-adventure",!on);
+  const panel=document.querySelector(".right-panel");
+  if(panel)panel.hidden=!on;
   const btn=$("#gameToggleBtn");
   if(btn){
     btn.textContent=on?"Joc: S\u00ed":"Joc: No";
@@ -2714,6 +2728,7 @@ setTimeout(lucyagoApplyDefaultStart,80);
   function ensureKeyboard(){
     var area=document.getElementById('inputArea');
     if(!area||!selectedWritingMode()||area.querySelector('.spanish-keyboard'))return;
+    if(area.querySelector('.match-grid,.choice-grid,.order-slots,.order-pool,.convert-work,.number-pad'))return;
     area.innerHTML='';
     var note=document.createElement('div');
     note.className='write-pad-note';
@@ -2738,6 +2753,11 @@ setTimeout(lucyagoApplyDefaultStart,80);
 </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
