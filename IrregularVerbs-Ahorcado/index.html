@@ -646,6 +646,11 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
   transform:scale(1)!important;
 }
 </style>
+
+<style id="hang-base-form-letter-spacing-patch">
+#baseWord.base-word.letters{gap:4px;min-height:auto;}
+#baseWord.base-word .char{font-size:inherit!important;line-height:inherit!important;padding:0 1px;}
+</style>
 </head>
 <body>
 <div class="app">
@@ -660,11 +665,11 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
       <div class="hangman-layout">
         <div class="hang-left">
           <div class="actions"><button id="revealBtn" class="btn good">Solución</button><button id="solutionOkBtn" class="btn good" style="display:none">OK</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button><button id="blindBtn" class="btn">Blind</button></div>
-          <div class="base-card"><div class="label">Base form</div><div id="baseWord" class="base-word">write</div></div>
+          <div class="base-card"><div class="label">Base form</div><div id="baseWord" class="base-word letters">write</div></div>
           <div id="psCard" class="prompt active"><div class="rowtop"><div class="rowtitle">Past simple</div><div id="psStatus" class="pill">Pendiente</div></div><div id="psLetters" class="letters"></div></div>
           <div id="ppCard" class="prompt"><div class="rowtop"><div class="rowtitle">Past participle</div><div id="ppStatus" class="pill">Pendiente</div></div><div id="ppLetters" class="letters"></div></div>
-          <div id="hangMsg" class="message">Escribe con el teclado.</div>
-          <div class="tools"><button id="deleteBtn" class="btn">Borrar última</button><button id="restartVerbBtn" class="btn">Reiniciar verbo</button><label class="btn">Importar Excel<input type="file" id="fileInput" style="display:none" accept=".xlsx,.xls,.xlsm,.json"></label><button id="exportBtn" class="btn">Exportar</button></div>
+          <div id="hangMsg" class="message"></div>
+          <div class="tools"><button id="deleteBtn" class="btn">Borrar</button><button id="restartVerbBtn" class="btn">Reiniciar</button><label class="btn">Import Excel<input type="file" id="fileInput" style="display:none" accept=".xlsx,.xls,.xlsm,.json"></label><button id="exportBtn" class="btn">Export</button></div>
         </div>
         <div class="hang-right"><div class="stage-card"><div class="stage-head"><div class="stage-title">Ahorcado</div><div class="stage-stats"><div class="mini"><span>Vidas</span><b id="lives">0</b></div><div class="mini"><span>Partes</span><b><span id="damage">0</span>/<span id="partsTotal">15</span></b></div></div></div><div id="stage" class="stage"><div id="result" class="result"><div class="result-card"><div id="resultTitle" style="font-size:34px"></div><div id="resultText"></div></div></div></div></div></div>
       </div>
@@ -947,7 +952,7 @@ function insert(ch){
 }
 function del(){if(!dataset.length)return; if(mode==='learn') return learnDelete(); let s=cur().state[activeTarget], i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
 function setActiveTarget(t){activeTarget=t;render();focusInput()}
-function renderHang(){if(!dataset.length)return; let it=cur(); $('#baseWord').textContent=it.baseForm; renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); let blindBtn=$('#blindBtn'); if(blindBtn)blindBtn.textContent=hangPromptMode==='blind'?'Tricky':'Blind'; renderHangman()}
+function renderHang(){if(!dataset.length)return; let it=cur(); renderStaticLetters($('#baseWord'),it.baseForm); renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); let blindBtn=$('#blindBtn'); if(blindBtn)blindBtn.textContent=hangPromptMode==='blind'?'Tricky':'Blind'; renderHangman()}
 function initHangmanParts(){let stage=$('#stage'); if(stage.querySelector('.part'))return; PARTS.forEach(p=>{let d=document.createElement('div');d.className='part '+p;d.dataset.part=p;stage.appendChild(d)}); $('#partsTotal').textContent=PARTS.length}
 function renderHangman(){initHangmanParts(); PARTS.forEach((p,i)=>{$(`[data-part="${p}"]`).classList.toggle('visible',i<hang.damage)}); $('#lives').textContent=hang.lives; $('#damage').textContent=hang.damage; let res=$('#result'); res.classList.toggle('show',hang.status!=='playing'); $('#resultTitle').textContent=hang.status==='won'?'GANASTE!':hang.status==='lost'?'PERDISTE!':''; $('#resultText').textContent=hang.status==='won'?'Has desmontado el ahorcado.':hang.status==='lost'?'Se completó el ahorcado.':''}
 function hangSuccess(){if(hang.status!=='playing')return ''; if(hang.damage>0) hang.damage--; else hang.lives++; if(hang.damage<=0){hang.damage=0;hang.status='won';return '¡Ganaste!'} return 'Quitas una pieza.'}
