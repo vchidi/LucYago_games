@@ -42,7 +42,11 @@ box-shadow:none;
 .promptTitle{background:white;border-radius:16px;padding:9px 12px;font-size:20px;font-weight:950;border:3px solid rgba(0,0,0,.05)}
 .actionRow{display:flex;gap:8px;flex-wrap:wrap}
 .actionRow button{padding:10px 12px;font-size:16px}
+.fractionNote{font-size:14px;line-height:1.25;font-weight:850;color:#6b3f21;background:#fffaf0;border:2px solid rgba(255,143,199,.18);border-radius:12px;padding:6px 10px;text-align:center}
+.fractionNote div{margin:1px 0}
 .workGrid{min-height:0;display:grid;grid-template-columns:minmax(360px,.82fr) minmax(300px,1.18fr);gap:10px}
+.workGrid.readMode{grid-template-columns:1fr!important}
+.workGrid.readMode .helpPane{display:none!important}
 .leftExercise{background:white;border-radius:18px;border:3px solid rgba(255,143,199,.22);padding:12px;display:flex;align-items:center;justify-content:center;min-height:0;overflow:auto}
 .helpPane{background:white;border-radius:18px;border:3px dashed #ff8fc7;padding:10px;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}
 .helpEmpty{font-weight:900;color:#9a6b4a;text-align:center;font-size:18px}
@@ -54,6 +58,7 @@ box-shadow:none;
 .fraction .bar{height:3px;background:currentColor;border-radius:9px}
 .mathLine{display:flex;align-items:center;gap:11px;flex-wrap:wrap;font-size:34px;font-weight:950}
 .resultInput{font-size:30px;font-weight:950;padding:8px 10px;border-radius:14px;border:3px solid #ffb3d1;width:120px;text-align:center;background:#fff7fd}
+.resultInput.activeInput{outline:4px solid rgba(255,77,166,.35);border-color:#ff4da6;background:#fff0f8}
 .mixInput{width:155px}
 .signBtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:300px;margin-top:10px}
 .numPad{display:grid;grid-template-columns:repeat(6,52px);gap:6px;margin-top:10px;justify-content:center}
@@ -70,8 +75,13 @@ svg.fracSvg.small{width:160px;height:160px;max-height:21vh}
 .slice{stroke:#6f3b1d;stroke-width:2.2}
 .multiVisual{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
 .bottomGame{position:relative;height:225px;min-height:225px;border-radius:24px;overflow:hidden;border:4px solid #ffb5d7;background:linear-gradient(#aeeeff 0 43%,#fce7b2 43% 100%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.45)}
+.cafeBgDecor{position:absolute;inset:0;pointer-events:none;z-index:1}
+.cafeBgDecor i{position:absolute;width:26px;height:26px;border-radius:50%;background:#fff7df;border:3px solid rgba(180,83,9,.45);box-shadow:0 3px 0 rgba(120,60,20,.12)}
+.cafeBgDecor i:nth-child(2n){background:#ffd6ec}
+.cafeBgDecor i:nth-child(3n){background:#d9f99d}
+.cafeBgDecor .d1{left:34px;bottom:40px}.cafeBgDecor .d2{left:82px;bottom:112px}.cafeBgDecor .d3{left:38px;bottom:176px}.cafeBgDecor .d4{right:36px;bottom:42px}.cafeBgDecor .d5{right:88px;bottom:116px}.cafeBgDecor .d6{right:40px;bottom:178px}.cafeBgDecor .d7{left:150px;bottom:176px}.cafeBgDecor .d8{right:158px;bottom:176px}
 .gameHud{position:absolute;left:10px;top:10px;z-index:5;background:white;border-radius:14px;padding:7px 11px;font-weight:950;box-shadow:0 4px 0 rgba(0,0,0,.08);font-size:14px}
-.cafeScene{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:720px;height:220px}
+.cafeScene{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:720px;height:220px;z-index:2}
 .floor{position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(#c08457,#8b5a38)}
 .part{opacity:0;transform:translateY(14px) scale(.96);transition:opacity .35s ease, transform .35s ease, filter .3s}
 .part.on{opacity:1;transform:translateY(0) scale(1)}
@@ -88,7 +98,8 @@ svg.fracSvg.small{width:160px;height:160px;max-height:21vh}
 .speech.on{opacity:1;transform:translateY(0)}
 .sp1{left:70px}.sp2{right:70px}
 .c1{left:95px}.c2{right:100px}
-.layerItem{position:absolute;font-size:36px;transition:all .35s;filter:drop-shadow(0 3px 1px rgba(0,0,0,.12))}
+.layerItem{position:absolute;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:32px;line-height:1;transition:all .35s;filter:drop-shadow(0 3px 1px rgba(0,0,0,.12));pointer-events:none}
+.layerItem.htmlLayer{width:auto;height:auto;display:block}
 .decor{animation:pop .35s ease}
 @keyframes pop{50%{transform:scale(1.25)}}
 .damage{animation:jiggle .35s ease-in-out 2}
@@ -244,7 +255,7 @@ svg.fracSvg.small{
   border-width:3px !important;
 }
 .exerciseBox{
-  grid-template-rows:auto minmax(0,1fr) minmax(34px,auto) !important;
+  grid-template-rows:auto auto minmax(0,1fr) minmax(34px,auto) !important;
 }
 .workGrid{
   grid-template-columns:minmax(0,1.95fr) minmax(180px,.55fr) !important;
@@ -279,6 +290,8 @@ svg.fracSvg.small{
 .signBtns button{font-size:36px !important;padding:16px 0 !important}
 .choiceGrid{width:min(100%,560px) !important;grid-template-columns:repeat(2,minmax(170px,1fr)) !important;gap:10px !important}
 .choiceGrid button{font-size:20px !important;padding:15px 10px !important}
+.workGrid.readMode{grid-template-columns:1fr !important}
+.workGrid.readMode .helpPane{display:none !important}
 .cafeScene{transform:translateX(-50%) scale(.92) !important;transform-origin:bottom center !important;bottom:6px !important}
 .layerItem{max-width:120px;white-space:nowrap}
 .badBubble{font-size:13px !important;padding:4px 7px !important}
@@ -316,6 +329,11 @@ svg.fracSvg.small{
   .cafeScene{transform:translateX(-50%) scale(.92) !important}
 }
 
+@media (min-width:700px) and (max-width:1199px) and (orientation:portrait){
+  :root{--cafeH:clamp(250px,32vh,330px)}
+  .cafeScene{transform:translateX(-50%) scale(1.02) !important}
+}
+
 @media (max-width:699px){
   :root{--cafeH:clamp(175px,30vh,220px)}
   .workGrid{grid-template-columns:1fr !important;grid-template-rows:minmax(145px,1fr) minmax(72px,.34fr) !important}
@@ -326,6 +344,12 @@ svg.fracSvg.small{
   .numPad button{font-size:18px !important;padding:7px 0 !important}
   .cafeScene{transform:translateX(-50%) scale(.62) !important;bottom:4px !important}
 }
+
+.workGrid.readMode{
+  grid-template-columns:1fr !important;
+  grid-template-rows:auto !important;
+}
+.workGrid.readMode .helpPane{display:none !important}
 
 </style>
 </head>
@@ -352,12 +376,17 @@ svg.fracSvg.small{
         <div class="modeTitle">
           <div class="promptTitle" id="modeTitle">🎲 Todo</div>
           <div class="actionRow">
-            <button onclick="showHelp()">👀 Ajuda</button>
+            <button id="helpBtn" onclick="showHelp()">👀 Ajuda</button>
             <button onclick="newQuestion()">Nova</button>
           </div>
         </div>
 
-        <div class="workGrid">
+        <div class="fractionNote">
+          <div>El número de abajo dice en cuántos trozos iguales está cortada la pizza.</div>
+          <div>El número de arriba dice cuántos trozos cogemos o nos comemos.</div>
+        </div>
+
+        <div class="workGrid" id="workGrid">
           <div class="leftExercise" id="questionPane"></div>
           <div class="helpPane" id="helpPane"><div class="helpEmpty">Pulsa “Ajuda” para ver el dibujo sin cambiar el ejercicio.</div></div>
         </div>
@@ -368,6 +397,10 @@ svg.fracSvg.small{
       <div class="bottomGame" id="bottomGame">
         <div class="flash" id="flash"></div><div class="confetti" id="confetti"></div>
         <div class="gameHud" id="gameHud"></div>
+        <div class="cafeBgDecor" aria-hidden="true">
+          <i class="d1"></i><i class="d2"></i><i class="d3"></i><i class="d4"></i>
+          <i class="d5"></i><i class="d6"></i><i class="d7"></i><i class="d8"></i>
+        </div>
         <div class="cafeScene">
           <div class="floor part" id="floor"></div>
           <div class="cafeBody part" id="cafeBody"></div>
@@ -403,6 +436,15 @@ function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function fracHTML(n,d){return `<span class="fraction"><span class="num">${n}</span><span class="bar"></span><span class="den">${d}</span></span>`}
 function setFeed(msg,kind=''){$('feedback').textContent=msg;$('feedback').className='feedback '+kind}
 function modeLabel(mode){return mode==='all'?'🎲 Todo':mode==='compare'?'⚖️ Comparacions':mode==='ops'?'➕➖ Sumes/restes':mode==='mixed'?'🎂 Mixtos':'📖 Lectura'}
+function pickAllMode(){return rand(['compare','compare','ops','ops','mixed','mixed','mixed','read'])}
+function markActiveInput(){
+  document.querySelectorAll('.resultInput').forEach(el=>el.classList.toggle('activeInput',el.id===activeInputId));
+}
+function setReadLayout(isRead){
+  $('workGrid').classList.toggle('readMode',isRead);
+  $('helpBtn').style.display=isRead?'none':'';
+  $('helpPane').innerHTML=isRead?'':'<div class="helpEmpty">Pulsa “Ajuda” para ver el dibujo sin cambiar el ejercicio.</div>';
+}
 
 function setMode(mode,btn){
   currentMode=mode;
@@ -413,11 +455,12 @@ function setMode(mode,btn){
 }
 
 function newQuestion(){
-  const mode=currentMode==='all'?rand(['compare','ops','mixed','read']):currentMode;
+  const mode=currentMode==='all'?pickAllMode():currentMode;
   if(currentMode==='all') $('modeTitle').textContent='🎲 Todo · '+modeLabel(mode).replace(/^.. /,'');
   else $('modeTitle').textContent=modeLabel(currentMode);
-  $('helpPane').innerHTML='<div class="helpEmpty">Pulsa “Ajuda” para ver el dibujo sin cambiar el ejercicio.</div>';
   activeInputId=null;
+  setReadLayout(mode==='read');
+  markActiveInput();
   if(mode==='compare') newCompare();
   if(mode==='ops') newOps();
   if(mode==='mixed') newMixed();
@@ -462,12 +505,13 @@ function numPadHTML(){
   const keys=['1','2','3','4','5','6','7','8','9','0','⌫','OK'];
   return `<div class="numPad">${keys.map(k=>`<button onclick="padKey('${k}')">${k}</button>`).join('')}</div>`;
 }
-function selectInput(id){activeInputId=id; const el=$(id); if(el)el.focus({preventScroll:true});}
+function selectInput(id){activeInputId=id; markActiveInput(); const el=$(id); if(el)el.focus({preventScroll:true});}
 function padKey(k){
   if(k==='OK'){checkTyped();return}
   const el=activeInputId?$(activeInputId):($('numInput')||$('wholeInput'));
   if(!el)return;
   activeInputId=el.id;
+  markActiveInput();
   if(k==='⌫') el.value=el.value.slice(0,-1);
   else el.value+=k;
 }
@@ -484,7 +528,7 @@ function newOps(){
 function newMixed(){
   const d=rand([3,4,5,6,8]); const whole=ri(1,2), rem=ri(1,d-1), n=whole*d+rem;
   current={type:'mixed',d,whole,rem,n,ans:`${whole} ${rem}/${d}`,shape:chooseGridShape(d),color:'#ff6ec7'};
-  $('questionPane').innerHTML=`<div><div class="mathLine">${fracHTML(n,d)} <span>=</span><input id="wholeInput" readonly onclick="selectInput('wholeInput')" class="resultInput" style="width:55px" placeholder="1">${inputFracHTML(60,60)}<button onclick="checkTyped()" style="padding:10px 14px;font-size:20px">Comprobar</button></div>${numPadHTML()}</div>`;
+  $('questionPane').innerHTML=`<div><div class="mathLine">${fracHTML(n,d)} <span>=</span><input id="wholeInput" readonly onclick="selectInput('wholeInput')" class="resultInput" style="width:55px" placeholder="?">${inputFracHTML(60,60)}<button onclick="checkTyped()" style="padding:10px 14px;font-size:20px">Comprobar</button></div>${numPadHTML()}</div>`;
   setFeed('Convierte a número mixto. El dibujo solo aparece con Ajuda.');
   selectInput('wholeInput');
 }
@@ -526,6 +570,7 @@ function answerRead(o){
 }
 
 function showHelp(){
+  if(current.type==='read') return;
   if(current.type==='compare'){
     showCompareTextHelp();
     return;
@@ -642,18 +687,21 @@ function updateCafe(){
 
   if(build>=8){
     if(stars>=10){c1.textContent='😍'; c2.textContent='🥳'; $('sp1').textContent='Boníssim!'; $('sp2').textContent='Una altra!';}
-    if(stars>=14){add('👨‍👩‍👧',72,42,'decor'); add('🧑‍🍳',610,42,'decor');}
+    if(stars>=14){add('★',72,42,'decor'); add('✦',610,42,'decor');}
     const goodIcons=['✨','🧁','🍓','🍩','🎈','🌸','🍰','🍪','🧋','🍒','⭐','🎉'];
-    for(let i=0;i<Math.min(stars-8,12);i++) add(goodIcons[i%goodIcons.length], 115+(i*48)%500, 62+((i*37)%115), 'decor');
+    const goodSpots=[[120,60],[180,120],[240,72],[300,142],[360,68],[420,130],[480,80],[540,140],[130,170],[230,172],[390,172],[520,170]];
+    for(let i=0;i<Math.min(stars-8,12);i++) add(goodIcons[i%goodIcons.length], goodSpots[i][0], goodSpots[i][1], 'decor');
   }
 
   // Si empieza fallando antes de construir, aparecen clientes descontentos fuera del futuro café.
   if(build<8 && fails>0){
     const angry=['😡','😤','😢','🙁','😱'];
     const texts=['No hay café!','Qué desastre!','Me quejo!','Me voy!','Arregla esto!'];
+    const angrySpots=[[60,34],[158,34],[256,34],[354,34],[452,34]];
+    const bubbleSpots=[[50,92],[148,92],[246,92],[344,92],[442,92]];
     for(let i=0;i<Math.min(fails,5);i++){
-      add(`<span class="badClient">${angry[i]}</span>`, 55+i*62, 32+(i%2)*42, 'html');
-      add(`<span class="badBubble">${texts[i]}</span>`, 38+i*62, 88+(i%2)*42, 'html');
+      add(`<span class="badClient">${angry[i]}</span>`, angrySpots[i][0], angrySpots[i][1], 'html');
+      add(`<span class="badBubble">${texts[i]}</span>`, bubbleSpots[i][0], bubbleSpots[i][1], 'html');
     }
     state='Clientes descontentos';
   }
@@ -671,7 +719,9 @@ function updateCafe(){
   $('stateTxt').textContent=state;
 }
 function add(txt,x,y,cls=''){
-  const e=document.createElement('div');e.className='layerItem '+(cls==='html'?'':cls);e.style.left=x+'px';e.style.bottom=y+'px';
+  const safeX=Math.max(32,Math.min(640,x));
+  const safeY=Math.max(28,Math.min(176,y));
+  const e=document.createElement('div');e.className='layerItem '+(cls==='html'?'htmlLayer':cls);e.style.left=safeX+'px';e.style.bottom=safeY+'px';
   if(cls==='html') e.innerHTML=txt; else e.textContent=txt;
   $('layers').appendChild(e)
 }
