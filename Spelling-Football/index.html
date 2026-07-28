@@ -5841,8 +5841,150 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
   setTimeout(prepare,0);
 })();
 </script>
+<style id="valentina-competition-keyboard-restore-20260728">
+/* Partido: el teclado digital siempre visible; Aprendizaje usa teclado nativo. */
+body.competition-mode #spellingSpanishKeyboard,
+body.competition-mode.keyboard-open #spellingSpanishKeyboard,
+body.competition-mode .clue-card #spellingSpanishKeyboard,
+body.competition-mode.keyboard-open .clue-card #spellingSpanishKeyboard{
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  max-width:760px!important;
+  margin-top:6px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+body.learning-mode #spellingSpanishKeyboard,
+body.learning-mode.keyboard-open #spellingSpanishKeyboard,
+body.learning-mode #learningView #spellingSpanishKeyboard,
+body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+</style>
+<script id="valentina-competition-keyboard-restore-20260728">
+(function(){
+  function isCompetition(){return document.body&&document.body.classList.contains('competition-mode')}
+  function restoreCompetitionKeyboard(){
+    if(!isCompetition())return;
+    var kb=document.getElementById('spellingSpanishKeyboard');
+    if(!kb)return;
+    var target=document.querySelector('.clue-card .word-zone')||document.querySelector('.clue-card')||document.querySelector('.panel');
+    if(target&&kb.parentElement!==target){
+      var actions=target.querySelector&&target.querySelector('.actions');
+      if(actions)target.insertBefore(kb,actions);
+      else target.appendChild(kb);
+    }
+    kb.style.removeProperty('display');
+    kb.style.removeProperty('visibility');
+    kb.style.removeProperty('pointer-events');
+    kb.style.removeProperty('opacity');
+    kb.style.setProperty('display','grid','important');
+    kb.style.setProperty('visibility','visible','important');
+    kb.style.setProperty('pointer-events','auto','important');
+    kb.style.setProperty('opacity','1','important');
+  }
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(restoreCompetitionKeyboard,0);setTimeout(restoreCompetitionKeyboard,180)},true);
+  });
+  setInterval(restoreCompetitionKeyboard,700);
+  setTimeout(restoreCompetitionKeyboard,0);
+})();
+</script>
+<style id="valentina-learning-ipad-enter-keyboard-size-20260728">
+/* Aprendizaje iPad: icono 40% mas corto y siempre por encima del teclado. */
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode .learn-layout,
+  body.learning-mode.keyboard-open .learn-layout{
+    grid-template-columns:minmax(0,1fr) 330px!important;
+    gap:10px!important;
+    align-items:start!important;
+  }
+  body.learning-mode .learn-right,
+  body.learning-mode.keyboard-open .learn-right{
+    align-self:start!important;
+    max-height:236px!important;
+    overflow:hidden!important;
+    display:flex!important;
+  }
+  body.learning-mode .learn-photo-card,
+  body.learning-mode.keyboard-open .learn-photo-card{
+    width:330px!important;
+    min-width:330px!important;
+    max-width:330px!important;
+    height:228px!important;
+    min-height:228px!important;
+    max-height:228px!important;
+    padding:10px!important;
+    overflow:hidden!important;
+    flex:0 0 228px!important;
+  }
+  body.learning-mode .learn-photo-frame,
+  body.learning-mode.keyboard-open .learn-photo-frame{
+    width:310px!important;
+    height:174px!important;
+    min-height:174px!important;
+    max-height:174px!important;
+    flex:0 0 174px!important;
+    aspect-ratio:auto!important;
+  }
+  body.learning-mode .learn-caption,
+  body.learning-mode.keyboard-open .learn-caption{
+    flex:0 0 24px!important;
+    height:24px!important;
+    max-height:24px!important;
+    overflow:hidden!important;
+  }
+}
+</style>
+<script id="valentina-learning-ipad-enter-keyboard-size-20260728">
+(function(){
+  function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  function input(){
+    var el=document.getElementById('learningNativeInputFinal')||document.getElementById('learningNativeInput');
+    if(!el){
+      el=document.createElement('textarea');
+      el.id='learningNativeInputFinal';
+      el.setAttribute('autocomplete','off');
+      el.setAttribute('autocorrect','off');
+      el.setAttribute('autocapitalize','off');
+      el.setAttribute('spellcheck','false');
+      el.setAttribute('inputmode','text');
+      document.body.appendChild(el);
+    }
+    el.readOnly=false;
+    el.disabled=false;
+    el.removeAttribute('readonly');
+    el.setAttribute('inputmode','text');
+    return el;
+  }
+  function focusNative(force){
+    if(!force&&!isLearning())return;
+    var el=input();
+    try{el.focus({preventScroll:true})}catch(e){try{el.focus()}catch(_){}}
+  }
+  function enteringLearningTarget(t){return !!(t&&t.closest&&t.closest('#learnScreenBtn'))}
+  ['touchstart','pointerdown','mousedown','click'].forEach(function(ev){
+    document.addEventListener(ev,function(e){
+      if(enteringLearningTarget(e.target)){
+        focusNative(true);
+        setTimeout(function(){focusNative(true)},40);
+        setTimeout(function(){focusNative(true)},180);
+      }
+    },true);
+  });
+  ['DOMContentLoaded','load','pageshow'].forEach(function(ev){
+    window.addEventListener(ev,function(){if(isLearning())setTimeout(function(){focusNative(false)},120)},true);
+  });
+})();
+</script>
 </body>
 </html>
+
+
 
 
 
