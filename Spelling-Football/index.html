@@ -5561,7 +5561,7 @@ body.learning-mode.keyboard-open .learn-table .learn-cell.editable:not(.phrase) 
   function ensureNativeInput(){var el=byId('learningNativeInput');if(el)return el;el=document.createElement('textarea');el.id='learningNativeInput';el.setAttribute('autocomplete','off');el.setAttribute('autocorrect','off');el.setAttribute('autocapitalize','off');el.setAttribute('spellcheck','false');el.setAttribute('aria-hidden','true');document.body.appendChild(el);el.addEventListener('beforeinput',function(e){if(!isLearning())return;if(e.inputType==='deleteContentBackward'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress('Borrar');el.value=''}},true);el.addEventListener('input',function(e){if(!isLearning())return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();var text=el.value||'';el.value='';for(var i=0;i<text.length;i++){var ch=text.charAt(i);if(ch==='\n'||ch===' ')continue;if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(ch)}},true);return el}
   function focusNative(){if(!isLearning())return;var el=ensureNativeInput();el.readOnly=false;el.removeAttribute('readonly');el.setAttribute('inputmode','text');try{el.focus({preventScroll:true})}catch(e){try{el.focus()}catch(_){}}}
   function ensureRefresh(strip){var btn=byId('learnIconRefreshBtn');if(!btn){btn=document.createElement('button');btn.id='learnIconRefreshBtn';btn.className='learn-control';btn.type='button';btn.title='Cambiar icono';btn.textContent='↻'}var anchor=byId('learnPhotoToggle');if(anchor&&anchor.parentElement===strip&&btn.parentElement!==strip)anchor.insertAdjacentElement('afterend',btn);else if(btn.parentElement!==strip)strip.insertBefore(btn,strip.firstChild||null);bind(btn,function(){if(typeof window.__learningRefreshIcon==='function')window.__learningRefreshIcon();setTimeout(place,0)});return btn}
-  function place(){if(!isLearning())return;ensureNativeInput();var kb=byId('spellingSpanishKeyboard');if(kb)kb.style.display='none';var strip=document.querySelector('.photo-controls'),controls=document.querySelector('.hero .controls');if(!strip||!controls)return;var comp=byId('competitionScreenBtn');if(strip.parentElement!==controls){if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',strip);else controls.appendChild(strip);}else if(comp&&comp.nextElementSibling!==strip){comp.insertAdjacentElement('afterend',strip);} strip.style.setProperty('display','flex','important');strip.style.setProperty('margin-left','auto','important');strip.style.setProperty('visibility','visible','important');strip.style.setProperty('opacity','1','important');ensureRefresh(strip);['learnPhotoToggle','learnIconRefreshBtn','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){var el=byId(id);if(el)strip.appendChild(el)});Array.prototype.slice.call(strip.querySelectorAll('.status')).forEach(function(el){el.style.display='none'});var photo=byId('learnPhotoToggle');if(photo)photo.textContent='Icono';['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){var b=byId(id);bind(b,function(){runOriginal(id);setTimeout(function(){var p=byId('learnPhotoToggle');if(p)p.textContent='Icono';place()},0)})})}
+  function place(){if(!isLearning())return;ensureNativeInput();var kb=byId('spellingSpanishKeyboard');if(kb)kb.style.display='none';var strip=document.querySelector('.photo-controls'),controls=document.querySelector('.hero .controls');if(!strip||!controls)return;var comp=byId('competitionScreenBtn');if(strip.parentElement!==controls){if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',strip);else controls.appendChild(strip);}else if(comp&&comp.nextElementSibling!==strip){comp.insertAdjacentElement('afterend',strip);} strip.style.setProperty('display','flex','important');strip.style.setProperty('margin-left','auto','important');strip.style.setProperty('visibility','visible','important');strip.style.setProperty('opacity','1','important');ensureRefresh(strip);['learnGuessBtn','learnPhraseBtn','learnBlocksBtn','learnShuffleBtn','learnPhotoToggle','learnIconRefreshBtn'].forEach(function(id){var el=byId(id);if(el)strip.appendChild(el)});Array.prototype.slice.call(strip.querySelectorAll('.status')).forEach(function(el){el.style.display='none'});var photo=byId('learnPhotoToggle');if(photo)photo.textContent='Icono';['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){var b=byId(id);bind(b,function(){runOriginal(id);setTimeout(function(){var p=byId('learnPhotoToggle');if(p)p.textContent='Icono';place()},0)})})}
   function coverEntry(){if(!isLearning())return;if(document.body.dataset.learningIconCoveredNow==='1')return;document.body.dataset.learningIconCoveredNow='1';if(typeof window.__learningCoverIcon==='function')window.__learningCoverIcon();setTimeout(place,0)}
   function resetFlagIfLeaving(){if(!isLearning()&&document.body)delete document.body.dataset.learningIconCoveredNow}
   function maybeFocus(e){if(!isLearning())return;var t=e&&e.target;if(t&&t.closest&&t.closest('.photo-controls,.hero .controls,button,select,label'))return;if(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))setTimeout(focusNative,0)}
@@ -5589,10 +5589,17 @@ body.competition-mode.keyboard-open .hero .controls{
   gap:6px!important;
   overflow-x:auto!important;
   overflow-y:hidden!important;
+  max-width:100%!important;
+  min-width:0!important;
+  scroll-behavior:smooth!important;
+  scrollbar-width:thin!important;
+  scrollbar-color:rgba(20,84,68,.35) transparent!important;
   -webkit-overflow-scrolling:touch!important;
 }
 body.competition-mode .hero .controls::-webkit-scrollbar,
-body.competition-mode.keyboard-open .hero .controls::-webkit-scrollbar{display:none!important}
+body.competition-mode.keyboard-open .hero .controls::-webkit-scrollbar{height:6px!important}
+body.competition-mode .hero .controls::-webkit-scrollbar-thumb,
+body.competition-mode.keyboard-open .hero .controls::-webkit-scrollbar-thumb{background:rgba(20,84,68,.35)!important;border-radius:999px!important}
 body.competition-mode .hero .controls button,
 body.competition-mode .hero .controls label.btn,
 body.competition-mode .hero .controls select.select-pill,
@@ -5657,15 +5664,25 @@ body.competition-mode.keyboard-open #regenTeamsBtn{min-width:86px!important}
     if(!isPartido())return;
     var strip=document.querySelector('.photo-controls');
     if(strip){strip.style.setProperty('display','none','important');strip.style.setProperty('visibility','hidden','important')}
+    var wordAudio=byId('autoAudioBtn');
+    if(wordAudio){wordAudio.textContent='🔊 S: '+(String(wordAudio.textContent||'').toLowerCase().indexOf('no')>=0?'no':'sí');wordAudio.title='Audio spelling'}
+    var matchAudio=byId('commentaryBtn');
+    if(matchAudio){matchAudio.textContent='🔊 P: '+(String(matchAudio.textContent||'').toLowerCase().indexOf('no')>=0?'no':'sí');matchAudio.title='Audio partido'}
     var repeat=byId('repeatAudioBtn');
-    if(repeat){repeat.textContent='Repetir';repeat.title='Repetir spelling'}
+    if(repeat){repeat.textContent='↻';repeat.title='Repetir spelling'}
     var shuffle=byId('shuffleVerbsBtn');
     if(shuffle){shuffle.textContent='⇄ Verbos';shuffle.title='Mezclar verbos';shuffle.style.setProperty('font-size','12px','important')}
+    var restart=byId('restartBtn');
+    if(restart){restart.textContent='↺';restart.title='Reiniciar partida'}
+    var noGame=byId('noGameBtn');
+    if(noGame){noGame.textContent='⚽ '+(String(noGame.textContent||'').toLowerCase().indexOf('no')>=0?'no':'sí');noGame.title='Partido sí/no'}
     var formation=byId('formationCycleBtn');
     if(formation){formation.textContent=formationText()||'1-2-2-1';formation.title='Cambiar formación'}
     var regen=byId('regenTeamsBtn');
     if(regen){regen.textContent='⇄ Equipos';regen.title='Regenerar equipos'}
-    [repeat,shuffle,formation,regen,byId('noGameBtn'),byId('restartBtn'),byId('autoAudioBtn'),byId('commentaryBtn')].forEach(function(btn){
+    var yago=byId('yagoRoleCycleBtn');
+    if(yago){yago.textContent=String(yago.textContent||'').replace(/^Yago\s+/i,'Y: ');yago.title='Posición de Yago'}
+    [wordAudio,matchAudio,repeat,shuffle,formation,regen,noGame,restart,yago,byId('modeClassicBtn'),byId('modeBlindBtn')].forEach(function(btn){
       if(!btn)return;
       btn.style.setProperty('white-space','nowrap','important');
       btn.style.setProperty('min-width','max-content','important');
@@ -5681,8 +5698,155 @@ body.competition-mode.keyboard-open #regenTeamsBtn{min-width:86px!important}
   setTimeout(syncPartidoTopMenu,0);
 })();
 </script>
+<style id="valentina-learning-ipad-native-keyboard-fix-20260728">
+/* Aprendizaje iPad: teclado nativo y recuadro de icono siempre dentro de la zona visible. */
+body.learning-mode #spellingSpanishKeyboard,
+body.learning-mode.keyboard-open #spellingSpanishKeyboard,
+body.learning-mode #learningView #spellingSpanishKeyboard,
+body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+#learningNativeInput,
+#learningNativeInputFinal{
+  position:fixed!important;
+  left:50%!important;
+  bottom:12px!important;
+  width:2px!important;
+  height:2px!important;
+  min-width:2px!important;
+  min-height:2px!important;
+  opacity:.02!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  color:transparent!important;
+  caret-color:transparent!important;
+  outline:0!important;
+  resize:none!important;
+  z-index:2147482000!important;
+  font-size:16px!important;
+  transform:translateX(-50%)!important;
+}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode .learn-layout,
+  body.learning-mode.keyboard-open .learn-layout{
+    grid-template-columns:minmax(0,1fr) 330px!important;
+    gap:10px!important;
+    align-items:start!important;
+  }
+  body.learning-mode .learn-right,
+  body.learning-mode.keyboard-open .learn-right{
+    align-self:start!important;
+    max-height:calc(100dvh - 150px)!important;
+    overflow:hidden!important;
+    display:flex!important;
+  }
+  body.learning-mode .learn-photo-card,
+  body.learning-mode.keyboard-open .learn-photo-card{
+    width:330px!important;
+    min-width:330px!important;
+    max-width:330px!important;
+    height:calc(100dvh - 158px)!important;
+    min-height:280px!important;
+    max-height:calc(100dvh - 158px)!important;
+    padding:10px!important;
+    overflow:hidden!important;
+    flex:0 1 auto!important;
+  }
+  body.learning-mode .learn-photo-frame,
+  body.learning-mode.keyboard-open .learn-photo-frame{
+    width:310px!important;
+    height:auto!important;
+    min-height:226px!important;
+    max-height:none!important;
+    flex:1 1 auto!important;
+    aspect-ratio:auto!important;
+  }
+  body.learning-mode .learn-caption,
+  body.learning-mode.keyboard-open .learn-caption{
+    flex:0 0 24px!important;
+    max-height:24px!important;
+    overflow:hidden!important;
+  }
+}
+</style>
+<script id="valentina-learning-ipad-native-keyboard-fix-20260728">
+(function(){
+  function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  function targetIsTypingArea(t){return !!(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))&&!t.closest('.photo-controls,.hero .controls,button,select,label')}
+  function nativeInput(){
+    var el=document.getElementById('learningNativeInputFinal')||document.getElementById('learningNativeInput');
+    if(el)return el;
+    el=document.createElement('textarea');
+    el.id='learningNativeInputFinal';
+    el.setAttribute('autocomplete','off');
+    el.setAttribute('autocorrect','off');
+    el.setAttribute('autocapitalize','off');
+    el.setAttribute('spellcheck','false');
+    el.setAttribute('inputmode','text');
+    document.body.appendChild(el);
+    function routeText(text){
+      if(!isLearning()||!text)return;
+      for(var i=0;i<text.length;i++){
+        var ch=text.charAt(i);
+        if(ch==='\n'||ch===' ')continue;
+        if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(ch);
+      }
+    }
+    el.addEventListener('beforeinput',function(e){
+      if(!isLearning())return;
+      if(e.inputType==='deleteContentBackward'){
+        e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+        if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress('Borrar');
+        el.value='';
+      }
+    },true);
+    el.addEventListener('input',function(e){
+      if(!isLearning())return;
+      e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+      var text=el.value||'';
+      el.value='';
+      routeText(text);
+    },true);
+    return el;
+  }
+  function focusNow(){
+    if(!isLearning())return;
+    var el=nativeInput();
+    el.readOnly=false;
+    el.removeAttribute('readonly');
+    el.disabled=false;
+    el.setAttribute('inputmode','text');
+    try{el.focus({preventScroll:true})}catch(e){try{el.focus()}catch(_){}}
+  }
+  function prepare(){
+    if(!isLearning())return;
+    var kb=document.getElementById('spellingSpanishKeyboard');
+    if(kb){kb.style.setProperty('display','none','important');kb.style.setProperty('visibility','hidden','important')}
+    nativeInput();
+  }
+  ['touchstart','pointerdown','mousedown'].forEach(function(ev){
+    document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target))focusNow()},true);
+  });
+  ['touchend','pointerup','click'].forEach(function(ev){
+    document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target)){focusNow();setTimeout(focusNow,30)}},true);
+  });
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(prepare,0);setTimeout(prepare,160)},true);
+  });
+  setInterval(prepare,700);
+  setTimeout(prepare,0);
+})();
+</script>
 </body>
 </html>
+
+
+
+
 
 
 
