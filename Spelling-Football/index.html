@@ -5571,8 +5571,119 @@ body.learning-mode.keyboard-open .learn-table .learn-cell.editable:not(.phrase) 
   setTimeout(function(){place();coverEntry()},0);
 })();
 </script>
+<style id="valentina-partido-top-menu-final-20260728">
+/* Partido: menu superior legible, sin controles de Aprendizaje. */
+body.competition-mode .photo-controls,
+body.competition-mode.keyboard-open .photo-controls,
+body.competition-mode .hero .controls > .photo-controls,
+body.competition-mode.keyboard-open .hero .controls > .photo-controls{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body.competition-mode .hero .controls,
+body.competition-mode.keyboard-open .hero .controls{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+body.competition-mode .hero .controls::-webkit-scrollbar,
+body.competition-mode.keyboard-open .hero .controls::-webkit-scrollbar{display:none!important}
+body.competition-mode .hero .controls button,
+body.competition-mode .hero .controls label.btn,
+body.competition-mode .hero .controls select.select-pill,
+body.competition-mode.keyboard-open .hero .controls button,
+body.competition-mode.keyboard-open .hero .controls label.btn,
+body.competition-mode.keyboard-open .hero .controls select.select-pill{
+  flex:0 0 auto!important;
+  width:auto!important;
+  max-width:none!important;
+  min-width:max-content!important;
+  height:32px!important;
+  min-height:32px!important;
+  max-height:32px!important;
+  padding:0 11px!important;
+  font-size:12px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-indent:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  pointer-events:auto!important;
+}
+body.competition-mode #shuffleVerbsBtn,
+body.competition-mode.keyboard-open #shuffleVerbsBtn,
+body.competition-mode #regenTeamsBtn,
+body.competition-mode.keyboard-open #regenTeamsBtn{
+  font-size:12px!important;
+  min-width:max-content!important;
+  flex-basis:auto!important;
+}
+body.competition-mode #shuffleVerbsBtn::before,
+body.competition-mode.keyboard-open #shuffleVerbsBtn::before,
+body.competition-mode #repeatAudioBtn::before,
+body.competition-mode.keyboard-open #repeatAudioBtn::before{
+  content:none!important;
+  display:none!important;
+}
+body.competition-mode #repeatAudioBtn,
+body.competition-mode.keyboard-open #repeatAudioBtn{font-size:12px!important}
+body.competition-mode #formationCycleBtn,
+body.competition-mode.keyboard-open #formationCycleBtn{
+  min-width:76px!important;
+  font-size:12px!important;
+}
+body.competition-mode #regenTeamsBtn,
+body.competition-mode.keyboard-open #regenTeamsBtn{min-width:86px!important}
+</style>
+<script id="valentina-partido-top-menu-final-20260728">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function isPartido(){return document.body&&document.body.classList.contains('competition-mode')}
+  function formationText(){
+    var f=byId('formationSelect');
+    if(f&&f.value)return f.value;
+    if(typeof window.formationKey!=='undefined')return window.formationKey;
+    var b=byId('formationCycleBtn');
+    return b?String(b.textContent||'').replace(/Formaci[oó]n\s*/i,'').trim():'';
+  }
+  function syncPartidoTopMenu(){
+    if(!isPartido())return;
+    var strip=document.querySelector('.photo-controls');
+    if(strip){strip.style.setProperty('display','none','important');strip.style.setProperty('visibility','hidden','important')}
+    var repeat=byId('repeatAudioBtn');
+    if(repeat){repeat.textContent='Repetir';repeat.title='Repetir spelling'}
+    var shuffle=byId('shuffleVerbsBtn');
+    if(shuffle){shuffle.textContent='⇄ Verbos';shuffle.title='Mezclar verbos';shuffle.style.setProperty('font-size','12px','important')}
+    var formation=byId('formationCycleBtn');
+    if(formation){formation.textContent=formationText()||'1-2-2-1';formation.title='Cambiar formación'}
+    var regen=byId('regenTeamsBtn');
+    if(regen){regen.textContent='⇄ Equipos';regen.title='Regenerar equipos'}
+    [repeat,shuffle,formation,regen,byId('noGameBtn'),byId('restartBtn'),byId('autoAudioBtn'),byId('commentaryBtn')].forEach(function(btn){
+      if(!btn)return;
+      btn.style.setProperty('white-space','nowrap','important');
+      btn.style.setProperty('min-width','max-content','important');
+      btn.style.setProperty('width','auto','important');
+      btn.style.setProperty('max-width','none','important');
+      btn.style.setProperty('pointer-events','auto','important');
+    });
+  }
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(syncPartidoTopMenu,0);setTimeout(syncPartidoTopMenu,180)},true);
+  });
+  setInterval(syncPartidoTopMenu,700);
+  setTimeout(syncPartidoTopMenu,0);
+})();
+</script>
 </body>
 </html>
+
 
 
 
