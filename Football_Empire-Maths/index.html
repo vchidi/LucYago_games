@@ -2154,6 +2154,13 @@ function cellsFromFormattedText(txt, cls='digit'){
     return `<div class="${cls}">${ch}</div>`;
   }).join('');
 }
+function subtractionTopCells(txt){
+  return String(txt).split('').map((ch,i)=>{
+    if(ch===' ') return '<div class="digit ghostDigit"></div>';
+    if(ch==='.') return '<div class="separatorDot">.</div>';
+    return `<div class="digit subTopDigit" data-borrow-target="${i}">${ch}</div>`;
+  }).join('');
+}
 function carryRowFor(formatted, opMark=''){
   let html = '<div class="rowMath carryRow">';
   html += `<div class="opMark">${opMark}</div>`;
@@ -2161,6 +2168,16 @@ function carryRowFor(formatted, opMark=''){
     if(ch===' ') html += '<div class="digit ghostDigit"></div>';
     else if(ch==='.') html += '<div class="separatorDot"></div>';
     else html += `<div class="carryBlank" data-carry="1"><input inputmode="none" readonly tabindex="-1" maxlength="1"></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+function borrowRowFor(formatted){
+  let html = '<div class="rowMath borrowRow"><div class="opMark"></div>';
+  formatted.split('').forEach((ch,i)=>{
+    if(ch===' ') html += '<div class="digit ghostDigit"></div>';
+    else if(ch==='.') html += '<div class="separatorDot"></div>';
+    else html += `<div class="blank borrowBlank" data-borrow="1" data-borrow-index="${i}" data-max="2"><input inputmode="none" readonly tabindex="-1" maxlength="2"></div>`;
   });
   html += '</div>';
   return html;
@@ -2174,8 +2191,8 @@ function renderAddSub(p){
   const bottomFormatted = padFormattedToWidth(padThousands(p.b),width);
   const answerFormatted = padFormattedToWidth(answer,width);
   let html='<div class="mathGrid">';
-  html += carryRowFor(topFormatted);
-  html += '<div class="rowMath"><div class="opMark"></div>'+cellsFromFormattedText(topFormatted)+'</div>';
+  html += p.type==='add' ? carryRowFor(topFormatted) : borrowRowFor(topFormatted);
+  html += '<div class="rowMath"><div class="opMark"></div>'+(p.type==='sub'?subtractionTopCells(topFormatted):cellsFromFormattedText(topFormatted))+'</div>';
   html += '<div class="rowMath"><div class="opMark">'+op+'</div>'+cellsFromFormattedText(bottomFormatted)+'</div>';
   html += '<div class="line"></div>';
   html += rowFromAnswer(answerFormatted,'ans');
@@ -2202,6 +2219,7 @@ function renderMul(p){
   const bottomFormatted = padFormattedToWidth(padThousands(p.b), width);
   let html='<div class="mathGrid">';
   html += carryRowFor(topFormatted);
+  if(String(Math.abs(p.b)).replace(/\D/g,'').length>1) html += carryRowFor(topFormatted);
   html += '<div class="rowMath"><div class="opMark"></div>'+cellsFromFormattedText(topFormatted)+'</div>';
   html += '<div class="rowMath"><div class="opMark">x</div>'+cellsFromFormattedText(bottomFormatted)+'</div>';
   html += '<div class="line"></div>';
@@ -2469,7 +2487,7 @@ function updateActiveCell(){
 function inputKey(k){
   let cell=state.activeElement;
   if(state.current?.type==='comb' && stepModeActive()) cell=nextCombinedTarget();
-  else if(stepModeActive() && !(state.activeKind==='carry' && state.activeElement?.classList.contains('carryBlank'))) cell=nextStepTarget();
+  else if(stepModeActive() && !((state.activeKind==='carry' && state.activeElement?.classList.contains('carryBlank')) || state.activeElement?.classList.contains('borrowBlank'))) cell=nextStepTarget();
   if(!cell){
     cell=orderedAnswerCells()[0] || carryCells()[0];
     state.activeElement=cell;
@@ -2481,6 +2499,13 @@ function inputKey(k){
 
   if(k==='del'){
     inp.value='';
+    cell.classList.remove('badCell','goodCell');
+    updateActiveCell();
+    return;
+  }
+
+  if(cell.classList.contains('borrowBlank')){
+    inp.value=(inp.value + String(k).slice(0,1)).slice(0,maxLen);
     cell.classList.remove('badCell','goodCell');
     updateActiveCell();
     return;
@@ -3772,13 +3797,12 @@ updateControlAvailability();
   let inkTimer=null;
   function scheduleEraser(){
     clearTimeout(inkTimer);
-    inkTimer=setTimeout(function(){setFullEraser(true)},4000);
   }
   function isInkSurface(target){
     return !(target && target.closest && target.closest('button,select,input,.blank,.carryBlank,.keypad,.topbar,.modal,#draftCanvas'));
   }
   window.addEventListener('load',function(){
-    setTimeout(function(){setFullEraser(true)},0);
+    setTimeout(function(){setFullEraser(false)},0);
     const lengthBtn=qs('#lengthBtn');
     if(lengthBtn && !lengthBtn.__codexApplyDigits){
       lengthBtn.__codexApplyDigits=true;
@@ -3801,6 +3825,197 @@ updateControlAvailability();
     const btn=qs('#fullEraserBtn');
     if(btn && !btn.classList.contains('active') && isInkSurface(e.target)) scheduleEraser();
   },true);
+})();
+</script>
+<style id="codex-operation-request-final-v2">
+.opButtons button,.opButtons .smallPlay{
+  min-width:78px!important;
+  max-width:none!important;
+  padding-left:10px!important;
+  padding-right:10px!important;
+  white-space:normal!important;
+  overflow:visible!important;
+}
+#fullEraserBtn,#clearFullInkBtn{
+  min-width:72px!important;
+  max-width:none!important;
+}
+.workArea{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+}
+.workArea > #screenKeypad.keypad{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  display:inline-flex!important;
+  width:auto!important;
+  max-width:calc(100% - 24px)!important;
+  flex:0 0 auto!important;
+  align-self:center!important;
+  justify-self:center!important;
+  margin:10px auto 6px!important;
+  justify-content:center!important;
+  align-items:center!important;
+}
+#screenKeypad.keypad button.wide{
+  width:86px!important;
+  min-width:86px!important;
+  font-size:14px!important;
+}
+.borrowRow .borrowBlank{
+  width:calc(var(--cell) * 1.55)!important;
+  min-width:calc(var(--cell) * 1.55)!important;
+  max-width:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  transition:opacity .12s ease;
+}
+.borrowRow .borrowBlank.show{
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+.borrowRow .borrowBlank input{
+  font-size:calc(var(--cell) * .44)!important;
+}
+.subTopDigit{
+  position:relative!important;
+  cursor:pointer!important;
+}
+.subTopDigit.crossed::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  top:50%;
+  border-top:3px solid #ef4444;
+  transform:rotate(-14deg);
+  transform-origin:center;
+  pointer-events:none;
+}
+#operationArea.shortOp{
+  --cell:clamp(48px,5.8vw,64px)!important;
+}
+#operationArea.shortOp .mathGrid{
+  gap:11px!important;
+}
+@media (min-width:700px) and (max-width:1199px){
+  .opButtons button,.opButtons .smallPlay{
+    min-width:70px!important;
+    min-height:32px!important;
+    font-size:11px!important;
+  }
+  #fullEraserBtn,#clearFullInkBtn{min-width:68px!important}
+  .workArea > #screenKeypad.keypad{
+    position:sticky!important;
+    bottom:6px!important;
+    padding:6px 8px!important;
+    gap:5px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  #operationArea.shortOp{
+    --cell:clamp(46px,6.2vw,60px)!important;
+  }
+}
+@media (min-width:700px) and (max-width:820px) and (orientation:portrait){
+  .main{
+    grid-template-rows:minmax(0,1fr) minmax(230px,300px)!important;
+    overflow:hidden!important;
+  }
+  .right,.footballPanel,.rightPhotoPanel,.photoStage.footballStage,.cmGame,.cmPanel{
+    min-height:0!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  .workArea{
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+  }
+  .workArea > #screenKeypad.keypad{
+    max-width:calc(100% - 12px)!important;
+    padding:5px 7px!important;
+    gap:4px!important;
+    flex-wrap:wrap!important;
+  }
+  #screenKeypad.keypad button{
+    width:31px!important;
+    min-width:31px!important;
+    height:31px!important;
+    min-height:31px!important;
+  }
+  #screenKeypad.keypad button.wide{
+    width:74px!important;
+    min-width:74px!important;
+    font-size:12px!important;
+  }
+  #operationArea.shortOp{
+    --cell:clamp(44px,7vw,58px)!important;
+  }
+}
+</style>
+<script id="codex-operation-request-final-v2">
+(function(){
+  function qs(s){return document.querySelector(s)}
+  let activeBorrowBox=null;
+  function markOperationSize(){
+    const area=qs('#operationArea');
+    if(!area || typeof state==='undefined') return;
+    const p=state.current;
+    const isShortAdd = p && p.type==='add' && Math.max(String(Math.abs(p.a)).length,String(Math.abs(p.b)).length,String(Math.abs(p.answer)).length)<=2;
+    area.classList.toggle('shortOp', Boolean(isShortAdd));
+  }
+  function activateBorrow(target){
+    if(!target || typeof state==='undefined' || state.current?.type!=='sub') return;
+    const index=target.dataset.borrowTarget;
+    const box=qs(`.borrowBlank[data-borrow-index="${index}"]`);
+    if(!box) return;
+    target.classList.add('crossed');
+    box.classList.add('show');
+    activeBorrowBox=box;
+    state.activeKind='answer';
+    state.activeElement=box;
+    if(typeof updateActiveCell==='function') updateActiveCell();
+  }
+  document.addEventListener('click',function(e){
+    const key=e.target?.closest?.('#screenKeypad button')?.dataset?.key;
+    if(key===undefined || !activeBorrowBox || !activeBorrowBox.classList.contains('show')) return;
+    const input=activeBorrowBox.querySelector('input');
+    if(!input) return;
+    if(key==='del') input.value='';
+    else input.value=(input.value + String(key).slice(0,1)).slice(0,2);
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  },true);
+  document.addEventListener('pointerdown',function(e){
+    const answer=e.target?.closest?.('.blank[data-answer],.divBlank[data-answer],.carryBlank');
+    if(answer && !answer.classList.contains('borrowBlank')) activeBorrowBox=null;
+  },true);
+  document.addEventListener('pointerover',function(e){
+    activateBorrow(e.target?.closest?.('.subTopDigit'));
+  },true);
+  document.addEventListener('pointerdown',function(e){
+    activateBorrow(e.target?.closest?.('.subTopDigit'));
+  },true);
+  if(typeof renderProblem==='function' && !renderProblem.__codexRequestFinalV2){
+    const oldRenderProblem=renderProblem;
+    renderProblem=function(){
+      const result=oldRenderProblem.apply(this,arguments);
+      setTimeout(markOperationSize,0);
+      return result;
+    };
+    renderProblem.__codexRequestFinalV2=true;
+  }
+  window.addEventListener('load',function(){
+    markOperationSize();
+    const eraser=qs('#fullEraserBtn');
+    if(eraser && eraser.classList.contains('active')) eraser.click();
+  });
 })();
 </script>
 </body>
