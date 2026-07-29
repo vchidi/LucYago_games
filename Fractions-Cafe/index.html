@@ -54,6 +54,9 @@ box-shadow:none;
 .drawTools{display:flex;gap:6px;justify-content:flex-end;align-items:center}
 .drawTools button{font-size:13px;padding:6px 9px;border-radius:12px;background:#eaffef;color:#14532d;box-shadow:0 3px 0 rgba(20,83,45,.16)}
 .drawTools button.active{background:#bbf7d0}
+.inkColors{display:flex;gap:5px;margin-right:auto}
+.inkColors button{width:22px;height:22px;min-width:22px;padding:0;border-radius:999px;border:3px solid white;box-shadow:0 2px 0 rgba(20,83,45,.16),0 0 0 1px rgba(20,83,45,.18)}
+.inkColors button.active{outline:3px solid rgba(34,197,94,.45)}
 .drawCanvas{width:100%;height:100%;min-height:90px;border-radius:12px;background:#fff;border:2px solid rgba(34,197,94,.35);touch-action:none;display:block;cursor:crosshair}
 .feedback{height:48px;min-height:48px;background:white;border-radius:16px;padding:10px 12px;font-size:14px;font-weight:600;border:3px solid rgba(0,0,0,.05);display:flex;align-items:center}
 .feedback.good{background:linear-gradient(135deg,#dcfce7,#fff3a3,#ffd6f1);color:#166534;border-color:#86efac;animation:partyPulse .55s ease-in-out 2}@keyframes partyPulse{50%{transform:scale(1.025);filter:saturate(1.4)}}
@@ -356,6 +359,36 @@ svg.fracSvg.small{
 @media (max-width:699px){
   .workGrid:not(.readMode){grid-template-rows:minmax(125px,1fr) minmax(100px,.45fr) !important}
 }
+.helpPane{
+  align-items:stretch !important;
+  justify-content:stretch !important;
+}
+.helpPane .multiVisual{
+  margin:auto;
+}
+@media (min-width:900px) and (orientation:landscape){
+  .panel{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(290px,.42fr) !important;
+    grid-template-rows:auto auto minmax(0,1fr) auto !important;
+    grid-template-areas:
+      "head help"
+      "note help"
+      "work help"
+      "feed cafe" !important;
+    gap:8px !important;
+  }
+  .exerciseBox{display:contents !important}
+  .modeTitle{grid-area:head !important}
+  .fractionNote{grid-area:note !important}
+  .workGrid{display:contents !important}
+  .leftExercise{grid-area:work !important;min-width:0}
+  .helpPane{grid-area:help !important;min-height:0 !important}
+  .feedback{grid-area:feed !important}
+  .bottomGame{grid-area:cafe !important;height:clamp(210px,34vh,280px) !important;min-height:210px !important}
+  .cafeScene{transform:translateX(-50%) scale(.76) !important}
+  .mathLine{justify-content:flex-start !important}
+}
 
 </style>
 </head>
@@ -440,11 +473,13 @@ function setFeed(msg,kind=''){$('feedback').textContent=msg;$('feedback').classN
 function modeLabel(mode){return mode==='all'?'🎲 Todo':mode==='compare'?'⚖️ Comparacions':mode==='ops'?'➕➖ Sumes/restes':mode==='mixed'?'🎂 Mixtos':'📖 Lectura'}
 function pickAllMode(){return rand(['compare','compare','ops','ops','mixed','mixed','mixed','read'])}
 let drawMode='draw';
+let drawColor='#1f2937';
 function markActiveInput(){
   document.querySelectorAll('.resultInput').forEach(el=>el.classList.toggle('activeInput',el.id===activeInputId));
 }
 function drawPadHTML(){
-  return `<div class="drawPad"><div class="drawTools"><button id="eraserBtn" onclick="toggleEraser()">Goma</button><button onclick="clearDrawPad()">Limpiar</button></div><canvas id="drawCanvas" class="drawCanvas"></canvas></div>`;
+  const colors=['#1f2937','#dc2626','#2563eb','#16a34a','#f59e0b'];
+  return `<div class="drawPad"><div class="drawTools"><div class="inkColors">${colors.map(c=>`<button type="button" data-color="${c}" onclick="setDrawColor('${c}')" style="background:${c}"></button>`).join('')}</div><button id="eraserBtn" onclick="toggleEraser()">Goma</button><button onclick="clearDrawPad()">Limpiar</button></div><canvas id="drawCanvas" class="drawCanvas"></canvas></div>`;
 }
 function setReadLayout(isRead){
   $('workGrid').classList.toggle('readMode',isRead);
@@ -599,7 +634,7 @@ function initDrawPad(){
     if(!drawing) return;
     const p=pos(e);
     ctx.globalCompositeOperation=drawMode==='erase'?'destination-out':'source-over';
-    ctx.strokeStyle='#1f2937';
+    ctx.strokeStyle=drawColor;
     ctx.lineWidth=drawMode==='erase'?18:4;
     ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();
     last=p;
@@ -616,6 +651,11 @@ function setDrawMode(mode){
   drawMode=mode;
   const b=$('eraserBtn');
   if(b)b.classList.toggle('active',drawMode==='erase');
+  document.querySelectorAll('.inkColors button').forEach(btn=>btn.classList.toggle('active',btn.dataset.color===drawColor&&drawMode!=='erase'));
+}
+function setDrawColor(color){
+  drawColor=color;
+  setDrawMode('draw');
 }
 function toggleEraser(){
   setDrawMode(drawMode==='erase'?'draw':'erase');
@@ -630,7 +670,23 @@ function showHelp(){
   if(current.type==='read') return;
   fails++;
   updateCafe();
-  if(!$('drawCanvas')){$('helpPane').innerHTML=drawPadHTML();setTimeout(initDrawPad,0);}
+  showVisualHelp();
+}
+function showVisualHelp(){
+  if(current.type==='compare'){
+    showCompareDrawing();
+  }else if(current.type==='ops'){
+    $('helpPane').innerHTML=`<div class="multiVisual" style="gap:10px;align-items:center">
+      <div style="text-align:center;font-weight:900">${fracHTML(current.a,current.d)}<br>${visualSVG(current.d,current.a,current.color,current.shape,'small')}</div>
+      <div style="font-size:36px;font-weight:950">${current.op}</div>
+      <div style="text-align:center;font-weight:900">${fracHTML(current.b,current.d)}<br>${visualSVG(current.d,current.b,current.color,current.shape,'small')}</div>
+    </div>`;
+  }else if(current.type==='mixed'){
+    let html='<div class="multiVisual">';
+    for(let i=0;i<current.whole;i++) html+=visualSVG(current.d,current.d,current.color,'circle','small');
+    html+=visualSVG(current.d,current.rem,current.color,'circle','small')+'</div>';
+    $('helpPane').innerHTML=html;
+  }
 }
 
 function showCompareTextHelp(){
