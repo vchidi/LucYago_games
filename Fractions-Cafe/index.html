@@ -48,8 +48,13 @@ box-shadow:none;
 .workGrid.readMode{grid-template-columns:1fr!important}
 .workGrid.readMode .helpPane{display:none!important}
 .leftExercise{background:white;border-radius:18px;border:3px solid rgba(255,143,199,.22);padding:12px;display:flex;align-items:center;justify-content:center;min-height:0;overflow:auto}
-.helpPane{background:white;border-radius:18px;border:3px dashed #ff8fc7;padding:10px;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center}
+.helpPane{background:#f2fff3;border-radius:18px;border:3px dashed #3fbf6f;padding:10px;min-height:0;overflow:hidden;display:flex;align-items:stretch;justify-content:stretch}
 .helpEmpty{font-weight:900;color:#9a6b4a;text-align:center;font-size:18px}
+.drawPad{width:100%;height:100%;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);gap:6px}
+.drawTools{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.drawTools button{font-size:13px;padding:6px 9px;border-radius:12px;background:#eaffef;color:#14532d;box-shadow:0 3px 0 rgba(20,83,45,.16)}
+.drawTools button.active{background:#bbf7d0}
+.drawCanvas{width:100%;height:100%;min-height:90px;border-radius:12px;background:#fff;border:2px solid rgba(34,197,94,.35);touch-action:none;display:block;cursor:crosshair}
 .feedback{height:48px;min-height:48px;background:white;border-radius:16px;padding:10px 12px;font-size:14px;font-weight:600;border:3px solid rgba(0,0,0,.05);display:flex;align-items:center}
 .feedback.good{background:linear-gradient(135deg,#dcfce7,#fff3a3,#ffd6f1);color:#166534;border-color:#86efac;animation:partyPulse .55s ease-in-out 2}@keyframes partyPulse{50%{transform:scale(1.025);filter:saturate(1.4)}}
 .feedback.bad{background:#fee2e2;color:#991b1b;border-color:#fecaca}
@@ -75,11 +80,6 @@ svg.fracSvg.small{width:160px;height:160px;max-height:21vh}
 .slice{stroke:#6f3b1d;stroke-width:2.2}
 .multiVisual{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
 .bottomGame{position:relative;height:225px;min-height:225px;border-radius:24px;overflow:hidden;border:4px solid #ffb5d7;background:linear-gradient(#aeeeff 0 43%,#fce7b2 43% 100%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.45)}
-.cafeBgDecor{position:absolute;inset:0;pointer-events:none;z-index:1}
-.cafeBgDecor i{position:absolute;width:26px;height:26px;border-radius:50%;background:#fff7df;border:3px solid rgba(180,83,9,.45);box-shadow:0 3px 0 rgba(120,60,20,.12)}
-.cafeBgDecor i:nth-child(2n){background:#ffd6ec}
-.cafeBgDecor i:nth-child(3n){background:#d9f99d}
-.cafeBgDecor .d1{left:34px;bottom:40px}.cafeBgDecor .d2{left:82px;bottom:112px}.cafeBgDecor .d3{left:38px;bottom:176px}.cafeBgDecor .d4{right:36px;bottom:42px}.cafeBgDecor .d5{right:88px;bottom:116px}.cafeBgDecor .d6{right:40px;bottom:178px}.cafeBgDecor .d7{left:150px;bottom:176px}.cafeBgDecor .d8{right:158px;bottom:176px}
 .gameHud{position:absolute;left:10px;top:10px;z-index:5;background:white;border-radius:14px;padding:7px 11px;font-weight:950;box-shadow:0 4px 0 rgba(0,0,0,.08);font-size:14px}
 .cafeScene{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:720px;height:220px;z-index:2}
 .floor{position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(#c08457,#8b5a38)}
@@ -92,7 +92,7 @@ svg.fracSvg.small{width:160px;height:160px;max-height:21vh}
 .w1{left:210px}.w2{left:425px}
 .door{position:absolute;left:322px;bottom:40px;width:78px;height:91px;background:#74411f;border:5px solid #4b2b13;border-bottom:0;border-radius:16px 16px 0 0}
 .handle{position:absolute;right:12px;top:45px;width:9px;height:9px;background:#facc15;border-radius:50%}
-.case{position:absolute;left:235px;bottom:43px;width:250px;height:47px;background:#fff;border:4px solid #7c2d12;border-radius:16px 16px 4px 4px;display:flex;align-items:center;justify-content:space-around;font-size:26px;transition:filter .3s}
+.case{position:absolute;left:235px;bottom:137px;width:250px;height:34px;background:#fff;border:4px solid #7c2d12;border-radius:14px;display:flex;align-items:center;justify-content:space-around;font-size:20px;transition:filter .3s}
 .customer{position:absolute;bottom:44px;font-size:50px;filter:drop-shadow(0 4px 2px rgba(0,0,0,.13));transition:opacity .3s}
 .speech{position:absolute;bottom:110px;background:white;border:3px solid #7c2d12;border-radius:16px;padding:5px 9px;font-size:15px;font-weight:950;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;box-shadow:0 4px 0 rgba(0,0,0,.08)}
 .speech.on{opacity:1;transform:translateY(0)}
@@ -350,6 +350,12 @@ svg.fracSvg.small{
   grid-template-rows:auto !important;
 }
 .workGrid.readMode .helpPane{display:none !important}
+@media (min-width:700px){
+  .workGrid:not(.readMode){grid-template-columns:minmax(0,1.45fr) minmax(250px,.85fr) !important}
+}
+@media (max-width:699px){
+  .workGrid:not(.readMode){grid-template-rows:minmax(125px,1fr) minmax(100px,.45fr) !important}
+}
 
 </style>
 </head>
@@ -382,8 +388,8 @@ svg.fracSvg.small{
         </div>
 
         <div class="fractionNote">
-          <div>El número de abajo dice en cuántos trozos iguales está cortada la pizza.</div>
-          <div>El número de arriba dice cuántos trozos cogemos o nos comemos.</div>
+          <div>Abajo: trozos iguales está cortada la pizza.</div>
+          <div>Arriba: cuántos trozos cogemos o nos comemos.</div>
         </div>
 
         <div class="workGrid" id="workGrid">
@@ -397,10 +403,6 @@ svg.fracSvg.small{
       <div class="bottomGame" id="bottomGame">
         <div class="flash" id="flash"></div><div class="confetti" id="confetti"></div>
         <div class="gameHud" id="gameHud"></div>
-        <div class="cafeBgDecor" aria-hidden="true">
-          <i class="d1"></i><i class="d2"></i><i class="d3"></i><i class="d4"></i>
-          <i class="d5"></i><i class="d6"></i><i class="d7"></i><i class="d8"></i>
-        </div>
         <div class="cafeScene">
           <div class="floor part" id="floor"></div>
           <div class="cafeBody part" id="cafeBody"></div>
@@ -437,13 +439,18 @@ function fracHTML(n,d){return `<span class="fraction"><span class="num">${n}</sp
 function setFeed(msg,kind=''){$('feedback').textContent=msg;$('feedback').className='feedback '+kind}
 function modeLabel(mode){return mode==='all'?'🎲 Todo':mode==='compare'?'⚖️ Comparacions':mode==='ops'?'➕➖ Sumes/restes':mode==='mixed'?'🎂 Mixtos':'📖 Lectura'}
 function pickAllMode(){return rand(['compare','compare','ops','ops','mixed','mixed','mixed','read'])}
+let drawMode='draw';
 function markActiveInput(){
   document.querySelectorAll('.resultInput').forEach(el=>el.classList.toggle('activeInput',el.id===activeInputId));
+}
+function drawPadHTML(){
+  return `<div class="drawPad"><div class="drawTools"><button id="eraserBtn" onclick="toggleEraser()">Goma</button><button onclick="clearDrawPad()">Limpiar</button></div><canvas id="drawCanvas" class="drawCanvas"></canvas></div>`;
 }
 function setReadLayout(isRead){
   $('workGrid').classList.toggle('readMode',isRead);
   $('helpBtn').style.display=isRead?'none':'';
-  $('helpPane').innerHTML=isRead?'':'<div class="helpEmpty">Pulsa “Ajuda” para ver el dibujo sin cambiar el ejercicio.</div>';
+  $('helpPane').innerHTML=isRead?'':drawPadHTML();
+  if(!isRead) setTimeout(initDrawPad,0);
 }
 
 function setMode(mode,btn){
@@ -569,26 +576,61 @@ function answerRead(o){
   else bad('No. Revisa numerador y denominador.');
 }
 
+function initDrawPad(){
+  const canvas=$('drawCanvas');
+  if(!canvas || canvas.dataset.ready==='1') return;
+  canvas.dataset.ready='1';
+  const ctx=canvas.getContext('2d');
+  let drawing=false,last=null;
+  function resize(){
+    const rect=canvas.getBoundingClientRect();
+    const img=canvas.width&&canvas.height?ctx.getImageData(0,0,canvas.width,canvas.height):null;
+    canvas.width=Math.max(1,Math.round(rect.width*devicePixelRatio));
+    canvas.height=Math.max(1,Math.round(rect.height*devicePixelRatio));
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    ctx.lineCap='round';ctx.lineJoin='round';
+    if(img){try{ctx.putImageData(img,0,0)}catch(e){}}
+  }
+  function pos(e){
+    const r=canvas.getBoundingClientRect();
+    return {x:e.clientX-r.left,y:e.clientY-r.top};
+  }
+  function stroke(e){
+    if(!drawing) return;
+    const p=pos(e);
+    ctx.globalCompositeOperation=drawMode==='erase'?'destination-out':'source-over';
+    ctx.strokeStyle='#1f2937';
+    ctx.lineWidth=drawMode==='erase'?18:4;
+    ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();
+    last=p;
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  canvas.addEventListener('pointerdown',e=>{e.preventDefault();canvas.setPointerCapture(e.pointerId);drawing=true;last=pos(e);stroke(e)});
+  canvas.addEventListener('pointermove',e=>{e.preventDefault();stroke(e)});
+  canvas.addEventListener('pointerup',()=>{drawing=false;last=null});
+  canvas.addEventListener('pointercancel',()=>{drawing=false;last=null});
+  setDrawMode(drawMode);
+}
+function setDrawMode(mode){
+  drawMode=mode;
+  const b=$('eraserBtn');
+  if(b)b.classList.toggle('active',drawMode==='erase');
+}
+function toggleEraser(){
+  setDrawMode(drawMode==='erase'?'draw':'erase');
+}
+function clearDrawPad(){
+  const canvas=$('drawCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
 function showHelp(){
   if(current.type==='read') return;
-  if(current.type==='compare'){
-    showCompareTextHelp();
-    return;
-  }
   fails++;
   updateCafe();
-  if(current.type==='ops'){
-    $('helpPane').innerHTML=`<div class="multiVisual" style="gap:10px;align-items:center">
-      <div style="text-align:center;font-weight:900">${fracHTML(current.a,current.d)}<br>${visualSVG(current.d,current.a,current.color,current.shape,'small')}</div>
-      <div style="font-size:36px;font-weight:950">${current.op}</div>
-      <div style="text-align:center;font-weight:900">${fracHTML(current.b,current.d)}<br>${visualSVG(current.d,current.b,current.color,current.shape,'small')}</div>
-    </div>`;
-  }else if(current.type==='mixed'){
-    let html='<div class="multiVisual">';
-    for(let i=0;i<current.whole;i++) html+=visualSVG(current.d,current.d,current.color,'circle','small');
-    html+=visualSVG(current.d,current.rem,current.color,'circle','small')+'</div>';
-    $('helpPane').innerHTML=html;
-  }
+  if(!$('drawCanvas')){$('helpPane').innerHTML=drawPadHTML();setTimeout(initDrawPad,0);}
 }
 
 function showCompareTextHelp(){
