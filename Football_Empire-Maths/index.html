@@ -3012,7 +3012,8 @@ updateControlAvailability();
       document.body.appendChild(bar);
     }
     const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<span>ðŸŽ¯ Reto mixto Â· '+game+' Â· âœ… '+done+'/'+target+'</span><span>Errores: âŒ '+(r.bad||0)+'</span>';
+    bar.innerHTML='<button type="button" aria-label="Volver al mapa del reto" title="Volver al mapa" style="width:42px;height:42px;min-width:42px;border:0;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(33,49,76,.12);font-size:22px;font-weight:900;padding:0;display:grid;place-items:center;cursor:pointer">&#127968;</button><span>&#127919; Reto mixto &middot; '+game+' &middot; &#9989; '+done+'/'+target+'</span><span>Errores: &#10060; '+(r.bad||0)+'</span>';
+    bar.querySelector('button').onclick=()=>{setSession(s);location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);};
     setSession(s);
   }
   function finish(){
@@ -3866,10 +3867,46 @@ updateControlAvailability();
   min-width:86px!important;
   font-size:14px!important;
 }
+.mathGrid{
+  width:max-content!important;
+  max-width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  justify-content:center!important;
+}
+.rowMath{
+  justify-content:flex-end!important;
+}
+.carryRow{
+  min-height:24px!important;
+  gap:4px!important;
+}
+.carryRow + .carryRow{
+  margin-top:-7px!important;
+}
+.carryRow .opMark{
+  visibility:hidden!important;
+}
+.carryRow .ghostDigit{
+  visibility:hidden!important;
+  opacity:0!important;
+  border-color:transparent!important;
+  background:transparent!important;
+}
+.blank.activeCell,.blank.selectedCell,.carryBlank.activeCell,.carryBlank.selectedCell,.divBlank.activeCell,.divBlank.selectedCell{
+  outline:4px solid #7c3aed!important;
+  outline-offset:2px!important;
+  box-shadow:0 0 0 3px rgba(255,209,102,.85)!important;
+}
 .borrowRow .borrowBlank{
-  width:calc(var(--cell) * 1.55)!important;
-  min-width:calc(var(--cell) * 1.55)!important;
+  width:var(--cell)!important;
+  min-width:var(--cell)!important;
   max-width:none!important;
+  height:var(--cell)!important;
+  min-height:var(--cell)!important;
+  box-sizing:border-box!important;
+  border-color:#a5b4fc!important;
+  background:linear-gradient(180deg,#fff,#eef2ff)!important;
   visibility:hidden!important;
   opacity:0!important;
   pointer-events:none!important;
@@ -3881,7 +3918,9 @@ updateControlAvailability();
   pointer-events:auto!important;
 }
 .borrowRow .borrowBlank input{
-  font-size:calc(var(--cell) * .44)!important;
+  font-size:calc(var(--cell) * .36)!important;
+  font-family:"Arial Narrow","Roboto Condensed",Arial,sans-serif!important;
+  letter-spacing:0!important;
 }
 .subTopDigit{
   position:relative!important;
@@ -3922,6 +3961,100 @@ updateControlAvailability();
   #operationArea.shortOp{
     --cell:clamp(46px,6.2vw,60px)!important;
   }
+  .borrowRow .borrowBlank{
+    width:36px!important;
+    min-width:36px!important;
+    height:36px!important;
+    min-height:36px!important;
+  }
+  .borrowRow .borrowBlank input{
+    font-size:13px!important;
+  }
+  #operationArea.verticalWrap{
+    display:flex!important;
+    justify-content:center!important;
+    align-items:center!important;
+  }
+}
+@media (min-width:900px) and (max-width:1199px) and (orientation:landscape){
+  .main{
+    grid-template-columns:minmax(660px,1fr) minmax(330px,360px)!important;
+    gap:8px!important;
+  }
+  .right{
+    min-width:330px!important;
+    overflow:hidden!important;
+  }
+  .footballPanel,.rightPhotoPanel,.photoStage.footballStage,.cmGame{
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+  .cmPanel{
+    height:100%!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding-right:4px!important;
+  }
+  .cmTabs{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:4px!important;
+  }
+  .cmTabs button{
+    font-size:9px!important;
+    line-height:1.05!important;
+    padding:5px 3px!important;
+    min-width:0!important;
+    overflow-wrap:anywhere!important;
+  }
+  .cmTourGrid{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-items:stretch!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  .cmTour{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(62px,auto)!important;
+    width:100%!important;
+    min-width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    align-items:center!important;
+    gap:7px!important;
+    overflow:visible!important;
+  }
+  .cmTourName,.cmTourMeta{
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  .cmTour button{
+    min-width:62px!important;
+    max-width:70px!important;
+    width:auto!important;
+    justify-self:end!important;
+    white-space:normal!important;
+  }
+  .divSchool{
+    --dcell:33px!important;
+    min-width:640px!important;
+    width:max-content!important;
+    padding-left:38px!important;
+    padding-right:18px!important;
+    column-gap:7px!important;
+  }
+  .divCell,.divBlank,.divDot,.divGuideCell{
+    width:33px!important;
+    height:33px!important;
+    min-width:33px!important;
+    min-height:33px!important;
+    font-size:18px!important;
+  }
+  .divBlank input{font-size:18px!important}
 }
 @media (min-width:700px) and (max-width:820px) and (orientation:portrait){
   .main{
@@ -3958,6 +4091,12 @@ updateControlAvailability();
     --cell:clamp(44px,7vw,58px)!important;
   }
 }
+.divMinus{
+  transform:translateX(-92%)!important;
+}
+@media (min-width:700px) and (max-width:820px) and (orientation:portrait){
+  .divMinus{transform:translateX(-82%)!important}
+}
 </style>
 <script id="codex-operation-request-final-v2">
 (function(){
@@ -3970,11 +4109,24 @@ updateControlAvailability();
     const isShortAdd = p && p.type==='add' && Math.max(String(Math.abs(p.a)).length,String(Math.abs(p.b)).length,String(Math.abs(p.answer)).length)<=2;
     area.classList.toggle('shortOp', Boolean(isShortAdd));
   }
-  function activateBorrow(target){
+  function activateBorrow(target, toggle){
     if(!target || typeof state==='undefined' || state.current?.type!=='sub') return;
     const index=target.dataset.borrowTarget;
     const box=qs(`.borrowBlank[data-borrow-index="${index}"]`);
     if(!box) return;
+    if(target.classList.contains('crossed')){
+      if(!toggle) return;
+      target.classList.remove('crossed');
+      box.classList.remove('show','activeCell','selectedCell');
+      const input=box.querySelector('input');
+      if(input) input.value='';
+      if(activeBorrowBox===box) activeBorrowBox=null;
+      if(state.activeElement===box){
+        state.activeElement=typeof nextStepTarget==='function' ? nextStepTarget() : null;
+      }
+      if(typeof updateActiveCell==='function') updateActiveCell();
+      return;
+    }
     target.classList.add('crossed');
     box.classList.add('show');
     activeBorrowBox=box;
@@ -3997,10 +4149,10 @@ updateControlAvailability();
     if(answer && !answer.classList.contains('borrowBlank')) activeBorrowBox=null;
   },true);
   document.addEventListener('pointerover',function(e){
-    activateBorrow(e.target?.closest?.('.subTopDigit'));
+    activateBorrow(e.target?.closest?.('.subTopDigit'), false);
   },true);
   document.addEventListener('pointerdown',function(e){
-    activateBorrow(e.target?.closest?.('.subTopDigit'));
+    activateBorrow(e.target?.closest?.('.subTopDigit'), true);
   },true);
   if(typeof renderProblem==='function' && !renderProblem.__codexRequestFinalV2){
     const oldRenderProblem=renderProblem;
@@ -4015,6 +4167,147 @@ updateControlAvailability();
     markOperationSize();
     const eraser=qs('#fullEraserBtn');
     if(eraser && eraser.classList.contains('active')) eraser.click();
+  });
+})();
+</script>
+<style id="codex-operation-request-final-v3">
+#feedback{
+  display:none!important;
+  min-height:0!important;
+  height:0!important;
+  margin:0!important;
+  padding:0!important;
+}
+.workArea{
+  min-height:0!important;
+}
+#operationArea.verticalWrap{
+  min-height:calc(100% - 72px)!important;
+}
+#operationArea.op-add .carryRow .carryBlank:first-of-type,
+#operationArea.op-sub .borrowRow .borrowBlank:first-of-type{
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-color:transparent!important;
+  background:transparent!important;
+}
+.borrowRow .borrowBlank:not(.show){
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-color:transparent!important;
+  background:transparent!important;
+}
+.borrowRow .borrowBlank.show{
+  cursor:pointer!important;
+}
+.borrowRow .borrowBlank.show input{
+  pointer-events:auto!important;
+}
+#operationArea.op-sub .rowMath{
+  gap:6px!important;
+}
+#operationArea.op-mul .carryRow{
+  min-height:18px!important;
+  height:18px!important;
+  gap:4px!important;
+  transform:translateY(5px)!important;
+}
+#operationArea.op-mul .carryRow + .carryRow{
+  margin-top:-12px!important;
+  transform:translateY(2px)!important;
+}
+#operationArea.op-mul .carryBlank{
+  width:36px!important;
+  min-width:36px!important;
+  height:18px!important;
+  min-height:18px!important;
+  box-sizing:border-box!important;
+}
+#operationArea.op-mul .carryBlank input{
+  height:16px!important;
+  font-size:12px!important;
+}
+#operationArea.op-mul .carryRow .ghostDigit,
+#operationArea.op-mul .carryRow .separatorDot{
+  width:36px!important;
+  min-width:36px!important;
+}
+.divMinus{
+  justify-content:flex-end!important;
+  padding-right:1mm!important;
+  transform:translateX(-104%)!important;
+  box-sizing:border-box!important;
+}
+@media (min-width:700px) and (max-width:820px) and (orientation:portrait){
+  .divMinus{transform:translateX(-94%)!important}
+}
+.combinedInputLabel{
+  display:inline-block!important;
+  color:#166534!important;
+  background:#dcfce7!important;
+  border:2px solid #22c55e!important;
+  border-radius:999px!important;
+  padding:4px 10px!important;
+}
+.combinedInputLabel::first-letter{
+  text-transform:uppercase;
+}
+</style>
+<script id="codex-operation-request-final-v3">
+(function(){
+  function qs(s){return document.querySelector(s)}
+  const replacements=[
+    [/Ã—/g,'×'],[/Ã·/g,'÷'],[/âˆ’/g,'−'],[/â€“/g,'–'],[/Â·/g,'·'],[/Âº/g,'º'],
+    [/LÃ­neas/g,'Líneas'],[/LÃneas/g,'Líneas'],[/lÃ­nea/g,'línea'],[/nÃºmero/g,'número'],
+    [/operaciÃ³n/g,'operación'],[/MultiplicaciÃ³n/g,'Multiplicación'],[/DivisiÃ³n/g,'División'],
+    [/FÃ¡cil/g,'Fácil'],[/DifÃcil/g,'Difícil'],[/cuÃ¡ntas/g,'cuántas'],[/ParÃ©ntesis/g,'Paréntesis']
+  ];
+  function cleanText(root){
+    if(!root) return;
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    let node;
+    while((node=walker.nextNode())){
+      let text=node.nodeValue;
+      replacements.forEach(([from,to])=>{text=text.replace(from,to)});
+      node.nodeValue=text;
+    }
+  }
+  function markOperationType(){
+    const area=qs('#operationArea');
+    if(!area || typeof state==='undefined') return;
+    area.classList.remove('op-add','op-sub','op-mul','op-div','op-comb');
+    if(state.current?.type) area.classList.add('op-'+state.current.type);
+    cleanText(area);
+    cleanText(document.body);
+  }
+  const oldActivateBorrowSupport=function(){
+    document.addEventListener('click',function(e){
+      const box=e.target?.closest?.('.borrowBlank.show');
+      if(!box || typeof state==='undefined') return;
+      state.activeKind='answer';
+      state.activeElement=box;
+      if(typeof updateActiveCell==='function') updateActiveCell();
+    },true);
+  };
+  oldActivateBorrowSupport();
+  if(typeof renderProblem==='function' && !renderProblem.__codexRequestFinalV3){
+    const oldRender=renderProblem;
+    renderProblem=function(){
+      const result=oldRender.apply(this,arguments);
+      setTimeout(markOperationType,0);
+      return result;
+    };
+    renderProblem.__codexRequestFinalV3=true;
+  }
+  window.addEventListener('load',function(){
+    setTimeout(markOperationType,0);
+    setTimeout(markOperationType,400);
   });
 })();
 </script>
