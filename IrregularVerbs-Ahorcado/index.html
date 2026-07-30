@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -164,7 +164,7 @@ body:before{
 .photo-frame:before{content:"";position:absolute;left:50%;top:-10px;width:84px;height:22px;border-radius:4px;background:rgba(255,245,205,.75);transform:translateX(-50%) rotate(-2deg);box-shadow:0 2px 5px rgba(90,61,26,.12);z-index:4;pointer-events:none}.photo-image{background-color:#fff!important}.photo-mask{gap:0!important;padding:0!important;background:#172033!important}.tile{border-radius:0!important;box-shadow:none!important;outline:0!important;background:#182033!important;transition:opacity .22s ease,transform .22s ease!important}.tile:nth-child(3n){background:#1f2a44!important}.tile:nth-child(5n){background:#243759!important}.tile.revealed{opacity:0!important;transform:scale(.96)!important}
 .caption{font-size:12px!important;margin-top:9px!important;font-weight:950!important}.guess-panel{background:linear-gradient(180deg,#fffdf6,#fff3d5)!important}.choice{border-radius:17px!important;border:2px solid rgba(113,74,28,.08)!important;background:linear-gradient(180deg,#fff,#fff6e4)!important;box-shadow:0 5px 0 rgba(112,76,35,.14),0 9px 15px rgba(40,44,70,.08)!important;color:var(--ly-ink)!important}.choice:active{transform:translateY(2px)}
 /* Letras como piezas limpias */
-.char.fixed{color:#2d3748!important}.char.blank{color:#d49b00!important;text-shadow:0 2px 0 rgba(255,255,255,.55)}.char.filled{color:var(--ly-ink)!important}.cell.ref{background:#fff!important;color:var(--ly-ink)!important}
+.char.fixed{color:#2d3748!important}.char.blank{color:#d49b00!important;text-shadow:0 2px 0 rgba(255,255,255,.55)}.char.filled{color:var(--ly-ink)!important}.char.highlight{color:var(--ly-blue)!important;text-shadow:0 2px 0 rgba(63,124,255,.10)}.cell.ref{background:#fff!important;color:var(--ly-ink)!important}
 /* Ajustes responsive para no romper iPad/iPhone */
 @media (max-width:760px){
   .app{padding:calc(5px + var(--safe-top)) 6px calc(5px + var(--safe-bottom))!important}.top{border-radius:20px!important}.main{border-radius:22px!important;padding:7px!important}.nav{grid-template-columns:repeat(3,1fr)!important}.btn{border-radius:14px!important}.photo-frame{min-height:130px!important;height:clamp(130px,22vh,170px)!important;border-width:6px!important}.photo-frame:before{width:58px;height:16px;top:-8px}.cell,.prompt,.base-card,.stage-card,.photo-card,.guess-panel{border-radius:16px!important}.part{transform:scale(.62)!important;transform-origin:left top!important}.part.pole{top:34px!important;bottom:auto!important;height:180px!important}
@@ -651,6 +651,11 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
 #baseWord.base-word.letters{gap:4px;min-height:auto;}
 #baseWord.base-word .char{font-size:inherit!important;line-height:inherit!important;padding:0 1px;}
 </style>
+
+<style id="photo-icon-startup-flash-fix">
+/* Evita que el icono inicial se vea antes de construir la malla de bloques. */
+#photoFrame:not(.ready) #photoImage{visibility:hidden!important;}
+</style>
 </head>
 <body>
 <div class="app">
@@ -665,7 +670,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
       <div class="hangman-layout">
         <div class="hang-left">
           <div class="actions"><button id="revealBtn" class="btn good">Solución</button><button id="solutionOkBtn" class="btn good" style="display:none">OK</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button><button id="blindBtn" class="btn">Blind</button></div>
-          <div class="base-card"><div class="label">Base form</div><div id="baseWord" class="base-word letters">write</div></div>
+          <div class="base-card"><div id="baseWord" class="base-word letters">write</div></div>
           <div id="psCard" class="prompt active"><div class="rowtop"><div class="rowtitle">Past simple</div><div id="psStatus" class="pill">Pendiente</div></div><div id="psLetters" class="letters"></div></div>
           <div id="ppCard" class="prompt"><div class="rowtop"><div class="rowtitle">Past participle</div><div id="ppStatus" class="pill">Pendiente</div></div><div id="ppLetters" class="letters"></div></div>
           <div id="hangMsg" class="message"></div>
@@ -683,7 +688,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
           <div id="hint" class="hint">Aquí aparecerá una ayuda visual.</div>
         </div>
         <div class="learn-right">
-          <div id="photoCard" class="photo-card"><div id="photoFrame" class="photo-frame"><div id="photoImage" class="photo-image"><span id="iconGlyph" class="icon-glyph" aria-hidden="true">⚽</span></div><div id="photoMask" class="photo-mask"></div></div><div id="photoCaption" class="caption">Icono oculto</div></div>
+          <div id="photoCard" class="photo-card"><div id="photoFrame" class="photo-frame"><div id="photoImage" class="photo-image"><span id="iconGlyph" class="icon-glyph" aria-hidden="true"></span></div><div id="photoMask" class="photo-mask"></div></div><div id="photoCaption" class="caption">Icono oculto</div></div>
           <div id="guessPanel" class="guess-panel"><div class="guess-top"><div class="guess-title">¿Qué icono?</div><div id="hearts" class="hearts">❤️❤️❤️</div></div><div id="choices" class="choices"></div></div>
         </div>
       </div>
@@ -904,14 +909,14 @@ let hangPromptMode='tricky';
 let learn={phase:'tricky', col:0, cells:{}, done:{}, activeKey:'tricky_baseForm'};
 let photo={on:true,blocks:1200,revealed:0,order:[],iconIdx:Math.floor(Math.random()*HIDDEN_ICONS.length),guessOpen:false,guessTries:3,guessSolved:false,streak:0,verbHits:0,choices:[],choicesKey:""};
 function esc(x){return String(x??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
-function clean(e){let c={baseForm:String(e.baseForm||'').trim(),pastSimple:String(e.pastSimple||'').trim(),pastSimplePattern:String(e.pastSimplePattern||e.pastSimple||'').trim(),pastParticiple:String(e.pastParticiple||'').trim(),pastParticiplePattern:String(e.pastParticiplePattern||e.pastParticiple||'').trim(),studyHint:String(e.studyHint||'').trim(),isNew:String(e.isNew||'').trim().toLowerCase()}; if(!c.baseForm||!c.pastSimple||!c.pastParticiple)return null; c.pastSimplePattern=norm(c.pastSimple,c.pastSimplePattern); c.pastParticiplePattern=norm(c.pastParticiple,c.pastParticiplePattern); return c}
+function clean(e){let c={baseForm:String(e.baseForm||'').trim(),pastSimple:String(e.pastSimple||'').trim(),pastSimplePattern:String(e.pastSimplePattern||e.pastSimple||'').trim(),pastParticiple:String(e.pastParticiple||'').trim(),pastParticiplePattern:String(e.pastParticiplePattern||e.pastParticiple||'').trim(),psHighlight:String(e.psHighlight||e['PS Highlight']||e['Past Simple Highlight']||'').trim(),ppHighlight:String(e.ppHighlight||e['PP Highlight']||e['Past Participle Highlight']||'').trim(),studyHint:String(e.studyHint||'').trim(),isNew:String(e.isNew||'').trim().toLowerCase()}; if(!c.baseForm||!c.pastSimple||!c.pastParticiple)return null; c.pastSimplePattern=norm(c.pastSimple,c.pastSimplePattern); c.pastParticiplePattern=norm(c.pastParticiple,c.pastParticiplePattern); return c}
 function norm(a,p){a=String(a||'');p=String(p||a);if(p.length>a.length)p=p.slice(0,a.length);if(p.length<a.length)p+=a.slice(p.length);return p}
 function ensureBlank(answer,pattern){pattern=norm(answer,pattern); if(pattern.includes('_')) return pattern; let chars=[...answer]; for(let i=chars.length-1;i>=0;i--){ if(chars[i]!=='/'){chars[i]='_'; return chars.join('')}} return pattern}
 function blindPattern(answer){return [...answer].map(ch=>ch==='/'?'/':'_').join('')}
 function keyOf(it){return `${it.baseForm}|${it.pastSimple}|${it.pastParticiple}`.toLowerCase()}
 function rebuild(){let b=rawData.map(clean).filter(Boolean); if(filter==='new') b=b.filter(x=>x.isNew==='new_studied'); else if(filter==='studied') b=b.filter(x=>['new_studied','old_studied'].includes(x.isNew)); dataset=b; idx=0; seen.clear(); dataset.forEach(resetItem); resetLearn(); updateStats()}
-function resetItem(it){it.state={pastSimple:makeState(it.pastSimple,ensureBlank(it.pastSimple,it.pastSimplePattern)),pastParticiple:makeState(it.pastParticiple,ensureBlank(it.pastParticiple,it.pastParticiplePattern))}; it.meta={revealed:false,scored:{pastSimple:false,pastParticiple:false}}}
-function makeState(answer,pattern){return {answer,pattern,guessed:[...pattern].map(ch=>ch==='_?'?'':(ch==='_'?'':ch)),ok:null}}
+function resetItem(it){it.state={pastSimple:makeState(it.pastSimple,ensureBlank(it.pastSimple,it.pastSimplePattern),it.psHighlight),pastParticiple:makeState(it.pastParticiple,ensureBlank(it.pastParticiple,it.pastParticiplePattern),it.ppHighlight)}; it.meta={revealed:false,scored:{pastSimple:false,pastParticiple:false}}}
+function makeState(answer,pattern,highlight=''){return {answer,pattern,highlight,guessed:[...pattern].map(ch=>ch==='_?'?'':(ch==='_'?'':ch)),ok:null}}
 function cur(){return dataset[idx]}
 function updateStats(){ $('#good').textContent=score.good; $('#bad').textContent=score.bad; $('#idx').textContent=dataset.length?idx+1:0; $('#total').textContent=dataset.length; $('#setName').textContent=filter==='new'?'Studying':filter==='studied'?'Studied':'All'}
 function focusInput(){
@@ -925,11 +930,13 @@ function focusInput(){
 function showMsg(t){(mode==='learn'?$('#learnMsg'):$('#hangMsg')).textContent=t}
 function setMode(m){mode=m; $('#hangView').classList.toggle('active',m==='hang'); $('#learnView').classList.toggle('active',m==='learn'); $('#hangBtn').classList.toggle('active',m==='hang'); $('#learnBtn').classList.toggle('active',m==='learn'); if(m==='learn') resetLearn(false); render(); focusInput()}
 function setFilter(f){filter=f; $$('.nav .btn').forEach(()=>{}); $('#filterNew').classList.toggle('active',f==='new'); $('#filterStudied').classList.toggle('active',f==='studied'); $('#filterAll').classList.toggle('active',f==='all'); rebuild(); render();}
-function chars(s){return [...s.answer].map((ch,i)=>ch==='/'?{c:'slash',v:'/'}:s.pattern[i]==='_'?{c:(s.guessed[i]?'blank filled':'blank'),v:s.guessed[i]||'_'}:{c:'fixed',v:ch})}
+function highlightIndexes(answer,highlight){let out=new Set(), h=String(highlight||'').toLowerCase(); if(!h)return out; let a=String(answer||'').toLowerCase(); h.split(/[|,;]/).map(x=>x.trim()).filter(Boolean).forEach(part=>{let from=0, at; while((at=a.indexOf(part,from))>=0){for(let i=0;i<part.length;i++)out.add(at+i); from=at+Math.max(1,part.length)}}); return out}
+function chars(s){let hi=highlightIndexes(s.answer,s.highlight);return [...s.answer].map((ch,i)=>ch==='/'?{c:'slash',v:'/'}:s.pattern[i]==='_'?{c:(s.guessed[i]?'blank filled'+(hi.has(i)?' highlight':''):'blank'),v:s.guessed[i]||'_'}:{c:'fixed'+(hi.has(i)?' highlight':''),v:ch})}
 function renderLetters(el,s){el.innerHTML='';let items=chars(s);el.style.setProperty('--char-count',Math.max(3,items.length));items.forEach(it=>{let d=document.createElement('span');d.className='char '+it.c;d.textContent=it.v;el.appendChild(d)})}
 function renderStaticLetters(el,word){el.innerHTML='';let items=[...String(word||'')];el.style.setProperty('--char-count',Math.max(3,items.length));items.forEach(ch=>{let d=document.createElement('span');d.className='char fixed';d.textContent=ch;el.appendChild(d)})}
 function nextBlank(s){return s.pattern.split('').findIndex((ch,i)=>ch==='_'&&!s.guessed[i])}
 function lastFilled(s){for(let i=s.guessed.length-1;i>=0;i--)if(s.pattern[i]==='_'&&s.guessed[i])return i;return -1}
+function recordReto(ok){if(window.LucYagoReto)window.LucYagoReto.record(ok)}
 function insert(ch){
  if(!dataset.length)return;
  if(mode==='learn') return learnInsert(ch);
@@ -941,7 +948,7 @@ function insert(ch){
    let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase();
    let ok=guess===it[activeTarget].toLowerCase();
    s.ok=ok;
-   if(!it.meta.scored[activeTarget]){score[ok?'good':'bad']++;it.meta.scored[activeTarget]=true;}
+   if(!it.meta.scored[activeTarget]){score[ok?'good':'bad']++;recordReto(ok);it.meta.scored[activeTarget]=true;}
    let hmsg=ok?hangSuccess():hangFail();
    showMsg((hmsg?hmsg+' ':'')+(ok?'Bien. Pasamos a la siguiente.':'Está mal, pero pasamos a la siguiente.'));
    activeTarget=activeTarget==='pastSimple'?'pastParticiple':'pastSimple';
@@ -963,7 +970,7 @@ function restartGame(){score={good:0,bad:0}; hang={damage:4,lives:0,status:'play
 function markSeen(){if(dataset.length)seen.add(keyOf(cur()))}
 function nextVerb(){if(!dataset.length)return; markSeen(); let ni=-1; for(let step=1;step<=dataset.length;step++){let c=(idx+step)%dataset.length;if(!seen.has(keyOf(dataset[c]))){ni=c;break}} if(ni<0){seen.clear();ni=(idx+1)%dataset.length} idx=ni; resetItem(cur()); resetLearn(false); hangPromptMode='tricky'; activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render(); showMsg(mode==='learn'?'Nuevo verbo de aprendizaje.':'Nuevo verbo.')}
 function shuffleVerbs(){if(!dataset.length)return; let currentKey=keyOf(cur()); let unseen=dataset.filter(x=>!seen.has(keyOf(x))&&keyOf(x)!==currentKey); let seenItems=dataset.filter(x=>seen.has(keyOf(x))||keyOf(x)===currentKey); unseen.sort(()=>Math.random()-.5); seenItems.sort(()=>Math.random()-.5); dataset=[...unseen,...seenItems]; idx=0; dataset.forEach(resetItem); hangPromptMode='tricky'; resetLearn(); render(); showMsg('Mezclado sin repetir hasta agotar el conjunto.')}
-function setHangPromptMode(nextMode){if(!dataset.length)return; let it=cur(); let blind=nextMode==='blind'; ['pastSimple','pastParticiple'].forEach(k=>{let pattern=blind?blindPattern(it[k]):ensureBlank(it[k],k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); it.state[k]=makeState(it[k],pattern); it.meta.scored[k]=false}); hangPromptMode=nextMode; activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render()}
+function setHangPromptMode(nextMode){if(!dataset.length)return; let it=cur(); let blind=nextMode==='blind'; ['pastSimple','pastParticiple'].forEach(k=>{let pattern=blind?blindPattern(it[k]):ensureBlank(it[k],k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); it.state[k]=makeState(it[k],pattern,k==='pastSimple'?it.psHighlight:it.ppHighlight); it.meta.scored[k]=false}); hangPromptMode=nextMode; activeTarget='pastSimple'; solutionPending=false; $('#solutionOkBtn').style.display='none'; render()}
 function toggleHangPromptMode(){if(!dataset.length)return; if(mode!=='hang')setMode('hang'); let nextMode=hangPromptMode==='blind'?'tricky':'blind'; setHangPromptMode(nextMode); showMsg(nextMode==='blind'?'Blind: todas las letras estan ocultas.':'Tricky: vuelven las pistas.')}
 function resetLearn(resetPhoto=false){if(!dataset.length)return; let it=cur(); learn={phase:'tricky',col:0,cells:{},done:{},activeKey:'tricky_baseForm'}; ['baseForm','pastSimple','pastParticiple'].forEach(k=>{let ans=it[k]; let pat=k==='baseForm'?ensureBlank(ans,ans):ensureBlank(ans,k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); learn.cells['tricky_'+k]=makeState(ans,pat); learn.cells['blind_'+k]=makeState(ans,blindPattern(ans)); learn.done['tricky_'+k]=false; learn.done['blind_'+k]=false}); if(resetPhoto){resetPhotoProgress()}}
 function renderLearn(){
@@ -992,7 +999,7 @@ function renderLearn(){
  renderPhoto();
  renderGuess()
 }
-function learnInsert(ch){let s=learn.cells[learn.activeKey]; if(!s)return; let i=nextBlank(s); if(i<0){showMsg('Esta celda ya está completa.');return} s.guessed[i]=ch; let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]); if(done){let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase(); let ok=guess===s.answer.toLowerCase(); s.ok=ok; if(ok){ if(!learn.done[learn.activeKey]){score.good++; learn.done[learn.activeKey]=true; let amount=registerPhotoHit(); revealProgress(amount);} moveNextLearnCell(); showMsg(photo.lastBoostMsg||'Bien. Se descubre un poco más.'); photo.lastBoostMsg=''; } else {score.bad++; photo.streak=0; showMsg('Casi. Borra y corrige.')} } render()}
+function learnInsert(ch){let s=learn.cells[learn.activeKey]; if(!s)return; let i=nextBlank(s); if(i<0){showMsg('Esta celda ya está completa.');return} s.guessed[i]=ch; let done=s.pattern.split('').every((p,j)=>p!=='_'||s.guessed[j]); if(done){let guess=[...s.answer].map((c,j)=>s.pattern[j]==='_'?s.guessed[j]:c).join('').toLowerCase(); let ok=guess===s.answer.toLowerCase(); s.ok=ok; if(ok){ if(!learn.done[learn.activeKey]){score.good++; recordReto(true); learn.done[learn.activeKey]=true; let amount=registerPhotoHit(); revealProgress(amount);} moveNextLearnCell(); showMsg(photo.lastBoostMsg||'Bien. Se descubre un poco más.'); photo.lastBoostMsg=''; } else {score.bad++; recordReto(false); photo.streak=0; showMsg('Casi. Borra y corrige.')} } render()}
 function learnDelete(){let s=learn.cells[learn.activeKey]; if(!s)return; let i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada.')}}
 function moveNextLearnCell(){let cols=['baseForm','pastSimple','pastParticiple']; let keys=[...cols.map(c=>'tricky_'+c),...cols.map(c=>'blind_'+c)]; let i=keys.indexOf(learn.activeKey); for(let j=i+1;j<keys.length;j++){if(!learn.done[keys[j]] && !(keys[j].startsWith('blind')&&!cols.every(c=>learn.done['tricky_'+c]))){learn.activeKey=keys[j];return}} if(keys.every(k=>learn.done[k])) setTimeout(nextVerb,650)}
 function photoObj(){return HIDDEN_ICONS[photo.iconIdx%HIDDEN_ICONS.length]}
@@ -1019,7 +1026,7 @@ function renderPhoto(){
  const img=$('#photoImage');
  let glyph=$('#iconGlyph');
  const mask=$('#photoMask');
- if(frame) frame.setAttribute('data-icon-title',photoTitle(p));
+ if(frame){ frame.classList.remove('ready'); frame.setAttribute('data-icon-title',photoTitle(p)); }
  if(img) img.setAttribute('aria-label',photoTitle(p));
  if(img && !glyph){
    glyph=document.createElement('span');
@@ -1046,6 +1053,7 @@ function renderPhoto(){
    frag.appendChild(d);
  }
  mask.appendChild(frag);
+ if(frame) frame.classList.add('ready');
  $('#photoCaption').classList.toggle('done',revealed>=g.tiles);
  $('#photoCaption').innerHTML=revealed>=g.tiles?`Icono descubierto: <strong>${esc(photoTitle(p))}</strong>`:`Icono oculto · ${revealed}/${g.tiles} bloques`;
 }
@@ -1069,12 +1077,14 @@ function guess(ch,b){
    photo.guessSolved=true;
    photo.revealed=gridForTarget().tiles;
    score.good++;
+   recordReto(true);
    celebrate();
    renderPhoto();
    showMsg('¡Correcto! Empieza un nuevo icono.');
    setTimeout(()=>{resetPhotoProgress(true);render()},650);
  }else{
    score.bad++;
+   recordReto(false);
    photo.guessTries=Math.max(0,photo.guessTries-1);
    showMsg('No era ese. Guess se ha cerrado y puedes seguir jugando.');
    updateStats();
@@ -1083,7 +1093,7 @@ function guess(ch,b){
 function celebrate(){let c=$('#confetti'); c.innerHTML=''; let colors=['#4f8cff','#25c96f','#ffd34f','#ff6fb5','#7c5cff']; for(let i=0;i<42;i++){let el=document.createElement('i');el.style.left=Math.random()*100+'%';el.style.top='-20px';el.style.background=colors[i%colors.length];el.style.animationDelay=(Math.random()*0.25)+'s';c.appendChild(el)} setTimeout(()=>c.innerHTML='',1100)}
 function render(){updateStats(); if(mode==='hang')renderHang(); else renderLearn(); focusInput()}
 function exportJson(){let blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'}); let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='irregular_verbs_lucyago.json';a.click();URL.revokeObjectURL(a.href)}
-function importFile(file){let r=new FileReader(); r.onload=e=>{try{if(file.name.endsWith('.json')) rawData=JSON.parse(e.target.result); else {let wb=XLSX.read(e.target.result,{type:'binary'}), ws=wb.Sheets[wb.SheetNames[0]], rows=XLSX.utils.sheet_to_json(ws,{defval:''}); rawData=rows.map(x=>({baseForm:x.baseForm||x.Base||x['Base Form']||x.base||'',pastSimple:x.pastSimple||x['Past Simple']||x.Past||'',pastSimplePattern:x.pastSimplePattern||x['Past Simple Pattern']||'',pastParticiple:x.pastParticiple||x['Past Participle']||x.Participle||'',pastParticiplePattern:x.pastParticiplePattern||x['Past Participle Pattern']||'',studyHint:x.studyHint||x.Hint||'',isNew:x.isNew||x.Status||''}))} rebuild();render();showMsg('Conjunto importado.')}catch(err){showMsg('No he podido importar el archivo.')}}; if(file.name.endsWith('.json'))r.readAsText(file);else r.readAsBinaryString(file)}
+function importFile(file){let r=new FileReader(); r.onload=e=>{try{if(file.name.endsWith('.json')) rawData=JSON.parse(e.target.result); else {let wb=XLSX.read(e.target.result,{type:'binary'}), ws=wb.Sheets[wb.SheetNames[0]], rows=XLSX.utils.sheet_to_json(ws,{defval:''}); rawData=rows.map(x=>({baseForm:x.baseForm||x.Base||x['Base Form']||x.base||'',pastSimple:x.pastSimple||x['Past Simple']||x.Past||'',pastSimplePattern:x.pastSimplePattern||x['Past Simple Pattern']||'',pastParticiple:x.pastParticiple||x['Past Participle']||x.Participle||'',pastParticiplePattern:x.pastParticiplePattern||x['Past Participle Pattern']||'',psHighlight:x.psHighlight||x['PS Highlight']||x['Past Simple Highlight']||'',ppHighlight:x.ppHighlight||x['PP Highlight']||x['Past Participle Highlight']||'',studyHint:x.studyHint||x.Hint||'',isNew:x.isNew||x.Status||''}))} rebuild();render();showMsg('Conjunto importado.')}catch(err){showMsg('No he podido importar el archivo.')}}; if(file.name.endsWith('.json'))r.readAsText(file);else r.readAsBinaryString(file)}
 $('#learnBtn').onclick=()=>setMode('learn'); $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#blindBtn').onclick=toggleHangPromptMode; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#solutionOkBtn').onclick=()=>{solutionPending=false;$('#solutionOkBtn').style.display='none';nextVerb()}; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='../index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Iconos sí':'Iconos no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $('#blocksBtn').onclick=()=>{
   const levels=[300,600,1200,1800];
   const current=levels.indexOf(photo.blocks);
@@ -1101,6 +1111,60 @@ $('#guessBtn').onclick=()=>{
   if(e.target.closest('button,.cell,label,input')) return;
   focusInput();
 }); document.addEventListener('DOMContentLoaded',focusInput); window.addEventListener('pageshow',focusInput); document.addEventListener('touchend',focusInput,{passive:true}); document.addEventListener('pointerup',focusInput,{passive:true});
+/* LucYagoReto Common v1 */
+(function(){
+  const params=new URLSearchParams(location.search);
+  const active=params.get('reto')==='1';
+  if(!active) return;
+  const game=params.get('game')||document.title||'juego';
+  const target=Math.max(1,parseInt(params.get('preguntas')||'10',10));
+  const returnUrl=params.get('return')||'../reto_mixto.html';
+  const sessionKey=params.get('session')||'lucyago_reto_session';
+  let locked=false;
+  function getSession(){try{return JSON.parse(localStorage.getItem(sessionKey)||'{}')}catch(e){return {}}}
+  function setSession(s){localStorage.setItem(sessionKey,JSON.stringify(s));}
+  function ensureGame(s){
+    s.results=s.results||{};
+    if(!s.results[game]) s.results[game]={ok:0,bad:0,total:target,target:target,done:false,name:game};
+    s.results[game].total=target; s.results[game].target=target;
+    return s.results[game];
+  }
+  function total(r){return (r.ok||0)+(r.bad||0)}
+  function paint(){
+    const s=getSession(), r=ensureGame(s);
+    let bar=document.getElementById('lucyagoRetoBar');
+    if(!bar){
+      bar=document.createElement('div');bar.id='lucyagoRetoBar';
+      bar.style.cssText='position:fixed;left:10px;right:10px;bottom:10px;z-index:999999;background:#fffdf8;color:#21314c;border:3px solid #ffd84d;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:8px 12px;font-family:Arial,sans-serif;font-weight:900;display:flex;align-items:center;justify-content:space-between;gap:8px;';
+      document.body.appendChild(bar);
+    }
+    const done=Math.min(target,(r.ok||0));
+    bar.innerHTML='<button type="button" aria-label="Volver al mapa del reto" title="Volver al mapa" style="width:42px;height:42px;min-width:42px;border:0;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(33,49,76,.12);font-size:22px;font-weight:900;padding:0;display:grid;place-items:center;cursor:pointer">&#127968;</button><span>&#127919; Reto mixto &middot; '+game+' &middot; &#9989; '+done+'/'+target+'</span><span>Errores: &#10060; '+(r.bad||0)+'</span>';
+    bar.querySelector('button').onclick=()=>{setSession(s);location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);};
+    setSession(s);
+  }
+  function finish(){
+    if(locked) return; locked=true;
+    const s=getSession(), r=ensureGame(s); r.done=true; s.lastFinished=game; setSession(s);
+    paint();
+    setTimeout(()=>{location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);},450);
+  }
+  window.LucYagoReto={
+    active:true, game, target, sessionKey,
+    record:function(ok){
+      if(locked) return;
+      const s=getSession(), r=ensureGame(s);
+      if((r.ok||0)>=target) {finish(); return;}
+      if(ok) r.ok=(r.ok||0)+1; else r.bad=(r.bad||0)+1;
+      setSession(s); paint();
+      if((r.ok||0)>=target) finish();
+    },
+    finish:finish,
+    progress:function(){const s=getSession(), r=ensureGame(s); return {ok:r.ok||0,bad:r.bad||0,total:target,done:total(r)}}
+  };
+  window.addEventListener('load',()=>setTimeout(paint,250));
+  paint();
+})();
 rebuild();
 mode='learn';
 idx=0;
@@ -1113,6 +1177,7 @@ render();
 </script>
 </body>
 </html>
+
 
 
 
