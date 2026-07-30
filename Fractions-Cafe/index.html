@@ -421,8 +421,8 @@ svg.fracSvg.small{
         </div>
 
         <div class="fractionNote">
-          <div>Abajo: trozos iguales está cortada la pizza.</div>
-          <div>Arriba: cuántos trozos cogemos o nos comemos.</div>
+          <div>Abajo: número de trozos iguales en que se corta la pizza.</div>
+          <div>Arriba: número de trozos que cogemos o nos comemos.</div>
         </div>
 
         <div class="workGrid" id="workGrid">
@@ -474,6 +474,7 @@ function modeLabel(mode){return mode==='all'?'🎲 Todo':mode==='compare'?'⚖�
 function pickAllMode(){return rand(['compare','compare','ops','ops','mixed','mixed','mixed','read'])}
 let drawMode='draw';
 let drawColor='#1f2937';
+let visualHelpOpen=false;
 function markActiveInput(){
   document.querySelectorAll('.resultInput').forEach(el=>el.classList.toggle('activeInput',el.id===activeInputId));
 }
@@ -485,6 +486,7 @@ function setReadLayout(isRead){
   $('workGrid').classList.toggle('readMode',isRead);
   $('helpBtn').style.display=isRead?'none':'';
   $('helpPane').innerHTML=isRead?'':drawPadHTML();
+  visualHelpOpen=false;
   if(!isRead) setTimeout(initDrawPad,0);
 }
 
@@ -532,8 +534,7 @@ function newCompare(){
   const shape=chooseCompareShape(pattern,d1,d2);
   current={type:'compare',pattern,d1,d2,n1,n2,shape,color,ans:(n1/d1>n2/d2)?'>':(n1/d1<n2/d2)?'<':'='};
   $('questionPane').innerHTML=`<div><div class="mathLine">${fracHTML(n1,d1)} ${resultSquare()} ${fracHTML(n2,d2)}</div>${renderButtonsCompare()}</div>`;
-  setFeed(pattern==='different'?'Compara mentalmente y mira el dibujo de entrada.':'Compara mentalmente. Pulsa Ajuda para una pista de texto.');
-  if(pattern==='different'){ showCompareDrawing(); }
+  setFeed(pattern==='different'?'Compara mentalmente. Pulsa Ajuda si necesitas ver el dibujo.':'Compara mentalmente. Pulsa Ajuda si necesitas ver el dibujo.');
 }
 function answerCompare(a){
   if(a===current.ans){good('¡Correcto!');setTimeout(newQuestion,650)}
@@ -668,9 +669,16 @@ function clearDrawPad(){
 }
 function showHelp(){
   if(current.type==='read') return;
+  if(visualHelpOpen){
+    visualHelpOpen=false;
+    $('helpPane').innerHTML=drawPadHTML();
+    setTimeout(initDrawPad,0);
+    return;
+  }
   fails++;
   updateCafe();
   showVisualHelp();
+  visualHelpOpen=true;
 }
 function showVisualHelp(){
   if(current.type==='compare'){
@@ -858,7 +866,8 @@ updateCafe();
       document.body.appendChild(bar);
     }
     const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
+    bar.innerHTML='<button type="button" aria-label="Volver al mapa del reto" title="Volver al mapa" style="width:42px;height:42px;min-width:42px;border:0;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(33,49,76,.12);font-size:22px;font-weight:900;padding:0;display:grid;place-items:center;cursor:pointer">&#127968;</button><span>&#127919; Reto mixto &middot; '+game+' &middot; &#9989; '+done+'/'+target+'</span><span>Errores: &#10060; '+(r.bad||0)+'</span>';
+    bar.querySelector('button').onclick=()=>{setSession(s);location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);};
     setSession(s);
   }
   function finish(){
