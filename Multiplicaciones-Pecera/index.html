@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -695,7 +695,8 @@ html,body{height:var(--ios-vh,100dvh);min-height:var(--ios-vh,100dvh);overscroll
       document.body.appendChild(bar);
     }
     const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
+    bar.innerHTML='<button type="button" aria-label="Volver al mapa del reto" title="Volver al mapa" style="width:42px;height:42px;min-width:42px;border:0;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(33,49,76,.12);font-size:22px;font-weight:900;padding:0;display:grid;place-items:center;cursor:pointer">&#127968;</button><span>&#127919; Reto mixto &middot; '+game+' &middot; &#9989; '+done+'/'+target+'</span><span>Errores: &#10060; '+(r.bad||0)+'</span>';
+    bar.querySelector('button').onclick=()=>{setSession(s);location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);};
     setSession(s);
   }
   function finish(){
@@ -721,5 +722,6 @@ html,body{height:var(--ios-vh,100dvh);min-height:var(--ios-vh,100dvh);overscroll
 })();
 </script>
 <script>window.addEventListener('load',function(){if(window.LucYagoReto){setTimeout(function(){try{if(typeof startGame==='function') startGame(false);}catch(e){}},500);}});</script>
+<script src="../reto_badge.js" data-title-selector="h1" data-title-name="Multiplicaciones" data-orientation="vertical"></script>
 </body>
 </html>
