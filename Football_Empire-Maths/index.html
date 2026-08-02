@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
@@ -1474,7 +1474,6 @@ button:disabled{
   <div class="topbar">
     <div class="brand"><span class="cam">Operaciones</span><span></span></div>
     <div class="topControls">
-      <button id="homeBtn" class="homeBtn" title="Volver al menÃº">ðŸ </button>
       <button data-mode="full" class="modeTop selectedMode">Mixto</button>
       <button data-mode="add" class="modeTop">Suma</button>
       <button data-mode="sub" class="modeTop">Resta</button>
@@ -1509,6 +1508,7 @@ button:disabled{
 
       <div class="workArea">
         <div class="opButtons">
+          <button id="homeBtn" class="homeBtn smallPlay" title="Volver al menÃº">ðŸ </button>
           <button class="primary smallPlay" id="newGameBtn" title="Nueva partida">Nueva partida</button>
           <button class="warn smallPlay" id="helpBtn">Ayuda (3)</button>
           <button class="smallPlay" id="hintBtn">Pista</button>
@@ -4258,6 +4258,27 @@ updateControlAvailability();
 .combinedInputLabel::first-letter{
   text-transform:uppercase;
 }
+.opButtons #homeBtn.homeBtn{
+  order:-1!important;
+  width:42px!important;
+  min-width:42px!important;
+  max-width:42px!important;
+  height:32px!important;
+  min-height:32px!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+@media (min-width:700px) and (max-width:1199px){
+  .opButtons #homeBtn.homeBtn{
+    width:38px!important;
+    min-width:38px!important;
+    max-width:38px!important;
+  }
+}
 </style>
 <script id="codex-operation-request-final-v3">
 (function(){
@@ -4309,6 +4330,118 @@ updateControlAvailability();
     setTimeout(markOperationType,0);
     setTimeout(markOperationType,400);
   });
+})();
+</script>
+<script src="../reto_badge.js" data-title-selector=".brand span:last-child" data-title-name="" data-orientation="horizontal"></script>
+<style id="codex-title-and-division-frame-final">
+.topbar .brand{
+  display:flex!important;
+  align-items:center!important;
+  visibility:visible!important;
+  opacity:1!important;
+  width:auto!important;
+  max-width:none!important;
+  min-width:max-content!important;
+  height:auto!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+.topbar .brand .cam{
+  display:inline-flex!important;
+  align-items:center!important;
+  visibility:visible!important;
+  opacity:1!important;
+  width:auto!important;
+  max-width:none!important;
+  height:auto!important;
+  overflow:visible!important;
+  color:#5b376d!important;
+  font-size:clamp(18px,2.6vw,28px)!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  text-indent:0!important;
+}
+.topbar .brand span:last-child{
+  display:none!important;
+}
+@media (min-width:900px){
+  #operationArea.op-div.verticalWrap{
+    width:max-content!important;
+    max-width:none!important;
+    min-width:max-content!important;
+    box-sizing:border-box!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    align-self:center!important;
+    overflow:visible!important;
+    padding-left:36px!important;
+    padding-right:36px!important;
+  }
+  #operationArea.op-div.verticalWrap .divSchool{
+    width:max-content!important;
+    max-width:none!important;
+    flex:0 0 auto!important;
+  }
+  #operationArea.op-div.verticalWrap:before{
+    left:18px!important;
+    right:18px!important;
+    width:auto!important;
+  }
+}
+</style>
+<script id="codex-title-and-division-frame-final">
+(function(){
+  function restoreTitle(){
+    const brand=document.querySelector('.topbar .brand');
+    if(!brand) return;
+    let title=brand.querySelector('.cam');
+    if(!title){
+      title=document.createElement('span');
+      title.className='cam';
+      brand.prepend(title);
+    }
+    title.textContent='Operaciones';
+    brand.style.display='flex';
+    brand.style.visibility='visible';
+    brand.style.opacity='1';
+    brand.style.overflow='visible';
+    title.style.display='inline-flex';
+    title.style.visibility='visible';
+    title.style.opacity='1';
+  }
+  function fitDivisionFrame(){
+    const area=document.querySelector('#operationArea.op-div.verticalWrap');
+    const division=area?.querySelector?.('.divSchool');
+    if(!area || !division || window.innerWidth<900) return;
+    const target=Math.ceil(division.scrollWidth+72);
+    area.style.width=target+'px';
+    area.style.minWidth=target+'px';
+    area.style.maxWidth='none';
+  }
+  function refresh(){
+    restoreTitle();
+    fitDivisionFrame();
+  }
+  if(typeof renderProblem==='function' && !renderProblem.__codexTitleFrameFinal){
+    const oldRenderProblem=renderProblem;
+    renderProblem=function(){
+      const result=oldRenderProblem.apply(this,arguments);
+      setTimeout(refresh,0);
+      setTimeout(refresh,80);
+      return result;
+    };
+    renderProblem.__codexTitleFrameFinal=true;
+  }
+  window.addEventListener('load',function(){
+    refresh();
+    setTimeout(refresh,80);
+    setTimeout(refresh,500);
+  });
+  window.addEventListener('resize',function(){
+    setTimeout(refresh,80);
+  });
+  refresh();
 })();
 </script>
 </body>
