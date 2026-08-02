@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ca">
 <head>
 <meta charset="UTF-8">
@@ -77,7 +77,7 @@ button:disabled{opacity:.48;cursor:not-allowed}
   gap:12px;
   align-items:center;
 }
-.home-btn,.route-btn,.game-toggle-btn,.action-btn,.pad-btn,.choice-btn,.tiny-btn,.test-btn{
+.home-btn,.top-start-btn,.route-btn,.game-toggle-btn,.action-btn,.pad-btn,.choice-btn,.tiny-btn,.test-btn{
   border-radius:18px;
   background:#fff;
   box-shadow:0 10px 22px rgba(32,48,74,.11);
@@ -119,6 +119,7 @@ button:disabled{opacity:.48;cursor:not-allowed}
   color:#fff;
   background:linear-gradient(135deg,#20b86f,#39d38a);
 }
+.top-start-btn{min-width:82px;padding:13px 12px;color:#fff;background:linear-gradient(135deg,var(--green),#39d38a)}
 .game-toggle-btn.off{background:linear-gradient(135deg,#6d7891,#9aa4b8)}
 body.no-adventure .right-panel{display:none!important}
 body.no-adventure .game{grid-template-columns:minmax(330px,760px);justify-content:center}
@@ -176,8 +177,10 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 }
 .question-card.good{animation:pulseGood .45s ease}
 .question-card.bad{animation:shakeBad .35s ease}
-.question-meta{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.question-meta{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center}
 .tag{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.16);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.question-progress{display:none;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.22);font-size:12px;font-weight:900;text-align:center;white-space:nowrap}
+.question-progress.show{display:inline-flex;align-items:center;justify-content:center}
 .question-text{
   margin-top:10px;
   min-height:56px;
@@ -189,6 +192,8 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   line-height:1.1;
   font-weight:900;
 }
+.question-card.compact-match{min-height:120px}
+.question-card.compact-match .answer-box{display:none}
 .answer-box{
   margin-top:9px;
   min-height:58px;
@@ -264,7 +269,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 .match-status{text-align:center;font-size:12px;font-weight:900;color:var(--muted);padding:4px}
 .convert-work{display:grid;gap:8px;margin-bottom:12px}
 .convert-toggle-row{display:flex;justify-content:center;margin:3px 0 12px}
-.convert-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.convert-grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px}
 .convert-cell{min-height:38px;border-radius:13px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900}
 .convert-head{background:#fff;color:var(--ink);font-size:13px}
 .convert-cell.source,.convert-cell.target{background:#fff;color:var(--ink);outline:0;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08)}
@@ -285,7 +290,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 .test-solution-cell.empty{color:var(--muted);justify-content:center}
 .test-solution-cell.filled{background:#fff7ed;box-shadow:inset 0 0 0 3px rgba(255,139,46,.45)}
 
-.test-conversion-table{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:0 0 10px;padding:8px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08)}
+.test-conversion-table{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:5px;margin:0 0 10px;padding:8px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08)}
 .test-conv-cell{min-height:34px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 2px rgba(32,48,74,.08);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:var(--ink);line-height:1}
 .test-conv-head{background:#eef3ff;color:#285bd5;font-size:12px}
 .test-conv-cell.filled{background:#fff7ed;box-shadow:inset 0 0 0 3px rgba(255,139,46,.45)}
@@ -293,7 +298,6 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 .test-explain{margin:0 0 10px;padding:8px 10px;border-radius:14px;background:#fff8dc;color:#755000;font-size:12px;font-weight:900;line-height:1.25;box-shadow:inset 0 0 0 2px rgba(255,216,77,.22)}
 .test-table-title{margin:2px 0 4px;padding:4px 8px;border-radius:999px;background:#fff3df;color:#9c5c0d;font-size:11px;font-weight:900;text-align:center}
 .test-next-row{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
-#resetBtn{display:none!important}
 
 .text-pad,.number-pad{
   display:grid;
@@ -314,7 +318,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 .pad-btn.wide{grid-column:span 2}
 .pad-btn.ok,.action-btn.primary{background:linear-gradient(135deg,var(--green),#39d38a);color:#fff}
 .pad-btn.delete,.action-btn.danger{background:var(--red-soft);color:#a52d2d}
-.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .action-btn{min-height:46px;padding:10px}
 .feedback{
   min-height:38px;
@@ -654,10 +658,10 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 .topbar{min-height:54px;padding:6px 8px;border-radius:18px;gap:7px;display:flex;align-items:center;flex-wrap:nowrap}
 .home-btn{width:40px;height:40px;font-size:20px;border-radius:13px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;overflow:visible}
 .brand{min-width:0;flex:1 1 auto}.brand h1{font-size:clamp(18px,2.6vw,30px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0}.eyebrow{display:none}
-.top-stats{flex:0 0 auto;display:flex;flex-wrap:nowrap;gap:4px;align-items:center}.route-btn,.game-toggle-btn{min-width:0;padding:8px 9px;font-size:11px;border-radius:12px}.stat-pill{min-width:0;padding:5px 7px;border-radius:12px}.stat-label{font-size:8px}.stat-value{font-size:15px}.coin-bar{font-size:13px;letter-spacing:0;max-width:120px}
+.top-stats{flex:0 0 auto;display:flex;flex-wrap:nowrap;gap:4px;align-items:center}.route-btn,.game-toggle-btn,.top-start-btn{min-width:0;padding:8px 9px;font-size:11px;border-radius:12px}.stat-pill{min-width:0;padding:5px 7px;border-radius:12px}.stat-label{font-size:8px}.stat-value{font-size:15px}.coin-bar{font-size:13px;letter-spacing:0;max-width:120px}
 .right-panel{grid-template-columns:1fr 118px;gap:6px}.treasure-bar{gap:5px}.mini-card{padding:6px;border-radius:14px}.mini-card .stat-value{font-size:18px}.ship-card{padding:6px;border-radius:14px}.ship-view{min-height:66px}.ship-view svg{width:96px;height:66px}.ship-name{font-size:11px}.crew-list{gap:4px}.crew-card{padding:5px;grid-template-columns:30px 1fr;border-radius:12px}.crew-icon{width:30px;height:30px;border-radius:10px;font-size:18px}.crew-name{font-size:11px}.crew-state{font-size:9px}.boat{width:145px;height:92px}
 @media (orientation:portrait){
-  .app{padding:5px;gap:5px}.topbar{min-height:42px;padding:4px 5px;gap:4px}.home-btn{width:36px;height:36px;font-size:18px;line-height:1;padding:0;display:inline-flex;align-items:center;justify-content:center;overflow:visible}.brand h1{font-size:15px}.route-btn,.game-toggle-btn{padding:6px 6px;font-size:9px}.stat-pill{padding:4px 5px}.stat-label{display:none}.stat-value{font-size:12px}.coin-bar{font-size:11px;max-width:82px}.top-stats{gap:3px}
+  .app{padding:5px;gap:5px}.topbar{min-height:42px;padding:4px 5px;gap:4px}.home-btn{width:36px;height:36px;font-size:18px;line-height:1;padding:0;display:inline-flex;align-items:center;justify-content:center;overflow:visible}.brand h1{font-size:15px}.route-btn,.game-toggle-btn,.top-start-btn{padding:6px 6px;font-size:9px}.stat-pill{padding:4px 5px}.stat-label{display:none}.stat-value{font-size:12px}.coin-bar{font-size:11px;max-width:82px}.top-stats{gap:3px}
   .game{gap:5px}.panel{padding:6px;border-radius:16px}.question-card{min-height:112px}.test-selector{grid-template-columns:repeat(4,minmax(0,1fr))}.test-btn{font-size:10.5px;font-weight:900}.right-panel{grid-template-columns:1fr;grid-template-rows:420px auto auto}.side-panel{display:grid;grid-template-columns:100px 1fr;grid-template-rows:auto;gap:5px}.crew-list{grid-template-columns:repeat(5,minmax(0,1fr))}.crew-card{grid-template-columns:1fr;text-align:center}.crew-icon{margin:0 auto}.ship-view{min-height:54px}.ship-view svg{width:78px;height:54px}
 }
 @media (min-width:901px){
@@ -682,7 +686,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .topbar{min-height:42px!important;padding:4px 5px!important;gap:4px!important}
   .home-btn{width:36px!important;height:36px!important;font-size:18px!important;line-height:1!important;padding:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
   .brand h1{font-size:15px!important}
-  .route-btn,.game-toggle-btn{padding:6px 6px!important;font-size:9px!important}
+  .route-btn,.game-toggle-btn,.top-start-btn{padding:6px 6px!important;font-size:9px!important}
   .stat-pill{padding:4px 5px!important}
   .stat-label{display:none!important}
   .stat-value{font-size:12px!important}
@@ -775,7 +779,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .home-btn{width:36px!important;height:36px!important;font-size:18px!important;border-radius:12px!important;line-height:1!important;padding:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
   .brand h1{font-size:15px!important;margin:0!important;max-width:190px!important}
   .top-stats{gap:3px!important;flex-wrap:nowrap!important}
-  .route-btn,.game-toggle-btn{padding:6px 6px!important;font-size:9px!important;border-radius:11px!important;min-width:0!important}
+  .route-btn,.game-toggle-btn,.top-start-btn{padding:6px 6px!important;font-size:9px!important;border-radius:11px!important;min-width:0!important}
   .stat-pill{padding:4px 5px!important;border-radius:11px!important;min-width:0!important}
   .stat-label{display:none!important}
   .stat-value{font-size:12px!important;line-height:1!important;margin:0!important}
@@ -802,8 +806,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .write-grid{gap:4px!important;margin-bottom:5px!important}
   .write-cell{min-height:30px!important;height:30px!important;font-size:14px!important;border-radius:10px!important}
   .write-pad-note{font-size:10px!important;margin:0 0 4px!important}
-  .actions{gap:5px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
-  #resetBtn{display:none!important}
+  .actions{gap:5px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .action-btn{min-height:33px!important;padding:5px 7px!important;border-radius:12px!important;font-size:12px!important}
   .feedback{min-height:26px!important;font-size:11px!important;padding:5px 8px!important;border-radius:13px!important}
   .conversion-table{gap:4px!important;padding:6px!important;border-radius:14px!important}
@@ -847,6 +850,40 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   .home-btn{margin-right:10px!important}
 }
 </style>
+<style id="valentina-ipad-unitats-compact-20260730">
+@media (min-width:700px) and (max-width:1180px){
+  body.no-adventure .app{max-width:760px!important}
+  body.no-adventure .game{grid-template-columns:minmax(300px,620px)!important;justify-content:center!important}
+  .test-selector{grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:3px!important}
+  .test-btn{min-width:0!important;min-height:32px!important;padding:4px 2px!important;font-size:9.2px!important;line-height:1.05!important;white-space:normal!important;overflow-wrap:anywhere!important;border-radius:10px!important}
+  .question-card{min-height:100px!important;padding:7px!important;border-radius:16px!important}
+  .question-card.compact-match{min-height:82px!important}
+  .question-meta{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;gap:5px!important}
+  .question-meta .tag,.question-progress{min-width:0!important;padding:5px 6px!important;font-size:9.5px!important;line-height:1!important;letter-spacing:0!important;white-space:normal!important}
+  .question-meta .tag:last-child{text-align:right;justify-content:flex-end}
+  .question-text{min-height:28px!important;margin-top:5px!important;font-size:clamp(15px,2vw,22px)!important}
+  .answer-box{min-height:34px!important;margin-top:5px!important;padding:5px 7px!important;border-radius:13px!important}
+  .answer-label{font-size:9px!important;letter-spacing:0!important}
+  .answer-value{font-size:clamp(16px,2.2vw,23px)!important}
+  .conversion-table{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:3px!important;padding:5px!important;border-radius:14px!important}
+  .unit-cell{min-height:31px!important;border-radius:10px!important;padding:2px!important}
+  .unit-cell strong{font-size:14px!important;line-height:1!important}
+  .unit-cell span{font-size:7.8px!important;line-height:1!important}
+  .match-grid{gap:3px!important}
+  .match-column{gap:3px!important}
+  .match-card{min-width:0!important;min-height:25px!important;padding:3px 3px!important;border-radius:9px!important;font-size:8.8px!important;line-height:1.02!important}
+  .convert-grid,.test-conversion-table{grid-template-columns:repeat(9,minmax(0,1fr))!important;gap:3px!important}
+  .convert-cell,.test-conv-cell{min-width:0!important;min-height:28px!important;border-radius:9px!important;font-size:13px!important;padding:2px!important}
+  .convert-head,.test-conv-head{font-size:10px!important}
+  .empty-head{background:transparent!important;box-shadow:none!important}
+  .write-grid{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:3px!important}
+  .write-cell{min-width:0!important;min-height:28px!important;height:28px!important;font-size:13px!important;border-radius:9px!important}
+  .order-slots,.order-pool{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:3px!important}
+  .order-slot,.unit-token{min-width:0!important;min-height:28px!important;padding:4px 2px!important;border-radius:9px!important;font-size:12px!important}
+  .choice-grid{gap:5px!important}
+  .choice-btn{min-height:36px!important;font-size:13px!important;padding:6px 5px!important;border-radius:12px!important}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -857,6 +894,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
     </div>
     <div class="top-stats">
       <button class="home-btn" id="homeBtn" aria-label="Torna al menu">🏠</button>
+      <button class="top-start-btn" id="startBtn">Jugar</button>
       <button class="game-toggle-btn" id="gameToggleBtn">Joc: S&iacute;</button>
       <button class="route-btn adventure-stat" id="routeBtn">Ruta 15</button>
       <div class="stat-pill adventure-stat"><div class="stat-label">Monedes</div><div class="stat-value coin-bar" id="coinsText">🟡░░░░░░░░░</div></div>
@@ -873,7 +911,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
       </div>
       <div class="test-selector" id="testSelector">
         <button class="test-btn mix active" data-test="mix">Mixt</button>
-        <button class="test-btn" data-test="magnitudeDef">Magnituds</button>
+        <button class="test-btn" data-test="magnitudeDef">Magnitud</button>
         <button class="test-btn" data-test="nameToAbbr">Nom &rarr; abrev.</button>
         <button class="test-btn" data-test="abbrToName">Abrev. &rarr; nom</button>
         <button class="test-btn" data-test="orderScale">Ordenar</button>
@@ -892,6 +930,7 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
       <div class="question-card" id="questionCard">
         <div class="question-meta">
           <span class="tag" id="typeText">Abreviatura</span>
+          <span class="question-progress" id="questionProgress"></span>
           <span class="tag" id="levelText">Nivell fàcil</span>
         </div>
         <div class="question-text" id="questionText">Prem Jugar per començar</div>
@@ -908,10 +947,8 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
       <div id="inputArea"></div>
 
       <div class="actions">
-        <button class="action-btn" id="startBtn">Jugar</button>
-        <button class="action-btn primary" id="checkBtn">Comprovar</button>
         <button class="action-btn" id="helpBtn">Ajuda</button>
-        <button class="action-btn danger" id="resetBtn">Reiniciar</button>
+        <button class="action-btn primary" id="checkBtn">Comprovar</button>
       </div>
       <div class="feedback" id="feedbackText">Preparat per salpar cap al tresor.</div>
     </section>
@@ -1010,7 +1047,7 @@ const SHIPS=[
 ];
 const LETTERS=["q","w","e","r","t","y","u","i","o","p","a","s","d","f","g","h","j","k","l","z","x","c","v","b","n","m"];
 const TESTS=[
-  {kind:"magnitudeDef",label:"Magnituds"},
+  {kind:"magnitudeDef",label:"Magnitud"},
   {kind:"nameToAbbr",label:"Nom \u2192 abrev."},
   {kind:"abbrToName",label:"Abrev. \u2192 nom"},
   {kind:"orderScale",label:"Ordenar"},
@@ -1277,7 +1314,7 @@ function makeQuestion(){
     return {kind,title:"Nom \u2192 abreviatura",level:"Nivell f\u00e0cil",question:unit.name,answer:unit.abbr,unit:unit.abbr};
   }
   if(kind==="orderScale"){
-    return {kind,title:"Ordena l'escala",level:"Escala completa",question:"Arrossega cada unitat al seu lloc",answer:UNITS.map(u=>u.abbr).join(" "),tokens:shuffle(UNITS.map(u=>u.abbr))};
+    return {kind,title:"Ordena l'escala",level:"DE + GRAN A PETIT",question:"Arrossega cada unitat al seu lloc",answer:UNITS.map(u=>u.abbr).join(" "),tokens:shuffle(UNITS.map(u=>u.abbr))};
   }
   if(kind==="writeScale"){
     return {kind,title:"Escriu l'escala",level:"Escala completa",question:"Escriu les unitats de gran a petit:",answer:UNITS.map(u=>u.abbr).join(" ")};
@@ -1371,7 +1408,7 @@ function nextQuestion(){
   game.matchWrong=null;
   game.matchLeft=null;
   game.matchRight=null;
-  game.convertDraft=["","","","","","",""];
+  game.convertDraft=["","","","","","","","",""];
   game.convertActive=-1;
   game.convertReady=true;
   game.convertTableVisible=game.current&&game.current.kind==="convert";
@@ -1382,6 +1419,12 @@ function correctAnswerText(q){
   if(q.kind==="testChoice")return q.answer;
   if(q.kind==="matchAbbr"||q.kind==="magnitudeDef")return "totes les parelles correctes";
   return q.kind==="orderScale"||q.kind==="writeScale"?UNITS.map(u=>u.abbr).join(" "):q.answer;
+}
+function questionProgressText(q){
+  if(!q)return "";
+  if(q.kind==="magnitudeDef")return Object.keys(game.matchPairs).length+"/"+MAGNITUDES.length;
+  if(q.kind==="matchAbbr")return Object.keys(game.matchPairs).length+"/"+UNITS.length;
+  return "";
 }
 function isCorrect(){
   const q=game.current;
@@ -1534,10 +1577,13 @@ function testLabel(kind){
   return found?found.label:"Mixt";
 }
 function applyHelpPenalty(){
-  if(!game.running||game.helpUsed)return;
-  game.helpUsed=true;
+  if(!game.running)return;
   game.streak=0;
   game.showHelpTable=true;
+  if(window.LucYagoReto){
+    window.LucYagoReto.record(false);
+    window.LucYagoReto.record(false);
+  }
   if(game.final)game.playerLives=Math.max(0,game.playerLives-2);
   else if(isGameOn()){
     game.piratePos=Math.min(game.route,game.piratePos+2);
@@ -1553,7 +1599,7 @@ function helpText(){
   if(q.kind==="abbrToName")return "Pista: mira la taula. Escriu el nom complet de " + q.question + ".";
   if(q.kind==="nameToAbbr")return "Pista: busca a la taula el nom " + q.question + " i toca la seva abreviatura.";
   if(q.kind==="orderScale")return "Pista: l'escala de gran a petit \u00e9s Km, Hm, Dam, m, dm, cm, mm.";
-  if(q.kind==="writeScale")return "Pista: escriu l'escala completa de gran a petit: Km Hm Dam m dm cm mm.";
+  if(q.kind==="writeScale")return "";
   if(q.kind==="convert")return "Pista: cada salt cap a la dreta multiplica per 10. Cada salt cap a l'esquerra divideix per 10.";
   if(q.kind==="testChoice")return "Toca Solució per veure la resposta correcta i una explicació.";
   return "Mira la taula d'unitats i compara posicions.";
@@ -1680,7 +1726,9 @@ function conversionInfosForTest(q){
   return unique;
 }
 function tableDigitsForConversion(info){
-  const cells=Array.from({length:7},()=>({text:"",comma:false}));
+  const offset=2;
+  const cellCount=UNITS.length+offset;
+  const cells=Array.from({length:cellCount},()=>({text:"",comma:false}));
   if(!info)return cells;
   let s=String(info.value||"").trim().replace(/\s/g,"").replace(/\./g,"");
   const parts=s.split(",");
@@ -1688,26 +1736,32 @@ function tableDigitsForConversion(info){
   const decPart=(parts[1]||"").replace(/\D/g,"");
   const positions={};
   for(let i=0;i<intPart.length;i+=1){
-    const idx=info.fromIndex-(intPart.length-1-i);
-    if(idx>=0&&idx<7)positions[idx]=(positions[idx]||"")+intPart[i];
+    const idx=info.fromIndex+offset-(intPart.length-1-i);
+    if(idx>=0&&idx<cellCount)positions[idx]=(positions[idx]||"")+intPart[i];
   }
   for(let i=0;i<decPart.length;i+=1){
-    const idx=info.fromIndex+1+i;
-    if(idx>=0&&idx<7)positions[idx]=(positions[idx]||"")+decPart[i];
+    const idx=info.fromIndex+offset+1+i;
+    if(idx>=0&&idx<cellCount)positions[idx]=(positions[idx]||"")+decPart[i];
   }
   const used=Object.keys(positions).map(Number);
-  let min=used.length?Math.min(...used):info.fromIndex;
-  let max=used.length?Math.max(...used):info.fromIndex;
-  if(info.toIndex>max){for(let i=max+1;i<=info.toIndex;i+=1)positions[i]="0";}
-  if(info.toIndex<min){for(let i=info.toIndex;i<min;i+=1)positions[i]=positions[i]||"0";}
+  let min=used.length?Math.min(...used):info.fromIndex+offset;
+  let max=used.length?Math.max(...used):info.fromIndex+offset;
+  const targetIndex=info.toIndex+offset;
+  if(targetIndex>max){for(let i=max+1;i<=targetIndex;i+=1)positions[i]="0";}
+  if(targetIndex<min){for(let i=targetIndex;i<min;i+=1)positions[i]=positions[i]||"0";}
   Object.keys(positions).forEach(k=>{cells[Number(k)].text=positions[k];});
-  if(info.toIndex<info.fromIndex){cells[info.toIndex].comma=true;}
+  if(info.toIndex<info.fromIndex){cells[targetIndex].comma=true;}
   return cells;
 }
 function ensureTestDraft(rows){
   if(!Array.isArray(game.testDraft))game.testDraft=[];
-  while(game.testDraft.length<rows)game.testDraft.push(["","","","","","",""]);
+  while(game.testDraft.length<rows)game.testDraft.push(["","","","","","","","",""]);
   game.testDraft=game.testDraft.slice(0,rows);
+  game.testDraft=game.testDraft.map(row=>{
+    row=Array.isArray(row)?row.slice(0,9):[];
+    while(row.length<9)row.push("");
+    return row;
+  });
 }
 function renderConversionHelperTable(infos,showFilled){
   infos=Array.isArray(infos)?infos:[infos];
@@ -1723,6 +1777,11 @@ function renderConversionHelperTable(infos,showFilled){
     frag.appendChild(title);
     const table=document.createElement("div");
     table.className="test-conversion-table";
+    for(let i=0;i<2;i+=1){
+      const head=document.createElement("div");
+      head.className="test-conv-cell test-conv-head empty-head";
+      table.appendChild(head);
+    }
     group[0].info.units.forEach(u=>{
       const head=document.createElement("div");
       head.className="test-conv-cell test-conv-head";
@@ -1731,7 +1790,7 @@ function renderConversionHelperTable(infos,showFilled){
     });
     group.forEach(({info,idx})=>{
       const solutionCells=tableDigitsForConversion(info);
-      const draft=(game.testDraft&&game.testDraft[idx])||["","","","","","",""];
+      const draft=(game.testDraft&&game.testDraft[idx])||["","","","","","","","",""];
       const cells=showFilled?solutionCells:draft.map(v=>({text:v,comma:false}));
       cells.forEach((c,cellIndex)=>{
         const cell=document.createElement("button");
@@ -1759,7 +1818,7 @@ function inputTestTableNumber(ch){
   ensureTestDraft(infos.length);
   if(!game.testActive)game.testActive={row:0,cell:0};
   const r=Math.max(0,Math.min(game.testDraft.length-1,game.testActive.row));
-  const c=Math.max(0,Math.min(6,game.testActive.cell));
+  const c=Math.max(0,Math.min(8,game.testActive.cell));
   game.testDraft[r][c]=(game.testDraft[r][c]||"")+ch;
   renderInputArea();
 }
@@ -1800,15 +1859,16 @@ function showTestSolution(){
   return true;
 }
 function showHelp(){
+  applyHelpPenalty();
   if(showTestSolution())return;
   const box=$("#helpNote");
-  if(box&&box.classList.contains("show")){
-    hideHelp();
-    return;
+  if(game.current&&game.current.kind==="writeScale"){
+    box.textContent="";
+    box.classList.remove("show");
+  }else{
+    box.textContent=helpText();
+    box.classList.add("show");
   }
-  applyHelpPenalty();
-  box.textContent=helpText();
-  box.classList.add("show");
   if(helpTimer)clearTimeout(helpTimer);
   helpTimer=setTimeout(hideHelp,10000);
   renderUnitTable();
@@ -1819,6 +1879,8 @@ function hideHelp(){
   const box=$("#helpNote");
   if(!box)return;
   box.classList.remove("show");
+  game.showHelpTable=false;
+  renderUnitTable();
   if(helpTimer){clearTimeout(helpTimer);helpTimer=null;}
 }
 function setMessage(text,tone){
@@ -2133,17 +2195,23 @@ function renderInputArea(){
     work.appendChild(controls);
     const grid=document.createElement("div");
     grid.className="convert-grid";
+    for(let i=0;i<2;i+=1){
+      const head=document.createElement("div");
+      head.className="convert-cell convert-head empty-head";
+      grid.appendChild(head);
+    }
     UNITS.forEach(u=>{
       const head=document.createElement("div");
       head.className="convert-cell convert-head";
       head.textContent=u.abbr;
       grid.appendChild(head);
     });
-    UNITS.forEach((u,index)=>{
+    if(!Array.isArray(game.convertDraft)||game.convertDraft.length<9)game.convertDraft=["","","","","","","","",""];
+    for(let index=0;index<9;index+=1){
       const cls="convert-cell"+(game.convertActive===index?" active":"")+((game.convertDraft[index]||"").length?" filled":"");
       const cell=makeButton(game.convertDraft[index]||"",cls,()=>{game.convertActive=index;game.convertReady=false;renderInputArea();renderAnswer();});
       grid.appendChild(cell);
-    });
+    }
     if(game.convertTableVisible)work.appendChild(grid);
     area.appendChild(work);
   }
@@ -2416,6 +2484,13 @@ function renderQuestion(){
   $("#testModeText").textContent=cleanSelectedTests(game.selectedTests).length===DEFAULT_TEST_KINDS.length?"Mixt":testLabel(cleanSelectedTests(game.selectedTests)[0]);
   $("#typeText").textContent=q?q.title:"Longitud";
   $("#levelText").textContent=q?q.level:"V1";
+  const progress=$("#questionProgress");
+  const progressText=questionProgressText(q);
+  if(progress){
+    progress.textContent=progressText;
+    progress.classList.toggle("show",!!progressText);
+  }
+  $("#questionCard").classList.toggle("compact-match",!!(q&&(q.kind==="matchAbbr"||q.kind==="magnitudeDef")));
   $("#questionText").textContent=q?q.question:"Prem Jugar per començar";
   const helpBtn=$("#helpBtn");
   if(helpBtn)helpBtn.textContent=q&&q.kind==="testChoice"?"Solució":"Ajuda";
@@ -2429,6 +2504,12 @@ function renderAnswer(){
     const isConvert=game.current&&game.current.kind==="convert";
     box.classList.toggle("active",!!(isConvert&&game.convertActive===-1));
     box.classList.toggle("filled",!!(isConvert&&game.answer));
+  }
+  const progress=$("#questionProgress");
+  const progressText=questionProgressText(game.current);
+  if(progress){
+    progress.textContent=progressText;
+    progress.classList.toggle("show",!!progressText);
   }
   if(game.current&&game.current.kind==="magnitudeDef")$("#answerText").textContent=Object.keys(game.matchPairs).length+" / "+MAGNITUDES.length;
   else if(game.current&&game.current.kind==="matchAbbr")$("#answerText").textContent=Object.keys(game.matchPairs).length+" / "+UNITS.length;
@@ -2539,7 +2620,6 @@ $("#homeBtn").addEventListener("click",()=>{window.location.href="../index.html"
 $("#routeBtn").addEventListener("click",changeRoute);
 $("#gameToggleBtn").addEventListener("click",toggleGameMode);
 $("#startBtn").addEventListener("click",startGame);
-$("#resetBtn").addEventListener("click",resetGame);
 $("#helpBtn").addEventListener("click",showHelp);
 $$("#testSelector .test-btn").forEach(btn=>btn.addEventListener("click",()=>toggleTest(btn.dataset.test)));
 $$("#abbrLevelToggle .level-btn").forEach(btn=>btn.addEventListener("click",()=>setAbbrLevel(btn.dataset.level)));
@@ -2607,7 +2687,8 @@ setTimeout(lucyagoApplyDefaultStart,80);
       document.body.appendChild(bar);
     }
     const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
+    bar.innerHTML='<button type="button" aria-label="Volver al mapa del reto" title="Volver al mapa" style="width:42px;height:42px;min-width:42px;border:0;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(33,49,76,.12);font-size:22px;font-weight:900;padding:0;display:grid;place-items:center;cursor:pointer">&#127968;</button><span>&#127919; Reto mixto &middot; '+game+' &middot; &#9989; '+done+'/'+target+'</span><span>Errores: &#10060; '+(r.bad||0)+'</span>';
+    bar.querySelector('button').onclick=()=>{setSession(s);location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);};
     setSession(s);
   }
   function finish(){
@@ -2677,7 +2758,7 @@ setTimeout(lucyagoApplyDefaultStart,80);
         event.preventDefault();
         neutralizeEditable(event.target);
       }
-      if(event.target&&event.target.closest&&event.target.closest('.spanish-keyboard,.pad-btn,.write-cell,.answer-box,.action-btn,.test-btn')){
+      if(event.target&&event.target.closest&&event.target.closest('.spanish-keyboard,.pad-btn,.write-cell,.answer-box,.action-btn,.top-start-btn,.test-btn')){
         setTimeout(blurActive,0);
       }
     },true);
@@ -2751,8 +2832,15 @@ setTimeout(lucyagoApplyDefaultStart,80);
   setTimeout(ensureKeyboard,0);
 })();
 </script>
+<script src="../reto_badge.js" data-title-selector=".brand h1" data-title-name="Unitats" data-orientation="horizontal"></script>
 </body>
 </html>
+
+
+
+
+
+
 
 
 
