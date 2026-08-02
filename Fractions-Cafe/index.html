@@ -17,6 +17,7 @@ input{font-family:inherit}
 .top{height:50px;min-height:50px;background:rgba(255,255,255,.9);border-radius:18px;padding:7px 12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px rgba(120,60,20,.15)}
 .title{font-size:21px;font-weight:950}
 .stats{font-weight:950;display:flex;gap:10px;flex-wrap:wrap;font-size:14px}
+.stats .homeBtn{font-size:23px;min-width:34px;padding:0 4px;margin:0;line-height:1}
 .main{flex:1;min-height:0;display:grid;grid-template-columns:210px 1fr;gap:8px}
 .menu{background:rgba(255,255,255,.72);border-radius:18px;padding:8px;overflow:auto;box-shadow:0 8px 20px rgba(120,60,20,.12)}
 .menu button{width:100%;margin-bottom:8px;padding:11px 10px;font-size:16px;text-align:left}
@@ -396,11 +397,10 @@ svg.fracSvg.small{
 <div class="app">
   <div class="top">
     <div class="title">🍰 Sweet Fractions Café</div>
-    <div class="stats">⭐ <span id="stars">0</span> | ❌ <span id="fails">0</span> | Estado: <span id="stateTxt">Construyendo</span></div>
+    <div class="stats"><button class="homeBtn" onclick="goHome()">🏠</button> ⭐ <span id="stars">0</span> | ❌ <span id="fails">0</span> | Estado: <span id="stateTxt">Construyendo</span></div>
   </div>
 
   <nav class="menu topMenu">
-      <button class="homeBtn" onclick="goHome()">🏠</button>
       <button class="active" onclick="setMode('all',this)">🎲 Todo</button>
       <button onclick="setMode('compare',this)">⚖️ Comparacions</button>
       <button onclick="setMode('ops',this)">➕➖ Sumes/restes</button>
@@ -892,5 +892,6 @@ updateCafe();
   window.addEventListener('load',()=>setTimeout(paint,250));
 })();
 </script>
+<script src="../reto_badge.js" data-title-selector=".title" data-title-name="Sweet Fractions" data-orientation="vertical"></script>
 </body>
 </html>
