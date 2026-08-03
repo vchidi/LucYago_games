@@ -2928,14 +2928,14 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function renderPhoto(){var card=$('learnPhotoCard');if(!card)return;card.classList.toggle('off',!photo.on);$('learnPhotoToggle').textContent=photo.on?'Iconos sÃ­':'Iconos no';$('learnBlocksBtn').textContent=photo.blocks+' bloques';if(!photo.on)return;var p=pObj(),g=grid();order(g.tiles);$('learnIconGlyph').innerHTML=p.html||esc(p.fallback||'â˜…');$('learnIconGlyph').setAttribute('data-fallback',p.fallback||'â˜…');$('learnIconGlyph').setAttribute('title',p.title||'Icono');$('learnPhotoMask').style.setProperty('--photo-cols',g.cols);$('learnPhotoMask').style.setProperty('--photo-rows',g.rows);var revealed=Math.min(g.tiles,photo.guessSolved?g.tiles:photo.revealed),set=new Set(photo.order.slice(0,revealed)),frag=document.createDocumentFragment();$('learnPhotoMask').innerHTML='';for(var i=0;i<g.tiles;i++){var tile=document.createElement('div');tile.className='learn-tile'+(set.has(i)?' revealed':'');frag.appendChild(tile)}$('learnPhotoMask').appendChild(frag);$('learnPhotoCaption').classList.toggle('done',revealed>=g.tiles);$('learnPhotoCaption').innerHTML=revealed>=g.tiles?'Icono descubierto: <strong>'+esc(p.title)+'</strong>':'Icono oculto Â· '+revealed+'/'+g.tiles+' bloques'}
   function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
   function choices(){var correct=pObj().title,key=photo.iconIdx+'|'+correct;if(photo.choicesKey===key&&photo.choices.length)return photo.choices;var pool=ICONS.map(function(x){return x.title}).filter(function(x){return x!==correct});shuffle(pool);photo.choices=shuffle(pool.slice(0,7).concat([correct]));photo.choicesKey=key;return photo.choices}
-  function renderGuess(){var panel=$('learnGuessPanel');if(!panel)return;panel.classList.toggle('show',photo.guessOpen&&photo.on);$('learnGuessBtn').classList.toggle('active',photo.guessOpen);$('learnHearts').textContent='â™¥'.repeat(photo.guessTries)+'â™¡'.repeat(Math.max(0,3-photo.guessTries));if(!photo.guessOpen)return;$('learnChoices').innerHTML='';choices().forEach(function(ch){var b=document.createElement('button');b.className='learn-choice';b.textContent=ch;b.onclick=function(){guess(ch)};$('learnChoices').appendChild(b)})}
+  function renderGuess(){var panel=$('learnGuessPanel');if(!panel)return;panel.classList.toggle('show',photo.guessOpen);$('learnGuessBtn').classList.toggle('active',photo.guessOpen);$('learnHearts').textContent='â™¥'.repeat(photo.guessTries)+'â™¡'.repeat(Math.max(0,3-photo.guessTries));if(!photo.guessOpen)return;$('learnChoices').innerHTML='';choices().forEach(function(ch){var b=document.createElement('button');b.className='learn-choice';b.textContent=ch;b.onclick=function(){guess(ch)};$('learnChoices').appendChild(b)})}
   function guess(ch){var ok=ch.toLowerCase()===pObj().title.toLowerCase();photo.guessOpen=false;if(ok){photo.guessSolved=true;photo.revealed=grid().tiles;score.good++;showMsg('Â¡Correcto! Empieza un nuevo icono.');setTimeout(function(){resetPhoto(true);renderLearn()},650)}else{score.bad++;photo.guessTries=Math.max(0,photo.guessTries-1);showMsg('No era ese. Guess se ha cerrado y puedes seguir jugando.')}renderLearn()}
   window.__learningToggleGuess=function(){if(!photo.on)photo.on=true;photo.guessOpen=!photo.guessOpen;renderLearn()};
   window.__learningRefreshIcon=function(){resetPhoto(true);photo.revealed=0;photo.order=[];photo.guessOpen=false;photo.guessSolved=false;showMsg('');renderLearn()};
   window.__learningCoverIcon=function(){photo.revealed=0;photo.order=[];renderLearn()};
   function focusLater(){document.body.classList.add('learning-input-ready');setTimeout(function(){var input=$('hiddenInput');if(input)try{input.focus({preventScroll:true})}catch(e){}},40)}
   function bindScreenButtons(){if(!document.body.dataset.learnDelegatedFinal){document.body.dataset.learnDelegatedFinal='1';var lastTap=0;document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#learnPhraseBtn,#learnScreenBtn,#competitionScreenBtn');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var now=Date.now();if(now-lastTap<260)return;lastTap=now;if(t.id==='learnPhraseBtn'){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()}else{screen(t.id==='learnScreenBtn'?'learning':'competition')}},true)}var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),p=document.getElementById('learnPhraseBtn');if(a&&!a.dataset.learnBound){a.dataset.learnBound='1'}if(c&&!c.dataset.learnBound){c.dataset.learnBound='1'}if(p&&!p.dataset.learnPhraseBound){p.dataset.learnPhraseBound='1'}}
-  function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView'))return;var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnHomeBtn" class="learn-control" title="Volver al menu">&#x1F3E0;</button><button id="learnPhotoToggle" class="learn-control">Iconos sÃ­</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">âœ“ <span id="learnGood">0</span></span><span class="status">âœ— <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar Ãºltima</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">Â¿QuÃ© icono?</div><div id="learnHearts" class="learn-hearts">â™¥â™¥â™¥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};$('learnGuessBtn').onclick=function(){if(!photo.on)return;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
+  function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView'))return;var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnHomeBtn" class="learn-control" title="Volver al menu">&#x1F3E0;</button><button id="learnPhotoToggle" class="learn-control">Iconos sÃ­</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">âœ“ <span id="learnGood">0</span></span><span class="status">âœ— <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar Ãºltima</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">Â¿QuÃ© icono?</div><div id="learnHearts" class="learn-hearts">â™¥â™¥â™¥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};learnGuessBtn.onclick=function(){if(!photo.on)photo.on=true;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
   function screen(s){var isLearning=s==='learning',already=document.body.classList.contains(isLearning?'learning-mode':'competition-mode');document.body.classList.toggle('learning-mode',isLearning);document.body.classList.toggle('competition-mode',!isLearning);var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),ctl=document.querySelector('.hero .controls');if(a)a.classList.toggle('active',isLearning);if(c)c.classList.toggle('active',!isLearning);if(ctl)ctl.scrollLeft=0;if(already){if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}return}if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}else{document.body.classList.remove('keyboard-open');if(typeof render==='function')render();if(ctl)ctl.scrollLeft=0}}
   function key(e){if(!document.body.classList.contains('learning-mode'))return;if(e.key==='Backspace'){e.preventDefault();del()}else if(e.key===' '||e.code==='Space'){e.preventDefault();return}else if(e.key&&e.key.length===1&&(/[a-zA-Z]/.test(e.key)||(activeKey==='phrase'&&/[.,!?']/.test(e.key)))){e.preventDefault();insert(e.key)}}
   function fallbackLearningData(){try{return JSON.parse(($('spellingLearningData')||{textContent:'[]'}).textContent)||[]}catch(e){return []}}
@@ -6592,8 +6592,140 @@ body.learning-mode.keyboard-open #learnScreenBtn{left:40px!important}
 body.learning-mode #competitionScreenBtn,
 body.learning-mode.keyboard-open #competitionScreenBtn{left:188px!important}
 </style>
+<style id="valentina-guess-phrase-keyboard-final-20260803">
+/* Aprendizaje: frase modelo y frase rellenada con la misma caja y metrica. */
+body.learning-mode #learnSentence,
+body.learning-mode.keyboard-open #learnSentence,
+body.learning-mode #learnPhraseBlind,
+body.learning-mode.keyboard-open #learnPhraseBlind{
+  width:100%!important;
+  max-width:100%!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  box-sizing:border-box!important;
+}
+body.learning-mode #learnSentence,
+body.learning-mode.keyboard-open #learnSentence{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  gap:0!important;
+  overflow:hidden!important;
+}
+body.learning-mode #learnSentence .learn-char,
+body.learning-mode.keyboard-open #learnSentence .learn-char,
+body.learning-mode .learn-cell.phrase .learn-char,
+body.learning-mode.keyboard-open .learn-cell.phrase .learn-char{
+  display:inline-flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  min-width:.62em!important;
+  width:.62em!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-size:clamp(22px,3vw,34px)!important;
+  font-weight:1000!important;
+  line-height:1.16!important;
+  letter-spacing:0!important;
+}
+body.learning-mode #learnSentence .phrase-space,
+body.learning-mode.keyboard-open #learnSentence .phrase-space,
+body.learning-mode .learn-cell.phrase .phrase-space,
+body.learning-mode.keyboard-open .learn-cell.phrase .phrase-space{
+  min-width:.42em!important;
+  width:.42em!important;
+}
+body.learning-mode .learn-cell.phrase .learn-letters,
+body.learning-mode.keyboard-open .learn-cell.phrase .learn-letters{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  gap:0!important;
+  width:100%!important;
+}
+body.competition-mode #spellingSpanishKeyboard .spelling-key,
+body.competition-mode.keyboard-open #spellingSpanishKeyboard .spelling-key{
+  font-size:18px!important;
+}
+@media (max-width:1100px){
+  body.competition-mode #spellingSpanishKeyboard .spelling-key,
+  body.competition-mode.keyboard-open #spellingSpanishKeyboard .spelling-key{font-size:17px!important}
+}
+</style>
+<script id="valentina-guess-phrase-keyboard-final-20260803">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  function textOf(el){return String(el&&el.textContent||'').replace(/\s+/g,' ').trim()}
+  function makeChar(ch,wordRange,iNoSpace){
+    var sp=document.createElement('span');
+    if(ch===' '){sp.className='learn-char phrase-space';sp.textContent=' ';return sp;}
+    var isPunct=!/[a-z]/i.test(ch);
+    var inWord=wordRange&&iNoSpace>=wordRange.start&&iNoSpace<wordRange.end;
+    sp.className='learn-char '+(isPunct?'phrase-punct ':'phrase-letter ')+(inWord?'sentence-word ':'')+'filled';
+    sp.textContent=ch;
+    return sp;
+  }
+  function alignPhraseModel(){
+    if(!isLearning())return;
+    var sentence=byId('learnSentence'),phrase=byId('learnPhraseBlind');
+    if(!sentence||!phrase||!phrase.classList.contains('show'))return;
+    var source=textOf(sentence);
+    if(!source||sentence.dataset.alignedSource===source)return;
+    sentence.dataset.alignedSource=source;
+    var word='';
+    var ref=document.querySelector('#learnTable .learn-cell.ref');
+    if(ref)word=String(ref.textContent||'').replace(/[^a-z]/gi,'').toLowerCase();
+    var compact=source.replace(/[^a-z]/gi,'').toLowerCase();
+    var wi=word?compact.indexOf(word):-1;
+    var range=wi>=0?{start:wi,end:wi+word.length}:null;
+    sentence.innerHTML='';
+    var seen=0;
+    source.split('').forEach(function(ch){
+      var sp=makeChar(ch,range,seen);
+      sentence.appendChild(sp);
+      if(/[a-z]/i.test(ch))seen++;
+    });
+  }
+  function openGuess(){
+    if(!isLearning())return;
+    var now=Date.now();
+    if(window.__lastHardGuessOpen&&now-window.__lastHardGuessOpen<260)return;
+    window.__lastHardGuessOpen=now;
+    if(typeof window.__learningToggleGuess==='function')window.__learningToggleGuess();
+    setTimeout(function(){
+      var p=byId('learnGuessPanel');
+      if(p)p.classList.add('show');
+      var b=byId('learnGuessBtn');
+      if(b)b.classList.add('active');
+    },40);
+  }
+  ['pointerup','touchend','click'].forEach(function(ev){
+    window.addEventListener(ev,function(e){
+      var b=e.target&&e.target.closest&&e.target.closest('#learnGuessBtn');
+      if(!b||!isLearning())return;
+      e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+      openGuess();
+    },true);
+  });
+  function tick(){alignPhraseModel();}
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerup','touchend','input'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(tick,0);setTimeout(tick,120)},true);
+  });
+  setInterval(tick,500);
+  setTimeout(tick,0);
+})();
+</script>
 </body>
 </html>
+
+
 
 
 
