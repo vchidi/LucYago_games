@@ -318,6 +318,8 @@ svg.fracSvg.small{
   .workGrid{grid-template-columns:minmax(0,2.25fr) minmax(160px,.48fr) !important;gap:6px !important}
   .leftExercise{padding:10px !important}
   .helpPane{padding:5px !important;border-radius:14px !important}
+  .helpPane .multiVisual{gap:3px !important;flex-wrap:wrap !important}
+  .helpPane svg.fracSvg,.helpPane svg.fracSvg.small{width:clamp(66px,10vh,98px) !important;height:clamp(66px,10vh,98px) !important;max-height:13vh !important}
   .mathLine{font-size:clamp(32px,4.2vh,42px) !important;gap:10px !important}
   .fraction .num,.fraction .den{font-size:clamp(31px,4vh,40px) !important}
   .numPad{grid-template-columns:repeat(6,clamp(44px,5.7vw,58px)) !important;gap:7px !important}
@@ -385,6 +387,7 @@ svg.fracSvg.small{
   .workGrid{display:contents !important}
   .leftExercise{grid-area:work !important;min-width:0}
   .helpPane{grid-area:help !important;min-height:0 !important}
+  .helpPane svg.fracSvg,.helpPane svg.fracSvg.small{width:clamp(62px,11vh,96px) !important;height:clamp(62px,11vh,96px) !important;max-height:14vh !important}
   .feedback{grid-area:feed !important}
   .bottomGame{grid-area:cafe !important;height:clamp(210px,34vh,280px) !important;min-height:210px !important}
   .cafeScene{transform:translateX(-50%) scale(.76) !important}
@@ -685,9 +688,9 @@ function showVisualHelp(){
     showCompareDrawing();
   }else if(current.type==='ops'){
     $('helpPane').innerHTML=`<div class="multiVisual" style="gap:10px;align-items:center">
-      <div style="text-align:center;font-weight:900">${fracHTML(current.a,current.d)}<br>${visualSVG(current.d,current.a,current.color,current.shape,'small')}</div>
+      <div style="text-align:center;font-weight:900">${visualSVG(current.d,current.a,current.color,current.shape,'small')}</div>
       <div style="font-size:36px;font-weight:950">${current.op}</div>
-      <div style="text-align:center;font-weight:900">${fracHTML(current.b,current.d)}<br>${visualSVG(current.d,current.b,current.color,current.shape,'small')}</div>
+      <div style="text-align:center;font-weight:900">${visualSVG(current.d,current.b,current.color,current.shape,'small')}</div>
     </div>`;
   }else if(current.type==='mixed'){
     let html='<div class="multiVisual">';
@@ -710,7 +713,7 @@ function showCompareTextHelp(){
 }
 
 function showCompareDrawing(){
-  $('helpPane').innerHTML=`<div class="multiVisual"><div>${visualSVG(current.d1,current.n1,current.color,current.shape)}</div><div style="font-size:30px;font-weight:950">?</div><div>${visualSVG(current.d2,current.n2,current.color,current.shape)}</div></div>`;
+  $('helpPane').innerHTML=`<div class="multiVisual"><div>${visualSVG(current.d1,current.n1,current.color,current.shape,'small')}</div><div style="font-size:30px;font-weight:950">?</div><div>${visualSVG(current.d2,current.n2,current.color,current.shape,'small')}</div></div>`;
 }
 
 function visualSVG(d,n,color,type='circle',size=''){
