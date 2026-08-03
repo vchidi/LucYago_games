@@ -2471,8 +2471,8 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var v=item.type==='word'?pick('en',true):pick('es',false);
     if(v) u.voice=v;
     u.lang=(v&&v.lang)||(item.type==='word'?'en-GB':'es-ES');
-    u.rate=item.type==='word'?.78:1.04;
-    u.pitch=item.type==='word'?.78:1.02;
+    u.rate=item.type==='word'?.78:.94;
+    u.pitch=item.type==='word'?.78:.94;
     u.onend=finish; u.onerror=finish;
     return u;
   }
@@ -6465,8 +6465,138 @@ body.learning-mode.keyboard-open .stats > .stat{
   setTimeout(placeHome,0);
 })();
 </script>
+<style id="valentina-ascii-fix-guess-keyboard-audio-20260803">
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{left:210px!important;padding-left:8px!important}
+body.learning-mode .hero .controls > .photo-controls,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls{margin-left:14px!important}
+body.learning-mode #learnGuessPanel.show,
+body.learning-mode.keyboard-open #learnGuessPanel.show{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+body.learning-mode .stats > #menuBtn::before,
+body.learning-mode.keyboard-open .stats > #menuBtn::before{content:"\1F3E0"!important}
+</style>
+<script id="valentina-ascii-fix-guess-keyboard-audio-20260803">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  function isPartido(){return document.body&&document.body.classList.contains('competition-mode')}
+  function r(s,a,b){return String(s).split(a).join(b)}
+  function cleanText(s){
+    s=String(s==null?'':s);
+    var map=[
+      ['\u00c3\u00a1','\u00e1'],['\u00c3\u00a9','\u00e9'],['\u00c3\u00ad','\u00ed'],['\u00c3\u00b3','\u00f3'],['\u00c3\u00ba','\u00fa'],['\u00c3\u00b1','\u00f1'],
+      ['\u00c3\u0081','\u00c1'],['\u00c3\u0089','\u00c9'],['\u00c3\u008d','\u00cd'],['\u00c3\u0093','\u00d3'],['\u00c3\u009a','\u00da'],['\u00c3\u0091','\u00d1'],
+      ['\u00c2\u00bf','\u00bf'],['\u00c2\u00a1','\u00a1'],['\u00c2\u00b7','\u00b7'],['\u00c2\u00b0','\u00b0'],
+      ['\u00e2\u2020\u2018','\u2191'],['\u00e2\u2020\u00bb','\u21bb'],['\u00e2\u2020\u00ba','\u21ba'],['\u00e2\u2021\u201e','\u21c4'],
+      ['\u00e2\u0152\u00ab','\u232b'],['\u00e2\u017d\u00b5','\u23b5'],['\u00e2\u0153\u201c','\u2713'],['\u00e2\u0153\u2014','X'],
+      ['\u00e2\u2122\u00a5','\u2665'],['\u00e2\u2122\u00a1','\u2661'],['\u00e2\u0161\u00bd','\u26bd'],['\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a2','\u2022'],
+      ['\u00f0\u0178\u201d\u0160','\uD83D\uDD0A'],['\u00f0\u0178\u201d\u20ac','\uD83D\uDD00'],['\u00f0\u0178\u008f','\uD83C\uDFE0']
+    ];
+    for(var i=0;i<map.length;i++)s=r(s,map[i][0],map[i][1]);
+    return s;
+  }
+  function cleanVisible(root){
+    if(!root)return;
+    var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n;
+    while((n=w.nextNode())){var fixed=cleanText(n.nodeValue);if(fixed!==n.nodeValue)n.nodeValue=fixed;}
+    if(root.querySelectorAll)root.querySelectorAll('[title],[aria-label]').forEach(function(el){['title','aria-label'].forEach(function(a){if(el.hasAttribute(a))el.setAttribute(a,cleanText(el.getAttribute(a)))})});
+  }
+  function fixTopTexts(){
+    var home=byId('menuBtn');if(home){home.textContent='';home.title='Volver al menu';home.setAttribute('aria-label','Volver al menu')}
+    var a=byId('autoAudioBtn');if(a&&!/\bno\b/i.test(a.textContent||'')){a.textContent='\uD83D\uDD0A S: s\u00ed';a.classList.add('active','audio-on');a.classList.remove('audio-off')}
+    var c=byId('commentaryBtn');if(c&&!/\bno\b/i.test(c.textContent||'')){c.textContent='\uD83D\uDD0A P: s\u00ed';c.classList.add('active','audio-on');c.classList.remove('audio-off')}
+    var rep=byId('repeatAudioBtn');if(rep)rep.textContent='\u21bb';
+    var sh=byId('shuffleVerbsBtn');if(sh)sh.textContent='\u21c4 Verbos';
+    var re=byId('restartBtn');if(re)re.textContent='\u21ba';
+    var ng=byId('noGameBtn');if(ng&&!/\bno\b/i.test(ng.textContent||''))ng.textContent='\u26bd s\u00ed';
+    var rg=byId('regenTeamsBtn');if(rg)rg.textContent='\u21c4 Equipos';
+    var rf=byId('learnIconRefreshBtn');if(rf)rf.textContent='\u21bb';
+  }
+  function forceAudioDefault(){
+    if(!isPartido())return;
+    ['autoAudioBtn','commentaryBtn'].forEach(function(id){
+      var b=byId(id);if(!b)return;
+      if(/\bno\b/i.test(b.textContent||'')){try{b.click()}catch(e){}}
+    });
+    setTimeout(fixTopTexts,20);
+  }
+  var keyLabels=['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','\u00f1','\u2191','z','x','c','v','b','n','m','.','\u23b5','\u232b'];
+  var shift=false;
+  function applyKeyLabels(){
+    var kb=byId('spellingSpanishKeyboard');if(!kb)return;
+    Array.prototype.slice.call(kb.querySelectorAll('.spelling-key')).forEach(function(b,i){
+      var v=keyLabels[i];if(!v)return;
+      b.dataset.cleanValue=v;
+      b.textContent=(shift&&/^[a-z\u00f1]$/.test(v))?v.toUpperCase():v;
+      b.classList.toggle('spelling-key-shift',v==='\u2191');
+      b.classList.toggle('spelling-key-space',v==='\u23b5');
+      b.classList.toggle('spelling-key-delete',v==='\u232b');
+    });
+  }
+  function pressCleanKey(v){
+    if(v==='\u2191'){shift=!shift;applyKeyLabels();return;}
+    if(v==='\u232b'){if(isLearning()&&typeof window.__spellingLearningPress==='function')window.__spellingLearningPress('Borrar');else if(typeof window.deleteLast==='function')window.deleteLast();return;}
+    if(v==='\u23b5')v=' ';
+    if(/^[a-z\u00f1]$/i.test(v)&&shift){v=v.toUpperCase();shift=false;}
+    if(isLearning()){if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(v)}
+    else if(/^[a-z]$/i.test(v)&&typeof window.insertLetter==='function')window.insertLetter(v.toLowerCase());
+    applyKeyLabels();
+  }
+  document.addEventListener('pointerdown',function(e){
+    var b=e.target&&e.target.closest&&e.target.closest('#spellingSpanishKeyboard .spelling-key');
+    if(!b)return;
+    var keys=Array.prototype.slice.call(document.querySelectorAll('#spellingSpanishKeyboard .spelling-key'));
+    var v=keyLabels[keys.indexOf(b)];
+    if(!v)return;
+    e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+    pressCleanKey(v);
+  },true);
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest&&e.target.closest('#spellingSpanishKeyboard .spelling-key');
+    if(b){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();}
+  },true);
+  function forceGuess(){
+    var b=byId('learnGuessBtn');if(!b)return;
+    b.style.setProperty('pointer-events','auto','important');
+    if(b.dataset.asciiGuessFix==='1')return;
+    b.dataset.asciiGuessFix='1';
+    ['pointerup','touchend','click'].forEach(function(ev){
+      b.addEventListener(ev,function(e){
+        if(!isLearning())return;
+        e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+        var now=Date.now();if(b.__lastAsciiGuess&&now-b.__lastAsciiGuess<220)return;b.__lastAsciiGuess=now;
+        if(typeof window.__learningToggleGuess==='function')window.__learningToggleGuess();
+        setTimeout(function(){var p=byId('learnGuessPanel');if(p)p.classList.add('show');cleanVisible(document.body)},30);
+      },true);
+    });
+  }
+  function softerCommentary(){
+    if(window.__softCommentary20260803||typeof window.speakCommentary!=='function')return;
+    window.__softCommentary20260803=true;
+    var old=window.speakCommentary;
+    window.speakCommentary=function(text){
+      forceAudioDefault();
+      text=cleanText(text);
+      return old.call(this,text);
+    };
+  }
+  function tick(){cleanVisible(document.body);fixTopTexts();forceAudioDefault();applyKeyLabels();forceGuess();softerCommentary();}
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerup','touchend'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(tick,0);setTimeout(tick,180)},true)});
+  setInterval(tick,700);
+  setTimeout(tick,0);
+})();
+</script>
+<style id="valentina-learning-screen-buttons-right-20260803">
+body.learning-mode #learnScreenBtn,
+body.learning-mode.keyboard-open #learnScreenBtn{left:40px!important}
+body.learning-mode #competitionScreenBtn,
+body.learning-mode.keyboard-open #competitionScreenBtn{left:188px!important}
+</style>
 </body>
 </html>
+
+
+
 
 
 
