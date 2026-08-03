@@ -190,7 +190,32 @@ h1{
   text-align:center;
   color:var(--muted);
   font-size:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
 }
+.versions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+  margin:-5px 0 0;
+}
+.version-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  border-radius:999px;
+  padding:4px 7px;
+  background:rgba(255,255,255,.62);
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+  box-shadow:inset 0 0 0 1px rgba(33,49,76,.08);
+}
+.version-chip strong{color:var(--ink);font-weight:900}
 @media (max-width:900px){
   .app{max-width:100%;}
   .games{grid-template-columns:repeat(4,minmax(0,1fr));}
@@ -219,6 +244,8 @@ h1{
   .game-copy{font-size:12px;line-height:1.18}
   .cta{padding:8px 10px;border-radius:16px;font-size:13px}
   .footer-note{font-size:10px}
+  .versions{justify-content:flex-start;gap:4px}
+  .version-chip{font-size:9px;padding:3px 6px}
 }
 </style>
 </head>
@@ -350,8 +377,26 @@ h1{
 
   </section>
 
+  <div class="versions" id="versions" aria-label="Fechas de edición"></div>
   <p class="footer-note">Nombre previsto para GitHub: <strong>LucYago's Games</strong></p>
 </main>
+<script src="versiones.js"></script>
+<script>
+(function(){
+  function formatDate(value){
+    var d=new Date(value);
+    if(isNaN(d.getTime())) return "";
+    return d.toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric"});
+  }
+  var box=document.getElementById("versions");
+  var versions=window.LucYagoVersions||[];
+  if(box&&versions.length){
+    box.innerHTML=versions.map(function(item){
+      return '<span class="version-chip"><strong>'+item.name+'</strong> '+formatDate(item.date)+'</span>';
+    }).join("");
+  }
+})();
+</script>
 </body>
 </html>
 
