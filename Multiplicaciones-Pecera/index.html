@@ -272,8 +272,9 @@ button:disabled{opacity:.42;cursor:not-allowed}
       <button class="action-btn secondary" id="menuBtn">🏠</button>
       <button class="action-btn op-green" id="operationBtn">× Multiplicar</button>
       <button class="mode-btn primary active" data-mode="practice">Practica</button>
-      <button class="mode-btn ghost" data-mode="time" id="timeCycleBtn">Contrarreloj</button>
+      <button class="mode-btn ghost" data-mode="time">Contrarreloj</button>
       <button class="action-btn secondary" id="targetBtn">Meta 15</button>
+      <button class="action-btn secondary" id="secondsBtn">30 s</button>
       <button class="action-btn secondary" id="reviewBtn">Errores</button>
       <button class="action-btn secondary" id="aquariumToggleBtn">Pecera</button>
       <button class="action-btn secondary" id="chooseTablesBtn">Tablas</button>
@@ -426,7 +427,7 @@ const START_LIVES=5;
 let WIN_TARGET=15;
 let QUESTION_SECONDS=30;
 const WIN_TARGET_OPTIONS=[15,20,25,30];
-const QUESTION_SECONDS_OPTIONS=[30,15,5];
+const QUESTION_SECONDS_OPTIONS=[30,5,10,15];
 const OPERATION_OPTIONS=["multiply","divide","mixed"];
 const GOOD_ITEMS=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","crab","plant","plant_tall","seaweed","rock","stone","shell","coral","pearl","starfish"];
 const FISH_TYPES=["fish_orange","fish_blue","fish_puffer","fish_tropical","dolphin","turtle","crab"];
@@ -560,9 +561,9 @@ function toggleDifficultFact(table,factor){const key=buildFactKey(table,factor);
 function setSourceMode(mode){state.sourceMode=mode;saveState();render()}
 function toggleDifficultEditor(){state.difficultEditorOpen=!state.difficultEditorOpen;saveState();render()}
 function cycleWinTarget(){const current=WIN_TARGET_OPTIONS.indexOf(WIN_TARGET);WIN_TARGET=WIN_TARGET_OPTIONS[(current+1)%WIN_TARGET_OPTIONS.length];state.winTarget=WIN_TARGET;saveState();updateAquariumWinState();render();setMessage("Meta para ganar: "+WIN_TARGET+" peces.","neutral")}
-function cycleTimeMode(){if(state.mode!=="time"){QUESTION_SECONDS=30;state.questionSeconds=QUESTION_SECONDS;setMode("time");saveState();if(session.running&&!session.reviewMode&&!session.awaitingContinue)startQuestionTimer();else{session.timeLeft=QUESTION_SECONDS;renderStats()}renderToolbar();setMessage("Contrarreloj: 30 segundos.","neutral");return}const current=QUESTION_SECONDS_OPTIONS.indexOf(QUESTION_SECONDS);if(current<QUESTION_SECONDS_OPTIONS.length-1){QUESTION_SECONDS=QUESTION_SECONDS_OPTIONS[current+1];state.questionSeconds=QUESTION_SECONDS;saveState();if(session.running&&!session.reviewMode&&!session.awaitingContinue)startQuestionTimer();else{session.timeLeft=QUESTION_SECONDS;renderStats()}renderToolbar();setMessage("Contrarreloj: "+QUESTION_SECONDS+" segundos.","neutral");return}setMode("practice");saveState();renderToolbar();setMessage("Modo practica.","neutral")}
+function cycleQuestionSeconds(){const current=QUESTION_SECONDS_OPTIONS.indexOf(QUESTION_SECONDS);QUESTION_SECONDS=QUESTION_SECONDS_OPTIONS[(current+1)%QUESTION_SECONDS_OPTIONS.length];state.questionSeconds=QUESTION_SECONDS;saveState();if(session.running&&state.mode==="time"&&!session.reviewMode&&!session.awaitingContinue)startQuestionTimer();else{session.timeLeft=QUESTION_SECONDS;renderStats()}renderToolbar();setMessage("Tiempo por respuesta: "+QUESTION_SECONDS+" segundos.","neutral")}
 function cycleOperationMode(){const current=OPERATION_OPTIONS.indexOf(state.operationMode||"multiply");state.operationMode=OPERATION_OPTIONS[(current+1)%OPERATION_OPTIONS.length];saveState();if(session.running&&!session.reviewMode){session.queue=[];nextQuestion()}else render();setMessage("Tipo de cuentas: "+operationLabel(state.operationMode)+".","neutral")}
-function setMode(mode){state.mode=mode;saveState();$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode);btn.classList.toggle("primary",btn.dataset.mode===mode);btn.classList.toggle("ghost",btn.dataset.mode!==mode)});renderStats();renderToolbar()}
+function setMode(mode){state.mode=mode;saveState();$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.classList.toggle("active",btn.dataset.mode===mode);btn.classList.toggle("primary",btn.dataset.mode===mode);btn.classList.toggle("ghost",btn.dataset.mode!==mode)});renderStats()}
 function inputDigit(digit){if(!session.running||session.awaitingContinue||session.answer.length>=3)return;session.answer+=digit;renderAnswer()}
 function deleteDigit(){if(!session.running||session.awaitingContinue)return;session.answer=session.answer.slice(0,-1);renderAnswer()}
 function skipQuestion(){if(!session.running||!session.current||session.awaitingContinue)return;stopTimer();session.lastDelta=0;session.showCorrectAnswer=true;session.awaitingContinue=true;session.repeatCurrentOnContinue=true;session.neutralCurrent=true;saveState();setMessage("Solucion mostrada. Pulsa Cierto! y repitela: no sumara ni restara puntos.","neutral");render()}
@@ -586,7 +587,7 @@ function renderQuestion(){const label=$("#questionLabel"),question=$("#questionT
 function renderAnswer(){$("#answerValue").textContent=session.answer||"_";const banner=$("#correctAnswerBanner"),label=$("#answerLabel"),row=$("#correctAnswerRow");if(session.showCorrectAnswer&&session.current){label.textContent="Tu respuesta / Solucion";banner.textContent="Correcta: "+normalizeQuestion(session.current).answer;row.classList.add("show")}else{label.textContent="Tu respuesta";banner.textContent="";row.classList.remove("show")}}
 function renderErrors(){const list=$("#errorList");list.innerHTML="";if(!state.errors.length){const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>Sin guardados</div><div class='error-sub'>Cuando falle una cuenta aparecera aqui para repasar.</div></div><div class='error-points'>OK</div>";list.appendChild(item);return}state.errors.forEach(err=>{err=normalizeQuestion(err);const item=document.createElement("div");item.className="error-item";item.innerHTML="<div><div class='error-main'>"+displayEquation(err)+"</div><div class='error-sub'>Ultimo fallo: "+err.lastWrong+"</div></div><div class='error-points'>Repasar</div>";list.appendChild(item)})}
 function renderControls(){const playing=session.running,locked=session.awaitingContinue;$("#checkBtn").disabled=!playing||locked;$("#skipBtn").disabled=!playing||locked;$("#deleteBtn").disabled=!playing||locked;$("#okPadBtn").disabled=!playing||locked;$("#continueBtn").disabled=!playing||!locked;$$(".answer-pad button[data-digit]").forEach(btn=>{btn.disabled=!playing||locked});$("#reviewBtn").disabled=false}
-function renderToolbar(){if(typeof LUCYAGO_RETO_ACTIVE!=="undefined" && LUCYAGO_RETO_ACTIVE){const tb=$("#targetBtn"); if(tb){tb.textContent="Meta "+WIN_TARGET; tb.disabled=true;}}const btn=$("#aquariumToggleBtn");if(btn){btn.textContent=state.aquariumEnabled?"Pecera":"Pecera no";btn.classList.toggle("primary",state.aquariumEnabled);btn.classList.toggle("secondary",!state.aquariumEnabled)}const targetBtn=$("#targetBtn");if(targetBtn)targetBtn.textContent="Meta "+WIN_TARGET;const timeCycleBtn=$("#timeCycleBtn");if(timeCycleBtn)timeCycleBtn.textContent=state.mode==="time"?QUESTION_SECONDS+"s":"Contrarreloj";const operationBtn=$("#operationBtn");if(operationBtn)operationBtn.textContent=operationLabel(state.operationMode||"multiply");}
+function renderToolbar(){if(typeof LUCYAGO_RETO_ACTIVE!=="undefined" && LUCYAGO_RETO_ACTIVE){const tb=$("#targetBtn"); if(tb){tb.textContent="Meta "+WIN_TARGET; tb.disabled=true;}}const btn=$("#aquariumToggleBtn");if(btn){btn.textContent=state.aquariumEnabled?"Pecera":"Pecera no";btn.classList.toggle("primary",state.aquariumEnabled);btn.classList.toggle("secondary",!state.aquariumEnabled)}const targetBtn=$("#targetBtn");if(targetBtn)targetBtn.textContent="Meta "+WIN_TARGET;const secondsBtn=$("#secondsBtn");if(secondsBtn)secondsBtn.textContent=QUESTION_SECONDS+" s";const operationBtn=$("#operationBtn");if(operationBtn)operationBtn.textContent=operationLabel(state.operationMode||"multiply");}
 function render(){renderTables();renderStats();renderQuestion();updateFinalReviewVisual();renderAnswer();renderErrors();renderControls();renderToolbar();renderAquarium();renderWinProgress()}
 
 $("#menuBtn").addEventListener("click",()=>window.location.href="../index.html");
@@ -594,7 +595,7 @@ $("#startBtn").addEventListener("click",()=>startGame(false));
 $("#reviewBtn").addEventListener("click",()=>startGame(true));
 $("#aquariumToggleBtn").addEventListener("click",toggleAquarium);
 $("#targetBtn").addEventListener("click",cycleWinTarget);
-$("#timeCycleBtn").addEventListener("click",cycleTimeMode);
+$("#secondsBtn").addEventListener("click",cycleQuestionSeconds);
 $("#operationBtn").addEventListener("click",cycleOperationMode);
 $("#chooseTablesBtn").addEventListener("click",scrollToTables);
 $("#playFromTablesBtn").addEventListener("click",()=>{scrollToGame();startGame(false)});
@@ -609,7 +610,7 @@ $("#deleteBtn").addEventListener("click",deleteDigit);
 $("#okPadBtn").addEventListener("click",checkAnswer);
 $("#continueBtn").addEventListener("click",acknowledgeCorrect);
 $("#clearErrorsBtn").addEventListener("click",()=>{state.errors=[];saveState();render();setMessage("Errores borrados.","neutral")});
-$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode||btn.id==="timeCycleBtn")return;btn.addEventListener("click",()=>setMode(btn.dataset.mode))});
+$$(".mode-btn").forEach(btn=>{if(!btn.dataset.mode)return;btn.addEventListener("click",()=>setMode(btn.dataset.mode))});
 $$(".answer-pad button[data-digit]").forEach(btn=>btn.addEventListener("click",()=>inputDigit(btn.dataset.digit)));
 
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
