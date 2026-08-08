@@ -17,7 +17,6 @@ input{font-family:inherit}
 .top{height:50px;min-height:50px;background:rgba(255,255,255,.9);border-radius:18px;padding:7px 12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px rgba(120,60,20,.15)}
 .title{font-size:21px;font-weight:950}
 .stats{font-weight:950;display:flex;gap:10px;flex-wrap:wrap;font-size:14px}
-.stats .homeBtn{font-size:23px;min-width:34px;padding:0 4px;margin:0;line-height:1}
 .main{flex:1;min-height:0;display:grid;grid-template-columns:210px 1fr;gap:8px}
 .menu{background:rgba(255,255,255,.72);border-radius:18px;padding:8px;overflow:auto;box-shadow:0 8px 20px rgba(120,60,20,.12)}
 .menu button{width:100%;margin-bottom:8px;padding:11px 10px;font-size:16px;text-align:left}
@@ -318,8 +317,6 @@ svg.fracSvg.small{
   .workGrid{grid-template-columns:minmax(0,2.25fr) minmax(160px,.48fr) !important;gap:6px !important}
   .leftExercise{padding:10px !important}
   .helpPane{padding:5px !important;border-radius:14px !important}
-  .helpPane .multiVisual{gap:3px !important;flex-wrap:wrap !important}
-  .helpPane svg.fracSvg,.helpPane svg.fracSvg.small{width:clamp(66px,10vh,98px) !important;height:clamp(66px,10vh,98px) !important;max-height:13vh !important}
   .mathLine{font-size:clamp(32px,4.2vh,42px) !important;gap:10px !important}
   .fraction .num,.fraction .den{font-size:clamp(31px,4vh,40px) !important}
   .numPad{grid-template-columns:repeat(6,clamp(44px,5.7vw,58px)) !important;gap:7px !important}
@@ -387,11 +384,45 @@ svg.fracSvg.small{
   .workGrid{display:contents !important}
   .leftExercise{grid-area:work !important;min-width:0}
   .helpPane{grid-area:help !important;min-height:0 !important}
-  .helpPane svg.fracSvg,.helpPane svg.fracSvg.small{width:clamp(62px,11vh,96px) !important;height:clamp(62px,11vh,96px) !important;max-height:14vh !important}
   .feedback{grid-area:feed !important}
   .bottomGame{grid-area:cafe !important;height:clamp(210px,34vh,280px) !important;min-height:210px !important}
   .cafeScene{transform:translateX(-50%) scale(.76) !important}
   .mathLine{justify-content:flex-start !important}
+}
+
+
+/* ===== Ajuste iPad vertical: pizarra hasta abajo + café estrecho ===== */
+@media (min-width:700px) and (max-width:1199px) and (orientation:portrait){
+  .panel{
+    display:grid !important;
+    grid-template-columns:minmax(0,1.45fr) minmax(250px,.85fr) !important;
+    grid-template-rows:auto auto minmax(0,1fr) auto !important;
+    grid-template-areas:
+      "head help"
+      "note help"
+      "work help"
+      "feed cafe" !important;
+    gap:8px !important;
+  }
+  .exerciseBox{display:contents !important}
+  .modeTitle{grid-area:head !important}
+  .fractionNote{grid-area:note !important}
+  .workGrid{display:contents !important}
+  .leftExercise{grid-area:work !important;min-width:0}
+  .helpPane{grid-area:help !important;min-height:0 !important}
+  .feedback{grid-area:feed !important}
+  .bottomGame{
+    grid-area:cafe !important;
+    width:100% !important;
+    height:clamp(210px,24vh,250px) !important;
+    min-height:210px !important;
+    align-self:end !important;
+  }
+  .cafeScene{
+    transform:translateX(-50%) scale(.70) !important;
+    transform-origin:bottom center !important;
+    bottom:4px !important;
+  }
 }
 
 </style>
@@ -400,10 +431,11 @@ svg.fracSvg.small{
 <div class="app">
   <div class="top">
     <div class="title">🍰 Sweet Fractions Café</div>
-    <div class="stats"><button class="homeBtn" onclick="goHome()">🏠</button> ⭐ <span id="stars">0</span> | ❌ <span id="fails">0</span> | Estado: <span id="stateTxt">Construyendo</span></div>
+    <div class="stats">⭐ <span id="stars">0</span> | ❌ <span id="fails">0</span> | Estado: <span id="stateTxt">Construyendo</span></div>
   </div>
 
   <nav class="menu topMenu">
+      <button class="homeBtn" onclick="goHome()">🏠</button>
       <button class="active" onclick="setMode('all',this)">🎲 Todo</button>
       <button onclick="setMode('compare',this)">⚖️ Comparacions</button>
       <button onclick="setMode('ops',this)">➕➖ Sumes/restes</button>
@@ -424,8 +456,8 @@ svg.fracSvg.small{
         </div>
 
         <div class="fractionNote">
-          <div>Abajo: número de trozos iguales en que se corta la pizza.</div>
-          <div>Arriba: número de trozos que cogemos o nos comemos.</div>
+          <div>Abajo: trozos iguales está cortada la pizza.</div>
+          <div>Arriba: cuántos trozos cogemos o nos comemos.</div>
         </div>
 
         <div class="workGrid" id="workGrid">
@@ -537,7 +569,8 @@ function newCompare(){
   const shape=chooseCompareShape(pattern,d1,d2);
   current={type:'compare',pattern,d1,d2,n1,n2,shape,color,ans:(n1/d1>n2/d2)?'>':(n1/d1<n2/d2)?'<':'='};
   $('questionPane').innerHTML=`<div><div class="mathLine">${fracHTML(n1,d1)} ${resultSquare()} ${fracHTML(n2,d2)}</div>${renderButtonsCompare()}</div>`;
-  setFeed(pattern==='different'?'Compara mentalmente. Pulsa Ajuda si necesitas ver el dibujo.':'Compara mentalmente. Pulsa Ajuda si necesitas ver el dibujo.');
+  setFeed(pattern==='different'?'Compara mentalmente y mira el dibujo de entrada.':'Compara mentalmente. Pulsa Ajuda para una pista de texto.');
+  if(pattern==='different'){ showCompareDrawing(); }
 }
 function answerCompare(a){
   if(a===current.ans){good('¡Correcto!');setTimeout(newQuestion,650)}
@@ -688,9 +721,9 @@ function showVisualHelp(){
     showCompareDrawing();
   }else if(current.type==='ops'){
     $('helpPane').innerHTML=`<div class="multiVisual" style="gap:10px;align-items:center">
-      <div style="text-align:center;font-weight:900">${visualSVG(current.d,current.a,current.color,current.shape,'small')}</div>
+      <div style="text-align:center;font-weight:900">${fracHTML(current.a,current.d)}<br>${visualSVG(current.d,current.a,current.color,current.shape,'small')}</div>
       <div style="font-size:36px;font-weight:950">${current.op}</div>
-      <div style="text-align:center;font-weight:900">${visualSVG(current.d,current.b,current.color,current.shape,'small')}</div>
+      <div style="text-align:center;font-weight:900">${fracHTML(current.b,current.d)}<br>${visualSVG(current.d,current.b,current.color,current.shape,'small')}</div>
     </div>`;
   }else if(current.type==='mixed'){
     let html='<div class="multiVisual">';
@@ -713,7 +746,7 @@ function showCompareTextHelp(){
 }
 
 function showCompareDrawing(){
-  $('helpPane').innerHTML=`<div class="multiVisual"><div>${visualSVG(current.d1,current.n1,current.color,current.shape,'small')}</div><div style="font-size:30px;font-weight:950">?</div><div>${visualSVG(current.d2,current.n2,current.color,current.shape,'small')}</div></div>`;
+  $('helpPane').innerHTML=`<div class="multiVisual"><div>${visualSVG(current.d1,current.n1,current.color,current.shape)}</div><div style="font-size:30px;font-weight:950">?</div><div>${visualSVG(current.d2,current.n2,current.color,current.shape)}</div></div>`;
 }
 
 function visualSVG(d,n,color,type='circle',size=''){
@@ -869,8 +902,7 @@ updateCafe();
       document.body.appendChild(bar);
     }
     const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<button type="button" aria-label="Volver al mapa del reto" title="Volver al mapa" style="width:42px;height:42px;min-width:42px;border:0;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 2px rgba(33,49,76,.12);font-size:22px;font-weight:900;padding:0;display:grid;place-items:center;cursor:pointer">&#127968;</button><span>&#127919; Reto mixto &middot; '+game+' &middot; &#9989; '+done+'/'+target+'</span><span>Errores: &#10060; '+(r.bad||0)+'</span>';
-    bar.querySelector('button').onclick=()=>{setSession(s);location.href=returnUrl+'?continue=1&session='+encodeURIComponent(sessionKey);};
+    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
     setSession(s);
   }
   function finish(){
@@ -895,6 +927,5 @@ updateCafe();
   window.addEventListener('load',()=>setTimeout(paint,250));
 })();
 </script>
-<script src="../reto_badge.js" data-title-selector=".title" data-title-name="Sweet Fractions" data-orientation="vertical"></script>
 </body>
 </html>
