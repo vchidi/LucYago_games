@@ -391,32 +391,40 @@ svg.fracSvg.small{
 }
 
 
-/* ===== Ajuste iPad vertical: pizarra hasta abajo + café estrecho ===== */
+/* ===== Ajuste iPad vertical v2: operaciones+café izquierda, pizarra completa derecha ===== */
 @media (min-width:700px) and (max-width:1199px) and (orientation:portrait){
   .panel{
     display:grid !important;
     grid-template-columns:minmax(0,1.45fr) minmax(250px,.85fr) !important;
-    grid-template-rows:auto auto minmax(0,1fr) auto !important;
+    grid-template-rows:auto auto minmax(0,1fr) auto clamp(210px,24vh,250px) !important;
     grid-template-areas:
       "head help"
       "note help"
       "work help"
-      "feed cafe" !important;
+      "feed help"
+      "cafe help" !important;
     gap:8px !important;
   }
   .exerciseBox{display:contents !important}
   .modeTitle{grid-area:head !important}
   .fractionNote{grid-area:note !important}
   .workGrid{display:contents !important}
-  .leftExercise{grid-area:work !important;min-width:0}
-  .helpPane{grid-area:help !important;min-height:0 !important}
+  .leftExercise{grid-area:work !important;min-width:0;min-height:0 !important}
+  .helpPane{
+    grid-area:help !important;
+    min-height:0 !important;
+    height:100% !important;
+    align-self:stretch !important;
+  }
+  .drawPad{height:100% !important;min-height:0 !important}
+  .drawCanvas{height:100% !important;min-height:0 !important}
   .feedback{grid-area:feed !important}
   .bottomGame{
     grid-area:cafe !important;
     width:100% !important;
-    height:clamp(210px,24vh,250px) !important;
-    min-height:210px !important;
-    align-self:end !important;
+    height:100% !important;
+    min-height:0 !important;
+    align-self:stretch !important;
   }
   .cafeScene{
     transform:translateX(-50%) scale(.70) !important;
