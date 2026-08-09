@@ -359,20 +359,20 @@ body.learning-mode .hidden-input{
       </div>
     </div>
     <div class="controls">
-      <button id="menuBtn" class="icon-btn" title="Volver al menú">⌂</button>
+      <button id="menuBtn" class="icon-btn" title="Volver al menú">Inicio</button>
       <button id="modeClassicBtn" class="primary active">Tricky letters</button>
       <button id="modeBlindBtn" class="violet">Blind</button>
       <button id="autoAudioBtn">Audio Spelling: sí</button>
       <button id="commentaryBtn">Audio Partido: sí</button>
       <button id="repeatAudioBtn" class="amber">Repetir audio</button>
-      <button id="shuffleVerbsBtn" class="icon-btn" title="Mezclar verbos">Mezclar verbos</button>
+      <button id="shuffleVerbsBtn" class="icon-btn" title="Mezclar verbos">Mezclar</button>
       <button id="restartBtn">Reiniciar partida</button>
       <button id="noGameBtn">Partido: sí</button>
       <select id="formationSelect" class="select-pill tactic-hidden-select" aria-hidden="true" tabindex="-1">
-        <option value="1-2-2-1">FormaciÃ³n 1-2-2-1</option>
-        <option value="1-3-1-1">FormaciÃ³n 1-3-1-1</option>
-        <option value="1-2-1-2">FormaciÃ³n 1-2-1-2</option>
-        <option value="1-1-3-1">FormaciÃ³n 1-1-3-1</option>
+        <option value="1-2-2-1">Formación 1-2-2-1</option>
+        <option value="1-3-1-1">Formación 1-3-1-1</option>
+        <option value="1-2-1-2">Formación 1-2-1-2</option>
+        <option value="1-1-3-1">Formación 1-1-3-1</option>
       </select>
       <button id="formationCycleBtn" class="select-pill" type="button">Formación 1-2-2-1</button>
       <select id="yagoRoleSelect" class="select-pill tactic-hidden-select" aria-hidden="true" tabindex="-1">
@@ -399,7 +399,7 @@ body.learning-mode .hidden-input{
     <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
     <div class="game-grid" id="gameGrid">
       <div class="card clue-card">
-        <div class="label">Pista en espaÃ±ol</div>
+        <div class="label">Pista en español</div>
         <div class="spanish" id="spanishWord">arriba</div>
         <div class="smallnote" id="modeExplain">Completa solo las letras que faltan.</div>
         <div class="word-zone">
@@ -413,7 +413,7 @@ body.learning-mode .hidden-input{
         <div class="actions">
           <button id="deleteBtn">Borrar última</button>
           <button id="retryBtn">Intentar otra vez</button>
-          <button id="revealBtn" class="red">Ver solución</button>
+          <button id="revealBtn" class="red">Ver soluciÃ³n</button>
           <button id="nextBtn">Siguiente</button>
         </div>
         <div class="message" id="messageBox">Toca cualquier parte de la pantalla para abrir el teclado del iPhone o iPad.</div>
@@ -435,14 +435,14 @@ body.learning-mode .hidden-input{
               <div class="football-banner" id="footballBanner"><div class="football-banner-box"><div class="football-banner-title" id="footballBannerTitle"></div><div class="football-banner-text" id="footballBannerText"></div></div></div>
             </div>
             <div class="football-status-grid">
-              <div class="football-status"><div class="k">PosesiÃ³n</div><div class="v" id="footballPossession">Yago</div></div>
+              <div class="football-status"><div class="k">Posesión</div><div class="v" id="footballPossession">Yago</div></div>
               <div class="football-status"><div class="k">Zona</div><div class="v" id="footballZone">Defensa</div></div>
               <div class="panel-mini">
-                <div class="side-title">Por quÃ© pasÃ³</div>
+                <div class="side-title">Por qué pasó</div>
                 <div class="football-why" id="builderEvent">Acierto = oportunidad. Luego hay duelo: tu jugada contra defensa rival.</div>
               </div>
               <div class="panel-mini">
-                <div class="side-title">PosesiÃ³n y lÃ­nea</div>
+                <div class="side-title">Posesión y lÃ­nea</div>
                 <div class="smallnote"><strong id="livesLabel">Yago</strong> Â· <span id="goalLabel">Defensa</span></div>
               </div>
               <div class="panel-mini">
@@ -1314,19 +1314,19 @@ function setButtons(){
   $('#autoAudioBtn').classList.toggle('active',autoAudio);
   $('#commentaryBtn').textContent=commentaryEnabled?'Audio Partido: sí':'Audio Partido: no';
   $('#commentaryBtn').classList.toggle('active',commentaryEnabled);
-  $('#noGameBtn').textContent=gameEnabled?'âš½ Partido: sÃ­':'âš½ Partido: no';
+  $('#noGameBtn').textContent=gameEnabled?'Partido: sí':'Partido: no';
   $('#noGameBtn').classList.toggle('active',!gameEnabled);
   if($('#formationSelect')) $('#formationSelect').value=formationKey;
   if($('#yagoRoleSelect')) $('#yagoRoleSelect').value=preferredYagoLine;
 }
 function speakCurrent(force=false){const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
-function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la soluciÃ³n: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo de Atletic y el rival se beneficia de la jugada. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
 function insertLetter(letter){const s=current();if(!s) return;if(s.checked&&s.solved) return;clearAutoNext();if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
 function deleteLast(){const s=current();if(!s) return;if(s.checked&&s.solved) return;clearAutoNext();if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Ãšltima letra borrada.');}
 function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
 function revealCurrent(){evaluateWord(true)}
-function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseÃ±o la soluciÃ³n y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
+function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseño la solución. Cuenta como fallo de Atletic y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
 function shuffleWords(){clearAutoNext();for(let i=rawData.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rawData[i],rawData[j]]=[rawData[j],rawData[i]];}index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Partido mezclado y listo otra vez.':'Palabras mezcladas sin juego.';setMessage('Palabras mezcladas.');}
 function restartGame(){clearAutoNext();stats={good:0,bad:0,streak:0};index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Empieza un partido nuevo.':'Juego sin minijuego activado.';setMessage('Partida reiniciada.');}
 function toggleNoGame(){gameEnabled=!gameEnabled;if(!gameEnabled) pendingCommentarySpeech=null;if(gameEnabled) footballEngine.reset();render();setButtons();setMessage(gameEnabled?'Partido activado.':'Partido desactivado: solo spelling.');}
@@ -1407,12 +1407,12 @@ function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextT
 function showSolutionThenNext(){const s=current();if(!s) return;clearAutoNext();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});s.revealed=true;render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra. Sigue la jugada.');},2000);}
 function speakCurrent(force=false){const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
-function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la soluciÃ³n: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo de Atletic y el rival se beneficia de la jugada. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
 function insertLetter(letter){const s=current();if(!s) return;if(s.checked&&s.solved) return;clearAutoNext();if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
 function deleteLast(){const s=current();if(!s) return;if(s.checked&&s.solved) return;clearAutoNext();if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Ãšltima letra borrada.');}
 function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
 function revealCurrent(){evaluateWord(true)}
-function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseÃ±o la soluciÃ³n y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
+function nextWord(){clearAutoNext();if(!window.datasetStates.length) return;const s=current();if(s&&!s.solved&&!s.revealed){s.checked=true;s.solved=false;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();render();showSolutionThenNext();setMessage('Primero te enseño la solución. Cuenta como fallo de Atletic y el rival sigue jugando.');return;}index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra.');}
 function shuffleWords(){clearAutoNext();for(let i=rawData.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rawData[i],rawData[j]]=[rawData[j],rawData[i]];}index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Partido mezclado y listo otra vez.':'Palabras mezcladas sin juego.';setMessage('Palabras mezcladas.');}
 function restartGame(){clearAutoNext();stats={good:0,bad:0,streak:0};index=0;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'Empieza un partido nuevo.':'Juego sin minijuego activado.';setMessage('Partida reiniciada.');}
 function toggleNoGame(){gameEnabled=!gameEnabled;if(!gameEnabled) pendingCommentarySpeech=null;if(gameEnabled) footballEngine.reset();render();setButtons();setMessage(gameEnabled?'Partido activado.':'Partido desactivado: solo spelling.');}
@@ -1492,7 +1492,7 @@ document.addEventListener('pointerdown',userActivate,{capture:true,passive:true}
 document.addEventListener('click',e=>{if(document.body.classList.contains('learning-mode')){try{if(window.speechSynthesis)window.speechSynthesis.cancel()}catch(_){};return;}unlockSpeech();if(!isInteractiveTarget(e.target)) focusInput();},{capture:true});
 $('#hiddenInput').addEventListener('input',e=>{const value=e.target.value.toLowerCase().replace(/[^a-z]/g,'');if(value) [...value].forEach(insertLetter);e.target.value='';});
 document.addEventListener('keydown',e=>{if(e.key==='Backspace'){e.preventDefault();deleteLast();}});
-$('#menuBtn').addEventListener('click',()=>window.location.href='../index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{unlockSpeech();autoAudio=!autoAudio;if(!autoAudio){pendingWordSpeech=null;}setButtons();setMessage(autoAudio?'Audio de la palabra activado.':'Audio de la palabra desactivado.');if(autoAudio){if(IS_IOS){forceSpeakWordNow();}else{speakCurrent();}}});$('#commentaryBtn').addEventListener('click',()=>{unlockSpeech();commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled){pendingCommentarySpeech=null;}setButtons();setMessage(commentaryEnabled?'Audio del partido activado.':'Audio del partido desactivado.');});$('#repeatAudioBtn').addEventListener('click',()=>{unlockSpeech();if(IS_IOS){forceSpeakWordNow(true);}else{speakCurrent(true);}});$('#shuffleVerbsBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);if($('#exportPlayersTopBtn')) $('#exportPlayersTopBtn').addEventListener('click',exportAtleticTemplate);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuraciÃ³n.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('FormaciÃ³n actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('PosiciÃ³n preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
+$('#menuBtn').addEventListener('click',()=>window.location.href='../index.html');$('#modeClassicBtn').addEventListener('click',()=>setMode('classic'));$('#modeBlindBtn').addEventListener('click',()=>setMode('blind'));$('#autoAudioBtn').addEventListener('click',()=>{unlockSpeech();autoAudio=!autoAudio;if(!autoAudio){pendingWordSpeech=null;}setButtons();setMessage(autoAudio?'Audio de la palabra activado.':'Audio de la palabra desactivado.');if(autoAudio){if(IS_IOS){forceSpeakWordNow();}else{speakCurrent();}}});$('#commentaryBtn').addEventListener('click',()=>{unlockSpeech();commentaryEnabled=!commentaryEnabled;if(!commentaryEnabled){pendingCommentarySpeech=null;}setButtons();setMessage(commentaryEnabled?'Audio del partido activado.':'Audio del partido desactivado.');});$('#repeatAudioBtn').addEventListener('click',()=>{unlockSpeech();if(IS_IOS){forceSpeakWordNow(true);}else{speakCurrent(true);}});$('#shuffleVerbsBtn').addEventListener('click',shuffleWords);$('#restartBtn').addEventListener('click',restartGame);$('#noGameBtn').addEventListener('click',toggleNoGame);$('#deleteBtn').addEventListener('click',deleteLast);$('#retryBtn').addEventListener('click',retryCurrent);$('#revealBtn').addEventListener('click',revealCurrent);$('#nextBtn').addEventListener('click',nextWord);$('#exportBtn').addEventListener('click',exportJson);if($('#exportPlayersTopBtn')) $('#exportPlayersTopBtn').addEventListener('click',exportAtleticTemplate);$('#regenTeamsBtn').addEventListener('click',()=>{if(gameEnabled) footballEngine.reset();render();setMessage('Equipos regenerados con la nueva configuraciÃ³n.');});$('#formationSelect').addEventListener('change',e=>{formationKey=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Formación actualizada.');});$('#yagoRoleSelect').addEventListener('change',e=>{preferredYagoLine=e.target.value;saveData();if(gameEnabled) footballEngine.reset();render();setMessage('Posición preferida de Yago actualizada.');});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importFile(f);setMessage('Archivo importado.');}catch(err){setMessage('Error al importar: '+err.message);}finally{e.target.value='';}});$('#playersFileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f) return;try{await importPlayersFile(f);setMessage('Jugadores importados correctamente.');}catch(err){setMessage('Error al importar jugadores: '+err.message);}finally{e.target.value='';}});
 $('#playersEditor').addEventListener('change',e=>{});
 
 function relocateFootballInfoPanel(){
@@ -1832,7 +1832,7 @@ body.no-football .football-editor-panel{display:none!important;visibility:hidden
     if(stage) stage.classList.toggle('hidden',no);
     if(card) card.classList.toggle('hidden',no);
     var btn=byId('noGameBtn');
-    if(btn){btn.textContent=no?'âš½ Partido: no':'âš½ Partido: sÃ­';btn.classList.toggle('active',no);}
+    if(btn){btn.textContent=no?'Partido: no':'Partido: sí';btn.classList.toggle('active',no);}
   }
   function updateFieldFromSelectors(message){
     var f=byId('formationSelect'), y=byId('yagoRoleSelect');
@@ -1846,7 +1846,7 @@ body.no-football .football-editor-panel{display:none!important;visibility:hidden
   }
   window.addEventListener('load',function(){
     var shuffle=byId('shuffleVerbsBtn');
-    if(shuffle){shuffle.textContent='ðŸ”€ Verbos';shuffle.title='Mezclar verbos';}
+    if(shuffle){shuffle.textContent='Mezclar';shuffle.title='Mezclar verbos';}
     var noBtn=byId('noGameBtn');
     if(noBtn){
       var fresh=noBtn.cloneNode(true);
@@ -1865,12 +1865,12 @@ body.no-football .football-editor-panel{display:none!important;visibility:hidden
     var f=byId('formationSelect');
     if(f){
       var freshF=f.cloneNode(true); f.parentNode.replaceChild(freshF,f); freshF.value=formationKey;
-      freshF.addEventListener('change',function(){updateFieldFromSelectors('FormaciÃ³n actualizada.');});
+      freshF.addEventListener('change',function(){updateFieldFromSelectors('Formación actualizada.');});
     }
     var y=byId('yagoRoleSelect');
     if(y){
       var freshY=y.cloneNode(true); y.parentNode.replaceChild(freshY,y); freshY.value=preferredYagoLine;
-      freshY.addEventListener('change',function(){updateFieldFromSelectors('PosiciÃ³n de Yago actualizada.');});
+      freshY.addEventListener('change',function(){updateFieldFromSelectors('Posición de Yago actualizada.');});
     }
     applyPartidoVisibility();
   });
@@ -1934,14 +1934,14 @@ body.keyboard-open #regenTeamsBtn{
       f.dataset.tacticChangeFixed='1';
       f.addEventListener('change',function(){
         formationKey=f.value;
-        resetTeams('FormaciÃ³n actualizada: '+f.options[f.selectedIndex].text+'.');
+        resetTeams('Formación actualizada: '+f.options[f.selectedIndex].text+'.');
       });
     }
     if(y && !y.dataset.tacticChangeFixed){
       y.dataset.tacticChangeFixed='1';
       y.addEventListener('change',function(){
         preferredYagoLine=y.value;
-        resetTeams('PosiciÃ³n de Yago actualizada: '+y.options[y.selectedIndex].text+'.');
+        resetTeams('Posición de Yago actualizada: '+y.options[y.selectedIndex].text+'.');
       });
     }
     if(r && !r.dataset.regenExplainedFixed){
@@ -2016,10 +2016,10 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
 <script id="valentina-tactic-cycle-buttons-script">
 (function(){
   var formationOptions=[
-    {value:'1-2-2-1',label:'FormaciÃ³n 1-2-2-1'},
-    {value:'1-3-1-1',label:'FormaciÃ³n 1-3-1-1'},
-    {value:'1-2-1-2',label:'FormaciÃ³n 1-2-1-2'},
-    {value:'1-1-3-1',label:'FormaciÃ³n 1-1-3-1'}
+    {value:'1-2-2-1',label:'Formación 1-2-2-1'},
+    {value:'1-3-1-1',label:'Formación 1-3-1-1'},
+    {value:'1-2-1-2',label:'Formación 1-2-1-2'},
+    {value:'1-1-3-1',label:'Formación 1-1-3-1'}
   ];
   var yagoOptions=[
     {value:'goalkeeper',label:'Yago portero'},
@@ -2059,7 +2059,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
         e.preventDefault(); e.stopPropagation(); safeBlurHidden();
         var i=getIdx(formationOptions,formationKey);
         formationKey=formationOptions[(i+1)%formationOptions.length].value;
-        applyTactics('FormaciÃ³n actualizada: '+formationOptions[getIdx(formationOptions,formationKey)].label+'.');
+        applyTactics('Formación actualizada: '+formationOptions[getIdx(formationOptions,formationKey)].label+'.');
       });
     }
     if(yb && !yb.dataset.ready){
@@ -2068,7 +2068,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
         e.preventDefault(); e.stopPropagation(); safeBlurHidden();
         var i=getIdx(yagoOptions,preferredYagoLine);
         preferredYagoLine=yagoOptions[(i+1)%yagoOptions.length].value;
-        applyTactics('PosiciÃ³n de Yago actualizada: '+yagoOptions[getIdx(yagoOptions,preferredYagoLine)].label+'.');
+        applyTactics('Posición de Yago actualizada: '+yagoOptions[getIdx(yagoOptions,preferredYagoLine)].label+'.');
       });
     }
     var oldSetButtons=window.setButtons;
@@ -2500,7 +2500,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   window.forceSpeakWordNow=function(force){window.speakCurrent(!!force)};
   window.unlockSpeech=function(){try{speechSynthesis.resume()}catch(e){} play();};
 
-  /* Ver solución: muestra la soluciÃ³n, repite la misma palabra, pero NO relocuta automÃ¡ticamente. */
+  /* Ver soluciÃ³n: muestra la soluciÃ³n, repite la misma palabra, pero NO relocuta automÃ¡ticamente. */
   window.revealCurrent=function(){
     var s=(typeof current==='function')?current():null; if(!s) return;
     if(typeof clearAutoNext==='function') clearAutoNext();
@@ -2633,7 +2633,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     if(typeof gameEnabled!=='undefined' && gameEnabled && typeof footballEngine!=='undefined' && footballEngine.onSpellingFail) footballEngine.onSpellingFail();
     s.english.split('').forEach(function(ch,i){if(s.pattern[i]==='_') s.guess[i]=ch;});
     if(typeof render==='function') render();
-    if(typeof setMessage==='function') setMessage('Has pedido la soluciÃ³n: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');
+    if(typeof setMessage==='function') setMessage('Has pedido la solución: cuenta como fallo de Atletic y el rival se beneficia de la jugada. Repetimos esta misma palabra.');
     if(typeof autoNextTimer!=='undefined') autoNextTimer=setTimeout(function(){
       autoNextTimer=null;
       s.pattern=(typeof mode!=='undefined'&&mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);
@@ -5652,55 +5652,6 @@ body.competition-mode.keyboard-open #formationCycleBtn{
 body.competition-mode #regenTeamsBtn,
 body.competition-mode.keyboard-open #regenTeamsBtn{min-width:86px!important}
 </style>
-<script id="valentina-partido-top-menu-final-20260728">
-(function(){
-  function byId(id){return document.getElementById(id)}
-  function isPartido(){return document.body&&document.body.classList.contains('competition-mode')}
-  function formationText(){
-    var f=byId('formationSelect');
-    if(f&&f.value)return f.value;
-    if(typeof window.formationKey!=='undefined')return window.formationKey;
-    var b=byId('formationCycleBtn');
-    return b?String(b.textContent||'').replace(/Formaci[oÃ³]n\s*/i,'').trim():'';
-  }
-  function syncPartidoTopMenu(){
-    if(!isPartido())return;
-    var strip=document.querySelector('.photo-controls');
-    if(strip){strip.style.setProperty('display','none','important');strip.style.setProperty('visibility','hidden','important')}
-    var wordAudio=byId('autoAudioBtn');
-    if(wordAudio){wordAudio.textContent='ðŸ”Š S: '+(String(wordAudio.textContent||'').toLowerCase().indexOf('no')>=0?'no':'sÃ­');wordAudio.title='Audio spelling'}
-    var matchAudio=byId('commentaryBtn');
-    if(matchAudio){matchAudio.textContent='ðŸ”Š P: '+(String(matchAudio.textContent||'').toLowerCase().indexOf('no')>=0?'no':'sÃ­');matchAudio.title='Audio partido'}
-    var repeat=byId('repeatAudioBtn');
-    if(repeat){repeat.textContent='â†»';repeat.title='Repetir spelling'}
-    var shuffle=byId('shuffleVerbsBtn');
-    if(shuffle){shuffle.textContent='â‡„ Verbos';shuffle.title='Mezclar verbos';shuffle.style.setProperty('font-size','12px','important')}
-    var restart=byId('restartBtn');
-    if(restart){restart.textContent='â†º';restart.title='Reiniciar partida'}
-    var noGame=byId('noGameBtn');
-    if(noGame){noGame.textContent='âš½ '+(String(noGame.textContent||'').toLowerCase().indexOf('no')>=0?'no':'sÃ­');noGame.title='Partido sÃ­/no'}
-    var formation=byId('formationCycleBtn');
-    if(formation){formation.textContent=formationText()||'1-2-2-1';formation.title='Cambiar formaciÃ³n'}
-    var regen=byId('regenTeamsBtn');
-    if(regen){regen.textContent='â‡„ Equipos';regen.title='Regenerar equipos'}
-    var yago=byId('yagoRoleCycleBtn');
-    if(yago){yago.textContent=String(yago.textContent||'').replace(/^Yago\s+/i,'Y: ');yago.title='PosiciÃ³n de Yago'}
-    [wordAudio,matchAudio,repeat,shuffle,formation,regen,noGame,restart,yago,byId('modeClassicBtn'),byId('modeBlindBtn')].forEach(function(btn){
-      if(!btn)return;
-      btn.style.setProperty('white-space','nowrap','important');
-      btn.style.setProperty('min-width','max-content','important');
-      btn.style.setProperty('width','auto','important');
-      btn.style.setProperty('max-width','none','important');
-      btn.style.setProperty('pointer-events','auto','important');
-    });
-  }
-  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){
-    window.addEventListener(ev,function(){setTimeout(syncPartidoTopMenu,0);setTimeout(syncPartidoTopMenu,180)},true);
-  });
-  setInterval(syncPartidoTopMenu,700);
-  setTimeout(syncPartidoTopMenu,0);
-})();
-</script>
 <style id="valentina-learning-ipad-native-keyboard-fix-20260728">
 /* Aprendizaje iPad: teclado nativo y recuadro de icono siempre dentro de la zona visible. */
 body.learning-mode #spellingSpanishKeyboard,
@@ -6706,184 +6657,131 @@ body.learning-mode.keyboard-open .learn-cell.phrase .learn-char{
 })();
 </script>
 
-<style id="valentina-20260808-final-menu-ipad-log-fix">
-/* CAPA FINAL ÚNICA: evita que reglas antiguas vuelvan a superponer el menú. */
-.hero .controls,
-body.keyboard-open .hero .controls,
-body.learning-mode .hero .controls,
-body.learning-mode.keyboard-open .hero .controls{
-  position:static!important;
-  inset:auto!important;
-  transform:none!important;
-  display:flex!important;
-  flex-flow:row wrap!important;
-  align-items:center!important;
-  align-content:flex-start!important;
-  justify-content:flex-start!important;
-  width:100%!important;
-  max-width:100%!important;
-  margin:3px 0 5px!important;
-  padding:0!important;
-  gap:4px!important;
-  overflow:visible!important;
-  z-index:auto!important;
+<style id="valentina-recorte-20260808-final">
+/* Barra superior única y estable: sin capas, sin saltos y con controles compactos. */
+.hero,.hero *,.controls,.controls *{animation:none!important;transition:none!important}
+.hero{overflow:visible!important}
+.controls,.hero .controls,body.keyboard-open .controls,body.keyboard-open .hero .controls{
+  position:static!important;inset:auto!important;transform:none!important;
+  display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;
+  gap:4px!important;width:100%!important;max-width:none!important;margin:3px 0 4px!important;padding:0!important;
+  overflow:visible!important;scroll-behavior:auto!important;
 }
-.hero .controls button,.hero .controls label.btn,.hero .controls select.select-pill,
-body.keyboard-open .hero .controls button,body.keyboard-open .hero .controls label.btn,body.keyboard-open .hero .controls select.select-pill{
-  position:static!important;
-  inset:auto!important;
-  transform:none!important;
-  flex:0 0 auto!important;
-  width:auto!important;
-  max-width:none!important;
-  min-width:0!important;
-  height:24px!important;
-  min-height:24px!important;
-  max-height:24px!important;
-  padding:0 6px!important;
-  margin:0!important;
-  border-radius:8px!important;
-  font-size:9px!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-  box-shadow:none!important;
-  z-index:auto!important;
+.controls button,.controls label.btn,.controls select.select-pill,
+body.keyboard-open .controls button,body.keyboard-open .controls label.btn,body.keyboard-open .controls select.select-pill{
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;max-width:none!important;
+  height:25px!important;min-height:25px!important;max-height:25px!important;
+  padding:0 7px!important;border-radius:8px!important;font-size:9px!important;line-height:1!important;
+  white-space:nowrap!important;overflow:visible!important;text-indent:0!important;
 }
-.hero .controls .icon-btn{min-width:26px!important}
+#menuBtn{font-size:9px!important;min-width:42px!important;padding:0 7px!important}
+#menuBtn::before{content:none!important}
 
-/* Aprendizaje: solo dos botones, compactos y sin capas flotantes. */
-body.learning-mode .hero .controls{
-  flex-wrap:nowrap!important;
-  gap:6px!important;
-  margin-top:4px!important;
-}
-body.learning-mode #learnScreenBtn,
-body.learning-mode #competitionScreenBtn,
-body.learning-mode.keyboard-open #learnScreenBtn,
-body.learning-mode.keyboard-open #competitionScreenBtn{
-  position:static!important;
-  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
-  width:auto!important;
-  min-width:0!important;
-  height:28px!important;min-height:28px!important;max-height:28px!important;
-  padding:0 8px!important;
-  border-radius:9px!important;
-  font-size:10px!important;
-  box-shadow:none!important;
-  display:inline-flex!important;
-  align-items:center!important;
-  gap:5px!important;
-  z-index:auto!important;
-}
-/* Iconos dibujados con CSS: no dependen de emoji/fuentes del iPad. */
+/* Los dos selectores de pantalla llevan una tablet dibujada con CSS, no emoji. */
 #learnScreenBtn::before,#competitionScreenBtn::before{
-  content:""!important;
-  display:inline-block!important;
-  flex:0 0 auto!important;
-  border:1.6px solid currentColor!important;
-  background:rgba(255,255,255,.35)!important;
-  box-sizing:border-box!important;
-  opacity:.95!important;
+  content:""!important;display:inline-block!important;box-sizing:border-box!important;
+  border:1.7px solid currentColor!important;border-radius:2.5px!important;margin-right:5px!important;
+  background:linear-gradient(currentColor,currentColor) center bottom 2px/2px 2px no-repeat!important;
+  vertical-align:middle!important;flex:0 0 auto!important;
 }
-/* Aprendizaje = tableta vertical */
-#learnScreenBtn::before{
-  width:10px!important;height:15px!important;border-radius:2.5px!important;
-  box-shadow:inset 0 -2px 0 rgba(0,0,0,.08)!important;
-}
-/* Partido = tableta horizontal */
-#competitionScreenBtn::before{
-  width:16px!important;height:10px!important;border-radius:2.5px!important;
-  box-shadow:inset -2px 0 0 rgba(0,0,0,.08)!important;
+#learnScreenBtn::before{width:10px!important;height:15px!important;}       /* vertical */
+#competitionScreenBtn::before{width:16px!important;height:10px!important;} /* horizontal */
+#learnScreenBtn,#competitionScreenBtn,
+body.learning-mode #learnScreenBtn,body.learning-mode #competitionScreenBtn,
+body.competition-mode #learnScreenBtn,body.competition-mode #competitionScreenBtn{
+  position:static!important;inset:auto!important;transform:none!important;
+  min-width:0!important;width:auto!important;height:27px!important;min-height:27px!important;max-height:27px!important;
+  padding:0 8px!important;font-size:9.5px!important;border-radius:9px!important;
 }
 
-/* En iPad táctil, mantenerlos visibles y dentro de la barra. */
+/* Aprendizaje: menú superior compacto y sin solapamientos. */
+body.learning-mode .hero,body.learning-mode.keyboard-open .hero{
+  height:auto!important;min-height:112px!important;max-height:none!important;flex:0 0 auto!important;padding:6px 8px!important;
+}
+body.learning-mode .title,body.learning-mode.keyboard-open .title{font-size:20px!important;margin:1px 0 4px!important;line-height:1!important}
+body.learning-mode .stats,body.learning-mode.keyboard-open .stats{
+  position:static!important;inset:auto!important;width:100%!important;margin:3px 0 0!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important;
+}
+body.learning-mode .stat,body.learning-mode.keyboard-open .stat{min-height:30px!important;padding:3px 5px!important;border-radius:9px!important}
+body.learning-mode .stat .k{font-size:7px!important} body.learning-mode .stat .v{font-size:13px!important;margin-top:1px!important}
+body.learning-mode .hero .controls > .photo-controls,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls{
+  display:flex!important;position:static!important;flex:1 1 360px!important;width:auto!important;max-width:none!important;
+  min-width:0!important;margin:0!important;padding:0!important;gap:4px!important;overflow:visible!important;flex-wrap:wrap!important;
+  justify-content:flex-start!important;z-index:auto!important;
+}
+body.learning-mode .hero .controls > .photo-controls .learn-control,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls .learn-control{
+  height:25px!important;min-height:25px!important;max-height:25px!important;padding:0 7px!important;
+  font-size:9px!important;border-radius:8px!important;min-width:0!important;width:auto!important;
+}
+body.learning-mode #learnIconRefreshBtn{width:25px!important;min-width:25px!important;max-width:25px!important;font-size:15px!important;padding:0!important}
+body.learning-mode .panel,body.learning-mode.keyboard-open .panel{height:auto!important;flex:1 1 auto!important;min-height:0!important;padding-top:5px!important}
+
+/* Partido: todo visible en iPad, en una barra compacta que puede ocupar dos líneas sin scroll horizontal. */
+body.competition-mode .hero,body.competition-mode.keyboard-open .hero{
+  height:auto!important;min-height:108px!important;max-height:none!important;flex:0 0 auto!important;padding:6px 8px!important;overflow:visible!important;
+}
+body.competition-mode .topline,body.competition-mode.keyboard-open .topline{display:block!important}
+body.competition-mode .title,body.competition-mode.keyboard-open .title{font-size:20px!important;margin:1px 0 4px!important;white-space:nowrap!important}
+body.competition-mode .badge{display:none!important}
+body.competition-mode .hero .controls,body.competition-mode.keyboard-open .hero .controls{
+  grid-column:auto!important;grid-row:auto!important;overflow:visible!important;flex-wrap:wrap!important;justify-content:flex-start!important;
+}
+body.competition-mode .hero .controls button,body.competition-mode.keyboard-open .hero .controls button,
+body.competition-mode .hero .controls label.btn,body.competition-mode.keyboard-open .hero .controls label.btn,
+body.competition-mode .hero .controls select.select-pill,body.competition-mode.keyboard-open .hero .controls select.select-pill{
+  height:25px!important;min-height:25px!important;max-height:25px!important;padding:0 6px!important;font-size:8.5px!important;border-radius:8px!important;
+  min-width:0!important;width:auto!important;
+}
+body.competition-mode .stats,body.competition-mode.keyboard-open .stats{
+  position:static!important;inset:auto!important;width:100%!important;margin:3px 0 0!important;gap:3px!important;
+}
+body.competition-mode .stat,body.competition-mode.keyboard-open .stat{min-height:29px!important;padding:3px 5px!important;border-radius:9px!important}
+body.competition-mode .stat .k{font-size:7px!important} body.competition-mode .stat .v{font-size:13px!important;margin-top:1px!important}
+body.competition-mode .panel,body.competition-mode.keyboard-open .panel{height:auto!important;flex:1 1 auto!important;min-height:0!important}
+
+/* Se elimina “Por qué pasó”; el Log del partido ocupa su espacio. */
+.clue-card .panel-mini:has(#builderEvent),.football-status-grid .panel-mini:has(#builderEvent){display:none!important}
+.clue-card .football-status-grid>.panel-mini:has(#footballLog){
+  display:flex!important;flex:1 1 auto!important;min-height:105px!important;flex-direction:column!important;
+}
+.clue-card #footballLog{display:grid!important;flex:1 1 auto!important;min-height:82px!important;max-height:none!important;overflow-y:auto!important}
+
+/* iPad: respetar orientación y mantener visibles las dos tablets. */
 @media (pointer:coarse) and (min-width:761px){
-  .hero{overflow:visible!important;height:auto!important;min-height:0!important}
-  .hero .controls,.hero .controls *{visibility:visible!important}
-  body.learning-mode .hero .controls{overflow:visible!important;flex-wrap:nowrap!important}
-  body.learning-mode #learnScreenBtn,body.learning-mode #competitionScreenBtn{
-    height:27px!important;min-height:27px!important;max-height:27px!important;font-size:9.5px!important;padding:0 7px!important;
-  }
-}
-
-/* El bloque “Por qué pasó” desaparece; el log ocupará su sitio por JS. */
-#builderEvent{display:none!important}
-.football-status-grid>.panel-mini.match-log-primary{
-  display:flex!important;
-  flex-direction:column!important;
-  flex:1 1 auto!important;
-  min-height:110px!important;
-}
-.football-status-grid>.panel-mini.match-log-primary .football-log{
-  display:grid!important;
-  flex:1 1 auto!important;
-  min-height:80px!important;
-  max-height:none!important;
-  overflow-y:auto!important;
+  #learnScreenBtn::before{width:11px!important;height:17px!important}
+  #competitionScreenBtn::before{width:18px!important;height:11px!important}
+  body.learning-mode .hero,body.competition-mode .hero{overflow:visible!important}
+  body.learning-mode .controls,body.competition-mode .controls{overflow:visible!important;flex-wrap:wrap!important}
 }
 </style>
-<script id="valentina-20260808-final-menu-ipad-log-fix-script">
+<script id="valentina-recorte-20260808-final-js">
 (function(){
-  'use strict';
-  function $(id){return document.getElementById(id)}
-  function cleanTopLabels(){
-    var labels={
-      menuBtn:'⌂', modeClassicBtn:'Tricky letters', modeBlindBtn:'Blind',
-      autoAudioBtn:'Audio Spelling: sí', commentaryBtn:'Audio Partido: sí', repeatAudioBtn:'Repetir audio',
-      shuffleVerbsBtn:'Mezclar verbos', restartBtn:'Reiniciar partida', noGameBtn:'Partido: sí',
-      formationCycleBtn:'Formación 1-2-2-1', yagoRoleCycleBtn:'Yago medio', regenTeamsBtn:'Regenerar equipos',
-      importPlayersTopBtn:'Jugadores', exportPlayersTopBtn:'Plantilla Atletic'
-    };
-    Object.keys(labels).forEach(function(id){var el=$(id);if(el && !el.dataset.cleanTopFixed){el.textContent=labels[id];el.dataset.cleanTopFixed='1';}});
-    var menu=$('menuBtn'); if(menu) menu.title='Volver al menú';
-    var imp=$('importPlayersTopBtn'); if(imp) imp.title='Importar Excel o JSON de jugadores';
-    var exp=$('exportPlayersTopBtn'); if(exp) exp.title='Descargar plantilla de jugadores';
-    var a=$('learnScreenBtn'),c=$('competitionScreenBtn');
-    if(a) a.textContent='Aprendizaje';
-    if(c) c.textContent='Partido';
+  function q(id){return document.getElementById(id)}
+  function cleanTop(){
+    var menu=q('menuBtn'); if(menu){menu.textContent='Inicio';menu.title='Volver al menú'}
+    var sh=q('shuffleVerbsBtn'); if(sh){sh.textContent='Mezclar';sh.title='Mezclar palabras'}
+    var imp=q('importPlayersTopBtn'); if(imp) imp.textContent='Jugadores';
+    var exp=q('exportPlayersTopBtn'); if(exp) exp.textContent='Plantilla Atletic';
+    var rep=q('repeatAudioBtn'); if(rep){rep.textContent='Repetir';rep.title='Repetir spelling'}
+    var rst=q('restartBtn'); if(rst){rst.textContent='Reiniciar';rst.title='Reiniciar partida'}
+    var ng=q('noGameBtn'); if(ng){ng.textContent='Partido: '+((typeof gameEnabled!=='undefined'&&gameEnabled)?'sí':'no')}
+    var aa=q('autoAudioBtn'); if(aa){aa.textContent='Audio spelling: '+((typeof autoAudio!=='undefined'&&autoAudio)?'sí':'no')}
+    var ca=q('commentaryBtn'); if(ca){ca.textContent='Audio partido: '+((typeof commentaryEnabled!=='undefined'&&commentaryEnabled)?'sí':'no')}
   }
-  function moveMatchLog(){
-    var why=$('builderEvent');
-    if(!why) return;
-    var whyPanel=why.closest('.panel-mini');
-    var log=$('footballLog');
-    var logPanel=log&&log.closest('.panel-mini');
-    if(!whyPanel||!logPanel||whyPanel.dataset.logReplaced==='1') return;
-    whyPanel.dataset.logReplaced='1';
-    logPanel.classList.add('match-log-primary');
-    whyPanel.parentNode.insertBefore(logPanel,whyPanel);
-    whyPanel.remove();
+  function replaceWhyWithLog(){
+    var why=q('builderEvent');
+    if(why){var box=why.closest('.panel-mini');if(box)box.style.display='none'}
+    var log=q('footballLog');
+    if(log){var box=log.closest('.panel-mini');if(box){var title=box.querySelector('.side-title');if(title)title.textContent='Log del partido'}}
   }
-  function makeRevealSingleFail(){
-    if(window.__valentinaRevealFailFixed) return;
-    window.__valentinaRevealFailFixed=true;
-    window.revealCurrent=function(){
-      var s=(typeof current==='function')?current():null; if(!s) return;
-      if(s.__solutionFailInProgress) return;
-      s.__solutionFailInProgress=true;
-      if(typeof clearAutoNext==='function') clearAutoNext();
-      s.checked=true; s.solved=false; s.revealed=true;
-      if(typeof stats!=='undefined'){stats.bad++;stats.streak=0;}
-      if(window.LucYagoReto&&typeof window.LucYagoReto.record==='function') window.LucYagoReto.record(false);
-      if(typeof gameEnabled!=='undefined'&&gameEnabled&&typeof footballEngine!=='undefined'&&footballEngine.onSpellingFail){footballEngine.onSpellingFail();}
-      s.english.split('').forEach(function(ch,i){if(s.pattern[i]==='_')s.guess[i]=ch;});
-      if(typeof render==='function')render();
-      if(typeof setMessage==='function')setMessage('Has pedido la solución: cuenta como fallo del Atletic y el rival continúa la jugada. Repetimos esta misma palabra.');
-      if(typeof autoNextTimer!=='undefined')autoNextTimer=setTimeout(function(){
-        autoNextTimer=null;
-        s.pattern=(typeof mode!=='undefined'&&mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);
-        s.guess=[].slice.call(s.pattern).map(function(ch){return ch==='_'?'':ch;});
-        s.solved=false;s.revealed=false;s.checked=false;s.__solutionFailInProgress=false;
-        if(typeof render==='function')render();
-        if(typeof setMessage==='function')setMessage('Repite la misma palabra.');
-      },1700);
-    };
-  }
-  function fix(){cleanTopLabels();moveMatchLog();makeRevealSingleFail();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix,{once:true});else fix();
-  window.addEventListener('pageshow',fix);
-  window.addEventListener('orientationchange',function(){setTimeout(fix,60)});
-  setTimeout(fix,250);
+  function stabilize(){cleanTop();replaceWhyWithLog();var c=document.querySelector('.hero .controls');if(c)c.scrollLeft=0}
+  document.addEventListener('DOMContentLoaded',function(){stabilize();setTimeout(stabilize,100);setTimeout(stabilize,500)});
+  window.addEventListener('load',stabilize);
+  document.addEventListener('click',function(){setTimeout(stabilize,0)},true);
+  document.addEventListener('pointerup',function(){setTimeout(stabilize,0)},true);
 })();
 </script>
 </body>
