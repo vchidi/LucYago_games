@@ -476,7 +476,7 @@ html,body{width:100%;max-width:100%;overscroll-behavior:none}
 .badMood .eye.r{transform:rotate(-15deg)}
 
 
-/* v3.1 divisiÃ³n escolar mejorada */
+/* v3.1 división escolar mejorada */
 .divSchool{
   --dcell:42px;
   font-family:"Courier New", ui-monospace, monospace;
@@ -829,7 +829,7 @@ html,body{
 
 
 
-/* v3.8 Math Park: sustituye el fotÃ³grafo por parque de atracciones */
+/* v3.8 Math Park: sustituye el fotógrafo por parque de atracciones */
 .photoStage.parkStage{
   background:linear-gradient(180deg,#8ee7ff 0%,#dff8ff 52%,#8ee06e 53%,#4fc45a 100%)!important;
   border:4px solid #fff!important;
@@ -871,7 +871,7 @@ html,body{
 
 
 
-/* v3.9 MisiÃ³n Imposible + combinadas limpias/alineadas */
+/* v3.9 Misión Imposible + combinadas limpias/alineadas */
 .photoStage.missionStage{
   background:radial-gradient(circle at 70% 20%,#263b68 0%,#121827 42%,#080b12 100%)!important;
   border:4px solid #e5e7eb!important;overflow:hidden!important;color:white!important;
@@ -1474,21 +1474,21 @@ button:disabled{
   <div class="topbar">
     <div class="brand"><span class="cam">Operaciones</span><span></span></div>
     <div class="topControls">
-      <button id="homeBtn" class="homeBtn" title="Volver al menÃº">ðŸ </button>
+      <button id="homeBtn" class="homeBtn" title="Volver al menú">🏠</button>
       <button data-mode="full" class="modeTop selectedMode">Mixto</button>
       <button data-mode="add" class="modeTop">Suma</button>
       <button data-mode="sub" class="modeTop">Resta</button>
-      <button data-mode="mul" class="modeTop">MultiplicaciÃ³n</button>
-      <button data-mode="div" class="modeTop">DivisiÃ³n</button>
+      <button data-mode="mul" class="modeTop">Multiplicación</button>
+      <button data-mode="div" class="modeTop">División</button>
       <button data-mode="comb" class="modeTop modeCombBtn">Combinadas</button>
       <span class="topGap" aria-hidden="true"></span>
       <button id="goalBtn">Meta: 4</button>
       <button id="lengthBtn">Cifras: 5</button>
       <label>
         <select id="difficulty">
-          <option value="easy">FÃ¡cil</option>
+          <option value="easy">Fácil</option>
           <option value="medium">Medio</option>
-          <option value="hard">DifÃ­cil</option>
+          <option value="hard">Difícil</option>
         </select>
       </label>
       <button id="flowBtn">Paso a paso</button>
@@ -1597,8 +1597,8 @@ button:disabled{
 
 <div class="modalBack" id="numbersModal">
   <div class="modal">
-    <h2>Selector de nÃºmeros</h2>
-    <p>El nÃºmero elegido se usarÃ¡ para multiplicaciones y divisiones cuando coincida con la dificultad. Si no eliges ninguno, serÃ¡ aleatorio.</p>
+    <h2>Selector de números</h2>
+    <p>El número elegido se usará para multiplicaciones y divisiones cuando coincida con la dificultad. Si no eliges ninguno, será aleatorio.</p>
     <div class="gridBtns numberGrid" id="specificBtns"></div>
     <br>
     <button id="clearNumber" class="warn">Aleatorio</button>
@@ -1609,7 +1609,7 @@ button:disabled{
 <div class="modalBack" id="goalModal">
   <div class="modal">
     <h2>Meta de partida</h2>
-    <p>Elige cuÃ¡ntas operaciones correctas necesitas para ganar.</p>
+    <p>Elige cuántas operaciones correctas necesitas para ganar.</p>
     <div class="gridBtns numberGrid">
       <button data-goal="4">4 operaciones</button>
       <button data-goal="8">8 operaciones</button>
@@ -1623,12 +1623,12 @@ button:disabled{
 
 <div class="modalBack" id="helpModal">
   <div class="modal">
-    <h2>Ayuda Â· Operaciones combinadas</h2>
+    <h2>Ayuda · Operaciones combinadas</h2>
     <div style="font-size:26px;font-weight:1000;line-height:1.6;background:#fff7d6;border:3px solid #facc15;border-radius:22px;padding:18px">
-      <div>1Âº <span style="font-size:34px">( )</span> ParÃ©ntesis</div>
-      <div>2Âº <span style="font-size:34px">Ã— Ã·</span> Multiplicaciones y divisiones</div>
-      <div>3Âº <span style="font-size:34px">+ âˆ’</span> Sumas y restas</div>
-      <div style="margin-top:10px">âž¡ Siempre de izquierda a derecha.</div>
+      <div>1º <span style="font-size:34px">( )</span> Paréntesis</div>
+      <div>2º <span style="font-size:34px">× ÷</span> Multiplicaciones y divisiones</div>
+      <div>3º <span style="font-size:34px">+ −</span> Sumas y restas</div>
+      <div style="margin-top:10px">➡ Siempre de izquierda a derecha.</div>
     </div>
     <br>
     <button id="closeHelp" class="closeBig">Entendido</button>
@@ -1791,157 +1791,157 @@ function renderProblem(){
 
 
 function makeCombinedProblem(){
-  // Plantillas cerradas: sin eval(). Cada fase sabe quÃ© bloque debe seleccionarse
-  // y quÃ© lÃ­nea de transformaciÃ³n debe aparecer despuÃ©s.
+  // Plantillas cerradas: sin eval(). Cada fase sabe qué bloque debe seleccionarse
+  // y qué línea de transformación debe aparecer después.
   const templates = {
     easy: [
       {
-        expr:'8 + 2 Ã— 3',
+        expr:'8 + 2 × 3',
         stages:[
-          {tokens:['8','+','2','Ã—','3'], target:[2,4], parts:['8 + ', ''], holes:['6']},
+          {tokens:['8','+','2','×','3'], target:[2,4], parts:['8 + ', ''], holes:['6']},
           {tokens:['8','+','6'], target:[0,2], parts:[''], holes:['14']}
         ]
       },
       {
-        expr:'20 Ã· 5 + 7',
+        expr:'20 ÷ 5 + 7',
         stages:[
-          {tokens:['20','Ã·','5','+','7'], target:[0,2], parts:['', ' + 7'], holes:['4']},
+          {tokens:['20','÷','5','+','7'], target:[0,2], parts:['', ' + 7'], holes:['4']},
           {tokens:['4','+','7'], target:[0,2], parts:[''], holes:['11']}
         ]
       },
       {
-        expr:'6 Ã— 3 âˆ’ 8',
+        expr:'6 × 3 − 8',
         stages:[
-          {tokens:['6','Ã—','3','âˆ’','8'], target:[0,2], parts:['', ' âˆ’ 8'], holes:['18']},
-          {tokens:['18','âˆ’','8'], target:[0,2], parts:[''], holes:['10']}
+          {tokens:['6','×','3','−','8'], target:[0,2], parts:['', ' − 8'], holes:['18']},
+          {tokens:['18','−','8'], target:[0,2], parts:[''], holes:['10']}
         ]
       },
       {
-        expr:'15 âˆ’ 8 + 6',
+        expr:'15 − 8 + 6',
         stages:[
-          {tokens:['15','âˆ’','8','+','6'], target:[0,2], parts:['', ' + 6'], holes:['7']},
+          {tokens:['15','−','8','+','6'], target:[0,2], parts:['', ' + 6'], holes:['7']},
           {tokens:['7','+','6'], target:[0,2], parts:[''], holes:['13']}
         ]
       }
     ],
     medium: [
       {
-        expr:'36 Ã· 4 âˆ’ 3 Ã— 2 + 8',
+        expr:'36 ÷ 4 − 3 × 2 + 8',
         stages:[
-          {tokens:['36','Ã·','4','âˆ’','3','Ã—','2','+','8'], target:[0,2], parts:['', ' âˆ’ 3 Ã— 2 + 8'], holes:['9']},
-          {tokens:['9','âˆ’','3','Ã—','2','+','8'], target:[2,4], parts:['9 âˆ’ ', ' + 8'], holes:['6']},
-          {tokens:['9','âˆ’','6','+','8'], target:[0,2], parts:['', ' + 8'], holes:['3']},
+          {tokens:['36','÷','4','−','3','×','2','+','8'], target:[0,2], parts:['', ' − 3 × 2 + 8'], holes:['9']},
+          {tokens:['9','−','3','×','2','+','8'], target:[2,4], parts:['9 − ', ' + 8'], holes:['6']},
+          {tokens:['9','−','6','+','8'], target:[0,2], parts:['', ' + 8'], holes:['3']},
           {tokens:['3','+','8'], target:[0,2], parts:[''], holes:['11']}
         ]
       },
       {
-        expr:'6 âˆ’ (5 âˆ’ 3) + 10',
+        expr:'6 − (5 − 3) + 10',
         stages:[
-          {tokens:['6','âˆ’','(','5','âˆ’','3',')','+','10'], target:[2,6], parts:['6 âˆ’ ', ' + 10'], holes:['2']},
-          {tokens:['6','âˆ’','2','+','10'], target:[0,2], parts:['', ' + 10'], holes:['4']},
+          {tokens:['6','−','(','5','−','3',')','+','10'], target:[2,6], parts:['6 − ', ' + 10'], holes:['2']},
+          {tokens:['6','−','2','+','10'], target:[0,2], parts:['', ' + 10'], holes:['4']},
           {tokens:['4','+','10'], target:[0,2], parts:[''], holes:['14']}
         ]
       },
       {
-        expr:'24 Ã· 6 + 8 Ã— 2 âˆ’ 5',
+        expr:'24 ÷ 6 + 8 × 2 − 5',
         stages:[
-          {tokens:['24','Ã·','6','+','8','Ã—','2','âˆ’','5'], target:[0,2], parts:['', ' + 8 Ã— 2 âˆ’ 5'], holes:['4']},
-          {tokens:['4','+','8','Ã—','2','âˆ’','5'], target:[2,4], parts:['4 + ', ' âˆ’ 5'], holes:['16']},
-          {tokens:['4','+','16','âˆ’','5'], target:[0,2], parts:['', ' âˆ’ 5'], holes:['20']},
-          {tokens:['20','âˆ’','5'], target:[0,2], parts:[''], holes:['15']}
+          {tokens:['24','÷','6','+','8','×','2','−','5'], target:[0,2], parts:['', ' + 8 × 2 − 5'], holes:['4']},
+          {tokens:['4','+','8','×','2','−','5'], target:[2,4], parts:['4 + ', ' − 5'], holes:['16']},
+          {tokens:['4','+','16','−','5'], target:[0,2], parts:['', ' − 5'], holes:['20']},
+          {tokens:['20','−','5'], target:[0,2], parts:[''], holes:['15']}
         ]
       },
       {
-        expr:'(12 âˆ’ 4) Ã— 3 + 7',
+        expr:'(12 − 4) × 3 + 7',
         stages:[
-          {tokens:['(','12','âˆ’','4',')','Ã—','3','+','7'], target:[0,4], parts:['', ' Ã— 3 + 7'], holes:['8']},
-          {tokens:['8','Ã—','3','+','7'], target:[0,2], parts:['', ' + 7'], holes:['24']},
+          {tokens:['(','12','−','4',')','×','3','+','7'], target:[0,4], parts:['', ' × 3 + 7'], holes:['8']},
+          {tokens:['8','×','3','+','7'], target:[0,2], parts:['', ' + 7'], holes:['24']},
           {tokens:['24','+','7'], target:[0,2], parts:[''], holes:['31']}
         ]
       },
       {
-        expr:'40 Ã· (10 âˆ’ 5) + 12',
+        expr:'40 ÷ (10 − 5) + 12',
         stages:[
-          {tokens:['40','Ã·','(','10','âˆ’','5',')','+','12'], target:[2,6], parts:['40 Ã· ', ' + 12'], holes:['5']},
-          {tokens:['40','Ã·','5','+','12'], target:[0,2], parts:['', ' + 12'], holes:['8']},
+          {tokens:['40','÷','(','10','−','5',')','+','12'], target:[2,6], parts:['40 ÷ ', ' + 12'], holes:['5']},
+          {tokens:['40','÷','5','+','12'], target:[0,2], parts:['', ' + 12'], holes:['8']},
           {tokens:['8','+','12'], target:[0,2], parts:[''], holes:['20']}
         ]
       }
     ],
     hard: [
       {
-        expr:'48 Ã· (14 âˆ’ 8) + 7 Ã— 3 âˆ’ 5',
+        expr:'48 ÷ (14 − 8) + 7 × 3 − 5',
         stages:[
-          {tokens:['48','Ã·','(','14','âˆ’','8',')','+','7','Ã—','3','âˆ’','5'], target:[2,6], parts:['48 Ã· ', ' + 7 Ã— 3 âˆ’ 5'], holes:['6']},
-          {tokens:['48','Ã·','6','+','7','Ã—','3','âˆ’','5'], target:[0,2], parts:['', ' + 7 Ã— 3 âˆ’ 5'], holes:['8']},
-          {tokens:['8','+','7','Ã—','3','âˆ’','5'], target:[2,4], parts:['8 + ', ' âˆ’ 5'], holes:['21']},
-          {tokens:['8','+','21','âˆ’','5'], target:[0,2], parts:['', ' âˆ’ 5'], holes:['29']},
-          {tokens:['29','âˆ’','5'], target:[0,2], parts:[''], holes:['24']}
+          {tokens:['48','÷','(','14','−','8',')','+','7','×','3','−','5'], target:[2,6], parts:['48 ÷ ', ' + 7 × 3 − 5'], holes:['6']},
+          {tokens:['48','÷','6','+','7','×','3','−','5'], target:[0,2], parts:['', ' + 7 × 3 − 5'], holes:['8']},
+          {tokens:['8','+','7','×','3','−','5'], target:[2,4], parts:['8 + ', ' − 5'], holes:['21']},
+          {tokens:['8','+','21','−','5'], target:[0,2], parts:['', ' − 5'], holes:['29']},
+          {tokens:['29','−','5'], target:[0,2], parts:[''], holes:['24']}
         ]
       },
       {
-        expr:'(18 + 6) Ã· 3 + 4 Ã— (9 âˆ’ 7)',
+        expr:'(18 + 6) ÷ 3 + 4 × (9 − 7)',
         stages:[
-          {tokens:['(','18','+','6',')','Ã·','3','+','4','Ã—','(','9','âˆ’','7',')'], target:[0,4], parts:['', ' Ã· 3 + 4 Ã— (9 âˆ’ 7)'], holes:['24']},
-          {tokens:['24','Ã·','3','+','4','Ã—','(','9','âˆ’','7',')'], target:[6,10], parts:['24 Ã· 3 + 4 Ã— ', ''], holes:['2']},
-          {tokens:['24','Ã·','3','+','4','Ã—','2'], target:[0,2], parts:['', ' + 4 Ã— 2'], holes:['8']},
-          {tokens:['8','+','4','Ã—','2'], target:[2,4], parts:['8 + ', ''], holes:['8']},
+          {tokens:['(','18','+','6',')','÷','3','+','4','×','(','9','−','7',')'], target:[0,4], parts:['', ' ÷ 3 + 4 × (9 − 7)'], holes:['24']},
+          {tokens:['24','÷','3','+','4','×','(','9','−','7',')'], target:[6,10], parts:['24 ÷ 3 + 4 × ', ''], holes:['2']},
+          {tokens:['24','÷','3','+','4','×','2'], target:[0,2], parts:['', ' + 4 × 2'], holes:['8']},
+          {tokens:['8','+','4','×','2'], target:[2,4], parts:['8 + ', ''], holes:['8']},
           {tokens:['8','+','8'], target:[0,2], parts:[''], holes:['16']}
         ]
       },
       {
-        expr:'72 Ã· 8 + 5 Ã— (12 âˆ’ 9) âˆ’ 4',
+        expr:'72 ÷ 8 + 5 × (12 − 9) − 4',
         stages:[
-          {tokens:['72','Ã·','8','+','5','Ã—','(','12','âˆ’','9',')','âˆ’','4'], target:[6,10], parts:['72 Ã· 8 + 5 Ã— ', ' âˆ’ 4'], holes:['3']},
-          {tokens:['72','Ã·','8','+','5','Ã—','3','âˆ’','4'], target:[0,2], parts:['', ' + 5 Ã— 3 âˆ’ 4'], holes:['9']},
-          {tokens:['9','+','5','Ã—','3','âˆ’','4'], target:[2,4], parts:['9 + ', ' âˆ’ 4'], holes:['15']},
-          {tokens:['9','+','15','âˆ’','4'], target:[0,2], parts:['', ' âˆ’ 4'], holes:['24']},
-          {tokens:['24','âˆ’','4'], target:[0,2], parts:[''], holes:['20']}
+          {tokens:['72','÷','8','+','5','×','(','12','−','9',')','−','4'], target:[6,10], parts:['72 ÷ 8 + 5 × ', ' − 4'], holes:['3']},
+          {tokens:['72','÷','8','+','5','×','3','−','4'], target:[0,2], parts:['', ' + 5 × 3 − 4'], holes:['9']},
+          {tokens:['9','+','5','×','3','−','4'], target:[2,4], parts:['9 + ', ' − 4'], holes:['15']},
+          {tokens:['9','+','15','−','4'], target:[0,2], parts:['', ' − 4'], holes:['24']},
+          {tokens:['24','−','4'], target:[0,2], parts:[''], holes:['20']}
         ]
       },
       {
-        expr:'90 âˆ’ (24 Ã· 6 + 8) Ã— 3',
+        expr:'90 − (24 ÷ 6 + 8) × 3',
         stages:[
-          {tokens:['90','âˆ’','(','24','Ã·','6','+','8',')','Ã—','3'], target:[3,5], parts:['90 âˆ’ (', ' + 8) Ã— 3'], holes:['4']},
-          {tokens:['90','âˆ’','(','4','+','8',')','Ã—','3'], target:[2,6], parts:['90 âˆ’ ', ' Ã— 3'], holes:['12']},
-          {tokens:['90','âˆ’','12','Ã—','3'], target:[2,4], parts:['90 âˆ’ ', ''], holes:['36']},
-          {tokens:['90','âˆ’','36'], target:[0,2], parts:[''], holes:['54']}
+          {tokens:['90','−','(','24','÷','6','+','8',')','×','3'], target:[3,5], parts:['90 − (', ' + 8) × 3'], holes:['4']},
+          {tokens:['90','−','(','4','+','8',')','×','3'], target:[2,6], parts:['90 − ', ' × 3'], holes:['12']},
+          {tokens:['90','−','12','×','3'], target:[2,4], parts:['90 − ', ''], holes:['36']},
+          {tokens:['90','−','36'], target:[0,2], parts:[''], holes:['54']}
         ]
       },
       {
-        expr:'6 Ã— (18 âˆ’ 9) + 64 Ã· 8 âˆ’ 7',
+        expr:'6 × (18 − 9) + 64 ÷ 8 − 7',
         stages:[
-          {tokens:['6','Ã—','(','18','âˆ’','9',')','+','64','Ã·','8','âˆ’','7'], target:[2,6], parts:['6 Ã— ', ' + 64 Ã· 8 âˆ’ 7'], holes:['9']},
-          {tokens:['6','Ã—','9','+','64','Ã·','8','âˆ’','7'], target:[0,2], parts:['', ' + 64 Ã· 8 âˆ’ 7'], holes:['54']},
-          {tokens:['54','+','64','Ã·','8','âˆ’','7'], target:[2,4], parts:['54 + ', ' âˆ’ 7'], holes:['8']},
-          {tokens:['54','+','8','âˆ’','7'], target:[0,2], parts:['', ' âˆ’ 7'], holes:['62']},
-          {tokens:['62','âˆ’','7'], target:[0,2], parts:[''], holes:['55']}
+          {tokens:['6','×','(','18','−','9',')','+','64','÷','8','−','7'], target:[2,6], parts:['6 × ', ' + 64 ÷ 8 − 7'], holes:['9']},
+          {tokens:['6','×','9','+','64','÷','8','−','7'], target:[0,2], parts:['', ' + 64 ÷ 8 − 7'], holes:['54']},
+          {tokens:['54','+','64','÷','8','−','7'], target:[2,4], parts:['54 + ', ' − 7'], holes:['8']},
+          {tokens:['54','+','8','−','7'], target:[0,2], parts:['', ' − 7'], holes:['62']},
+          {tokens:['62','−','7'], target:[0,2], parts:[''], holes:['55']}
         ]
       },
       {
-        expr:'(15 âˆ’ 3) Ã— (12 Ã· 4) + 18',
+        expr:'(15 − 3) × (12 ÷ 4) + 18',
         stages:[
-          {tokens:['(','15','âˆ’','3',')','Ã—','(','12','Ã·','4',')','+','18'], target:[0,4], parts:['', ' Ã— (12 Ã· 4) + 18'], holes:['12']},
-          {tokens:['12','Ã—','(','12','Ã·','4',')','+','18'], target:[2,6], parts:['12 Ã— ', ' + 18'], holes:['3']},
-          {tokens:['12','Ã—','3','+','18'], target:[0,2], parts:['', ' + 18'], holes:['36']},
+          {tokens:['(','15','−','3',')','×','(','12','÷','4',')','+','18'], target:[0,4], parts:['', ' × (12 ÷ 4) + 18'], holes:['12']},
+          {tokens:['12','×','(','12','÷','4',')','+','18'], target:[2,6], parts:['12 × ', ' + 18'], holes:['3']},
+          {tokens:['12','×','3','+','18'], target:[0,2], parts:['', ' + 18'], holes:['36']},
           {tokens:['36','+','18'], target:[0,2], parts:[''], holes:['54']}
         ]
       },
       {
-        expr:'100 âˆ’ (16 + 8) Ã· 3 Ã— 2',
+        expr:'100 − (16 + 8) ÷ 3 × 2',
         stages:[
-          {tokens:['100','âˆ’','(','16','+','8',')','Ã·','3','Ã—','2'], target:[2,6], parts:['100 âˆ’ ', ' Ã· 3 Ã— 2'], holes:['24']},
-          {tokens:['100','âˆ’','24','Ã·','3','Ã—','2'], target:[2,4], parts:['100 âˆ’ ', ' Ã— 2'], holes:['8']},
-          {tokens:['100','âˆ’','8','Ã—','2'], target:[2,4], parts:['100 âˆ’ ', ''], holes:['16']},
-          {tokens:['100','âˆ’','16'], target:[0,2], parts:[''], holes:['84']}
+          {tokens:['100','−','(','16','+','8',')','÷','3','×','2'], target:[2,6], parts:['100 − ', ' ÷ 3 × 2'], holes:['24']},
+          {tokens:['100','−','24','÷','3','×','2'], target:[2,4], parts:['100 − ', ' × 2'], holes:['8']},
+          {tokens:['100','−','8','×','2'], target:[2,4], parts:['100 − ', ''], holes:['16']},
+          {tokens:['100','−','16'], target:[0,2], parts:[''], holes:['84']}
         ]
       },
       {
-        expr:'(25 âˆ’ 5 Ã— 2) + 36 Ã· 6 + 8',
+        expr:'(25 − 5 × 2) + 36 ÷ 6 + 8',
         stages:[
-          {tokens:['(','25','âˆ’','5','Ã—','2',')','+','36','Ã·','6','+','8'], target:[3,5], parts:['(25 âˆ’ ', ') + 36 Ã· 6 + 8'], holes:['10']},
-          {tokens:['(','25','âˆ’','10',')','+','36','Ã·','6','+','8'], target:[0,4], parts:['', ' + 36 Ã· 6 + 8'], holes:['15']},
-          {tokens:['15','+','36','Ã·','6','+','8'], target:[2,4], parts:['15 + ', ' + 8'], holes:['6']},
+          {tokens:['(','25','−','5','×','2',')','+','36','÷','6','+','8'], target:[3,5], parts:['(25 − ', ') + 36 ÷ 6 + 8'], holes:['10']},
+          {tokens:['(','25','−','10',')','+','36','÷','6','+','8'], target:[0,4], parts:['', ' + 36 ÷ 6 + 8'], holes:['15']},
+          {tokens:['15','+','36','÷','6','+','8'], target:[2,4], parts:['15 + ', ' + 8'], holes:['6']},
           {tokens:['15','+','6','+','8'], target:[0,2], parts:['', ' + 8'], holes:['21']},
           {tokens:['21','+','8'], target:[0,2], parts:[''], holes:['29']}
         ]
@@ -2012,7 +2012,7 @@ function renderCombinedProblem(p){
   const cols = p.cols || (stage?.tokens?.length || 1);
   let html = `<div class="combinedWrap" style="--comb-cols:${cols}">`;
   html += '<div class="combinedHistory">';
-  html += '<div class="combinedHistoryLabel">LÃ­neas ya construidas</div>';
+  html += '<div class="combinedHistoryLabel">Líneas ya construidas</div>';
   const items = p.historyItems || [{tokens:(stage?.tokens||[]), result:null, target:null}];
   items.forEach((item,idx)=>{
     html += `<div class="combinedGridLine ${idx===items.length-1 && p.awaitingSelection?'current':''}" style="--comb-cols:${cols}">`;
@@ -2028,7 +2028,7 @@ function renderCombinedProblem(p){
     html += renderCombinedTokens(stage.tokens, {selectable:true});
     html += '</div>';
   }else if(stage){
-    html += '<div class="combinedInputLabel">Nueva lÃ­nea de transformaciÃ³n</div>';
+    html += '<div class="combinedInputLabel">Nueva línea de transformación</div>';
     html += '<div class="combinedPrompt">Rellena el resultado de la parte seleccionada.</div>';
     html += `<div class="combinedStageInput" data-line="${p.stage}" style="--comb-cols:${cols}">`;
     html += renderCombinedInputStage(stage);
@@ -2096,7 +2096,7 @@ function validateCombinedSelection(indices){
     setTimeout(()=>{ renderCombinedProblem(p); applyStepMode(); fitOperationToScreen(); }, 180);
   }else{
     $$('.combinedToken.dragSel').forEach(t=>t.classList.add('badSel'));
-    setFeedback('Prueba otra vez: esa parte no toca todavÃ­a.', 'bad', true);
+    setFeedback('Prueba otra vez: esa parte no toca todavía.', 'bad', true);
     fail();
     // fail() no cambia de ejercicio salvo que se acaben las vidas; si seguimos en combinadas, mantenemos la fase.
     if(state.current?.type==='comb') setTimeout(()=>{ renderCombinedProblem(state.current); applyStepMode(); fitOperationToScreen(); }, 350);
@@ -2518,7 +2518,7 @@ function inputKey(k){
       if(inp.value===cell.dataset.answer){
         cell.classList.add('goodCell');
         if(combinedVisibleDone()){
-          setFeedback('Correcto. LÃ­nea transformada.', 'good');
+          setFeedback('Correcto. Línea transformada.', 'good');
           setTimeout(advanceCombinedStage, 260);
         }else if(state.flow==='step'){
           state.activeElement=nextCombinedTarget();
@@ -2607,7 +2607,7 @@ function success(){
   state.failCount=0;
   addStat(t,true);
 
-  // La recompensa se llama directamente aquÃ­. AsÃ­ no depende de restos del juego anterior.
+  // La recompensa se llama directamente aquí. Así no depende de restos del juego anterior.
   if(typeof window.footballGood === 'function'){
     window.footballGood();
   }
@@ -2615,8 +2615,8 @@ function success(){
   setFeedback('Correcto', 'good');
   updateUI();
   showOperationConfetti();
-// Cambia de operaciÃ³n en el siguiente ciclo de pantalla: sin espera visible,
-  // pero permitiendo que se pinten la recompensa y la celebraciÃ³n.
+// Cambia de operación en el siguiente ciclo de pantalla: sin espera visible,
+  // pero permitiendo que se pinten la recompensa y la celebración.
   setTimeout(()=>{
     state.autoAdvancing=false;
     nextOperation();
@@ -2648,7 +2648,7 @@ function showCelebration(done){
   if(old) old.remove();
   const overlay=document.createElement('div');
   overlay.className='celebrationOverlay';
-  overlay.innerHTML='<div class="celebrationBurst">ðŸŽ‰ Â¡Correcto! ðŸŽ‰</div>';
+  overlay.innerHTML='<div class="celebrationBurst">🎉 ¡Correcto! 🎉</div>';
   const colors=['#fb7185','#f59e0b','#22c55e','#06b6d4','#8b5cf6','#facc15'];
   for(let i=0;i<44;i++){
     const dot=document.createElement('span');
@@ -2711,7 +2711,7 @@ function showGeneralHint(){
     ? 'Pista: primero parentesis; despues multiplicaciones y divisiones; despues sumas y restas; dentro del mismo nivel, izquierda a derecha.'
     : (state.flow==='step'
       ? 'Pista: escribe solo en la casilla iluminada. Si aciertas, el juego pasa a la siguiente.'
-      : 'Pista: completa las casillas amarillas. Al acertar, pasarÃ¡s automÃ¡ticamente a la siguiente operaciÃ³n.');
+      : 'Pista: completa las casillas amarillas. Al acertar, pasarás automáticamente a la siguiente operación.');
   $('#helpBox').textContent = msg;
   $('#helpBox').classList.add('show');
   setFeedback(msg, 'ok');
@@ -2724,7 +2724,7 @@ function updateControlAvailability(){
   $('#flowBtn').title=noStep?'Paso a paso no disponible en divisiones ni combinadas':'Cambiar modo de rellenado';
   const noDigits=type==='comb' || state.mode==='comb';
   $('#lengthBtn').disabled=!!noDigits;
-  $('#lengthBtn').title=noDigits?'Cifras no afecta a combinadas':'Cambiar nÃºmero de cifras';
+  $('#lengthBtn').title=noDigits?'Cifras no afecta a combinadas':'Cambiar número de cifras';
 }
 
 function finishGame(lost=false){
@@ -2785,7 +2785,7 @@ function saveStats(){ localStorage.setItem('photoPanicStats', JSON.stringify(sta
 function renderStats(){
   const table=$("#statsTable");
   if(!table) return;
-  const names={add:'Suma',sub:'Resta',mul:'MultiplicaciÃ³n',div:'DivisiÃ³n',comb:'Operaciones combinadas',help:'Ayudas'};
+  const names={add:'Suma',sub:'Resta',mul:'Multiplicación',div:'División',comb:'Operaciones combinadas',help:'Ayudas'};
   table.innerHTML='<tr><th>Tipo</th><th>Bien</th><th>Fallos</th></tr>'+
     Object.keys(names).map(k=>{
       const s=state.stats[k]||{ok:0,bad:0};
@@ -2853,7 +2853,7 @@ $('#helpModal').addEventListener('click',e=>{if(e.target.id==='helpModal') $('#h
 
 function renderSpecificBtns(){
   const nums=[2,3,4,5,6,7,8,9];
-  $('#specificBtns').innerHTML = nums.map(n=>`<button data-spec="${n}" class="${state.specific===n?'selectedNumber':''}">Ã—${n} / Ã·${n}</button>`).join('');
+  $('#specificBtns').innerHTML = nums.map(n=>`<button data-spec="${n}" class="${state.specific===n?'selectedNumber':''}">×${n} / ÷${n}</button>`).join('');
   $$('[data-spec]').forEach(b=>b.onclick=()=>{
     state.specific=Number(b.dataset.spec);
     renderSpecificBtns();
@@ -3017,7 +3017,7 @@ updateControlAvailability();
       document.body.appendChild(bar);
     }
     const done=Math.min(target,(r.ok||0));
-    bar.innerHTML='<span>ðŸŽ¯ Reto mixto Â· '+game+' Â· âœ… '+done+'/'+target+'</span><span>Errores: âŒ '+(r.bad||0)+'</span>';
+    bar.innerHTML='<span>🎯 Reto mixto · '+game+' · ✅ '+done+'/'+target+'</span><span>Errores: ❌ '+(r.bad||0)+'</span>';
     setSession(s);
   }
   function finish(){
@@ -3046,12 +3046,12 @@ updateControlAvailability();
 <script id="lucyago-football-empire-js">
 (function(){
   const $=window.$ || (s=>document.querySelector(s));
-  const players=['Lamine Yamal','Pedri','Nico Williams','MbappÃ©','Haaland','Bellingham','Vinicius','Rodri','Griezmann','Salah','Musiala','Foden','Kane','Lewandowski','DembÃ©lÃ©','Gavi','JuliÃ¡n Ãlvarez','Courtois','Ter Stegen','Unai SimÃ³n'];
-  const boots=['Nike Mercurial oro','Adidas Predator roja','Puma Future azul','Nike Phantom negra','Adidas F50 blanca','Mizuno Morelia clÃ¡sica','New Balance Furon verde'];
-  const kits=['EspaÃ±a home','Argentina celeste','Brasil amarilla','Athletic rojiblanca','BarÃ§a blaugrana','Real Madrid blanca','Liverpool roja','PSG azul'];
-  const stadiums=['Campo de barrio','Estadio municipal','San MamÃ©s','BernabÃ©u','Camp Nou','Anfield','Wembley','MaracanÃ¡'];
+  const players=['Lamine Yamal','Pedri','Nico Williams','Mbappé','Haaland','Bellingham','Vinicius','Rodri','Griezmann','Salah','Musiala','Foden','Kane','Lewandowski','Dembélé','Gavi','Julián Álvarez','Courtois','Ter Stegen','Unai Simón'];
+  const boots=['Nike Mercurial oro','Adidas Predator roja','Puma Future azul','Nike Phantom negra','Adidas F50 blanca','Mizuno Morelia clásica','New Balance Furon verde'];
+  const kits=['España home','Argentina celeste','Brasil amarilla','Athletic rojiblanca','Barça blaugrana','Real Madrid blanca','Liverpool roja','PSG azul'];
+  const stadiums=['Campo de barrio','Estadio municipal','San Mamés','Bernabéu','Camp Nou','Anfield','Wembley','Maracaná'];
   const rivals=['Blue Sharks','Fire Dragons','Royal Lions','Storm FC','Iron Bulls','Sky Eagles'];
-  const icons=['ðŸ‘•','ðŸ‘Ÿ','âš½','ðŸ§¤','ðŸŸï¸','â­','ðŸ†','ðŸ”¥'];
+  const icons=['👕','👟','⚽','🧣','🏟️','⭐','🏆','🔥'];
   function choice(a){return a[Math.floor(Math.random()*a.length)]}
   function initFootball(){
     window.state=window.state||{};
@@ -3061,7 +3061,7 @@ updateControlAvailability();
   }
   function renderPlayers(){
     const box=$('#fbPlayers'); if(!box) return;
-    const pos=[[48,13,'âš½'],[24,31,'7'],[72,31,'11'],[37,52,'8'],[60,54,'10'],[18,72,'3'],[40,76,'5'],[62,76,'4'],[82,72,'2']];
+    const pos=[[48,13,'⚽'],[24,31,'7'],[72,31,'11'],[37,52,'8'],[60,54,'10'],[18,72,'3'],[40,76,'5'],[62,76,'4'],[82,72,'2']];
     box.innerHTML=pos.map((p,i)=>`<div class="fbPlayer" style="left:${p[0]}%;top:${p[1]}%">${p[2]}</div>`).join('');
   }
   function renderFootball(){
@@ -3069,7 +3069,7 @@ updateControlAvailability();
     const f=window.state.football;
     const divs=['Barrio','Ciudad','Regional','Nacional','Primera','Champions','Leyendas'];
     $('#flashText') && ($('#flashText').textContent='Director Deportivo');
-    $('#fbDivision') && ($('#fbDivision').textContent=(divs[f.division]||'Leyendas')+' Â· Temporada '+(1+Math.floor(f.xp/120)));
+    $('#fbDivision') && ($('#fbDivision').textContent=(divs[f.division]||'Leyendas')+' · Temporada '+(1+Math.floor(f.xp/120)));
     $('#fbCoins') && ($('#fbCoins').textContent=f.coins);
     $('#fbFans') && ($('#fbFans').textContent=f.fans.toLocaleString('es-ES'));
     $('#fbPrestige') && ($('#fbPrestige').textContent=f.prestige);
@@ -3092,35 +3092,35 @@ updateControlAvailability();
   }
   function confetti(){
     const zone=$('#fbBurstZone')||$('#photoStage'); if(!zone) return;
-    for(let i=0;i<10;i++){const c=document.createElement('div'); c.className='fbConfetti'; c.textContent=choice(['âš½','â˜…','FE','ðŸ”¥','ðŸ†']); c.style.left=(10+Math.random()*80)+'%'; c.style.top=(35+Math.random()*45)+'%'; c.style.animationDelay=(i*35)+'ms'; zone.appendChild(c); setTimeout(()=>c.remove(),1300);}
+    for(let i=0;i<10;i++){const c=document.createElement('div'); c.className='fbConfetti'; c.textContent=choice(['⚽','★','FE','🔥','🏆']); c.style.left=(10+Math.random()*80)+'%'; c.style.top=(35+Math.random()*45)+'%'; c.style.animationDelay=(i*35)+'ms'; zone.appendChild(c); setTimeout(()=>c.remove(),1300);}
   }
   function unlockItem(){
     const f=window.state.football; const roll=Math.random(); let name,icon,rar='common';
-    if(roll>.78){name=choice(players); icon='â­'; rar=roll>.94?'legend':'epic'; f.prestige+=rar==='legend'?2:1; f.next='Mejorar estadio';}
-    else if(roll>.55){name=choice(boots); icon='ðŸ‘Ÿ'; rar='rare'; f.next='Nueva equipaciÃ³n';}
-    else if(roll>.34){name=choice(kits); icon='ðŸ‘•'; rar='rare'; f.next='Fichaje estrella';}
-    else if(roll>.18){name=choice(stadiums); icon='ðŸŸï¸'; rar='epic'; f.stadium=Math.min(7,f.stadium+1); f.next='Derrotar a '+choice(rivals);}
-    else {name=choice(['BalÃ³n Champions','Guantes Pro','CapitÃ¡n del equipo','Trofeo local']); icon=choice(icons); rar='common';}
+    if(roll>.78){name=choice(players); icon='⭐'; rar=roll>.94?'legend':'epic'; f.prestige+=rar==='legend'?2:1; f.next='Mejorar estadio';}
+    else if(roll>.55){name=choice(boots); icon='👟'; rar='rare'; f.next='Nueva equipación';}
+    else if(roll>.34){name=choice(kits); icon='👕'; rar='rare'; f.next='Fichaje estrella';}
+    else if(roll>.18){name=choice(stadiums); icon='🏟️'; rar='epic'; f.stadium=Math.min(7,f.stadium+1); f.next='Derrotar a '+choice(rivals);}
+    else {name=choice(['Balón Champions','Guantes Pro','Capitán del equipo','Trofeo local']); icon=choice(icons); rar='common';}
     f.collection.unshift({name,icon,rar}); f.collection=f.collection.slice(0,10);
     f.lastUnlock=`<span class="fbRarity-${rar}">${icon} ${name}</span><br><small>desbloqueado</small>`;
     const pack=$('#fbPack'); if(pack){pack.classList.add('opening'); setTimeout(()=>pack.classList.remove('opening'),800)}
-    confetti(); burst('Â¡SOBRE!', 'good');
+    confetti(); burst('¡SOBRE!', 'good');
   }
   window.footballGood=function(){
-    initFootball(); const f=window.state.football; const gain=10+Math.floor(Math.random()*10); f.coins+=gain; f.xp+=10; f.fans+=25+Math.floor(Math.random()*80); f.pack+=25; f.goalsFor++; confetti(); if(f.pack>=100){f.pack-=100; unlockItem()} else {f.lastUnlock='+'+gain+' monedas Â· +10 XP Â· gol del equipo'; burst('+'+gain+' FE','good')}
+    initFootball(); const f=window.state.football; const gain=10+Math.floor(Math.random()*10); f.coins+=gain; f.xp+=10; f.fans+=25+Math.floor(Math.random()*80); f.pack+=25; f.goalsFor++; confetti(); if(f.pack>=100){f.pack-=100; unlockItem()} else {f.lastUnlock='+'+gain+' monedas · +10 XP · gol del equipo'; burst('+'+gain+' FE','good')}
     f.prestige=Math.max(1,Math.floor(f.xp/70)+1); f.division=Math.min(6,Math.floor(f.xp/180));
     const st=$('#photoStage'); if(st){st.classList.add('fbWin'); setTimeout(()=>st.classList.remove('fbWin'),850)}
     renderFootball();
   };
   window.footballBad=function(hard){
-    initFootball(); const f=window.state.football; f.pack=Math.max(0,f.pack-(hard?12:6)); f.fans=Math.max(100,f.fans-(hard?75:25)); if(hard) f.goalsAgainst++; f.lastUnlock=hard?'El rival marca. Â¡RecupÃ©rate!':'OcasiÃ³n fallada, sigue'; burst(hard?'PresiÃ³n rival':'Casi','bad');
+    initFootball(); const f=window.state.football; f.pack=Math.max(0,f.pack-(hard?12:6)); f.fans=Math.max(100,f.fans-(hard?75:25)); if(hard) f.goalsAgainst++; f.lastUnlock=hard?'El rival marca. ¡Recupérate!':'Ocasión fallada, sigue'; burst(hard?'Presión rival':'Casi','bad');
     const st=$('#photoStage'); if(st){st.classList.add('fbMistake'); setTimeout(()=>st.classList.remove('fbMistake'),520)}
     renderFootball();
   };
   window.initFootballEmpire=initFootball;
   window.renderFootballEmpire=renderFootball;
   window.footballCelebrate=confetti;
-  window.footballFinish=function(won){ initFootball(); const f=window.state.football; f.lastUnlock=won?'Partido ganado Â· bonus de 50 monedas':'Descanso y a por el siguiente partido'; if(won){f.coins+=50; f.fans+=500; confetti();} renderFootball(); };
+  window.footballFinish=function(won){ initFootball(); const f=window.state.football; f.lastUnlock=won?'Partido ganado · bonus de 50 monedas':'Descanso y a por el siguiente partido'; if(won){f.coins+=50; f.fans+=500; confetti();} renderFootball(); };
   window.addEventListener('load',()=>{setTimeout(()=>{initFootball(); renderFootball();},150)});
 })();
 </script>
@@ -3582,7 +3582,7 @@ updateControlAvailability();
   function kitReqText(k){const r=k.req; if(!r.coins&&!r.rep&&!r.scout&&!r.avg)return 'Primer objetivo del club.'; return `Necesitas ${r.coins} monedas, ${r.rep} reputación, ${r.scout} scouting y Media 11 ${r.avg}.`}
   function celebrate(txt,kind){const z=qs('#cmBurst')||stage(); if(!z)return; for(let i=0;i<(kind==='good'?7:3);i++){const ball=document.createElement('div'); ball.className='cmBurstBall'; ball.textContent=kind==='bad'?'!':'⚽'; ball.style.left=(12+Math.random()*66)+'%'; ball.style.top=(34+Math.random()*42)+'%'; ball.style.animationDelay=(i*45)+'ms'; z.appendChild(ball); setTimeout(()=>ball.remove(),1200)} const card=document.createElement('div'); card.className='cmBurstCard'; card.textContent=txt; card.style.left='14%'; card.style.top='58%'; if(kind==='bad'){card.style.borderColor='#ef4444';card.style.background='#fee2e2'} z.appendChild(card); setTimeout(()=>card.remove(),1250)}
   function opConfetti(kind){if(kind!=='good')return; const area=qs('#operationArea'); if(!area)return; const icons=['⚽','⚽','★','+']; for(let i=0;i<10;i++){const d=document.createElement('div'); d.className='opConfetti good'; d.textContent=icons[i%icons.length]; d.style.left=(18+Math.random()*64)+'%'; d.style.top=(-4+Math.random()*22)+'%'; d.style.animationDelay=(i*30)+'ms'; area.appendChild(d); setTimeout(()=>d.remove(),1050)}}
-  function fixStaticText(){const mul=qs('[data-mode="mul"]'); if(mul)mul.textContent='Multiplicación'; const div=qs('[data-mode="div"]'); if(div)div.textContent='División'; const home=qs('#homeBtn'); if(home){home.textContent='🏠';home.title='Volver al menú'} const diff=qs('#difficulty option[value="easy"]'); if(diff)diff.textContent='Fácil'; const hard=qs('#difficulty option[value="hard"]'); if(hard)hard.textContent='Difícil'; const lives=qs('.lives'); if(lives)lives.textContent=lives.textContent.replace('Â·','·').replace('Ã­','í');}
+  function fixStaticText(){const mul=qs('[data-mode="mul"]'); if(mul)mul.textContent='Multiplicación'; const div=qs('[data-mode="div"]'); if(div)div.textContent='División'; const home=qs('#homeBtn'); if(home){home.textContent='🏠';home.title='Volver al menú'} const diff=qs('#difficulty option[value="easy"]'); if(diff)diff.textContent='Fácil'; const hard=qs('#difficulty option[value="hard"]'); if(hard)hard.textContent='Difícil'; const lives=qs('.lives'); if(lives)lives.textContent=lives.textContent.replace('·','·').replace('í','í');}
   function render(){fixStaticText(); const st=stage(); if(!st)return; const f=window.state.footballManager=window.state.footballManager||load(); ensureOffers(f); save(f); const kit=KITS.find(k=>k.id===f.kit)||KITS[0]; st.style.setProperty('--kit1',kit.a); st.style.setProperty('--kit2',kit.b); const obj=objective(f); const opct=Math.max(0,Math.min(100,Math.round(obj.done/Math.max(1,obj.total)*100))); const ev=f.event||{kind:'',text:f.last}; st.innerHTML=`<div class="cmGame"><div class="cmTop"><div class="cmBadge">LF</div><div><div class="cmTitle" id="flashText">Director Deportivo</div><div class="cmSub" id="fbDivision">${phase(f)} - ${f.last}</div><div class="cmStats"><div class="cmStat">Monedas<b>${f.coins}</b></div><div class="cmStat">Reputación<b>${f.rep}</b></div><div class="cmStat" title="mejores fichajes">Scouting<b>${f.scout}</b><small>mejores fichajes</small></div><div class="cmStat" title="promedio del once">Media 11<b>${avg(f)}</b><small>promedio del once</small></div></div></div></div><div class="cmObjective"><div class="cmObjectiveTop"><span>${obj.label}</span><span>${obj.txt}</span></div><div class="cmBar"><div class="cmBarFill" style="--pct:${opct}%"></div></div></div><div class="cmBody"><div class="cmTabs"><button data-cmtab="kit" class="${f.activeTab==='kit'?'cmActive':''}">Equipación</button><button data-cmtab="market" class="${f.activeTab==='market'?'cmActive':''}">Mercado</button><button data-cmtab="squad" class="${f.activeTab==='squad'?'cmActive':''}">Plantilla</button><button data-cmtab="tours" class="${f.activeTab==='tours'?'cmActive':''}">Campeonatos</button></div><div class="cmPanel">${renderTab(f)}</div></div><div class="cmEvent ${ev.kind||''}"><span class="cmEventIcon">${ev.kind==='bad'?'▼':ev.kind==='gold'?'★':'⚽'}</span><span class="cmEventText">${ev.text}</span></div><div id="cmBurst"></div></div>`; document.querySelector('.workArea')?.classList.toggle('goldMode',!!f.goldPending)}
   function renderTab(f){if(f.activeTab==='kit')return renderKit(f); if(f.activeTab==='market')return renderMarket(f); if(f.activeTab==='tours')return renderTours(f); return renderSquad(f)}
   function renderKit(f){const v=values(f); return `<div class="cmNotice">Elige una equipación. Para seleccionarla, completa sus barras.</div><div class="cmKitGrid">${KITS.map(k=>{const open=kitUnlocked(f,k); return `<button class="cmKit ${f.kit===k.id?'cmChosen':''} ${open||f.kit===k.id?'':'locked'}" data-kit="${k.id}" style="--a:${k.a};--b:${k.b}"><span class="cmMiniKit"></span><span><span class="cmKitName">${k.name}</span><span class="cmKitMeta">${k.style}</span><span class="cmKitBars">${statBar('Mon',v.coins,k.req.coins)}${statBar('Rep',v.rep,k.req.rep)}${statBar('Scout',v.scout,k.req.scout)}${statBar('Media',v.avg,k.req.avg)}</span><span class="cmKitState">${f.kit===k.id?'Elegida':open?'Elegir':'Completa las barras'}</span></span></button>`}).join('')}</div><div class="cmActions"><button class="cmAction cmPrimary" data-cmtabgo="market">Ir al mercado</button><button class="cmAction cmReset" data-resetclub="1">Reiniciar club</button></div>`}
@@ -4248,8 +4248,8 @@ updateControlAvailability();
 <script id="codex-copy-request-final">
 (function(){
   const fixes=[
-    [/Ã·/g,'÷'],[/Ã—/g,'×'],[/âˆ’/g,'−'],[/Ã­/g,'í'],[/Ã³/g,'ó'],[/Ã¡/g,'á'],[/Ã©/g,'é'],[/Ãº/g,'ú'],[/Ã±/g,'ñ'],
-    [/LÃ­neas/g,'Líneas'],[/lÃ­nea/g,'línea'],[/todavÃ­a/g,'todavía'],[/operaciÃ³n/g,'operación']
+    [/÷/g,'÷'],[/×/g,'×'],[/−/g,'−'],[/í/g,'í'],[/ó/g,'ó'],[/á/g,'á'],[/é/g,'é'],[/ú/g,'ú'],[/ñ/g,'ñ'],
+    [/Líneas/g,'Líneas'],[/línea/g,'línea'],[/todavía/g,'todavía'],[/operación/g,'operación']
   ];
   function cleanText(root){
     if(!root) return;
@@ -4641,87 +4641,6 @@ updateControlAvailability();
   },0);
 })();
 </script>
-<script id="codex-combined-text-clean-final">
-(function(){
-  const replacements=[
-    [/ÃƒÂ·/g,'÷'],[/Ã·/g,'÷'],[/Ãƒâ€”/g,'×'],[/Ã—/g,'×'],[/âˆ’/g,'−'],[/Ã¢Ë†â€™/g,'−'],
-    [/ÃƒÂ­/g,'í'],[/Ã­/g,'í'],[/ÃƒÂ³/g,'ó'],[/Ã³/g,'ó'],[/ÃƒÂ¡/g,'á'],[/Ã¡/g,'á'],
-    [/ÃƒÂ©/g,'é'],[/Ã©/g,'é'],[/ÃƒÂº/g,'ú'],[/Ãº/g,'ú'],[/ÃƒÂ±/g,'ñ'],[/Ã±/g,'ñ'],
-    [/LÃƒÂ­neas/g,'Líneas'],[/LÃ­neas/g,'Líneas'],[/lÃƒÂ­nea/g,'línea'],[/lÃ­nea/g,'línea'],
-    [/transformaciÃƒÂ³n/g,'transformación'],[/transformaciÃ³n/g,'transformación'],
-    [/operaciÃƒÂ³n/g,'operación'],[/operaciÃ³n/g,'operación'],
-    [/todavÃƒÂ­a/g,'todavía'],[/todavÃ­a/g,'todavía'],
-    [/Â·/g,'·'],[/Â¡/g,'¡'],[/Â¿/g,'¿']
-  ];
-  function cleanValue(value){
-    let text=String(value ?? '');
-    replacements.forEach(function(pair){text=text.replace(pair[0],pair[1])});
-    return text;
-  }
-  function cleanDeep(value){
-    if(Array.isArray(value)) return value.map(cleanDeep);
-    if(value && typeof value==='object'){
-      Object.keys(value).forEach(function(key){value[key]=cleanDeep(value[key])});
-      return value;
-    }
-    return typeof value==='string' ? cleanValue(value) : value;
-  }
-  function cleanTextNodes(root){
-    if(!root) return;
-    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
-    let node;
-    while((node=walker.nextNode())) node.nodeValue=cleanValue(node.nodeValue);
-  }
-  function cleanCombinedState(){
-    if(typeof state==='undefined' || state.current?.type!=='comb') return;
-    cleanDeep(state.current);
-  }
-  if(typeof escapeHtml==='function' && !escapeHtml.__codexCombinedTextClean){
-    const oldEscapeHtml=escapeHtml;
-    escapeHtml=function(value){
-      return oldEscapeHtml(cleanValue(value));
-    };
-    escapeHtml.__codexCombinedTextClean=true;
-  }
-  if(typeof combinedLineText==='function' && !combinedLineText.__codexCombinedTextClean){
-    const oldCombinedLineText=combinedLineText;
-    combinedLineText=function(stage){
-      cleanDeep(stage);
-      return cleanValue(oldCombinedLineText(stage));
-    };
-    combinedLineText.__codexCombinedTextClean=true;
-  }
-  if(typeof renderCombinedProblem==='function' && !renderCombinedProblem.__codexCombinedTextClean){
-    const oldRenderCombinedProblem=renderCombinedProblem;
-    renderCombinedProblem=function(problem){
-      cleanDeep(problem);
-      const result=oldRenderCombinedProblem.apply(this,arguments);
-      setTimeout(function(){cleanTextNodes(document.getElementById('operationArea'))},0);
-      return result;
-    };
-    renderCombinedProblem.__codexCombinedTextClean=true;
-  }
-  if(typeof renderProblem==='function' && !renderProblem.__codexCombinedTextClean){
-    const oldRenderProblem=renderProblem;
-    renderProblem=function(){
-      cleanCombinedState();
-      const result=oldRenderProblem.apply(this,arguments);
-      setTimeout(function(){
-        cleanCombinedState();
-        cleanTextNodes(document.getElementById('operationArea'));
-      },0);
-      setTimeout(function(){cleanTextNodes(document.getElementById('operationArea'))},120);
-      return result;
-    };
-    renderProblem.__codexCombinedTextClean=true;
-  }
-  window.addEventListener('load',function(){
-    cleanCombinedState();
-    cleanTextNodes(document.getElementById('operationArea'));
-    setTimeout(function(){cleanTextNodes(document.getElementById('operationArea'))},400);
-  });
-})();
-</script>
 <style id="codex-carry-alignment-final">
 #operationArea.op-add .mathGrid,
 #operationArea.op-sub .mathGrid,
@@ -4967,6 +4886,272 @@ updateControlAvailability();
 })();
 </script>
 
+
+<style id="combined-v41-flow-fix">
+/* Combinadas v4.1: cada paso se trabaja directamente sobre la línea visible */
+.combinedHistory{gap:2px!important;margin:0!important;padding:0!important;border:0!important}
+.combinedHistoryLabel,.combinedSelectLabel,.combinedInputLabel{display:none!important}
+.combinedGridLine{
+  position:relative!important;
+  padding:3px 0!important;
+  min-height:46px!important;
+  border:0!important;
+  background:transparent!important;
+}
+.combinedGridLine.combinedSelectable{
+  touch-action:none!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  cursor:crosshair;
+}
+.combinedGridLine.combinedSelectedGood .combinedToken.combinedInSelection{
+  background:#dcfce7!important;
+  border-bottom:5px solid #16a34a!important;
+  color:#166534!important;
+}
+.combinedStageInput{
+  margin:0!important;
+  padding:3px 0!important;
+  min-height:46px!important;
+  border:0!important;
+  background:transparent!important;
+  grid-template-columns:repeat(var(--comb-cols),44px)!important;
+  gap:0!important;
+}
+.combinedStageInput .combinedBlank{
+  grid-column:auto!important;
+  width:44px!important;
+  min-width:44px!important;
+  height:40px!important;
+}
+.combinedPrompt{margin:4px 0 6px!important;padding:0!important;border:0!important;font-size:13px!important}
+.combinedWrap{padding-top:10px!important}
+@media(max-width:800px){
+  .combinedStageInput{grid-template-columns:repeat(var(--comb-cols),31px)!important}
+  .combinedStageInput .combinedBlank{width:31px!important;min-width:31px!important;height:34px!important}
+  .combinedGridLine{min-height:39px!important;padding:2px 0!important}
+}
+</style>
+<script id="combined-v41-flow-fix-js">
+(function(){
+  function cEsc(v){
+    if(typeof escapeHtml==='function') return escapeHtml(v);
+    return String(v).replace(/[&<>\"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]||m;});
+  }
+
+  function ensureCombinedState(p){
+    if(!p || p.type!=='comb') return;
+    if(!Array.isArray(p.historyItems) || !p.historyItems.length){
+      var st=p.stages[p.stage||0];
+      p.historyItems=[{tokens:(st&&st.tokens?st.tokens:[]).slice()}];
+    }
+    /* Limpia el formato antiguo que almacenaba líneas resueltas de más. */
+    p.historyItems=p.historyItems.slice(0,(p.stage||0)+1).map(function(item,idx){
+      var st=p.stages[idx];
+      return {tokens:(st&&st.tokens?st.tokens:(item.tokens||[])).slice()};
+    });
+  }
+
+  function historyTokensHtml(tokens, cols, selectable, selectedRange){
+    var html='';
+    for(var i=0;i<cols;i++){
+      var tok=tokens[i];
+      if(tok===undefined){ html+='<span class="combinedGhost"></span>'; continue; }
+      var inSel=selectedRange && i>=selectedRange[0] && i<=selectedRange[1];
+      html+='<span class="combinedToken'+(inSel?' combinedInSelection goodSel':'')+'"'+
+        (selectable?' data-comb-token="'+i+'"':'')+'>'+cEsc(tok)+'</span>';
+    }
+    return html;
+  }
+
+  function nextLineInputHtml(p,stage){
+    var cols=p.cols || stage.tokens.length;
+    var next=p.stages[p.stage+1];
+    var answer=String(stage.holes[0]);
+    var tokens=next ? next.tokens.slice() : [answer];
+    var blankIndex=Math.min(stage.target[0], Math.max(0,tokens.length-1));
+    /* En las plantillas el resultado sustituye al bloque exactamente en target[0]. */
+    if(next && String(tokens[blankIndex])!==answer){
+      var near=-1;
+      for(var d=0;d<tokens.length;d++){
+        if(String(tokens[d])===answer){ near=d; break; }
+      }
+      if(near>=0) blankIndex=near;
+    }
+    var html='';
+    for(var i=0;i<cols;i++){
+      if(i>=tokens.length){ html+='<span class="combinedGhost"></span>'; continue; }
+      if(i===blankIndex){
+        html+='<span class="blank combinedBlank" data-key="comb" data-i="0" data-seq="0" data-answer="'+cEsc(answer)+'" data-max="'+Math.max(1,answer.length)+'"><input inputmode="none" readonly tabindex="-1" maxlength="'+Math.max(1,answer.length)+'"></span>';
+      }else{
+        html+='<span class="combinedToken">'+cEsc(tokens[i])+'</span>';
+      }
+    }
+    return html;
+  }
+
+  window.renderCombinedProblem=function(p){
+    ensureCombinedState(p);
+    var stage=(typeof currentCombinedStage==='function')?currentCombinedStage():p.stages[p.stage];
+    var cols=p.cols || (stage&&stage.tokens?stage.tokens.length:1);
+    var html='<div class="combinedWrap" style="--comb-cols:'+cols+'">';
+    html+='<div class="combinedHistory">';
+    p.historyItems.forEach(function(item,idx){
+      var isCurrent=idx===p.historyItems.length-1;
+      var selectable=!!(stage && p.awaitingSelection && isCurrent);
+      var keepGreen=!!(stage && !p.awaitingSelection && isCurrent && p.selectedRange);
+      html+='<div class="combinedGridLine'+(selectable?' combinedSelectable current':'')+(keepGreen?' combinedSelectedGood':'')+'"'+(selectable?' id="combinedTokenLine"':'')+' style="--comb-cols:'+cols+'">';
+      html+=historyTokensHtml(item.tokens,cols,selectable,keepGreen?p.selectedRange:null);
+      html+='</div>';
+    });
+    html+='</div>';
+
+    if(stage && p.awaitingSelection){
+      html+='<div class="combinedPrompt">Arrastra directamente sobre la operación que toca resolver.</div>';
+    }else if(stage){
+      html+='<div class="combinedStageInput" data-line="'+p.stage+'" style="--comb-cols:'+cols+'">';
+      html+=nextLineInputHtml(p,stage);
+      html+='</div>';
+    }else{
+      html+='<div class="combinedDone">Resultado final conseguido.</div>';
+    }
+    html+='</div>';
+    var area=document.getElementById('operationArea');
+    if(area) area.innerHTML=html;
+    if(typeof setupCombinedDrag==='function') setupCombinedDrag();
+  };
+  window.renderCombined=window.renderCombinedProblem;
+
+  window.setupCombinedDrag=function(){
+    var line=document.getElementById('combinedTokenLine');
+    if(!line) return;
+    var dragging=false, touched=new Set();
+    function tokens(){return Array.prototype.slice.call(line.querySelectorAll('.combinedToken[data-comb-token]'));}
+    function clearSel(){tokens().forEach(function(t){t.classList.remove('dragSel','badSel');});}
+    function addFromPoint(x,y){
+      var el=document.elementFromPoint(x,y);
+      el=el&&el.closest?el.closest('.combinedToken[data-comb-token]'):null;
+      if(el && line.contains(el)){
+        touched.add(Number(el.dataset.combToken));
+        el.classList.add('dragSel');
+      }
+    }
+    function finish(e){
+      if(!dragging) return;
+      if(e){e.preventDefault();addFromPoint(e.clientX,e.clientY);}
+      dragging=false;
+      if(typeof validateCombinedSelection==='function') validateCombinedSelection(Array.from(touched));
+    }
+    line.addEventListener('pointerdown',function(e){e.preventDefault();dragging=true;touched=new Set();clearSel();line.setPointerCapture&&line.setPointerCapture(e.pointerId);addFromPoint(e.clientX,e.clientY);});
+    line.addEventListener('pointermove',function(e){if(!dragging)return;e.preventDefault();addFromPoint(e.clientX,e.clientY);});
+    line.addEventListener('pointerup',finish);
+    line.addEventListener('pointercancel',function(){dragging=false;clearSel();});
+  };
+
+  window.validateCombinedSelection=function(indices){
+    var p=state.current, stage=(typeof currentCombinedStage==='function')?currentCombinedStage():null;
+    if(!p||!stage)return;
+    var range=indices&&indices.length?[Math.min.apply(null,indices),Math.max.apply(null,indices)]:null;
+    var target=stage.target;
+    var ok=!!range && range[0]<=target[0] && range[1]>=target[1] && (range[1]-range[0])<=(target[1]-target[0]+2);
+    if(ok){
+      p.awaitingSelection=false;
+      p.selectedRange=range;
+      if(typeof setFeedback==='function') setFeedback('Bien elegido. Ahora escribe el resultado justo debajo.','good');
+      window.renderCombinedProblem(p);
+      if(typeof applyStepMode==='function') applyStepMode();
+      if(typeof fitOperationToScreen==='function') setTimeout(fitOperationToScreen,20);
+    }else{
+      var bad=document.querySelectorAll('#combinedTokenLine .combinedToken.dragSel');
+      bad.forEach(function(t){t.classList.add('badSel');});
+      if(typeof setFeedback==='function') setFeedback('Prueba otra vez: esa parte no toca todavía.','bad',true);
+      if(typeof fail==='function') fail();
+      if(state.current&&state.current.type==='comb') setTimeout(function(){window.renderCombinedProblem(state.current); if(typeof applyStepMode==='function')applyStepMode();},350);
+    }
+  };
+
+  window.advanceCombinedStage=function(){
+    var p=state.current, stage=(typeof currentCombinedStage==='function')?currentCombinedStage():null;
+    if(!p||!stage||p.__combinedAdvancing)return;
+    p.__combinedAdvancing=true;
+    var nextIndex=p.stage+1;
+    if(nextIndex>=p.stages.length){
+      p.stage=nextIndex;
+      p.awaitingSelection=false;
+      p.selectedRange=null;
+      p.__combinedAdvancing=false;
+      if(typeof success==='function') success();
+      return;
+    }
+    p.stage=nextIndex;
+    p.awaitingSelection=true;
+    p.selectedRange=null;
+    if(!Array.isArray(p.historyItems)) p.historyItems=[];
+    /* Añade SOLO la siguiente expresión pendiente, nunca un paso ya resuelto. */
+    p.historyItems=p.historyItems.slice(0,nextIndex);
+    p.historyItems.push({tokens:p.stages[nextIndex].tokens.slice()});
+    p.__combinedAdvancing=false;
+    window.renderCombinedProblem(p);
+    if(typeof applyStepMode==='function') applyStepMode();
+    if(typeof fitOperationToScreen==='function') setTimeout(fitOperationToScreen,20);
+  };
+
+  /* Si una combinada estaba ya creada con el formato anterior, la normaliza al repintar. */
+  document.addEventListener('DOMContentLoaded',function(){
+    setTimeout(function(){
+      try{
+        if(window.state && state.current && state.current.type==='comb') window.renderCombinedProblem(state.current);
+      }catch(e){}
+    },80);
+  });
+})();
+</script>
+
+
+<script id="combined-v42-double-advance-random-fix">
+(function(){
+  /* Evita que un mismo acierto haga avanzar dos etapas por eventos/temporizadores duplicados. */
+  var lastAdvanceAt=0;
+  var lastAdvanceProblem=null;
+  var lastAdvanceFromStage=-1;
+  if(typeof window.advanceCombinedStage==='function'){
+    var v41Advance=window.advanceCombinedStage;
+    window.advanceCombinedStage=function(){
+      var p=(typeof state!=='undefined')?state.current:null;
+      if(!p || p.type!=='comb') return v41Advance.apply(this,arguments);
+      var now=Date.now();
+      var fromStage=Number(p.stage||0);
+      if(lastAdvanceProblem===p && lastAdvanceFromStage===fromStage && now-lastAdvanceAt<900){
+        return;
+      }
+      /* También ignora cualquier segundo avance que llegue justo después de que el primero
+         haya cambiado de etapa, antes de que el jugador haya hecho una nueva selección. */
+      if(lastAdvanceProblem===p && now-lastAdvanceAt<900 && p.awaitingSelection===true){
+        return;
+      }
+      lastAdvanceProblem=p;
+      lastAdvanceFromStage=fromStage;
+      lastAdvanceAt=now;
+      return v41Advance.apply(this,arguments);
+    };
+  }
+
+  /* No permite que una nueva combinada repita inmediatamente la anterior. */
+  if(typeof window.makeCombinedProblem==='function'){
+    var originalMakeCombinedProblem=window.makeCombinedProblem;
+    var lastExpr='';
+    window.makeCombinedProblem=function(){
+      var p=null;
+      for(var tries=0; tries<12; tries++){
+        p=originalMakeCombinedProblem.apply(this,arguments);
+        if(!p || p.expr!==lastExpr) break;
+      }
+      if(p && p.expr) lastExpr=p.expr;
+      return p;
+    };
+  }
+})();
+</script>
 </body>
 </html>
 
