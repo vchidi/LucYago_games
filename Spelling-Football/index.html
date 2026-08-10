@@ -308,40 +308,51 @@ body.competition-mode #modeBlindBtn{display:flex!important}
 </head>
 <body class="learning-mode">
 <div class="wrap">
-  <section class="hero" id="cleanHero">
-  <div class="clean-title-row">
-    <h1 class="title" id="cleanGameTitle">Football Spelling</h1>
-  </div>
-  <div class="controls clean-controls" id="cleanControls">
-    <button id="menuBtn" class="clean-btn" type="button">Inicio</button>
-    <button id="modeClassicBtn" class="clean-btn primary active" type="button">Tricky letters</button>
-    <button id="modeBlindBtn" class="clean-btn violet" type="button">Blind</button>
-    <button id="autoAudioBtn" class="clean-btn" type="button">Audio Spelling: sí</button>
-    <button id="commentaryBtn" class="clean-btn" type="button">Audio Partido: sí</button>
-    <button id="repeatAudioBtn" class="clean-btn amber" type="button">Repetir audio</button>
-    <button id="shuffleVerbsBtn" class="clean-btn" type="button">Mezclar</button>
-    <button id="restartBtn" class="clean-btn" type="button">Reiniciar partida</button>
-    <button id="noGameBtn" class="clean-btn" type="button">Partido: sí</button>
-    <select id="formationSelect" class="tactic-hidden-select" aria-hidden="true" tabindex="-1">
-      <option value="1-2-2-1">Formación 1-2-2-1</option><option value="1-3-1-1">Formación 1-3-1-1</option><option value="1-2-1-2">Formación 1-2-1-2</option><option value="1-1-3-1">Formación 1-1-3-1</option>
-    </select>
-    <button id="formationCycleBtn" class="clean-btn" type="button">Formación 1-2-2-1</button>
-    <select id="yagoRoleSelect" class="tactic-hidden-select" aria-hidden="true" tabindex="-1">
-      <option value="goalkeeper">Yago portero</option><option value="defense">Yago defensa</option><option value="midfield" selected>Yago medio</option><option value="attack">Yago atacante</option>
-    </select>
-    <button id="yagoRoleCycleBtn" class="clean-btn" type="button">Yago medio</button>
-    <button id="regenTeamsBtn" class="clean-btn" type="button">Regenerar equipos</button>
-    <button id="importPlayersTopBtn" class="clean-btn" type="button">Jugadores</button>
-    <button id="exportPlayersTopBtn" class="clean-btn" type="button">Plantilla Atletic</button>
-  </div>
-  <div class="stats clean-stats" id="cleanStats">
-    <div class="stat"><div class="k">Aciertos</div><div class="v" id="goodCount">0</div></div>
-    <div class="stat"><div class="k">Errores</div><div class="v" id="badCount">0</div></div>
-    <div class="stat"><div class="k">Racha</div><div class="v" id="streakCount">0</div></div>
-    <div class="stat"><div class="k">Marcador</div><div class="v" id="stepCount">0 - 0</div></div>
-    <div class="stat"><div class="k">Palabra</div><div class="v"><span id="currentIndex">1</span>/<span id="totalCount">0</span></div></div>
-  </div>
-</section>
+  <section class="hero">
+    <div class="topline">
+      <div>
+        <div class="badge">Football words</div>
+        <h1 class="title">Football Spelling</h1>
+        <p class="subtitle">Escucha la palabra, completa las letras que faltan y haz avanzar la jugada sin distracciones.</p>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="menuBtn" class="icon-btn" title="Volver al menú">Inicio</button>
+      <button id="modeClassicBtn" class="primary active">Tricky letters</button>
+      <button id="modeBlindBtn" class="violet">Blind</button>
+      <button id="autoAudioBtn">Audio Spelling: sí</button>
+      <button id="commentaryBtn">Audio Partido: sí</button>
+      <button id="repeatAudioBtn" class="amber">Repetir audio</button>
+      <button id="shuffleVerbsBtn" class="icon-btn" title="Mezclar verbos">Mezclar</button>
+      <button id="restartBtn">Reiniciar partida</button>
+      <button id="noGameBtn">Partido: sí</button>
+      <select id="formationSelect" class="select-pill tactic-hidden-select" aria-hidden="true" tabindex="-1">
+        <option value="1-2-2-1">Formación 1-2-2-1</option>
+        <option value="1-3-1-1">Formación 1-3-1-1</option>
+        <option value="1-2-1-2">Formación 1-2-1-2</option>
+        <option value="1-1-3-1">Formación 1-1-3-1</option>
+      </select>
+      <button id="formationCycleBtn" class="select-pill" type="button">Formación 1-2-2-1</button>
+      <select id="yagoRoleSelect" class="select-pill tactic-hidden-select" aria-hidden="true" tabindex="-1">
+        <option value="goalkeeper">Yago portero</option>
+        <option value="defense">Yago defensa</option>
+        <option value="midfield" selected>Yago medio</option>
+        <option value="attack">Yago atacante</option>
+      </select>
+      <button id="yagoRoleCycleBtn" class="select-pill" type="button">Yago medio</button>
+      <button id="regenTeamsBtn">Regenerar equipos</button>
+      <button id="importPlayersTopBtn" title="Importar Excel o JSON de jugadores">Jugadores</button>
+      <button id="exportPlayersTopBtn" title="Descargar plantilla de jugadores">Plantilla Atletic</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">Aciertos</div><div class="v" id="goodCount">0</div></div>
+      <div class="stat"><div class="k">Errores</div><div class="v" id="badCount">0</div></div>
+      <div class="stat"><div class="k">Racha</div><div class="v" id="streakCount">0</div></div>
+      <div class="stat"><div class="k">Marcador</div><div class="v" id="stepCount">0 - 0</div></div>
+      <div class="stat"><div class="k">Palabra</div><div class="v"><span id="currentIndex">1</span>/<span id="totalCount">0</span></div></div>
+    </div>
+
+  </section>
   <section class="panel">
     <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false">
     <div class="game-grid" id="gameGrid">
@@ -3002,6 +3013,65 @@ body.learning-mode .photo-controls .status{
   document.addEventListener('click',function(){setTimeout(stabilize,0)},true);
 })();
 </script>
+
+<style id="FINAL_PARTIDO_MODE_AND_LAYOUT_20260810B">
+/* Esta es la única capa final para la cabecera de Partido. No altera Aprendizaje en web. */
+body.competition-mode .hero{position:relative!important;height:auto!important;min-height:0!important;overflow:visible!important;padding:7px 9px!important}
+body.competition-mode .topline{display:block!important}
+body.competition-mode .badge,body.competition-mode .subtitle{display:none!important}
+body.competition-mode .title{margin:0 0 5px!important;font-size:20px!important;line-height:1!important;white-space:nowrap!important}
+body.competition-mode .controls{position:static!important;left:auto!important;right:auto!important;top:auto!important;width:100%!important;max-width:none!important;margin:0 0 5px!important;padding:0!important;display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:4px!important;overflow:visible!important}
+body.competition-mode .controls>*{position:static!important;transform:none!important;animation:none!important;transition:none!important;min-width:0!important;width:auto!important;height:27px!important;min-height:27px!important;max-height:27px!important;padding:0 5px!important;font-size:9.5px!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+body.competition-mode #learnScreenBtn,body.competition-mode #competitionScreenBtn,body.competition-mode #modeClassicBtn{display:none!important}
+body.competition-mode #modeBlindBtn{display:flex!important;align-items:center!important;justify-content:center!important}
+body.competition-mode .stats{position:static!important;width:100%!important;margin:0!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important}
+body.competition-mode .stat{min-width:0!important;padding:4px 5px!important;border-radius:9px!important}
+body.competition-mode .stat .k{font-size:7.5px!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+body.competition-mode .stat .v{font-size:13px!important;line-height:1.05!important;margin-top:2px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+@media (pointer:coarse) and (orientation:landscape) and (min-width:761px){
+ body.competition-mode .hero{padding:5px 7px!important}
+ body.competition-mode .title{font-size:16px!important;margin-bottom:4px!important}
+ body.competition-mode .controls{grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:3px!important;margin-bottom:4px!important}
+ body.competition-mode .controls>*{height:23px!important;min-height:23px!important;max-height:23px!important;padding:0 3px!important;font-size:8px!important;border-radius:7px!important}
+ body.competition-mode .stats{gap:3px!important}
+ body.competition-mode .stat{padding:3px 4px!important}
+ body.competition-mode .stat .k{font-size:6.8px!important}
+ body.competition-mode .stat .v{font-size:11px!important}
+}
+/* El botón de modo no debe vibrar ni cambiar de geometría al activarse. */
+#modeBlindBtn,#modeBlindBtn.active{outline:none!important;transform:none!important;animation:none!important;transition:none!important}
+</style>
+<script id="FINAL_SINGLE_BLIND_CONTROL_20260810B">
+(function(){
+  function install(){
+    var old=document.getElementById('modeBlindBtn');
+    if(!old || old.dataset.singleModeInstalled==='1') return;
+    var btn=old.cloneNode(true); // elimina listeners acumulados del botón
+    btn.dataset.singleModeInstalled='1';
+    old.parentNode.replaceChild(btn,old);
+    function sync(){
+      try{
+        var isBlind=(typeof mode!=='undefined' && mode==='blind');
+        btn.textContent=isBlind?'Blind':'Tricky';
+        btn.classList.toggle('active',isBlind);
+      }catch(e){ btn.textContent='Tricky'; }
+    }
+    btn.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      try{
+        var next=(typeof mode!=='undefined' && mode==='blind')?'classic':'blind';
+        if(typeof setMode==='function') setMode(next);
+        sync();
+      }catch(err){ console.error(err); }
+    },false);
+    sync();
+    // sincroniza después de renderizados sin bucles ni timers continuos
+    document.addEventListener('spelling-mode-changed',sync,false);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',install,{once:true}); else install();
+})();
+</script>
+
 </body>
 <style id="spelling-learning-word-phrase-alignment-final">
 body.learning-mode .learn-cell.ref{
@@ -4624,3 +4694,34 @@ body.learning-mode.keyboard-open .learn-cell.phrase .learn-char{
 
 
 
+
+<style id="IPAD_HORIZONTAL_FINAL_STABILIZER_20260810">
+@media (pointer:coarse) and (orientation:landscape) and (min-width:761px){
+  body.competition-mode .hero{position:relative!important;height:auto!important;min-height:0!important;padding:6px 8px!important;overflow:visible!important}
+  body.competition-mode .topline{display:block!important}
+  body.competition-mode .title{margin:0 0 4px!important;font-size:17px!important;line-height:1!important;white-space:nowrap!important}
+  body.competition-mode .controls{position:static!important;left:auto!important;right:auto!important;top:auto!important;width:100%!important;max-width:none!important;margin:0 0 4px!important;padding:0!important;display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:3px!important;overflow:visible!important}
+  body.competition-mode .controls>*{position:static!important;min-width:0!important;width:auto!important;height:24px!important;min-height:24px!important;max-height:24px!important;padding:0 4px!important;margin:0!important;font-size:8.5px!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;transform:none!important;animation:none!important;transition:none!important}
+  body.competition-mode .stats{position:static!important;width:100%!important;margin:0!important;padding:0!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:3px!important}
+  body.competition-mode .stat{min-width:0!important;padding:2px 4px!important;border-radius:8px!important}
+  body.competition-mode .stat .k{font-size:6.5px!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  body.competition-mode .stat .v{font-size:10.5px!important;line-height:1.05!important;margin-top:1px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  body.competition-mode #modeBlindBtn,body.competition-mode #modeBlindBtn.active{outline:none!important;transform:none!important;animation:none!important;transition:none!important}
+  body.competition-mode.keyboard-open .controls{position:static!important;left:auto!important;right:auto!important;top:auto!important;max-width:none!important;display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important}
+}
+</style>
+<script id="IPAD_BLIND_SINGLE_LISTENER_GUARD_20260810">
+(function(){
+  function fix(){
+    if(!document.body.classList.contains('competition-mode')) return;
+    var b=document.getElementById('modeBlindBtn');
+    if(!b||b.dataset.ipadGuard==='1') return;
+    b.dataset.ipadGuard='1';
+    b.style.transform='none';
+    b.style.animation='none';
+    b.style.transition='none';
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fix,{once:true});else fix();
+  document.addEventListener('click',function(){setTimeout(fix,0)},true);
+})();
+</script>
