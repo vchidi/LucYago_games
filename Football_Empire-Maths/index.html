@@ -5153,601 +5153,67 @@ updateControlAvailability();
 })();
 </script>
 
-<script id="resta-ipad-single-editable-cell-patch">
-(function(){
-  function clearSelected(){
-    document.querySelectorAll('.blank.selectedCell,.carryBlank.selectedCell,.blank.activeCell,.carryBlank.activeCell')
-      .forEach(function(el){
-        el.classList.remove('selectedCell','activeCell');
-      });
-  }
 
-  function selectCell(cell){
-    if(!cell) return;
-    clearSelected();
-    cell.classList.add('selectedCell','activeCell');
 
-    var input = cell.querySelector('input');
-    if(input){
-      try{
-        input.removeAttribute('readonly');
-        input.disabled = false;
-        input.focus({preventScroll:true});
-      }catch(e){
-        try{ input.focus(); }catch(_){}
-      }
-    }
 
-    try{ window.activeBlank = cell; }catch(e){}
-    try{ window.activeCell = cell; }catch(e){}
-    try{ window.selectedBlank = cell; }catch(e){}
-    try{ window.selectedCell = cell; }catch(e){}
-  }
 
-  function isEditableRestaCell(target){
-    if(!target || !target.closest) return null;
-    var cell = target.closest('.blank,.carryBlank');
-    if(!cell) return null;
-    try{
-      var bodyText = (document.getElementById('opTitle')||{}).textContent || '';
-      var selected = document.querySelector('.topControls .selectedMode,.topControls .topActive');
-      var selectedText = selected ? selected.textContent : '';
-      var op = String(window.currentOperation || window.currentOp || window.opType || '').toLowerCase();
-      var known = bodyText || selectedText || op;
-      var looksSub = /resta|subtract|subtraction/.test((bodyText+' '+selectedText+' '+op).toLowerCase());
-      if(known && !looksSub) return null;
-    }catch(e){}
-    return cell;
-  }
 
-  function handler(e){
-    var cell = isEditableRestaCell(e.target);
-    if(!cell) return;
-    selectCell(cell);
-    e.stopPropagation();
-  }
 
-  document.addEventListener('pointerdown', handler, true);
-  document.addEventListener('touchstart', handler, {capture:true, passive:true});
-  document.addEventListener('click', handler, true);
 
-  var mo = new MutationObserver(function(){
-    var active = Array.from(document.querySelectorAll('.blank.selectedCell,.carryBlank.selectedCell,.blank.activeCell,.carryBlank.activeCell'));
-    if(active.length <= 1) return;
-    var last = active[active.length-1];
-    active.slice(0,-1).forEach(function(el){ el.classList.remove('selectedCell','activeCell'); });
-    last.classList.add('selectedCell','activeCell');
-  });
-  mo.observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['class']});
 
-  function unlockResultInputs(){
-    document.querySelectorAll('.blank input,.carryBlank input').forEach(function(inp){
-      inp.disabled = false;
-      if(inp.hasAttribute('readonly')) inp.removeAttribute('readonly');
-      inp.setAttribute('inputmode','numeric');
-    });
-  }
-  document.addEventListener('DOMContentLoaded', unlockResultInputs);
-  setInterval(unlockResultInputs, 800);
-})();
-</script>
 
-<style id="resta-ipad-single-editable-cell-style">
-.blank.selectedCell,.blank.activeCell,
-.carryBlank.selectedCell,.carryBlank.activeCell{
-  outline:4px solid #8b5cf6!important;
-  outline-offset:2px!important;
-  background:#f2ecff!important;
-}
+
+
+
+
+
+
+
+
+
+
+
+<style id="reset-resta-combinadas-final-style">
+#operationArea.op-sub .blank,#operationArea.op-sub .borrowBlank{pointer-events:auto!important;touch-action:manipulation!important}
+#operationArea.op-sub .borrowBlank{display:none}
+#operationArea.op-sub .borrowBlank.show{display:flex!important;visibility:visible!important;opacity:1!important}
+#operationArea.op-sub .editSelected{outline:4px solid #7c3aed!important;outline-offset:2px!important;background:#fef3c7!important}
+#operationArea.op-sub .crossedDigit{position:relative!important}
+#operationArea.op-sub .crossedDigit::after{content:"";position:absolute;left:4px;right:4px;top:50%;height:2px;background:#ef4444;border-radius:999px;transform:rotate(-14deg);pointer-events:none;z-index:5}
+#operationArea.op-comb .combinedWrap{display:flex!important;flex-direction:column!important;width:min(100%,900px)!important;background:#fff!important;border:0!important;box-shadow:none!important;margin-top:10px!important;padding:8px 10px!important}
+#operationArea.op-comb .combinedPrompt{order:-20!important;margin:0 0 10px!important;padding:0!important;border:0!important;font:1000 14px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif!important;color:#3f3b63!important}
+#operationArea.op-comb .combinedHistoryLabel,#operationArea.op-comb .combinedSelectLabel,#operationArea.op-comb .combinedInputLabel,#operationArea.op-comb .combinedOriginal{display:none!important}
+#operationArea.op-comb .combinedHistory{order:0!important;margin:0!important;padding:0!important;border:0!important;display:flex!important;flex-direction:column!important;gap:4px!important}
+#operationArea.op-comb .combinedGridLine,#operationArea.op-comb .combinedStageInput,#operationArea.op-comb .combinedFinalRow{display:grid!important;grid-template-columns:repeat(var(--comb-cols),44px)!important;gap:0!important;align-items:center!important;justify-content:start!important;min-height:44px!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important}
+#operationArea.op-comb .combinedToken,#operationArea.op-comb .combinedGhost{min-width:44px!important;width:44px!important;min-height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;font-size:26px!important;color:#111827!important;user-select:none!important;-webkit-user-select:none!important}
+#operationArea.op-comb .combinedToken.dragSel{background:#dbeafe!important;box-shadow:inset 0 -4px 0 #2563eb!important}
+#operationArea.op-comb .combinedToken.goodSel{background:#dcfce7!important;color:#166534!important;box-shadow:inset 0 -4px 0 #16a34a!important}
+#operationArea.op-comb .combinedToken.badSel{background:#fee2e2!important;color:#991b1b!important;box-shadow:inset 0 -4px 0 #ef4444!important}
+#operationArea.op-comb .combinedStageInput .combinedBlank,#operationArea.op-comb .combinedFinalBlank{width:44px!important;min-width:44px!important;height:40px!important;margin:0!important;border:3px solid #8b5cf6!important;border-radius:10px!important;background:#fff!important;box-shadow:none!important}
+#operationArea.op-comb .combinedStageInput .combinedBlank.editSelected,#operationArea.op-comb .combinedFinalBlank.editSelected{outline:4px solid #7c3aed!important;outline-offset:2px!important;background:#fef3c7!important;border-color:#f59e0b!important}
+#operationArea.op-comb .combinedReserved{min-height:132px!important;display:block!important}
+@media(max-width:800px){#operationArea.op-comb .combinedGridLine,#operationArea.op-comb .combinedStageInput,#operationArea.op-comb .combinedFinalRow{grid-template-columns:repeat(var(--comb-cols),31px)!important}#operationArea.op-comb .combinedToken,#operationArea.op-comb .combinedGhost{min-width:31px!important;width:31px!important;font-size:20px!important}#operationArea.op-comb .combinedStageInput .combinedBlank,#operationArea.op-comb .combinedFinalBlank{min-width:31px!important;width:31px!important;height:34px!important}}
 </style>
-
-
-<style id="valentina-empire-final-20260810">
-/* RESTA: una única casilla activa, cualquiera puede reactivarse en cualquier momento. */
-#operationArea.op-sub .blank,
-#operationArea.op-sub .borrowBlank.show{
-  pointer-events:auto!important;
-  touch-action:manipulation!important;
-}
-#operationArea.op-sub .blank.cellChosen,
-#operationArea.op-sub .borrowBlank.show.cellChosen{
-  outline:4px solid #7c3aed!important;
-  outline-offset:2px!important;
-  border-color:#f59e0b!important;
-  background:linear-gradient(180deg,#fef3c7,#fde68a)!important;
-}
-/* Evitar que estilos antiguos dejen dos casillas visualmente activas. */
-#operationArea.op-sub .blank:not(.cellChosen).activeCell,
-#operationArea.op-sub .blank:not(.cellChosen).selectedCell,
-#operationArea.op-sub .borrowBlank.show:not(.cellChosen).activeCell,
-#operationArea.op-sub .borrowBlank.show:not(.cellChosen).selectedCell{
-  outline:none!important;
-}
-
-/* SUMA: llevadas exactamente del mismo ancho y columna que la cifra inferior. */
-#operationArea.op-add .carryRow{
-  gap:7px!important;
-  justify-content:flex-end!important;
-}
-#operationArea.op-add .carryRow .carryBlank,
-#operationArea.op-add .carryRow .ghostDigit{
-  box-sizing:border-box!important;
-  width:var(--cell)!important;
-  min-width:var(--cell)!important;
-  max-width:var(--cell)!important;
-  flex:0 0 var(--cell)!important;
-  margin:0!important;
-}
-#operationArea.op-add .carryRow .separatorDot{
-  width:12px!important;
-  min-width:12px!important;
-  max-width:12px!important;
-  flex:0 0 12px!important;
-}
-
-/* COMBINADAS: una sola capa visual y símbolos/números sin "pastillas". */
-#operationArea.op-comb .combinedWrap{
-  position:relative!important;
-  isolation:isolate!important;
-  opacity:1!important;
-  visibility:visible!important;
-}
-#operationArea.op-comb .combinedOriginal,
-#operationArea.op-comb .combinedHistoryLabel,
-#operationArea.op-comb .combinedSelectLabel,
-#operationArea.op-comb .combinedInputLabel{
-  display:none!important;
-}
-#operationArea.op-comb .combinedToken,
-#operationArea.op-comb .combinedResultToken,
-#operationArea.op-comb .combinedGhost{
-  border:0!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-  background:transparent!important;
-  padding:0!important;
-  min-height:38px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-}
-#operationArea.op-comb .combinedGridLine.combinedSelectable .combinedToken.dragSel{
-  background:rgba(219,234,254,.75)!important;
-  outline:0!important;
-  border:0!important;
-}
-#operationArea.op-comb .combinedGridLine.combinedSelectedGood .combinedToken.combinedInSelection,
-#operationArea.op-comb .combinedToken.goodSel{
-  background:rgba(220,252,231,.95)!important;
-  color:#166534!important;
-  border:0!important;
-  box-shadow:inset 0 -4px 0 #22c55e!important;
-}
-#operationArea.op-comb .combinedToken.badSel{
-  background:rgba(254,226,226,.95)!important;
-  color:#991b1b!important;
-  border:0!important;
-  box-shadow:inset 0 -4px 0 #ef4444!important;
-}
-#operationArea.op-comb .combinedGridLine,
-#operationArea.op-comb .combinedStageInput,
-#operationArea.op-comb .combinedFinalDirect{
-  grid-template-columns:repeat(var(--comb-cols),44px)!important;
-  gap:0!important;
-}
-#operationArea.op-comb .combinedFinalDirect{
-  display:grid!important;
-  align-items:center!important;
-  justify-content:start!important;
-  min-height:46px!important;
-  padding:3px 0 0!important;
-  margin-top:2px!important;
-  border-top:2px dashed #cbd5e1!important;
-}
-#operationArea.op-comb .combinedFinalDirect .combinedFinalBlank{
-  width:44px!important;
-  min-width:44px!important;
-  height:40px!important;
-}
-#operationArea.op-comb .combinedFinalDirect .combinedGhost{
-  visibility:hidden!important;
-}
-#operationArea.op-comb .combinedFinalBlank.cellChosen{
-  outline:4px solid #7c3aed!important;
-  outline-offset:2px!important;
-  background:#fef3c7!important;
-}
-@media(max-width:800px){
-  #operationArea.op-comb .combinedGridLine,
-  #operationArea.op-comb .combinedStageInput,
-  #operationArea.op-comb .combinedFinalDirect{
-    grid-template-columns:repeat(var(--comb-cols),31px)!important;
-  }
-  #operationArea.op-comb .combinedFinalDirect .combinedFinalBlank{
-    width:31px!important;min-width:31px!important;height:34px!important;
-  }
-}
-
-/* DIRECTOR DEPORTIVO: LF a la izquierda del título y stats desplazadas/compactadas a la izquierda. */
-.photoStage .cmTop{
-  grid-template-columns:auto minmax(0,1fr)!important;
-  align-items:start!important;
-  column-gap:6px!important;
-}
-.photoStage .cmBadge{
-  align-self:start!important;
-  margin-top:0!important;
-}
-.photoStage .cmTitle{
-  display:inline-block!important;
-  vertical-align:top!important;
-  margin-top:1px!important;
-}
-.photoStage .cmStats{
-  margin-top:4px!important;
-  margin-left:-2px!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:3px!important;
-  width:100%!important;
-}
-.photoStage .cmStat{
-  min-width:0!important;
-  padding:3px 2px!important;
-  font-size:9px!important;
-}
-.photoStage .cmStat b{
-  font-size:12px!important;
-}
-.photoStage .cmStat small{
-  display:none!important;
-}
-@media(max-width:1180px){
-  .photoStage .cmTop{grid-template-columns:38px minmax(0,1fr)!important;gap:4px!important;padding:5px!important}
-  .photoStage .cmBadge{width:38px!important;height:38px!important;border-radius:11px!important;font-size:13px!important}
-  .photoStage .cmTitle{font-size:13px!important}
-  .photoStage .cmStats{gap:2px!important;margin-top:3px!important}
-  .photoStage .cmStat{font-size:7.5px!important;padding:2px 1px!important}
-  .photoStage .cmStat b{font-size:10px!important}
-}
-</style>
-
-<script id="valentina-empire-final-20260810-js">
+<script id="reset-resta-combinadas-final-js">
 (function(){
-  var chosenCell=null;
-
-  function isSub(){
-    try{return !!(window.state && state.current && state.current.type==='sub');}catch(e){return false;}
-  }
-  function clearChosen(){
-    document.querySelectorAll('#operationArea.op-sub .cellChosen').forEach(function(el){
-      el.classList.remove('cellChosen','selectedCell','activeCell','borrowSelected');
-    });
-  }
-  function chooseSubCell(cell){
-    if(!cell || !isSub()) return false;
-    if(cell.classList.contains('borrowBlank') && !cell.classList.contains('show')) return false;
-    clearChosen();
-    chosenCell=cell;
-    cell.classList.add('cellChosen','selectedCell','activeCell');
-    var input=cell.querySelector('input');
-    if(input){
-      input.disabled=false;
-      input.removeAttribute('readonly');
-    }
-    try{
-      state.activeElement=cell;
-      state.activeKind=cell.classList.contains('carryBlank')?'carry':'answer';
-    }catch(e){}
-    return true;
-  }
-
-  function subCellFromTarget(t){
-    if(!t || !t.closest) return null;
-    return t.closest('#operationArea.op-sub .blank[data-answer],#operationArea.op-sub .borrowBlank.show,#operationArea.op-sub .carryBlank');
-  }
-
-  ['pointerdown','touchstart','click'].forEach(function(type){
-    document.addEventListener(type,function(e){
-      var cell=subCellFromTarget(e.target);
-      if(!cell) return;
-      chooseSubCell(cell);
-      if(type!=='touchstart') e.preventDefault();
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-    },{capture:true,passive:type==='touchstart'});
-  });
-
-  function writeChosen(key){
-    if(!isSub() || !chosenCell || !chosenCell.isConnected) return false;
-    var input=chosenCell.querySelector('input');
-    if(!input) return false;
-    var max=Number(chosenCell.dataset.max || input.maxLength || (chosenCell.classList.contains('borrowBlank')?2:1));
-    if(!Number.isFinite(max) || max<1) max=2;
-    if(key==='del'){
-      input.value=input.value.slice(0,-1);
-    }else if(/^\d$/.test(String(key))){
-      input.value=(input.value+String(key)).slice(0,max);
-    }else return false;
-    input.dispatchEvent(new Event('input',{bubbles:true}));
-    input.dispatchEvent(new Event('change',{bubbles:true}));
-    chooseSubCell(chosenCell);
-    return true;
-  }
-
-  /* Este manejador se ejecuta antes que los parches antiguos de préstamo.
-     Así, cuando el usuario vuelve a una casilla de resultado, el teclado vuelve con él. */
-  document.addEventListener('click',function(e){
-    var b=e.target&&e.target.closest&&e.target.closest('#screenKeypad button');
-    if(!b || !isSub() || !chosenCell) return;
-    var key=b.dataset.key || b.textContent.trim();
-    if(key==='⌫'||/borrar|del/i.test(key)) key='del';
-    if(writeChosen(key)){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-    }
-  },true);
-
-  /* ---------------- COMBINADAS ---------------- */
-  function esc(v){
-    return String(v).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});
-  }
-  function addFinalDirectRow(p){
-    var wrap=document.querySelector('#operationArea.op-comb .combinedWrap');
-    if(!wrap || wrap.querySelector('.combinedFinalDirect') || !p || !p.answer) return;
-    var cols=p.cols||1;
-    var html='<div class="combinedFinalDirect" style="--comb-cols:'+cols+'" aria-label="Resultado final directo">';
-    html+='<span class="blank combinedBlank combinedFinalBlank" data-combined-final="1" data-answer="'+esc(p.answer)+'" data-max="'+String(p.answer).length+'"><input inputmode="none" readonly tabindex="-1" maxlength="'+String(p.answer).length+'"></span>';
-    for(var i=1;i<cols;i++) html+='<span class="combinedGhost"></span>';
-    html+='</div>';
-    wrap.insertAdjacentHTML('beforeend',html);
-  }
-
-  function normalizeCombinedLayers(){
-    var area=document.getElementById('operationArea');
-    if(!area || !area.classList.contains('op-comb')) return;
-    var wraps=area.querySelectorAll(':scope > .combinedWrap');
-    if(wraps.length>1){
-      for(var i=0;i<wraps.length-1;i++) wraps[i].remove();
-    }
-    try{
-      if(window.state && state.current && state.current.type==='comb') addFinalDirectRow(state.current);
-    }catch(e){}
-  }
-
-  var oldRenderCombined=window.renderCombinedProblem;
-  if(typeof oldRenderCombined==='function'){
-    window.renderCombinedProblem=function(p){
-      var r=oldRenderCombined.apply(this,arguments);
-      normalizeCombinedLayers();
-      return r;
-    };
-    window.renderCombined=window.renderCombinedProblem;
-  }
-
-  function chooseFinal(cell){
-    document.querySelectorAll('#operationArea.op-comb .combinedFinalBlank.cellChosen').forEach(function(x){x.classList.remove('cellChosen','selectedCell','activeCell');});
-    cell.classList.add('cellChosen','selectedCell','activeCell');
-    try{state.activeElement=cell;state.activeKind='answer';}catch(e){}
-  }
-  ['pointerdown','touchstart','click'].forEach(function(type){
-    document.addEventListener(type,function(e){
-      var cell=e.target&&e.target.closest&&e.target.closest('#operationArea.op-comb .combinedFinalBlank');
-      if(!cell) return;
-      chooseFinal(cell);
-      if(type!=='touchstart') e.preventDefault();
-      e.stopPropagation();
-    },{capture:true,passive:type==='touchstart'});
-  });
-
-  document.addEventListener('click',function(e){
-    var b=e.target&&e.target.closest&&e.target.closest('#screenKeypad button');
-    var cell=document.querySelector('#operationArea.op-comb .combinedFinalBlank.cellChosen');
-    if(!b||!cell) return;
-    var key=b.dataset.key || b.textContent.trim();
-    var inp=cell.querySelector('input'); if(!inp)return;
-    if(key==='⌫'||/borrar|del/i.test(key)) inp.value=inp.value.slice(0,-1);
-    else if(/^\d$/.test(key)) inp.value=(inp.value+key).slice(0,Number(cell.dataset.max)||4);
-    else return;
-    inp.dispatchEvent(new Event('input',{bubbles:true}));
-    if(inp.value===cell.dataset.answer){
-      cell.classList.add('goodCell');
-      try{
-        if(typeof setFeedback==='function') setFeedback('Resultado final correcto.','good');
-        if(typeof success==='function') success();
-      }catch(_){}
-    }
-    e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();
-  },true);
-
-  /* Observador: elimina cualquier render viejo momentáneo de combinadas y añade el resultado final
-     en el mismo ciclo de pintura, evitando el destello de una capa previa. */
-  var mo=new MutationObserver(function(){
-    normalizeCombinedLayers();
-  });
-  document.addEventListener('DOMContentLoaded',function(){
-    var area=document.getElementById('operationArea');
-    if(area) mo.observe(area,{childList:true,subtree:false});
-    normalizeCombinedLayers();
-  });
-})();
-</script>
-
-
-<style id="valentina-combinadas-resta-20260810-b">
-/* COMBINADAS: instrucción arriba, hueco reservado para pasos y solución final en su posición definitiva */
-#operationArea.op-comb .combinedPrompt{
-  order:-10!important;
-  margin:0 0 10px!important;
-  padding:0!important;
-  border:0!important;
-  font-size:14px!important;
-  font-weight:1000!important;
-  color:#3f3b63!important;
-}
-#operationArea.op-comb .combinedWrap{
-  display:flex!important;
-  flex-direction:column!important;
-}
-#operationArea.op-comb .combinedHistory{
-  order:0!important;
-  margin:0!important;
-  padding:0!important;
-  border:0!important;
-}
-#operationArea.op-comb .combinedSelectLabel,
-#operationArea.op-comb .combinedInputLabel,
-#operationArea.op-comb .combinedHistoryLabel{
-  display:none!important;
-}
-#operationArea.op-comb .combinedReservedSteps{
-  display:flex!important;
-  flex-direction:column!important;
-  gap:6px!important;
-  min-height:calc(var(--reserved-lines,3) * 48px)!important;
-  margin-top:4px!important;
-}
-#operationArea.op-comb .combinedReservedLine{
-  min-height:48px!important;
-}
-#operationArea.op-comb .combinedFinalDirect{
-  border-top:0!important;
-  margin-top:0!important;
-  padding-top:0!important;
-}
-#operationArea.op-comb .combinedFinalBlank{
-  border:3px solid #8b5cf6!important;
-  border-radius:10px!important;
-  background:#fff!important;
-  box-shadow:none!important;
-}
-#operationArea.op-comb .combinedFinalBlank.cellChosen{
-  background:#fef3c7!important;
-  outline:4px solid #7c3aed!important;
-  outline-offset:2px!important;
-}
-/* La casilla que aparece al validar el arrastre queda claramente activa */
-#operationArea.op-comb .combinedStageInput .combinedBlank.autoActive,
-#operationArea.op-comb .combinedStageInput .combinedBlank.cellChosen{
-  outline:4px solid #7c3aed!important;
-  outline-offset:2px!important;
-  background:#fef3c7!important;
-  border-color:#f59e0b!important;
-}
-
-/* RESTA: cualquier cifra tachada crea su recuadro superior visible */
-#operationArea.op-sub .borrowBlank.forceShow{
-  display:flex!important;
-  visibility:visible!important;
-  opacity:1!important;
-}
-</style>
-
-<script id="valentina-combinadas-resta-20260810-b-js">
-(function(){
-  function replacePrompt(){
-    document.querySelectorAll('#operationArea.op-comb .combinedPrompt').forEach(function(el){
-      el.textContent='Arrastra el dedo/cursor sobre la operación que tiene prioridad';
-    });
-  }
-
-  function activeStageBlank(){
-    var stage=document.querySelector('#operationArea.op-comb .combinedStageInput');
-    if(!stage) return;
-    var blank=stage.querySelector('.combinedBlank,.blank');
-    if(!blank) return;
-    document.querySelectorAll('#operationArea.op-comb .combinedStageInput .combinedBlank.autoActive,#operationArea.op-comb .combinedStageInput .combinedBlank.cellChosen')
-      .forEach(function(x){ if(x!==blank) x.classList.remove('autoActive','cellChosen','selectedCell','activeCell'); });
-    blank.classList.add('autoActive','cellChosen','selectedCell','activeCell');
-    var input=blank.querySelector('input');
-    if(input){
-      input.disabled=false;
-      input.removeAttribute('readonly');
-    }
-    try{
-      state.activeElement=blank;
-      state.activeKind='answer';
-    }catch(e){}
-  }
-
-  function reserveLines(){
-    var wrap=document.querySelector('#operationArea.op-comb .combinedWrap');
-    if(!wrap) return;
-    var finalRow=wrap.querySelector('.combinedFinalDirect');
-    if(!finalRow) return;
-
-    var reserve=wrap.querySelector('.combinedReservedSteps');
-    if(!reserve){
-      reserve=document.createElement('div');
-      reserve.className='combinedReservedSteps';
-      reserve.style.setProperty('--reserved-lines','3');
-      reserve.innerHTML='<div class="combinedReservedLine"></div><div class="combinedReservedLine"></div><div class="combinedReservedLine"></div>';
-      finalRow.parentNode.insertBefore(reserve,finalRow);
-    }
-
-    // Keep final answer row as the only bottom solution box.
-    var extras=wrap.querySelectorAll('.combinedFinalDirect');
-    if(extras.length>1){
-      for(var i=0;i<extras.length-1;i++) extras[i].remove();
-    }
-  }
-
-  function normalizeCombined(){
-    replacePrompt();
-    reserveLines();
-    activeStageBlank();
-  }
-
-  // Observe changes after drag/drop so newly-created answer blank becomes active immediately.
-  var combObserver=new MutationObserver(function(){ normalizeCombined(); });
-  document.addEventListener('DOMContentLoaded',function(){
-    var area=document.getElementById('operationArea');
-    if(area) combObserver.observe(area,{childList:true,subtree:true});
-    normalizeCombined();
-  });
-
-  /* RESTA:
-     Cada tachado debe forzar la aparición del recuadro superior correspondiente.
-     Detectamos tanto pointer/touch como cambios de clase creados por la lógica existente. */
-  function showBorrowForMarkedDigit(target){
-    if(!target || !target.closest) return;
-    var area=document.getElementById('operationArea');
-    if(!area || !area.classList.contains('op-sub')) return;
-    var digit=target.closest('.digit,.locked,.blank,.borrowSource,.subDigit');
-    if(!digit) return;
-
-    var col = digit.dataset.col || digit.dataset.index || digit.getAttribute('data-col');
-    if(col==null) return;
-
-    var candidates=area.querySelectorAll('.borrowBlank,.carryBlank');
-    candidates.forEach(function(b){
-      var bcol=b.dataset.col || b.dataset.index || b.getAttribute('data-col');
-      if(String(bcol)===String(col)){
-        b.classList.add('show','forceShow');
-        b.style.display='flex';
-      }
-    });
-  }
-
-  ['pointerup','touchend','click'].forEach(function(type){
-    document.addEventListener(type,function(e){
-      showBorrowForMarkedDigit(e.target);
-    },true);
-  });
-
-  var subObserver=new MutationObserver(function(muts){
-    var area=document.getElementById('operationArea');
-    if(!area || !area.classList.contains('op-sub')) return;
-    muts.forEach(function(m){
-      if(m.type==='attributes' && m.target && /cross|strike|borrow|marked|used/i.test(m.target.className||'')){
-        showBorrowForMarkedDigit(m.target);
-      }
-    });
-  });
-  document.addEventListener('DOMContentLoaded',function(){
-    var area=document.getElementById('operationArea');
-    if(area) subObserver.observe(area,{subtree:true,attributes:true,attributeFilter:['class','style']});
-  });
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s)); let selectedCell=null;
+function currentType(){try{return state&&state.current&&state.current.type}catch(e){return null}}
+function clearSel(){$$('.editSelected').forEach(el=>el.classList.remove('editSelected','selectedCell','activeCell'))}
+function selectCell(cell,kind){if(!cell)return;clearSel();selectedCell=cell;cell.classList.add('editSelected','selectedCell','activeCell');const i=$('input',cell);if(i){i.disabled=false;i.removeAttribute('readonly')}try{state.activeElement=cell;state.activeKind=kind||'answer'}catch(e){}}
+function mathCells(row){return row?$$(':scope > .digit,:scope > .locked,:scope > .blank,:scope > .borrowSource',row):[]}
+function colFromRight(cell){const row=cell.closest('.rowMath'),cells=mathCells(row),actual=cell.matches('.digit,.locked,.blank,.borrowSource')?cell:cell.closest('.digit,.locked,.blank,.borrowSource'),idx=cells.indexOf(actual);return idx<0?-1:cells.length-1-idx}
+function borrowBoxes(){const a=$('#operationArea');if(!a)return[];let b=$$('.borrowBlank',a);return b.length?b:$$('.carryBlank',a)}
+function borrowForCol(col){const boxes=borrowBoxes();let x=boxes.find(b=>{const v=b.dataset.col??b.dataset.column??b.dataset.index;return v!=null&&Number(v)===col});return x||boxes[boxes.length-1-col]||null}
+function crossAndShow(cell){if(currentType()!=='sub'||!cell)return;const c=cell.matches('.digit,.locked,.blank,.borrowSource')?cell:cell.closest('.digit,.locked,.blank,.borrowSource');if(!c)return;const col=colFromRight(c);if(col<0)return;c.classList.add('crossedDigit');const box=borrowForCol(col);if(box){box.classList.add('show');box.style.display='flex'}}
+['pointerup','touchend','click'].forEach(type=>document.addEventListener(type,e=>{if(currentType()!=='sub')return;const a=$('#operationArea.op-sub');if(!a||!a.contains(e.target))return;const edit=e.target.closest('.blank,.borrowBlank.show,.carryBlank');if(edit){selectCell(edit,edit.classList.contains('borrowBlank')||edit.classList.contains('carryBlank')?'carry':'answer');return}const d=e.target.closest('.digit,.locked,.borrowSource');if(d)crossAndShow(d)},true));
+function esc(v){return String(v).replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
+function combProblem(){try{return currentType()==='comb'?state.current:null}catch(e){return null}}
+function ensureComb(){const p=combProblem(),w=$('#operationArea.op-comb .combinedWrap');if(!p||!w)return;let pr=$('.combinedPrompt',w);if(!pr){pr=document.createElement('div');pr.className='combinedPrompt';w.prepend(pr)}pr.textContent='Arrastra el dedo/cursor sobre la operación que tiene prioridad';if(!$('.combinedReserved',w)){const r=document.createElement('div');r.className='combinedReserved';w.appendChild(r)}if(!$('.combinedFinalRow',w)){const cols=p.cols||1,row=document.createElement('div');row.className='combinedFinalRow';row.style.setProperty('--comb-cols',cols);row.innerHTML='<span class="blank combinedBlank combinedFinalBlank" data-answer="'+esc(p.answer)+'" data-max="'+String(p.answer).length+'"><input inputmode="none" readonly tabindex="-1" maxlength="'+String(p.answer).length+'"></span>'+Array.from({length:Math.max(0,cols-1)},()=>'<span class="combinedGhost"></span>').join('');w.appendChild(row)}}
+function activateStage(){const st=$('#operationArea.op-comb .combinedStageInput');if(!st)return;const b=$('.combinedBlank,.blank',st);if(b)selectCell(b,'answer')}
+function normalizeComb(){if(currentType()!=='comb')return;const a=$('#operationArea.op-comb');if(!a)return;const wraps=$$('.combinedWrap',a);if(wraps.length>1)wraps.slice(0,-1).forEach(w=>w.remove());ensureComb();activateStage()}
+const mo=new MutationObserver(()=>normalizeComb());document.addEventListener('DOMContentLoaded',()=>{const a=$('#operationArea');if(a)mo.observe(a,{childList:true,subtree:true});normalizeComb()});
+['pointerdown','touchstart','click'].forEach(type=>document.addEventListener(type,e=>{if(currentType()!=='comb')return;const c=e.target.closest('#operationArea.op-comb .combinedStageInput .combinedBlank,#operationArea.op-comb .combinedFinalBlank');if(!c)return;selectCell(c,'answer');e.stopPropagation()},{capture:true,passive:type==='touchstart'}));
+document.addEventListener('click',e=>{const b=e.target.closest('#screenKeypad button,.keypad button');if(!b||!selectedCell||!selectedCell.isConnected)return;const t=currentType();if(t!=='sub'&&t!=='comb')return;let key=b.dataset.key||b.textContent.trim();if(key==='⌫'||/borrar|del/i.test(key))key='del';const input=$('input',selectedCell);if(!input)return;const max=Number(selectedCell.dataset.max||input.maxLength||(selectedCell.classList.contains('borrowBlank')?2:4))||4;if(key==='del')input.value=input.value.slice(0,-1);else if(/^\d$/.test(key))input.value=(input.value+key).slice(0,max);else return;input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));selectCell(selectedCell,selectedCell.classList.contains('borrowBlank')?'carry':'answer');if(t==='comb'&&selectedCell.classList.contains('combinedFinalBlank')){const ans=String(selectedCell.dataset.answer||'');selectedCell.classList.toggle('goodCell',input.value===ans)}e.preventDefault();e.stopImmediatePropagation();e.stopPropagation()},true)
 })();
 </script>
 
