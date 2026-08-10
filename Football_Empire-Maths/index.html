@@ -5189,3 +5189,132 @@ updateControlAvailability();
 
 
 
+
+<style id="resta-ipad-borrow-final-20260810">
+/* Resta iPad: tachado fino para mantener legible el número. */
+#operationArea.op-sub .subTopDigit.crossed::after{
+  height:0!important;
+  border-top:2px solid #ef4444!important;
+  background:transparent!important;
+  left:10%!important;
+  right:10%!important;
+  top:50%!important;
+  transform:rotate(-16deg)!important;
+  opacity:.9!important;
+}
+/* El recuadro de préstamo visible se comporta como una casilla real. */
+#operationArea.op-sub .borrowRow .borrowBlank.show{
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  touch-action:manipulation!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+}
+#operationArea.op-sub .borrowRow .borrowBlank.show.borrowSelected,
+#operationArea.op-sub .borrowRow .borrowBlank.show.activeCell,
+#operationArea.op-sub .borrowRow .borrowBlank.show.selectedCell{
+  outline:4px solid #7c3aed!important;
+  outline-offset:3px!important;
+  border-color:#f59e0b!important;
+  background:linear-gradient(180deg,#fef3c7,#fde68a)!important;
+  box-shadow:0 0 0 3px rgba(255,209,102,.9),0 5px 0 rgba(70,82,150,.14)!important;
+}
+#operationArea.op-sub .borrowRow .borrowBlank.show input{
+  pointer-events:none!important;
+  opacity:1!important;
+  -webkit-text-fill-color:#7a5b00!important;
+  color:#7a5b00!important;
+}
+@media (pointer:coarse) and (min-width:700px){
+  #operationArea.op-sub .subTopDigit.crossed::after{
+    border-top-width:1.5px!important;
+  }
+}
+</style>
+<script id="resta-ipad-borrow-final-20260810">
+(function(){
+  const qs=(s,r=document)=>r.querySelector(s);
+  let selectedBorrow=null;
+
+  function clearBorrowSelection(except){
+    document.querySelectorAll('#operationArea.op-sub .borrowBlank.borrowSelected').forEach(function(b){
+      if(b!==except) b.classList.remove('borrowSelected','activeCell','selectedCell');
+    });
+  }
+  function selectBorrow(box){
+    if(!box || !box.classList.contains('show')) return;
+    clearBorrowSelection(box);
+    selectedBorrow=box;
+    box.classList.add('borrowSelected','selectedCell','activeCell');
+    try{
+      state.activeKind='answer';
+      state.activeElement=box;
+    }catch(_e){}
+    if(typeof updateActiveCell==='function'){
+      try{ updateActiveCell(); }catch(_e){}
+      // updateActiveCell puede limpiar clases; la selección táctil debe seguir visible.
+      box.classList.add('borrowSelected','selectedCell','activeCell');
+    }
+  }
+  function writeBorrow(key){
+    if(!selectedBorrow || !selectedBorrow.isConnected || !selectedBorrow.classList.contains('show')) return false;
+    const input=selectedBorrow.querySelector('input');
+    if(!input) return false;
+    if(key==='del') input.value=input.value.slice(0,-1);
+    else if(/^\d$/.test(String(key))) input.value=(input.value+String(key)).slice(0,2);
+    else return false;
+    input.dispatchEvent(new Event('input',{bubbles:true}));
+    selectBorrow(selectedBorrow);
+    return true;
+  }
+
+  function boxFromEvent(e){ return e.target?.closest?.('#operationArea.op-sub .borrowBlank.show'); }
+  ['pointerdown','touchend','click'].forEach(function(type){
+    document.addEventListener(type,function(e){
+      const box=boxFromEvent(e);
+      if(!box) return;
+      selectBorrow(box);
+      if(type==='touchend') e.preventDefault();
+      e.stopPropagation();
+    },{capture:true,passive:type!=='touchend'});
+  });
+
+  // Intercepta el teclado de pantalla antes que los manejadores antiguos.
+  document.addEventListener('click',function(e){
+    const btn=e.target?.closest?.('#screenKeypad button');
+    if(!btn || !selectedBorrow) return;
+    const key=btn.dataset.key;
+    if(key===undefined) return;
+    if(writeBorrow(key)){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  },true);
+
+  // Al tachar un número, selecciona automáticamente su recuadro superior.
+  function selectShownForDigit(digit){
+    if(!digit) return;
+    const idx=digit.dataset.borrowTarget;
+    setTimeout(function(){
+      const box=qs('#operationArea.op-sub .borrowBlank[data-borrow-index="'+idx+'"].show');
+      if(box) selectBorrow(box);
+    },0);
+  }
+  document.addEventListener('touchend',function(e){ selectShownForDigit(e.target?.closest?.('.subTopDigit')); },true);
+  document.addEventListener('pointerdown',function(e){ selectShownForDigit(e.target?.closest?.('.subTopDigit')); },true);
+
+  // Si cambia el ejercicio, elimina referencias a casillas antiguas.
+  if(typeof renderProblem==='function' && !renderProblem.__restaIpadBorrowFinal){
+    const old=renderProblem;
+    renderProblem=function(){
+      selectedBorrow=null;
+      const r=old.apply(this,arguments);
+      setTimeout(function(){ clearBorrowSelection(null); },0);
+      return r;
+    };
+    renderProblem.__restaIpadBorrowFinal=true;
+  }
+})();
+</script>
