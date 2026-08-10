@@ -5573,6 +5573,184 @@ updateControlAvailability();
 })();
 </script>
 
+
+<style id="valentina-combinadas-resta-20260810-b">
+/* COMBINADAS: instrucción arriba, hueco reservado para pasos y solución final en su posición definitiva */
+#operationArea.op-comb .combinedPrompt{
+  order:-10!important;
+  margin:0 0 10px!important;
+  padding:0!important;
+  border:0!important;
+  font-size:14px!important;
+  font-weight:1000!important;
+  color:#3f3b63!important;
+}
+#operationArea.op-comb .combinedWrap{
+  display:flex!important;
+  flex-direction:column!important;
+}
+#operationArea.op-comb .combinedHistory{
+  order:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+}
+#operationArea.op-comb .combinedSelectLabel,
+#operationArea.op-comb .combinedInputLabel,
+#operationArea.op-comb .combinedHistoryLabel{
+  display:none!important;
+}
+#operationArea.op-comb .combinedReservedSteps{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  min-height:calc(var(--reserved-lines,3) * 48px)!important;
+  margin-top:4px!important;
+}
+#operationArea.op-comb .combinedReservedLine{
+  min-height:48px!important;
+}
+#operationArea.op-comb .combinedFinalDirect{
+  border-top:0!important;
+  margin-top:0!important;
+  padding-top:0!important;
+}
+#operationArea.op-comb .combinedFinalBlank{
+  border:3px solid #8b5cf6!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+#operationArea.op-comb .combinedFinalBlank.cellChosen{
+  background:#fef3c7!important;
+  outline:4px solid #7c3aed!important;
+  outline-offset:2px!important;
+}
+/* La casilla que aparece al validar el arrastre queda claramente activa */
+#operationArea.op-comb .combinedStageInput .combinedBlank.autoActive,
+#operationArea.op-comb .combinedStageInput .combinedBlank.cellChosen{
+  outline:4px solid #7c3aed!important;
+  outline-offset:2px!important;
+  background:#fef3c7!important;
+  border-color:#f59e0b!important;
+}
+
+/* RESTA: cualquier cifra tachada crea su recuadro superior visible */
+#operationArea.op-sub .borrowBlank.forceShow{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+</style>
+
+<script id="valentina-combinadas-resta-20260810-b-js">
+(function(){
+  function replacePrompt(){
+    document.querySelectorAll('#operationArea.op-comb .combinedPrompt').forEach(function(el){
+      el.textContent='Arrastra el dedo/cursor sobre la operación que tiene prioridad';
+    });
+  }
+
+  function activeStageBlank(){
+    var stage=document.querySelector('#operationArea.op-comb .combinedStageInput');
+    if(!stage) return;
+    var blank=stage.querySelector('.combinedBlank,.blank');
+    if(!blank) return;
+    document.querySelectorAll('#operationArea.op-comb .combinedStageInput .combinedBlank.autoActive,#operationArea.op-comb .combinedStageInput .combinedBlank.cellChosen')
+      .forEach(function(x){ if(x!==blank) x.classList.remove('autoActive','cellChosen','selectedCell','activeCell'); });
+    blank.classList.add('autoActive','cellChosen','selectedCell','activeCell');
+    var input=blank.querySelector('input');
+    if(input){
+      input.disabled=false;
+      input.removeAttribute('readonly');
+    }
+    try{
+      state.activeElement=blank;
+      state.activeKind='answer';
+    }catch(e){}
+  }
+
+  function reserveLines(){
+    var wrap=document.querySelector('#operationArea.op-comb .combinedWrap');
+    if(!wrap) return;
+    var finalRow=wrap.querySelector('.combinedFinalDirect');
+    if(!finalRow) return;
+
+    var reserve=wrap.querySelector('.combinedReservedSteps');
+    if(!reserve){
+      reserve=document.createElement('div');
+      reserve.className='combinedReservedSteps';
+      reserve.style.setProperty('--reserved-lines','3');
+      reserve.innerHTML='<div class="combinedReservedLine"></div><div class="combinedReservedLine"></div><div class="combinedReservedLine"></div>';
+      finalRow.parentNode.insertBefore(reserve,finalRow);
+    }
+
+    // Keep final answer row as the only bottom solution box.
+    var extras=wrap.querySelectorAll('.combinedFinalDirect');
+    if(extras.length>1){
+      for(var i=0;i<extras.length-1;i++) extras[i].remove();
+    }
+  }
+
+  function normalizeCombined(){
+    replacePrompt();
+    reserveLines();
+    activeStageBlank();
+  }
+
+  // Observe changes after drag/drop so newly-created answer blank becomes active immediately.
+  var combObserver=new MutationObserver(function(){ normalizeCombined(); });
+  document.addEventListener('DOMContentLoaded',function(){
+    var area=document.getElementById('operationArea');
+    if(area) combObserver.observe(area,{childList:true,subtree:true});
+    normalizeCombined();
+  });
+
+  /* RESTA:
+     Cada tachado debe forzar la aparición del recuadro superior correspondiente.
+     Detectamos tanto pointer/touch como cambios de clase creados por la lógica existente. */
+  function showBorrowForMarkedDigit(target){
+    if(!target || !target.closest) return;
+    var area=document.getElementById('operationArea');
+    if(!area || !area.classList.contains('op-sub')) return;
+    var digit=target.closest('.digit,.locked,.blank,.borrowSource,.subDigit');
+    if(!digit) return;
+
+    var col = digit.dataset.col || digit.dataset.index || digit.getAttribute('data-col');
+    if(col==null) return;
+
+    var candidates=area.querySelectorAll('.borrowBlank,.carryBlank');
+    candidates.forEach(function(b){
+      var bcol=b.dataset.col || b.dataset.index || b.getAttribute('data-col');
+      if(String(bcol)===String(col)){
+        b.classList.add('show','forceShow');
+        b.style.display='flex';
+      }
+    });
+  }
+
+  ['pointerup','touchend','click'].forEach(function(type){
+    document.addEventListener(type,function(e){
+      showBorrowForMarkedDigit(e.target);
+    },true);
+  });
+
+  var subObserver=new MutationObserver(function(muts){
+    var area=document.getElementById('operationArea');
+    if(!area || !area.classList.contains('op-sub')) return;
+    muts.forEach(function(m){
+      if(m.type==='attributes' && m.target && /cross|strike|borrow|marked|used/i.test(m.target.className||'')){
+        showBorrowForMarkedDigit(m.target);
+      }
+    });
+  });
+  document.addEventListener('DOMContentLoaded',function(){
+    var area=document.getElementById('operationArea');
+    if(area) subObserver.observe(area,{subtree:true,attributes:true,attributeFilter:['class','style']});
+  });
+})();
+</script>
+
 </body>
 </html>
 
