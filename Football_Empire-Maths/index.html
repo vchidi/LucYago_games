@@ -5217,6 +5217,141 @@ document.addEventListener('click',e=>{const b=e.target.closest('#screenKeypad bu
 })();
 </script>
 
+
+<style id="empire-resta-suma-director-final">
+#operationArea.op-sub .subBorrowOverlay{position:absolute!important;pointer-events:none!important;inset:0!important;z-index:20!important}
+#operationArea.op-sub .subBorrowOverlay .borrowBlank{position:absolute!important;display:none;pointer-events:auto!important}
+#operationArea.op-sub .subBorrowOverlay .borrowBlank.show{display:flex!important;visibility:visible!important;opacity:1!important}
+
+#operationArea.op-add .rowMath,
+#operationArea.op-add .carryRow{
+  display:grid!important;
+  grid-auto-flow:column!important;
+  grid-auto-columns:var(--cell)!important;
+  column-gap:7px!important;
+  justify-content:end!important;
+  align-items:center!important;
+}
+#operationArea.op-add .carryRow > .carryBlank,
+#operationArea.op-add .carryRow > .ghostDigit,
+#operationArea.op-add .rowMath > .digit,
+#operationArea.op-add .rowMath > .blank,
+#operationArea.op-add .rowMath > .locked{
+  width:var(--cell)!important;
+  min-width:var(--cell)!important;
+  max-width:var(--cell)!important;
+  margin:0!important;
+}
+#operationArea.op-add .carryRow{padding-left:calc(var(--cell) + 7px)!important}
+
+.photoStage .cmTop{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  column-gap:6px!important;
+  align-items:start!important;
+}
+.photoStage .cmBadge{grid-column:1!important;grid-row:1!important;margin:0!important;align-self:start!important}
+.photoStage .cmTitle{grid-column:2!important;grid-row:1!important;margin:1px 0 0!important;align-self:start!important}
+.photoStage .cmStats{
+  grid-column:1 / -1!important;
+  grid-row:2!important;
+  width:100%!important;
+  margin:3px 0 0!important;
+  padding-left:0!important;
+  transform:translateX(-4px)!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:3px!important;
+}
+.photoStage .cmStat{min-width:0!important;padding:3px 2px!important;overflow:hidden!important;text-align:center!important}
+.photoStage .cmStat b{font-size:11px!important;white-space:nowrap!important}
+.photoStage .cmStat small{font-size:7px!important;white-space:nowrap!important}
+@media(max-width:1180px){
+  .photoStage .cmTop{grid-template-columns:34px minmax(0,1fr)!important;column-gap:4px!important}
+  .photoStage .cmBadge{width:34px!important;height:34px!important;font-size:12px!important}
+  .photoStage .cmTitle{font-size:12px!important}
+  .photoStage .cmStats{gap:2px!important;transform:translateX(-6px)!important}
+  .photoStage .cmStat{padding:2px 1px!important}
+  .photoStage .cmStat b{font-size:9px!important}
+  .photoStage .cmStat small{font-size:6px!important}
+}
+</style>
+
+<script id="empire-resta-column-overlay-final">
+(function(){
+  function area(){return document.getElementById('operationArea');}
+  function isSub(){try{return !!(window.state && state.current && state.current.type==='sub');}catch(e){return false;}}
+  function ensureOverlay(){
+    var a=area(); if(!a) return null;
+    var ov=a.querySelector('.subBorrowOverlay');
+    if(!ov){ov=document.createElement('div');ov.className='subBorrowOverlay';a.appendChild(ov);}
+    return ov;
+  }
+  function mathCells(row){
+    return Array.from(row.children).filter(function(el){return el.matches && el.matches('.digit,.blank,.locked,.borrowSource');});
+  }
+  function colFromRight(cell){
+    var row=cell.closest('.rowMath'); if(!row) return -1;
+    var cells=mathCells(row), idx=cells.indexOf(cell);
+    return idx<0?-1:cells.length-1-idx;
+  }
+  function targetDigitForColumn(col){
+    var a=area(); if(!a) return null;
+    var rows=Array.from(a.querySelectorAll('.rowMath'));
+    for(var r=0;r<rows.length;r++){
+      var cells=mathCells(rows[r]);
+      if(cells.length>col) return cells[cells.length-1-col];
+    }
+    return null;
+  }
+  function overlayBoxForCol(col){
+    var ov=ensureOverlay(); if(!ov) return null;
+    var box=ov.querySelector('.borrowBlank[data-overlay-col="'+col+'"]');
+    if(!box){
+      box=document.createElement('div');
+      box.className='borrowBlank';
+      box.dataset.overlayCol=String(col);
+      box.dataset.max='2';
+      box.innerHTML='<input inputmode="none" readonly tabindex="-1" maxlength="2">';
+      ov.appendChild(box);
+    }
+    return box;
+  }
+  function positionBox(box,digit){
+    var a=area(); if(!a||!box||!digit) return;
+    var ar=a.getBoundingClientRect(), dr=digit.getBoundingClientRect(), h=24;
+    box.style.width=dr.width+'px';
+    box.style.height=h+'px';
+    box.style.left=(dr.left-ar.left)+'px';
+    box.style.top=Math.max(0,(dr.top-ar.top)-h-4)+'px';
+  }
+  function showForCell(cell){
+    if(!isSub()||!cell) return;
+    var col=colFromRight(cell); if(col<0) return;
+    var digit=targetDigitForColumn(col); if(!digit) return;
+    var box=overlayBoxForCol(col);
+    positionBox(box,digit);
+    box.classList.add('show');
+  }
+  ['pointerup','touchend','click'].forEach(function(type){
+    document.addEventListener(type,function(e){
+      if(!isSub()) return;
+      var a=area(); if(!a||!a.contains(e.target)) return;
+      var cell=e.target.closest&&e.target.closest('.digit,.locked,.borrowSource');
+      if(cell) requestAnimationFrame(function(){showForCell(cell);});
+    },true);
+  });
+  window.addEventListener('resize',function(){
+    if(!isSub()) return;
+    var ov=ensureOverlay(); if(!ov) return;
+    Array.from(ov.querySelectorAll('.borrowBlank.show')).forEach(function(box){
+      var col=Number(box.dataset.overlayCol), digit=targetDigitForColumn(col);
+      if(digit) positionBox(box,digit);
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
 
