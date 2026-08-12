@@ -307,6 +307,9 @@ body.learning-mode .panel{
 body.learning-mode .hidden-input{
   pointer-events:none!important;
 }
+body.learning-mode .badge{
+  display:none!important;
+}
 </style>
 </head>
 <body class="learning-mode">
@@ -1489,7 +1492,7 @@ function relocateFootballInfoPanel(){
 window.addEventListener('load',()=>{relocateFootballInfoPanel();loadSaved();footballEngine.init();setupVoices();buildDataset();if(!document.body.classList.contains('learning-mode')){render();setButtons();setTimeout(focusInput,150);if(autoAudio) setTimeout(()=>{if(!document.body.classList.contains('learning-mode')) speakCurrent();},300);}else{setButtons();try{if(window.speechSynthesis)window.speechSynthesis.cancel()}catch(_){}}});
 </script>
 <script id="ipad-compact-keyboard-detector">
-(function(){function setCompactViewport(){var vv=window.visualViewport;var h=vv?vv.height:window.innerHeight;document.documentElement.style.setProperty('--compact-vh',Math.max(260,Math.round(h))+'px');var keyboardOpen=vv?(window.innerHeight-vv.height>120||vv.height<520):false;document.body.classList.toggle('keyboard-open',keyboardOpen);}setCompactViewport();window.addEventListener('resize',setCompactViewport,{passive:true});window.addEventListener('orientationchange',function(){setTimeout(setCompactViewport,80)},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',setCompactViewport,{passive:true});visualViewport.addEventListener('scroll',setCompactViewport,{passive:true});}document.addEventListener('focusin',setCompactViewport);document.addEventListener('focusout',function(){setTimeout(setCompactViewport,120)});})();
+(function(){function setCompactViewport(){var vv=window.visualViewport;var h=vv?vv.height:window.innerHeight;document.documentElement.style.setProperty('--compact-vh',Math.max(260,Math.round(h))+'px');var keyboardOpen=vv?(window.innerHeight-vv.height>120||vv.height<520):false;document.body.classList.toggle('keyboard-open',keyboardOpen&&!document.body.classList.contains('learning-mode'));}setCompactViewport();window.addEventListener('resize',setCompactViewport,{passive:true});window.addEventListener('orientationchange',function(){setTimeout(setCompactViewport,80)},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',setCompactViewport,{passive:true});visualViewport.addEventListener('scroll',setCompactViewport,{passive:true});}document.addEventListener('focusin',setCompactViewport);document.addEventListener('focusout',function(){setTimeout(setCompactViewport,120)});})();
 </script>
 
 
@@ -2860,7 +2863,7 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   var data=[],originalData=[],shuffled=false,orderMode='original',phraseMode=false,idx=0,activeKey='line1',score={good:0,bad:0},photo={on:true,blocks:300,revealed:12,order:[],iconIdx:0,guessOpen:false,guessTries:3,guessSolved:false,streak:0,wordHits:0,lastBoostMsg:'',choices:[],choicesKey:''},cells={};
   function $(id){return document.getElementById(id)}
   function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function sentenceWithWord(sentence,word){var text=String(sentence||''),low=text.toLowerCase(),w=String(word||'').toLowerCase(),start=w?low.indexOf(w):-1,end=start>=0?start+w.length:-1;return text.split('').map(function(ch,i){return '<span class="learn-model-char'+(i>=start&&i<end?' sentence-word':'')+'">'+(ch===' '?'&nbsp;':esc(ch))+'</span>'}).join('')}
+  function sentenceWithWord(sentence,word){var text=String(sentence||''),low=text.toLowerCase(),w=String(word||'').toLowerCase(),start=w?low.indexOf(w):-1,end=start>=0?start+w.length:-1;return text.split('').map(function(ch,i){return '<span class="learn-model-char'+(ch===' '?' phrase-space':'')+(i>=start&&i<end?' sentence-word':'')+'">'+(ch===' '?'&nbsp;':esc(ch))+'</span>'}).join('')}
   function cleanLetters(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z]/g,'').toLowerCase()}
   function phraseDisplay(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z\s.,!?']/g,'').replace(/\s+/g,' ').trim()}
   function phraseTarget(s){return String(s||'').replace(/\s+/g,'')}
@@ -3550,7 +3553,7 @@ body.learning-mode .photo-controls .status{
 .learn-char{font-size:clamp(22px,calc(96cqw / var(--char-count,8)),38px)!important;line-height:1.12!important;min-width:.46em!important}
 .learn-char.blank{color:#3f7cff!important;opacity:.82!important;text-shadow:none!important}
 .learn-sentence{
-  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace!important;
   font-size:clamp(22px,3vw,34px)!important;
   font-weight:1000!important;
   line-height:1.22!important;
@@ -5305,7 +5308,7 @@ body.learning-mode.keyboard-open .learn-cell.phrase .learn-letters{
   text-align:center!important;
   flex-wrap:nowrap!important;
   white-space:nowrap!important;
-  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace!important;
   font-size:clamp(22px,3vw,34px)!important;
   font-weight:1000!important;
   line-height:1.22!important;
