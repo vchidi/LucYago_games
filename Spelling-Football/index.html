@@ -308,45 +308,6 @@ body.learning-mode .hidden-input{
   pointer-events:none!important;
 }
 </style>
-<script id="spelling-learning-boot-guard">
-(function(){
-  var originalAdd=DOMTokenList.prototype.add;
-  DOMTokenList.prototype.add=function(){
-    if(this===document.body.classList&&arguments.length){
-      for(var i=0;i<arguments.length;i++){
-        if(arguments[i]==='keyboard-open'&&document.body.classList.contains('learning-mode')){
-          return;
-        }
-      }
-    }
-    return originalAdd.apply(this,arguments);
-  };
-  var originalSetAttribute=HTMLElement.prototype.setAttribute;
-  HTMLElement.prototype.setAttribute=function(name,value){
-    if(this&&this.id==='hiddenInput'&&String(name).toLowerCase()==='autofocus'&&document.body&&document.body.classList.contains('learning-mode')){
-      return;
-    }
-    return originalSetAttribute.call(this,name,value);
-  };
-  var originalFocus=HTMLElement.prototype.focus;
-  HTMLElement.prototype.focus=function(options){
-    if(this&&this.id==='hiddenInput'&&document.body&&document.body.classList.contains('learning-mode')&&!document.body.classList.contains('learning-input-ready')){
-      return;
-    }
-    return originalFocus.call(this,options);
-  };
-  document.addEventListener('pointerdown',function(e){
-    if(e.target&&e.target.closest&&e.target.closest('.learn-cell.editable,#learningView')){
-      document.body.classList.add('learning-input-ready');
-    }
-  },true);
-  document.addEventListener('touchstart',function(e){
-    if(e.target&&e.target.closest&&e.target.closest('.learn-cell.editable,#learningView')){
-      document.body.classList.add('learning-input-ready');
-    }
-  },true);
-})();
-</script>
 </head>
 <body class="learning-mode">
 <div class="wrap">
@@ -2874,7 +2835,7 @@ body.learning-mode .hero{background:linear-gradient(180deg,#fffdf6,#fff6dc)!impo
 .learn-cell.locked{opacity:.44;filter:grayscale(.25)}@keyframes learnShake{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 .learn-letters{display:flex;flex-wrap:nowrap;white-space:nowrap;overflow:hidden;width:100%;justify-content:center;container-type:inline-size}
 .learn-char{flex:0 1 auto;min-width:.34em;font-size:clamp(18px,calc(92cqw / var(--char-count,8)),38px);font-weight:1000;line-height:1.05;padding:0 1px;color:#3f7cff!important}.learn-char.blank{color:#3f7cff!important;min-width:.44em;text-align:center;text-shadow:0 2px 0 rgba(255,255,255,.75)}.learn-char.filled{color:#3f7cff!important}
-.learn-sentence{background:transparent!important;border:0!important;border-radius:0!important;padding:8px 6px 2px!important;font-size:clamp(22px,3vw,34px);line-height:1.16;font-weight:1000;color:#172033!important;text-align:center;box-shadow:none!important;text-shadow:none!important}.sentence-word{color:#3f7cff!important}
+.sentence-word{color:#3f7cff!important}
 .learn-message{display:none!important}
 .learn-photo-card{flex:1;min-height:0;background:linear-gradient(180deg,#fff,#fff8e9);border-radius:26px;padding:14px;border:3px solid rgba(90,61,26,.08);display:flex;flex-direction:column;box-shadow:0 10px 0 rgba(109,72,33,.09),0 18px 30px rgba(40,44,70,.12)}.learn-photo-card.off{display:none}
 .learn-photo-frame{position:relative;flex:1;min-height:240px;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,#fffdf6,#fff0bd);display:flex;align-items:center;justify-content:center;border:10px solid #fff;box-shadow:inset 0 0 0 2px rgba(38,39,55,.05)}
@@ -2936,7 +2897,7 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function guess(ch){var ok=ch.toLowerCase()===pObj().title.toLowerCase();photo.guessOpen=false;if(ok){photo.guessSolved=true;photo.revealed=grid().tiles;score.good++;showMsg('¡Correcto! Empieza un nuevo icono.');setTimeout(function(){resetPhoto(true);renderLearn()},650)}else{score.bad++;photo.guessTries=Math.max(0,photo.guessTries-1);showMsg('No era ese. Guess se ha cerrado y puedes seguir jugando.')}renderLearn()}
   window.__learningRefreshIcon=function(){resetPhoto(true);photo.revealed=0;photo.order=[];photo.guessOpen=false;photo.guessSolved=false;showMsg('');renderLearn()};
   window.__learningCoverIcon=function(){photo.revealed=0;photo.order=[];renderLearn()};
-  function focusLater(){document.body.classList.add('learning-input-ready');setTimeout(function(){var input=$('hiddenInput');if(input)try{input.focus({preventScroll:true})}catch(e){}},40)}
+  function focusLater(){setTimeout(function(){var input=$('learningNativeInputFinal')||$('learningNativeInput');if(input)try{input.focus({preventScroll:true})}catch(e){try{input.focus()}catch(_){}}},40)}
   function bindScreenButtons(){if(!document.body.dataset.learnDelegatedFinal){document.body.dataset.learnDelegatedFinal='1';var lastTap=0;document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#learnPhraseBtn,#learnScreenBtn,#competitionScreenBtn');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var now=Date.now();if(now-lastTap<260)return;lastTap=now;if(t.id==='learnPhraseBtn'){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()}else{screen(t.id==='learnScreenBtn'?'learning':'competition')}},true)}var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),p=document.getElementById('learnPhraseBtn');if(a&&!a.dataset.learnBound){a.dataset.learnBound='1'}if(c&&!c.dataset.learnBound){c.dataset.learnBound='1'}if(p&&!p.dataset.learnPhraseBound){p.dataset.learnPhraseBound='1'}}
   function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView'))return;var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnHomeBtn" class="learn-control" title="Volver al menu">&#x1F3E0;</button><button id="learnPhotoToggle" class="learn-control">Iconos sí</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">✓ <span id="learnGood">0</span></span><span class="status">✗ <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar última</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">¿Qué icono?</div><div id="learnHearts" class="learn-hearts">♥♥♥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};$('learnGuessBtn').onclick=function(){if(!photo.on)return;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
   function screen(s){var isLearning=s==='learning',already=document.body.classList.contains(isLearning?'learning-mode':'competition-mode');document.body.classList.toggle('learning-mode',isLearning);document.body.classList.toggle('competition-mode',!isLearning);var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),ctl=document.querySelector('.hero .controls'),home=document.getElementById('menuBtn'),statBar=document.querySelector('.stats');if(isLearning&&home&&statBar&&home.parentElement!==statBar)statBar.insertBefore(home,statBar.firstElementChild);if(!isLearning&&home&&ctl&&home.parentElement!==ctl)ctl.insertBefore(home,ctl.firstElementChild);if(a)a.classList.toggle('active',isLearning);if(c)c.classList.toggle('active',!isLearning);if(ctl)ctl.scrollLeft=0;if(already){if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}return}if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}else{document.body.classList.remove('keyboard-open');if(typeof render==='function')render();if(ctl)ctl.scrollLeft=0}}
@@ -2985,8 +2946,6 @@ body.learning-mode.keyboard-open .stats .stat:first-child{
 .learn-phrase-blind{display:none;grid-template-columns:104px 1fr;gap:8px;align-items:stretch;margin-top:4px}
 .learn-phrase-blind.show{display:grid}
 .learn-phrase-label{font-size:12px;font-weight:1000;color:#7a5a22;display:flex;align-items:center;text-transform:uppercase;letter-spacing:.05em}
-.learn-cell.phrase{min-height:54px;border-radius:18px}
-.learn-cell.phrase .learn-char{font-size:clamp(13px,calc(78cqw / var(--char-count,24)),28px)}
 body.learning-mode .photo-controls #learnPhraseBtn.active{
   background:linear-gradient(135deg,#b8ffd7,#69e6a1)!important;
   color:#145234!important;
@@ -3593,6 +3552,7 @@ body.learning-mode .photo-controls .status{
 .learn-sentence{
   font-family:Inter,Arial,Helvetica,sans-serif!important;
   font-size:clamp(22px,3vw,34px)!important;
+  font-weight:1000!important;
   line-height:1.22!important;
   padding:6px 12px 4px!important;
   display:flex!important;
@@ -3602,36 +3562,6 @@ body.learning-mode .photo-controls .status{
   white-space:nowrap!important;
   letter-spacing:0!important;
 }
-.learn-phrase-blind{grid-template-columns:104px 1fr!important;gap:7px!important;margin-top:4px!important}
-.learn-cell.phrase{
-  min-height:62px!important;
-  padding:8px 10px!important;
-  overflow:visible!important;
-}
-.learn-cell.phrase .learn-letters{
-  display:flex!important;
-  justify-content:center!important;
-  flex-wrap:wrap!important;
-  gap:0!important;
-  white-space:normal!important;
-  font-family:inherit!important;
-  font-size:clamp(22px,3vw,34px)!important;
-  font-weight:1000!important;
-  line-height:1.22!important;
-  color:#3f7cff!important;
-}
-.learn-cell.phrase .learn-char{
-  font-size:1em!important;
-  line-height:1.22!important;
-  min-width:.48em!important;
-  padding:0!important;
-  color:#3f7cff!important;
-}
-.learn-cell.phrase .phrase-space{
-  flex:0 0 .38em!important;
-  min-width:.38em!important;
-}
-.learn-cell.phrase .phrase-punct{min-width:auto!important;color:#172033!important}
 @media(max-width:900px){
   body.learning-mode .hero,
   body.learning-mode.keyboard-open .hero{
@@ -3767,50 +3697,6 @@ body.learning-mode .learn-phrase-label{
   width:88px!important;
   pointer-events:none!important;
 }
-body.learning-mode .learn-cell.phrase{
-  width:100%!important;
-  min-height:68px!important;
-  padding:8px 12px!important;
-  overflow:visible!important;
-}
-body.learning-mode .learn-cell.phrase .learn-letters{
-  width:100%!important;
-  display:flex!important;
-  justify-content:center!important;
-  align-items:center!important;
-  flex-wrap:wrap!important;
-  gap:0!important;
-  font-family:inherit!important;
-  font-weight:1000!important;
-  letter-spacing:0!important;
-  color:#172033!important;
-}
-body.learning-mode .learn-cell.phrase .learn-char,
-body.learning-mode .learn-sentence .learn-model-char{
-  min-width:1ch!important;
-  width:1ch!important;
-  flex:0 0 1ch!important;
-  padding:0!important;
-  margin:0!important;
-  font-size:1em!important;
-  line-height:1.24!important;
-  letter-spacing:0!important;
-  color:#172033!important;
-}
-body.learning-mode .learn-cell.phrase .learn-char.sentence-word{
-  color:#5b72ff!important;
-}
-body.learning-mode .learn-cell.phrase .phrase-space{
-  flex:0 0 1ch!important;
-  min-width:1ch!important;
-  width:1ch!important;
-}
-body.learning-mode .learn-cell.phrase .phrase-punct{
-  min-width:1ch!important;
-  width:1ch!important;
-  flex:0 0 1ch!important;
-  color:#172033!important;
-}
 body.learning-mode .hero,
 body.learning-mode .panel,
 body.learning-mode .stats,
@@ -3833,7 +3719,6 @@ body.learning-mode #competitionScreenBtn:active{
 (function(){
   function pinLearningHeader(){
     if(!document.body.classList.contains('learning-mode'))return;
-    document.body.classList.remove('keyboard-open');
     var controls=document.querySelector('.hero .controls');
     if(controls)controls.scrollLeft=0;
   }
@@ -4069,8 +3954,6 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
 body.learning-mode .learn-cell.ref,body.learning-mode .learn-cell.editable:not(.phrase){background:linear-gradient(180deg,#fff,#f8fbff)!important;border:3px solid rgba(90,61,26,.07)!important;box-shadow:0 7px 0 rgba(109,72,33,.07),0 12px 20px rgba(40,44,70,.08)!important;color:#3f7cff!important;font-family:Inter,Arial,Helvetica,sans-serif!important;font-weight:1000!important;letter-spacing:0!important;word-spacing:0!important}
 body.learning-mode .learn-cell.ref .learn-letters,body.learning-mode .learn-cell.editable:not(.phrase) .learn-letters{gap:0!important;justify-content:center!important;align-items:center!important;white-space:nowrap!important;overflow:visible!important;font-family:Inter,Arial,Helvetica,sans-serif!important;font-weight:1000!important;letter-spacing:0!important;word-spacing:0!important;color:#3f7cff!important}
 body.learning-mode .learn-cell.ref .learn-char,body.learning-mode .learn-cell.editable:not(.phrase) .learn-char{font-size:clamp(22px,calc(96cqw / var(--char-count,8)),38px)!important;line-height:1.12!important;min-width:.46em!important;padding:0!important;margin:0!important;color:#3f7cff!important;font-family:inherit!important;font-weight:1000!important;letter-spacing:0!important;text-shadow:none!important}
-body.learning-mode .learn-cell.phrase .phrase-space{flex:0 0 .20em!important;min-width:.20em!important;width:.20em!important}
-body.learning-mode .learn-cell.phrase .phrase-punct.blank{color:#172033!important;opacity:.82!important;text-align:center!important}
 .learn-caret{display:inline-block!important;width:2px!important;height:1.12em!important;margin:0 1px!important;background:#172033!important;border-radius:2px!important;vertical-align:-.12em!important;animation:learnCaretBlink 1s steps(1,end) infinite!important}
 @keyframes learnCaretBlink{50%{opacity:0}}
 #learnHomeBtn{min-width:48px!important;padding:0 14px!important;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',Arial,sans-serif!important;font-size:20px!important;line-height:1!important}
@@ -4090,7 +3973,6 @@ body.competition-mode .football-field.match-shake,body.competition-mode .footbal
     var field=document.getElementById('footballField');
     if(field){field.classList.remove('match-shake');field.classList.remove('match-zoom')}
     if(inCompetition())document.body.classList.remove('keyboard-open');
-    if(inLearning())document.body.classList.remove('keyboard-open');
     var h=document.getElementById('learnHomeBtn');
     if(h&&!h.dataset.boundHome){h.dataset.boundHome='1';h.onclick=function(){window.location.href='../index.html'}}
   }
@@ -5086,13 +4968,10 @@ body.learning-mode.keyboard-open .learn-table .learn-cell.editable:not(.phrase) 
   function runOriginal(id){var b=byId(id);if(!b)return;var fn=b.__nativeLearningClick||b.onclick;if(typeof fn==='function')fn.call(b,new MouseEvent('click',{bubbles:false,cancelable:true}))}
   function bind(btn,fn){if(!btn||btn.dataset.underStatsBound==='1')return;btn.dataset.underStatsBound='1';['pointerup','touchend','click'].forEach(function(ev){btn.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();var now=Date.now();if(btn.__lastUnderStatsRun&&now-btn.__lastUnderStatsRun<220)return;btn.__lastUnderStatsRun=now;fn()},true)})}
   function ensureNativeInput(){var el=byId('learningNativeInput');if(el)return el;el=document.createElement('textarea');el.id='learningNativeInput';el.setAttribute('autocomplete','off');el.setAttribute('autocorrect','off');el.setAttribute('autocapitalize','off');el.setAttribute('spellcheck','false');el.setAttribute('aria-hidden','true');document.body.appendChild(el);el.addEventListener('beforeinput',function(e){if(!isLearning())return;if(e.inputType==='deleteContentBackward'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress('Borrar');el.value=''}},true);el.addEventListener('input',function(e){if(!isLearning())return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();var text=el.value||'';el.value='';for(var i=0;i<text.length;i++){var ch=text.charAt(i);if(ch==='\n'||ch===' ')continue;if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(ch)}},true);return el}
-  function focusNative(){if(!isLearning())return;var el=ensureNativeInput();el.readOnly=false;el.removeAttribute('readonly');el.setAttribute('inputmode','text');try{el.focus({preventScroll:true})}catch(e){try{el.focus()}catch(_){}}}
   function ensureRefresh(strip){var btn=byId('learnIconRefreshBtn');if(!btn){btn=document.createElement('button');btn.id='learnIconRefreshBtn';btn.className='learn-control';btn.type='button';btn.title='Cambiar icono';btn.textContent='↻'}var anchor=byId('learnPhotoToggle');if(anchor&&anchor.parentElement===strip&&btn.parentElement!==strip)anchor.insertAdjacentElement('afterend',btn);else if(btn.parentElement!==strip)strip.insertBefore(btn,strip.firstChild||null);bind(btn,function(){if(typeof window.__learningRefreshIcon==='function')window.__learningRefreshIcon();setTimeout(place,0)});return btn}
   function place(){if(!isLearning())return;ensureNativeInput();var kb=byId('spellingSpanishKeyboard');if(kb)kb.style.display='none';var strip=document.querySelector('.photo-controls'),controls=document.querySelector('.hero .controls');if(!strip||!controls)return;var comp=byId('competitionScreenBtn');if(strip.parentElement!==controls){if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',strip);else controls.appendChild(strip);}else if(comp&&comp.nextElementSibling!==strip){comp.insertAdjacentElement('afterend',strip);} strip.style.setProperty('display','flex','important');strip.style.setProperty('margin-left','auto','important');strip.style.setProperty('visibility','visible','important');strip.style.setProperty('opacity','1','important');ensureRefresh(strip);['learnGuessBtn','learnPhraseBtn','learnBlocksBtn','learnShuffleBtn','learnPhotoToggle','learnIconRefreshBtn'].forEach(function(id){var el=byId(id);if(el)strip.appendChild(el)});Array.prototype.slice.call(strip.querySelectorAll('.status')).forEach(function(el){el.style.display='none'});var photo=byId('learnPhotoToggle');if(photo)photo.textContent='Icono';['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){var b=byId(id);bind(b,function(){runOriginal(id);setTimeout(function(){var p=byId('learnPhotoToggle');if(p)p.textContent='Icono';place()},0)})})}
   function coverEntry(){if(!isLearning())return;if(document.body.dataset.learningIconCoveredNow==='1')return;document.body.dataset.learningIconCoveredNow='1';if(typeof window.__learningCoverIcon==='function')window.__learningCoverIcon();setTimeout(place,0)}
   function resetFlagIfLeaving(){if(!isLearning()&&document.body)delete document.body.dataset.learningIconCoveredNow}
-  function maybeFocus(e){if(!isLearning())return;var t=e&&e.target;if(t&&t.closest&&t.closest('.photo-controls,.hero .controls,button,select,label'))return;if(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))setTimeout(focusNative,0)}
-  ['pointerup','touchend','click'].forEach(function(ev){document.addEventListener(ev,maybeFocus,true)});
   ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(place,0);setTimeout(place,160);setTimeout(coverEntry,220);setTimeout(resetFlagIfLeaving,260)},true)});
   setInterval(function(){place();coverEntry();resetFlagIfLeaving()},700);
   setTimeout(function(){place();coverEntry()},0);
@@ -5300,7 +5179,7 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
 <script id="valentina-learning-ipad-native-keyboard-fix-20260728">
 (function(){
   function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
-  function targetIsTypingArea(t){return !!(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))&&!t.closest('.photo-controls,.hero .controls,button,select,label')}
+  function targetIsTypingArea(t){return !!(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))}
   function nativeInput(){
     var el=document.getElementById('learningNativeInputFinal')||document.getElementById('learningNativeInput');
     if(el)return el;
@@ -5344,6 +5223,7 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
     el.removeAttribute('readonly');
     el.disabled=false;
     el.setAttribute('inputmode','text');
+    if(document.activeElement===el)return;
     try{el.focus({preventScroll:true})}catch(e){try{el.focus()}catch(_){}}
   }
   function prepare(){
@@ -5352,11 +5232,8 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
     if(kb){kb.style.setProperty('display','none','important');kb.style.setProperty('visibility','hidden','important')}
     nativeInput();
   }
-  ['touchstart','pointerdown','mousedown'].forEach(function(ev){
+  ['touchstart','pointerdown'].forEach(function(ev){
     document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target))focusNow()},true);
-  });
-  ['touchend','pointerup','click'].forEach(function(ev){
-    document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target)){focusNow();setTimeout(focusNow,30)}},true);
   });
   ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
     window.addEventListener(ev,function(){setTimeout(prepare,0);setTimeout(prepare,160)},true);
@@ -5414,6 +5291,7 @@ body.learning-mode.keyboard-open .learn-cell.phrase{
   width:100%!important;
   min-width:0!important;
   margin:0!important;
+  min-height:68px!important;
   padding:10px 12px!important;
   overflow:hidden!important;
 }
@@ -5428,6 +5306,33 @@ body.learning-mode.keyboard-open .learn-cell.phrase .learn-letters{
   flex-wrap:nowrap!important;
   white-space:nowrap!important;
   font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-size:clamp(22px,3vw,34px)!important;
+  font-weight:1000!important;
+  line-height:1.22!important;
+  letter-spacing:0!important;
+  gap:0!important;
+  color:#172033!important;
+}
+body.learning-mode .learn-cell.phrase .learn-char,
+body.learning-mode.keyboard-open .learn-cell.phrase .learn-char,
+body.learning-mode .learn-sentence .learn-model-char,
+body.learning-mode.keyboard-open .learn-sentence .learn-model-char{
+  flex:0 0 1ch!important;
+  width:1ch!important;
+  min-width:1ch!important;
+  margin:0!important;
+  padding:0!important;
+  font-family:inherit!important;
+  font-size:1em!important;
+  font-weight:inherit!important;
+  line-height:1.22!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+  color:#172033!important;
+}
+body.learning-mode .learn-cell.phrase .learn-char.sentence-word,
+body.learning-mode.keyboard-open .learn-cell.phrase .learn-char.sentence-word{
+  color:#3f7cff!important;
 }
 @media(max-width:760px){
   body.learning-mode .learn-table,
