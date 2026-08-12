@@ -298,7 +298,7 @@ body.learning-mode #messageBox,
 body.learning-mode .mini{
   display:none!important;
 }
-body.learning-mode .controls>*:not(#learnScreenBtn):not(#competitionScreenBtn){
+body.learning-mode .controls>*:not(#learnScreenBtn):not(#competitionScreenBtn):not(.photo-controls){
   display:none!important;
 }
 body.learning-mode .panel{
@@ -2854,7 +2854,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
 <!-- SPELLING_LEARNING_MODE_START -->
 <style id="spelling-learning-mode-css">
 body.learning-mode #gameGrid,body.learning-mode .footer-tools,body.learning-mode .match-stage,body.learning-mode #footballCard,body.learning-mode .football-panel,body.learning-mode .football-field,body.learning-mode .football-status-grid,body.learning-mode #spanishWord,body.learning-mode #modeExplain,body.learning-mode .word-zone,body.learning-mode .clue-card>.actions,body.learning-mode #messageBox,body.learning-mode .mini{display:none!important}
-body.learning-mode .controls>*:not(#learnScreenBtn):not(#competitionScreenBtn){display:none!important}
+body.learning-mode .controls>*:not(#learnScreenBtn):not(#competitionScreenBtn):not(.photo-controls){display:none!important}
 body.learning-mode .controls{display:flex!important;position:relative!important;z-index:50!important;justify-content:flex-start!important;gap:10px!important;margin-top:58px!important;padding:0!important;overflow:visible!important;pointer-events:auto!important}
 body.competition-mode #learningView{display:none!important}
 body.learning-mode .panel{background:linear-gradient(180deg,#fffdf6,#fff1cf 48%,#e8f8ff)!important;border:3px solid rgba(255,255,255,.88)!important;box-shadow:0 14px 0 rgba(109,72,33,.10),0 24px 42px rgba(40,44,70,.16)!important}
@@ -4857,9 +4857,9 @@ body.learning-mode.keyboard-open .stats{
   }
   body.learning-mode .hero .controls,
   body.learning-mode.keyboard-open .hero .controls{
-    left:8px!important;
-    right:8px!important;
-    top:42px!important;
+    left:0!important;
+    right:0!important;
+    top:0!important;
     height:36px!important;
     z-index:20!important;
   }
@@ -4973,7 +4973,7 @@ body.learning-mode.keyboard-open .stats{
     font-size:19px!important;
   }
   body.learning-mode .hero .controls,
-  body.learning-mode.keyboard-open .hero .controls{left:198px!important}
+  body.learning-mode.keyboard-open .hero .controls{left:0!important}
   body.learning-mode .stat,
   body.learning-mode.keyboard-open .stat{width:78px!important;min-width:78px!important;max-width:78px!important}
 }
@@ -5438,9 +5438,6 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
 </style>
 </body>
 </html>
-
-
-
 
 
 
