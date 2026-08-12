@@ -2899,7 +2899,7 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   var data=[],originalData=[],shuffled=false,orderMode='original',phraseMode=false,idx=0,activeKey='line1',score={good:0,bad:0},photo={on:true,blocks:300,revealed:12,order:[],iconIdx:0,guessOpen:false,guessTries:3,guessSolved:false,streak:0,wordHits:0,lastBoostMsg:'',choices:[],choicesKey:''},cells={};
   function $(id){return document.getElementById(id)}
   function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-  function sentenceWithWord(sentence,word){var safe=esc(sentence||''),w=esc(word||'');if(!w)return safe;var i=safe.toLowerCase().indexOf(w.toLowerCase());if(i<0)return safe;return safe.slice(0,i)+'<span class="sentence-word">'+safe.slice(i,i+w.length)+'</span>'+safe.slice(i+w.length)}
+  function sentenceWithWord(sentence,word){var text=String(sentence||''),low=text.toLowerCase(),w=String(word||'').toLowerCase(),start=w?low.indexOf(w):-1,end=start>=0?start+w.length:-1;return text.split('').map(function(ch,i){return '<span class="learn-model-char'+(i>=start&&i<end?' sentence-word':'')+'">'+(ch===' '?'&nbsp;':esc(ch))+'</span>'}).join('')}
   function cleanLetters(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z]/g,'').toLowerCase()}
   function phraseDisplay(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z\s.,!?']/g,'').replace(/\s+/g,' ').trim()}
   function phraseTarget(s){return String(s||'').replace(/\s+/g,'')}
@@ -3591,10 +3591,14 @@ body.learning-mode .photo-controls .status{
 .learn-char{font-size:clamp(22px,calc(96cqw / var(--char-count,8)),38px)!important;line-height:1.12!important;min-width:.46em!important}
 .learn-char.blank{color:#3f7cff!important;opacity:.82!important;text-shadow:none!important}
 .learn-sentence{
-  font-family:"Courier New",Courier,monospace!important;
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
   font-size:clamp(22px,3vw,34px)!important;
   line-height:1.22!important;
   padding:6px 12px 4px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
   white-space:nowrap!important;
   letter-spacing:0!important;
 }
@@ -3781,7 +3785,8 @@ body.learning-mode .learn-cell.phrase .learn-letters{
   letter-spacing:0!important;
   color:#172033!important;
 }
-body.learning-mode .learn-cell.phrase .learn-char{
+body.learning-mode .learn-cell.phrase .learn-char,
+body.learning-mode .learn-sentence .learn-model-char{
   min-width:1ch!important;
   width:1ch!important;
   flex:0 0 1ch!important;
@@ -5053,11 +5058,11 @@ body.learning-mode .learn-photo-card{width:100%!important;min-width:0!important;
 body.learning-mode .learn-photo-frame{width:100%!important;height:auto!important;min-height:360px!important;max-height:none!important;flex:1 1 auto!important;aspect-ratio:auto!important}
 body.learning-mode .learn-caption{flex:0 0 24px!important;max-height:24px!important;overflow:hidden!important}
 @media (pointer:coarse) and (min-width:761px) and (orientation:portrait){
-  body.learning-mode.keyboard-open .learn-layout{grid-template-columns:minmax(0,1fr) 330px!important;gap:10px!important;align-items:stretch!important}
-  body.learning-mode.keyboard-open .learn-right{align-self:stretch!important;max-height:calc(100dvh - 150px)!important;overflow:hidden!important;display:flex!important}
-  body.learning-mode.keyboard-open .learn-photo-card{width:330px!important;min-width:330px!important;max-width:330px!important;height:100%!important;min-height:220px!important;max-height:calc(100dvh - 158px)!important;padding:10px!important;overflow:hidden!important;flex:1 1 auto!important}
-  body.learning-mode.keyboard-open .learn-photo-frame{width:310px!important;height:auto!important;min-height:166px!important;max-height:none!important;flex:1 1 auto!important;aspect-ratio:auto!important}
-  body.learning-mode.keyboard-open .learn-caption{flex:0 0 24px!important;max-height:24px!important;overflow:hidden!important}
+  body.learning-mode .learn-layout,body.learning-mode.keyboard-open .learn-layout{grid-template-columns:minmax(0,1fr) 450px!important;gap:10px!important;align-items:stretch!important}
+  body.learning-mode .learn-right,body.learning-mode.keyboard-open .learn-right{align-self:stretch!important;max-height:280px!important;overflow:hidden!important;display:flex!important}
+  body.learning-mode .learn-photo-card,body.learning-mode.keyboard-open .learn-photo-card{width:450px!important;min-width:450px!important;max-width:450px!important;height:280px!important;min-height:280px!important;max-height:280px!important;padding:10px!important;overflow:hidden!important;flex:0 0 280px!important}
+  body.learning-mode .learn-photo-frame,body.learning-mode.keyboard-open .learn-photo-frame{width:430px!important;height:226px!important;min-height:226px!important;max-height:226px!important;flex:0 0 226px!important;aspect-ratio:auto!important}
+  body.learning-mode .learn-caption,body.learning-mode.keyboard-open .learn-caption{flex:0 0 24px!important;max-height:24px!important;overflow:hidden!important}
 }
 body.learning-mode .learn-table .learn-cell.ref .learn-letters,
 body.learning-mode .learn-table .learn-cell.editable:not(.phrase) .learn-letters,
@@ -5253,7 +5258,7 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
   font-size:16px!important;
   transform:translateX(-50%)!important;
 }
-@media (pointer:coarse) and (min-width:761px){
+@media (pointer:coarse) and (min-width:761px) and (orientation:landscape){
   body.learning-mode .learn-layout{
     grid-template-columns:minmax(0,1fr) 450px!important;
     gap:10px!important;
@@ -5422,7 +5427,7 @@ body.learning-mode.keyboard-open .learn-cell.phrase .learn-letters{
   text-align:center!important;
   flex-wrap:nowrap!important;
   white-space:nowrap!important;
-  font-family:"Courier New",Courier,monospace!important;
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
 }
 @media(max-width:760px){
   body.learning-mode .learn-table,
