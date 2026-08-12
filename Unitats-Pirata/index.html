@@ -941,6 +941,30 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
 /* El recuadro azul conserva exactamente sus tamaños actuales. */
 </style>
 
+
+<style id="valentina-convert-comma-gaps-20260812">
+.convert-grid.convert-grid-with-gaps{
+  grid-template-columns:minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr)!important;
+  gap:2px!important;
+}
+.convert-comma-gap{
+  min-width:12px;
+  min-height:32px;
+  padding:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:24px!important;
+  line-height:1!important;
+  color:#ff6b00!important;
+  font-weight:900!important;
+}
+.convert-comma-gap.active{
+  background:#fff3df!important;
+  box-shadow:inset 0 0 0 2px rgba(255,139,46,.45)!important;
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -1157,9 +1181,9 @@ const TEST_CONVERSION_UNITS={
   capacity:[{abbr:"Kl",factor:1000},{abbr:"Hl",factor:100},{abbr:"Dal",factor:10},{abbr:"l",factor:1},{abbr:"dl",factor:.1},{abbr:"cl",factor:.01},{abbr:"ml",factor:.001}]
 };
 const WRITE_SCALE_SYSTEMS=[
-  {key:"length",label:"LONGITUD",units:TEST_CONVERSION_UNITS.length.map(u=>u.abbr)},
-  {key:"mass",label:"MASSA",units:TEST_CONVERSION_UNITS.mass.map(u=>u.abbr)},
-  {key:"capacity",label:"CAPACITAT",units:TEST_CONVERSION_UNITS.capacity.map(u=>u.abbr)}
+  {key:"length",label:"LONGITUD",units:TEST_CONVERSION_UNITS.length.map(u=>u.abbr),names:["quilòmetre","hectòmetre","decàmetre","metre","decímetre","centímetre","mil·límetre"]},
+  {key:"mass",label:"MASSA",units:TEST_CONVERSION_UNITS.mass.map(u=>u.abbr),names:["quilogram","hectogram","decagram","gram","decigram","centigram","mil·ligram"]},
+  {key:"capacity",label:"CAPACITAT",units:TEST_CONVERSION_UNITS.capacity.map(u=>u.abbr),names:["quilolitre","hectolitre","decalitre","litre","decilitre","centilitre","mil·lilitre"]}
 ];
 
 const DEFAULT_TEST_KINDS=TESTS.map(test=>test.kind);
@@ -1248,6 +1272,7 @@ function freshGame(route){
     matchRight:null,
     convertDraft:["","","","","","",""],
     convertActive:-1,
+    convertCommaAfter:-1,
     convertTableVisible:true,
     lastTone:"neutral",
     message:"Preparat per salpar cap al tresor."
@@ -1483,6 +1508,7 @@ function nextQuestion(){
   game.matchRight=null;
   game.convertDraft=["","","","","","","","",""];
   game.convertActive=-1;
+  game.convertCommaAfter=-1;
   game.convertReady=true;
   game.convertTableVisible=game.current&&game.current.kind==="convert";
   hideHelp();
@@ -1672,7 +1698,7 @@ function helpText(){
   if(q.kind==="abbrToName")return "Pista: mira la taula. Escriu el nom complet de " + q.question + ".";
   if(q.kind==="nameToAbbr")return "Pista: busca a la taula el nom " + q.question + " i toca la seva abreviatura.";
   if(q.kind==="orderScale")return "Pista: l'escala de gran a petit \u00e9s Km, Hm, Dam, m, dm, cm, mm.";
-  if(q.kind==="writeScale")return "";
+  if(q.kind==="writeScale"){const units=q.units||[];const names=q.unitNames||[];return "Pista · "+(q.scaleLabel||"ESCALA")+": "+units.map((u,i)=>u+(names[i]?" · "+names[i]:"")).join("  |  ");}
   if(q.kind==="convert")return "Pista: cada salt cap a la dreta multiplica per 10. Cada salt cap a l'esquerra divideix per 10.";
   if(q.kind==="testChoice")return "Toca Solució per veure la resposta correcta i una explicació.";
   return "Mira la taula d'unitats i compara posicions.";
@@ -1935,13 +1961,8 @@ function showHelp(){
   applyHelpPenalty();
   if(showTestSolution())return;
   const box=$("#helpNote");
-  if(game.current&&game.current.kind==="writeScale"){
-    box.textContent="";
-    box.classList.remove("show");
-  }else{
-    box.textContent=helpText();
-    box.classList.add("show");
-  }
+  box.textContent=helpText();
+  box.classList.add("show");
   if(helpTimer)clearTimeout(helpTimer);
   helpTimer=setTimeout(hideHelp,10000);
   renderUnitTable();
@@ -2005,6 +2026,8 @@ function inputChar(char){
     return;
   }
   if(game.answer.length>=24)return;
+  if(game.current&&game.current.kind==="convert"&&char===".")return;
+  if(game.current&&game.current.kind==="convert"&&char===","&&game.answer.includes(","))return;
   game.answer+=char;
   renderAnswer();
 }
@@ -2089,7 +2112,12 @@ function renderUnitTable(){
   table.innerHTML="";
   const q=game.current||{};
   table.classList.toggle("show",!!game.showHelpTable);
-  UNITS.forEach(unit=>{
+  let unitsToShow=UNITS.map(u=>({abbr:u.abbr,name:u.name}));
+  if(q.kind==="writeScale"&&Array.isArray(q.units)){
+    const names=Array.isArray(q.unitNames)?q.unitNames:[];
+    unitsToShow=q.units.map((abbr,i)=>({abbr,name:names[i]||""}));
+  }
+  unitsToShow.forEach(unit=>{
     const cell=document.createElement("div");
     cell.className="unit-cell";
     cell.innerHTML="<strong>"+unit.abbr+"</strong><span>"+unit.name+"</span>";
@@ -2274,30 +2302,42 @@ function renderInputArea(){
     controls.appendChild(makeButton(game.convertTableVisible?"Taula visible":"Taula amagada","pad-btn",()=>{game.convertTableVisible=!game.convertTableVisible;renderInputArea()}));
     work.appendChild(controls);
     const grid=document.createElement("div");
-    grid.className="convert-grid";
-    for(let i=0;i<2;i+=1){
+    grid.className="convert-grid convert-grid-with-gaps";
+    const headers=["","",...UNITS.map(u=>u.abbr)];
+    headers.forEach((label,index)=>{
       const head=document.createElement("div");
-      head.className="convert-cell convert-head empty-head";
+      head.className="convert-cell convert-head"+(label?"":" empty-head");
+      head.textContent=label;
       grid.appendChild(head);
-    }
-    UNITS.forEach(u=>{
-      const head=document.createElement("div");
-      head.className="convert-cell convert-head";
-      head.textContent=u.abbr;
-      grid.appendChild(head);
+      if(index<headers.length-1){
+        const gap=document.createElement("div");
+        gap.className="convert-comma-gap";
+        grid.appendChild(gap);
+      }
     });
     if(!Array.isArray(game.convertDraft)||game.convertDraft.length<9)game.convertDraft=["","","","","","","","",""];
     for(let index=0;index<9;index+=1){
       const cls="convert-cell"+(game.convertActive===index?" active":"")+((game.convertDraft[index]||"").length?" filled":"");
       const cell=makeButton(game.convertDraft[index]||"",cls,()=>{game.convertActive=index;game.convertReady=false;renderInputArea();renderAnswer();});
       grid.appendChild(cell);
+      if(index<8){
+        const commaGap=makeButton(game.convertCommaAfter===index?",":"","convert-comma-gap"+(game.convertCommaAfter===index?" active":""),()=>{
+          game.convertCommaAfter=game.convertCommaAfter===index?-1:index;
+          game.convertActive=-1;
+          game.convertReady=false;
+          renderInputArea();
+          renderAnswer();
+        });
+        commaGap.setAttribute("aria-label","Posar la coma decimal entre aquestes dues xifres");
+        grid.appendChild(commaGap);
+      }
     }
     if(game.convertTableVisible)work.appendChild(grid);
     area.appendChild(work);
   }
   const pad=document.createElement("div");
   pad.className="number-pad";
-  ["1","2","3","4","5","6","7","8","9","0",",","."].forEach(ch=>{
+  ["1","2","3","4","5","6","7","8","9","0",","].forEach(ch=>{
     pad.appendChild(makeButton(ch,"pad-btn",()=>inputConvertOrAnswer(ch)));
   });
   pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteChar));
@@ -2313,11 +2353,17 @@ function selectResultTarget(){
 }
 function inputConvertOrAnswer(ch){
   if(game.current&&game.current.kind==="convert"&&game.convertActive>=0){
-    game.convertDraft[game.convertActive]=(game.convertDraft[game.convertActive]||"")+ch;
+    if(ch===","){
+      game.convertCommaAfter=Math.max(0,Math.min(7,game.convertActive));
+      game.convertActive=-1;
+    }else{
+      game.convertDraft[game.convertActive]=(game.convertDraft[game.convertActive]||"")+ch;
+    }
     renderInputArea();
     renderAnswer();
     return;
   }
+  if(ch===","&&game.answer.includes(","))return;
   inputChar(ch);
 }
 function chooseMatchLeft(abbr){
