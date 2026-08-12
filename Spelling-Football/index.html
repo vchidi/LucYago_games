@@ -2939,7 +2939,7 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function focusLater(){document.body.classList.add('learning-input-ready');setTimeout(function(){var input=$('hiddenInput');if(input)try{input.focus({preventScroll:true})}catch(e){}},40)}
   function bindScreenButtons(){if(!document.body.dataset.learnDelegatedFinal){document.body.dataset.learnDelegatedFinal='1';var lastTap=0;document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#learnPhraseBtn,#learnScreenBtn,#competitionScreenBtn');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var now=Date.now();if(now-lastTap<260)return;lastTap=now;if(t.id==='learnPhraseBtn'){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()}else{screen(t.id==='learnScreenBtn'?'learning':'competition')}},true)}var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),p=document.getElementById('learnPhraseBtn');if(a&&!a.dataset.learnBound){a.dataset.learnBound='1'}if(c&&!c.dataset.learnBound){c.dataset.learnBound='1'}if(p&&!p.dataset.learnPhraseBound){p.dataset.learnPhraseBound='1'}}
   function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView'))return;var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnHomeBtn" class="learn-control" title="Volver al menu">&#x1F3E0;</button><button id="learnPhotoToggle" class="learn-control">Iconos sí</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">✓ <span id="learnGood">0</span></span><span class="status">✗ <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar última</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">¿Qué icono?</div><div id="learnHearts" class="learn-hearts">♥♥♥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};$('learnGuessBtn').onclick=function(){if(!photo.on)return;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
-  function screen(s){var isLearning=s==='learning',already=document.body.classList.contains(isLearning?'learning-mode':'competition-mode');document.body.classList.toggle('learning-mode',isLearning);document.body.classList.toggle('competition-mode',!isLearning);var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),ctl=document.querySelector('.hero .controls');if(a)a.classList.toggle('active',isLearning);if(c)c.classList.toggle('active',!isLearning);if(ctl)ctl.scrollLeft=0;if(already){if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}return}if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}else{document.body.classList.remove('keyboard-open');if(typeof render==='function')render();if(ctl)ctl.scrollLeft=0}}
+  function screen(s){var isLearning=s==='learning',already=document.body.classList.contains(isLearning?'learning-mode':'competition-mode');document.body.classList.toggle('learning-mode',isLearning);document.body.classList.toggle('competition-mode',!isLearning);var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),ctl=document.querySelector('.hero .controls'),home=document.getElementById('menuBtn'),statBar=document.querySelector('.stats');if(isLearning&&home&&statBar&&home.parentElement!==statBar)statBar.insertBefore(home,statBar.firstElementChild);if(!isLearning&&home&&ctl&&home.parentElement!==ctl)ctl.insertBefore(home,ctl.firstElementChild);if(a)a.classList.toggle('active',isLearning);if(c)c.classList.toggle('active',!isLearning);if(ctl)ctl.scrollLeft=0;if(already){if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}return}if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}else{document.body.classList.remove('keyboard-open');if(typeof render==='function')render();if(ctl)ctl.scrollLeft=0}}
   function key(e){if(!document.body.classList.contains('learning-mode'))return;if(e.key==='Backspace'){e.preventDefault();del()}else if(e.key===' '||e.code==='Space'){e.preventDefault();return}else if(e.key&&e.key.length===1&&(/[a-zA-Z]/.test(e.key)||(activeKey==='phrase'&&/[.,!?']/.test(e.key)))){e.preventDefault();insert(e.key)}}
   function fallbackLearningData(){try{return JSON.parse(($('spellingLearningData')||{textContent:'[]'}).textContent)||[]}catch(e){return []}}
 function parseLearningRows(rows){var out=[];(rows||[]).forEach(function(r,i){if(!r||!r.length)return;var num=repairUnicodeText(r[0]).toLowerCase().trim(),wordRaw=repairUnicodeText(r[1]).trim(),meaning=repairUnicodeText(r[2]).trim(),letters=repairUnicodeText(r[3]||wordRaw).trim(),sentence=repairUnicodeText(r[4]).trim();if(i===0&&(num==='número'||num==='numero'||wordRaw.toLowerCase()==='palabra'))return;var word=cleanLetters(wordRaw||letters);if(!word||!meaning||!sentence)return;out.push({word:word,wordDisplay:wordRaw||letters,meaning:meaning,letters:letters||wordRaw,sentence:sentence})});return out}
@@ -2978,9 +2978,9 @@ body.learning-mode.keyboard-open .stats{
 }
 body.learning-mode .stats .stat:first-child,
 body.learning-mode.keyboard-open .stats .stat:first-child{
-  background:linear-gradient(135deg,#d8ffe8,#79eba7)!important;
-  border:2px solid rgba(22,163,74,.30)!important;
-  box-shadow:0 6px 0 rgba(22,163,74,.18),0 12px 18px rgba(22,163,74,.12)!important;
+  background:linear-gradient(180deg,#fff,#f7fbff)!important;
+  border:1px solid var(--line)!important;
+  box-shadow:none!important;
 }
 .learn-phrase-blind{display:none;grid-template-columns:104px 1fr;gap:8px;align-items:stretch;margin-top:4px}
 .learn-phrase-blind.show{display:grid}
@@ -3254,9 +3254,9 @@ body.learning-mode.keyboard-open .stats .stat:has(#wordIndex){
 <style id="spelling-learning-current-total-green-final">
 body.learning-mode .stats .stat:has(#currentIndex),
 body.learning-mode.keyboard-open .stats .stat:has(#currentIndex){
-  background:linear-gradient(135deg,#d8ffe8,#79eba7)!important;
-  border:2px solid rgba(22,163,74,.30)!important;
-  box-shadow:0 6px 0 rgba(22,163,74,.18),0 12px 18px rgba(22,163,74,.12)!important;
+  background:linear-gradient(180deg,#fff,#f7fbff)!important;
+  border:1px solid var(--line)!important;
+  box-shadow:none!important;
 }
 </style>
 
@@ -4730,7 +4730,7 @@ body.learning-mode.keyboard-open .stats .stat:has(#stepCount){display:none!impor
 body.learning-mode .stats,
 body.learning-mode.keyboard-open .stats{
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(74px,1fr))!important;
+  grid-template-columns:34px repeat(4,minmax(74px,1fr))!important;
   gap:4px!important;
 }
 @media (pointer:coarse) and (min-width:761px){
@@ -4756,7 +4756,7 @@ body.learning-mode.keyboard-open .stats{
     top:7px!important;
     width:auto!important;
     margin:0!important;
-    grid-template-columns:repeat(4,minmax(58px,1fr))!important;
+    grid-template-columns:31px repeat(4,minmax(58px,1fr))!important;
   }
   body.learning-mode .stat,
   body.learning-mode.keyboard-open .stat{height:25px!important;min-height:25px!important;padding:2px 5px!important;border-radius:9px!important}
@@ -5438,8 +5438,6 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
 </style>
 </body>
 </html>
-
-
 
 
 
