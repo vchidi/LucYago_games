@@ -2301,19 +2301,34 @@ function addVillageItem(forceKind){
 
   eventText("El pueblo necesita espacio");
 }
-function destroyVillageItem(){
+function destroyVillageItem(count=1){
   if(!villageItems.length) return;
-  const houses = villageItems.filter(i=>i.kind==="house");
-  const pool = houses.length ? houses : villageItems;
-  const victim = pool[Math.floor(Math.random()*pool.length)];
-  const idx = villageItems.findIndex(i=>i.id===victim.id);
 
-  const zone = $("villageZone");
-  const existing = zone ? [...zone.children][idx] : null;
-  if(existing) existing.classList.add("destroyed");
+  const victims=[];
+  const available=[...villageItems];
+  const total=Math.min(count, available.length);
+
+  for(let n=0;n<total;n++){
+    const houses=available.filter(i=>i.kind==="house");
+    const pool=houses.length ? houses : available;
+    const victim=pool[Math.floor(Math.random()*pool.length)];
+    victims.push(victim);
+    const removeIdx=available.findIndex(i=>i.id===victim.id);
+    if(removeIdx>=0) available.splice(removeIdx,1);
+  }
+
+  const zone=$("villageZone");
+  if(zone){
+    victims.forEach(victim=>{
+      const idx=villageItems.findIndex(i=>i.id===victim.id);
+      const existing=[...zone.children][idx];
+      if(existing) existing.classList.add("destroyed");
+    });
+  }
 
   setTimeout(()=>{
-    villageItems = villageItems.filter(i=>i.id!==victim.id);
+    const victimIds=new Set(victims.map(i=>i.id));
+    villageItems=villageItems.filter(i=>!victimIds.has(i.id));
     renderVillage();
     if(villageItems.length <= 0){
       setTimeout(()=>{
@@ -2321,36 +2336,33 @@ function destroyVillageItem(){
         resetGame();
       }, 300);
     }
-  }, 380);
+  },380);
 }
 
 function applyCorrectVisual(){
   if(volcanoHeat > 0){
     volcanoHeat = Math.max(0, volcanoHeat - 1);
-    eventText("❄️ El volcán se enfría");
     coolingParticles();
-  }else{
-    addVillageItem();
-    eventText("🏘️ El pueblo crece");
-    buildParticles();
   }
+  addVillageItem();
+  addVillageItem();
+  addVillageItem();
+  eventText("🏘️ +3 iconos");
+  buildParticles();
   updateStats();
 }
 
 function applyWrongVisual(reason){
-  if(volcanoHeat < 5){
-    volcanoHeat++;
-    eventText(volcanoHeat >= 3 ? "🌋 La lava sube" : "🔥 El volcán se calienta");
-    heatParticles();
-  }else{
-    eruptionCount++;
-    eruptAndDestroy();
-  }
+  volcanoHeat = Math.min(5, volcanoHeat + 1);
+  eventText("💥 El volcán explota: -4 iconos");
+  heatParticles();
+  eruptionCount++;
+  eruptAndDestroy();
   updateStats();
 }
 
 function eruptAndDestroy(){
-  eventText("💥 erupción destruye una casa");
+  eventText("💥 erupción destruye 4 iconos");
   const scene=$("scene");
   if(scene){
     scene.classList.add("panic");
@@ -2366,7 +2378,7 @@ function eruptAndDestroy(){
     spawnEruption(["🔥","🪨","💥","🌋"][Math.floor(Math.random()*4)], 250+Math.random()*70, 90+Math.random()*40, -250+Math.random()*180, -170+Math.random()*230);
   }
 
-  setTimeout(destroyVillageItem, 380);
+  setTimeout(()=>destroyVillageItem(4), 380);
 }
 
 function spawnEruption(char,x,y,dx,dy){
