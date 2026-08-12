@@ -2911,10 +2911,10 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function lastFilled(cell){for(var i=cell.guess.length-1;i>=0;i--)if(cell.guess[i])return i;return -1}
   function done(k){return cells[k]&&cells[k].ok===true}
   function complete(cell){return cell.guess.length>=cell.target.length&&cell.guess.every(Boolean)}
-  function cellNode(key,locked){var cell=cells[key],div=document.createElement('div');div.className='learn-cell editable '+(key==='phrase'?'phrase ':'')+(activeKey===key?'active ':'')+(cell.ok===true?'good ':cell.ok===false?'bad ':'')+(locked?'locked':'');div.dataset.key=key;var letters=document.createElement('div');letters.className='learn-letters '+(key==='phrase'?'phrase-letters':'');letters.style.setProperty('--char-count',Math.max(1,cell.target.length));function addCaret(pos){if(activeKey===key&&cell.cursor===pos){var caret=document.createElement('span');caret.className='learn-caret';letters.appendChild(caret)}}if(key==='phrase'){var gi=0,wordStart=cell.word?cleanLetters(cell.display||'').indexOf(cell.word):-1,wordEnd=wordStart>=0?wordStart+cell.word.length:-1,lettersSeen=0;(cell.display||cell.target).split('').forEach(function(ch){var sp=document.createElement('span');if(ch===' '){sp.className='learn-char phrase-space';sp.textContent=' '}else{addCaret(gi);var typed=cell.guess[gi],isPunct=!/[a-z]/i.test(ch),inWord=wordStart>=0&&lettersSeen>=wordStart&&lettersSeen<wordEnd;if(/[a-z]/i.test(ch))lettersSeen++;sp.dataset.pos=gi;sp.className='learn-char '+(isPunct?'phrase-punct ':'phrase-letter ')+(inWord?'sentence-word ':'')+(typed?'filled':'blank');sp.textContent=typed||'_';gi++}letters.appendChild(sp)});addCaret(gi)}else{cell.target.split('').forEach(function(ch,i){addCaret(i);var sp=document.createElement('span');sp.dataset.pos=i;sp.className='learn-char '+(cell.guess[i]?'filled':'blank');sp.textContent=cell.guess[i]||'_';letters.appendChild(sp)});addCaret(cell.target.length)}div.appendChild(letters);return div}
+  function cellNode(key,locked){var cell=cells[key],div=document.createElement('div');div.className='learn-cell editable '+(key==='phrase'?'phrase ':'')+(activeKey===key?'active ':'')+(cell.ok===true?'good ':cell.ok===false?'bad ':'')+(locked?'locked':'');div.dataset.key=key;var letters=document.createElement('div');letters.className='learn-letters '+(key==='phrase'?'phrase-letters':'');letters.style.setProperty('--char-count',Math.max(1,key==='phrase'?(cell.display||cell.target).length:cell.target.length));function addCaret(pos){if(activeKey===key&&cell.cursor===pos){var caret=document.createElement('span');caret.className='learn-caret';letters.appendChild(caret)}}if(key==='phrase'){var gi=0,wordStart=cell.word?cleanLetters(cell.display||'').indexOf(cell.word):-1,wordEnd=wordStart>=0?wordStart+cell.word.length:-1,lettersSeen=0;(cell.display||cell.target).split('').forEach(function(ch){var sp=document.createElement('span');if(ch===' '){sp.className='learn-char phrase-space';sp.textContent=' '}else{addCaret(gi);var typed=cell.guess[gi],isPunct=!/[a-z]/i.test(ch),inWord=wordStart>=0&&lettersSeen>=wordStart&&lettersSeen<wordEnd;if(/[a-z]/i.test(ch))lettersSeen++;sp.dataset.pos=gi;sp.className='learn-char '+(isPunct?'phrase-punct ':'phrase-letter ')+(inWord?'sentence-word ':'')+(typed?'filled':'blank');sp.textContent=typed||'_';gi++}letters.appendChild(sp)});addCaret(gi)}else{cell.target.split('').forEach(function(ch,i){addCaret(i);var sp=document.createElement('span');sp.dataset.pos=i;sp.className='learn-char '+(cell.guess[i]?'filled':'blank');sp.textContent=cell.guess[i]||'_';letters.appendChild(sp)});addCaret(cell.target.length)}div.appendChild(letters);return div}
   function setCursorFromEvent(key,e){var cell=cells[key];if(!cell)return;var pos=cell.guess.length,target=e&&e.target&&e.target.closest&&e.target.closest('[data-pos]');if(target){pos=Number(target.dataset.pos)||0;var r=target.getBoundingClientRect&&target.getBoundingClientRect();if(r&&e&&typeof e.clientX==='number'&&e.clientX>r.left+r.width/2)pos++;}cell.cursor=Math.max(0,Math.min(cell.guess.length,pos));cell.ok=null}
   function refNode(it){var letters=cleanLetters(it.letters||it.word),div=document.createElement('div'),wrap=document.createElement('div');div.className='learn-cell ref';wrap.className='learn-letters';wrap.style.setProperty('--char-count',Math.max(1,letters.length));letters.split('').forEach(function(ch){var sp=document.createElement('span');sp.className='learn-char filled';sp.textContent=ch;wrap.appendChild(sp)});div.appendChild(wrap);return div}
-  function renderLearn(){var it=item();if(!it||!$('learnMeaning'))return;$('learnMeaning').textContent=it.meaning;var sh=$('learnShuffleBtn'),ph=$('learnPhraseBtn');if(sh)sh.textContent=orderMode==='original'?'Mezclar':orderMode==='mixed'?'Alfabetico':'Original';if(ph){ph.textContent=phraseMode?'Frase s\u00ed':'Frase no';ph.classList.toggle('active',phraseMode)}var table=$('learnTable');table.innerHTML='';[['Sig.','meaning'],['Word','word'],['Blind','line1'],['Blind','line2']].forEach(function(row){var lab=document.createElement('div');lab.className='learn-label';lab.textContent=row[0];table.appendChild(lab);if(row[1]==='meaning'){var mean=document.createElement('div');mean.className='learn-cell meaning';mean.textContent=it.meaning;table.appendChild(mean);return}if(row[1]==='word'){table.appendChild(refNode(it));return}var locked=row[1]==='line2'&&!done('line1'),node=cellNode(row[1],locked);node.onclick=function(e){if(!locked){activeKey=row[1];setCursorFromEvent(row[1],e);renderLearn();focusLater()}};table.appendChild(node)});$('learnSentence').innerHTML=sentenceWithWord(it.sentence,it.word);var phrase=$('learnPhraseBlind');if(phrase){phrase.innerHTML='';phrase.classList.toggle('show',phraseMode&&!!cells.phrase);if(phraseMode&&cells.phrase){var label=document.createElement('div');label.className='learn-phrase-label';label.textContent='Frase';phrase.appendChild(label);var lockedPhrase=!done('line2'),phraseNode=cellNode('phrase',lockedPhrase);phraseNode.onclick=function(e){if(!lockedPhrase){activeKey='phrase';setCursorFromEvent('phrase',e);renderLearn();focusLater()}};phrase.appendChild(phraseNode)}}$('learnIndex').textContent=(idx+1)+'/'+data.length;$('learnGood').textContent=score.good;$('learnBad').textContent=score.bad;if($('goodCount'))$('goodCount').textContent=score.good;if($('badCount'))$('badCount').textContent=score.bad;if($('streakCount'))$('streakCount').textContent=photo.streak||0;if($('currentIndex'))$('currentIndex').textContent=idx+1;if($('totalCount'))$('totalCount').textContent=data.length;if($('stepCount'))$('stepCount').textContent='0 - 0';renderPhoto();renderGuess()}
+  function renderLearn(){var it=item();if(!it||!$('learnMeaning'))return;$('learnMeaning').textContent=it.meaning;var sh=$('learnShuffleBtn'),ph=$('learnPhraseBtn');if(sh)sh.textContent=orderMode==='original'?'Mezclar':orderMode==='mixed'?'Alfabetico':'Original';if(ph){ph.textContent=phraseMode?'Frase s\u00ed':'Frase no';ph.classList.toggle('active',phraseMode)}var table=$('learnTable');table.innerHTML='';[['Sig.','meaning'],['Word','word'],['Blind','line1'],['Blind','line2']].forEach(function(row){var lab=document.createElement('div');lab.className='learn-label';lab.textContent=row[0];table.appendChild(lab);if(row[1]==='meaning'){var mean=document.createElement('div');mean.className='learn-cell meaning';mean.textContent=it.meaning;table.appendChild(mean);return}if(row[1]==='word'){table.appendChild(refNode(it));return}var locked=row[1]==='line2'&&!done('line1'),node=cellNode(row[1],locked);node.onclick=function(e){if(!locked){activeKey=row[1];setCursorFromEvent(row[1],e);renderLearn();focusLater()}};table.appendChild(node)});$('learnSentence').innerHTML=sentenceWithWord(it.sentence,it.word);var phrase=$('learnPhraseBlind');if(phrase){phrase.innerHTML='';phrase.classList.toggle('show',phraseMode&&!!cells.phrase);if(phraseMode&&cells.phrase){var lockedPhrase=!done('line2'),phraseNode=cellNode('phrase',lockedPhrase);phraseNode.onclick=function(e){if(!lockedPhrase){activeKey='phrase';setCursorFromEvent('phrase',e);renderLearn();focusLater()}};phrase.appendChild(phraseNode)}}$('learnIndex').textContent=(idx+1)+'/'+data.length;$('learnGood').textContent=score.good;$('learnBad').textContent=score.bad;if($('goodCount'))$('goodCount').textContent=score.good;if($('badCount'))$('badCount').textContent=score.bad;if($('streakCount'))$('streakCount').textContent=photo.streak||0;if($('currentIndex'))$('currentIndex').textContent=idx+1;if($('totalCount'))$('totalCount').textContent=data.length;if($('stepCount'))$('stepCount').textContent='0 - 0';renderPhoto();renderGuess()}
   function showMsg(t){$('learnMsg').textContent=t}
   function insert(ch){var cell=cells[activeKey];if(!cell||cell.ok===true)return;var allowed=activeKey==='phrase'?/^[a-zA-Z.,!?']$/:/^[a-zA-Z]$/;if(!allowed.test(ch)||cell.guess.length>=cell.target.length)return;var pos=Math.max(0,Math.min(cell.guess.length,cell.cursor||0));cell.guess.splice(pos,0,activeKey==='phrase'?ch:ch.toLowerCase());cell.cursor=pos+1;cell.ok=null;if(complete(cell)){cell.ok=activeKey==='phrase'?cell.guess.join('')===cell.target:normalize(cell.guess.join(''))===normalize(cell.target);if(cell.ok){var it=item(),points=activeKey==='phrase'?wordCount(it&&it.sentence):1;score.good+=points;var amount=registerHit();reveal(amount);activeKey=activeKey==='line1'?'line2':activeKey==='line2'&&phraseMode?'phrase':activeKey;photo.lastBoostMsg='';if(cells[activeKey])cells[activeKey].cursor=cells[activeKey].guess.length;if(allLearnDone())setTimeout(nextWord,550)}else{score.bad++;photo.streak=0;showMsg('')}}renderLearn()}
   function del(){var cell=cells[activeKey];if(!cell||cell.ok===true)return;var pos=Math.max(0,Math.min(cell.guess.length,cell.cursor||cell.guess.length));if(pos>0){cell.guess.splice(pos-1,1);cell.cursor=pos-1;cell.ok=null;showMsg('');renderLearn()}}
@@ -3591,10 +3591,12 @@ body.learning-mode .photo-controls .status{
 .learn-char{font-size:clamp(22px,calc(96cqw / var(--char-count,8)),38px)!important;line-height:1.12!important;min-width:.46em!important}
 .learn-char.blank{color:#3f7cff!important;opacity:.82!important;text-shadow:none!important}
 .learn-sentence{
-  font-family:inherit!important;
+  font-family:"Courier New",Courier,monospace!important;
   font-size:clamp(22px,3vw,34px)!important;
   line-height:1.22!important;
-  padding:6px 6px 4px!important;
+  padding:6px 12px 4px!important;
+  white-space:nowrap!important;
+  letter-spacing:0!important;
 }
 .learn-phrase-blind{grid-template-columns:104px 1fr!important;gap:7px!important;margin-top:4px!important}
 .learn-cell.phrase{
@@ -3780,8 +3782,9 @@ body.learning-mode .learn-cell.phrase .learn-letters{
   color:#172033!important;
 }
 body.learning-mode .learn-cell.phrase .learn-char{
-  min-width:0!important;
-  width:auto!important;
+  min-width:1ch!important;
+  width:1ch!important;
+  flex:0 0 1ch!important;
   padding:0!important;
   margin:0!important;
   font-size:1em!important;
@@ -3793,12 +3796,14 @@ body.learning-mode .learn-cell.phrase .learn-char.sentence-word{
   color:#5b72ff!important;
 }
 body.learning-mode .learn-cell.phrase .phrase-space{
-  flex:0 0 .34em!important;
-  min-width:.34em!important;
-  width:.34em!important;
+  flex:0 0 1ch!important;
+  min-width:1ch!important;
+  width:1ch!important;
 }
 body.learning-mode .learn-cell.phrase .phrase-punct{
-  min-width:0!important;
+  min-width:1ch!important;
+  width:1ch!important;
+  flex:0 0 1ch!important;
   color:#172033!important;
 }
 body.learning-mode .hero,
@@ -4995,8 +5000,23 @@ body.learning-mode.keyboard-open .stats{
 <style id="valentina-remove-learning-title-suffix-final-20260726">
 body.learning-mode .title::after,
 body.learning-mode.keyboard-open .title::after{
-  content:""!important;
-  display:none!important;
+  content:"📱"!important;
+  display:inline-block!important;
+  margin-left:8px!important;
+  font-size:.78em!important;
+  line-height:1!important;
+  vertical-align:middle!important;
+  transform:none!important;
+}
+body.competition-mode .title::after,
+body.competition-mode.keyboard-open .title::after{
+  content:"📱"!important;
+  display:inline-block!important;
+  margin-left:8px!important;
+  font-size:.78em!important;
+  line-height:1!important;
+  vertical-align:middle!important;
+  transform:rotate(90deg)!important;
 }
 </style>
 <style id="valentina-learning-icons-under-stats-final-20260727">
@@ -5032,11 +5052,11 @@ body.learning-mode .learn-right{align-self:stretch!important;max-height:none!imp
 body.learning-mode .learn-photo-card{width:100%!important;min-width:0!important;max-width:none!important;height:100%!important;min-height:0!important;max-height:none!important;padding:14px!important;overflow:hidden!important;flex:1 1 auto!important}
 body.learning-mode .learn-photo-frame{width:100%!important;height:auto!important;min-height:360px!important;max-height:none!important;flex:1 1 auto!important;aspect-ratio:auto!important}
 body.learning-mode .learn-caption{flex:0 0 24px!important;max-height:24px!important;overflow:hidden!important}
-@media (pointer:coarse) and (min-width:761px){
-  body.learning-mode.keyboard-open .learn-layout{grid-template-columns:minmax(0,1fr) 450px!important;gap:10px!important;align-items:stretch!important}
+@media (pointer:coarse) and (min-width:761px) and (orientation:portrait){
+  body.learning-mode.keyboard-open .learn-layout{grid-template-columns:minmax(0,1fr) 330px!important;gap:10px!important;align-items:stretch!important}
   body.learning-mode.keyboard-open .learn-right{align-self:stretch!important;max-height:calc(100dvh - 150px)!important;overflow:hidden!important;display:flex!important}
-  body.learning-mode.keyboard-open .learn-photo-card{width:450px!important;min-width:450px!important;max-width:450px!important;height:100%!important;min-height:300px!important;max-height:calc(100dvh - 158px)!important;padding:10px!important;overflow:hidden!important;flex:1 1 auto!important}
-  body.learning-mode.keyboard-open .learn-photo-frame{width:430px!important;height:auto!important;min-height:246px!important;max-height:none!important;flex:1 1 auto!important;aspect-ratio:auto!important}
+  body.learning-mode.keyboard-open .learn-photo-card{width:330px!important;min-width:330px!important;max-width:330px!important;height:100%!important;min-height:220px!important;max-height:calc(100dvh - 158px)!important;padding:10px!important;overflow:hidden!important;flex:1 1 auto!important}
+  body.learning-mode.keyboard-open .learn-photo-frame{width:310px!important;height:auto!important;min-height:166px!important;max-height:none!important;flex:1 1 auto!important;aspect-ratio:auto!important}
   body.learning-mode.keyboard-open .learn-caption{flex:0 0 24px!important;max-height:24px!important;overflow:hidden!important}
 }
 body.learning-mode .learn-table .learn-cell.ref .learn-letters,
@@ -5234,21 +5254,18 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
   transform:translateX(-50%)!important;
 }
 @media (pointer:coarse) and (min-width:761px){
-  body.learning-mode .learn-layout,
-  body.learning-mode.keyboard-open .learn-layout{
+  body.learning-mode .learn-layout{
     grid-template-columns:minmax(0,1fr) 450px!important;
     gap:10px!important;
     align-items:start!important;
   }
-  body.learning-mode .learn-right,
-  body.learning-mode.keyboard-open .learn-right{
+  body.learning-mode .learn-right{
     align-self:start!important;
     max-height:calc(100dvh - 150px)!important;
     overflow:hidden!important;
     display:flex!important;
   }
-  body.learning-mode .learn-photo-card,
-  body.learning-mode.keyboard-open .learn-photo-card{
+  body.learning-mode .learn-photo-card{
     width:450px!important;
     min-width:450px!important;
     max-width:450px!important;
@@ -5259,8 +5276,7 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
     overflow:hidden!important;
     flex:0 1 auto!important;
   }
-  body.learning-mode .learn-photo-frame,
-  body.learning-mode.keyboard-open .learn-photo-frame{
+  body.learning-mode .learn-photo-frame{
     width:430px!important;
     height:auto!important;
     min-height:226px!important;
@@ -5364,8 +5380,8 @@ body.learning-mode.keyboard-open .learn-phrase-blind,
 body.learning-mode .learn-phrase-blind.show,
 body.learning-mode.keyboard-open .learn-phrase-blind.show{
   display:grid!important;
-  grid-template-columns:70px minmax(0,1fr)!important;
-  gap:6px!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:0!important;
   align-items:stretch!important;
   margin-top:4px!important;
   position:relative!important;
@@ -5376,9 +5392,9 @@ body.learning-mode.keyboard-open .learn-phrase-label{
   left:auto!important;
   top:auto!important;
   transform:none!important;
-  display:flex!important;
+  display:none!important;
   align-items:center!important;
-  justify-content:flex-start!important;
+  justify-content:center!important;
   width:auto!important;
   min-width:0!important;
   font-size:11px!important;
@@ -5398,12 +5414,15 @@ body.learning-mode.keyboard-open .learn-cell.phrase{
 }
 body.learning-mode .learn-cell.phrase .learn-letters,
 body.learning-mode.keyboard-open .learn-cell.phrase .learn-letters{
-  justify-content:flex-start!important;
+  justify-content:center!important;
   align-items:center!important;
   width:100%!important;
   max-width:100%!important;
   overflow:hidden!important;
-  text-align:left!important;
+  text-align:center!important;
+  flex-wrap:nowrap!important;
+  white-space:nowrap!important;
+  font-family:"Courier New",Courier,monospace!important;
 }
 @media(max-width:760px){
   body.learning-mode .learn-table,
@@ -5438,7 +5457,3 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
 </style>
 </body>
 </html>
-
-
-
-
