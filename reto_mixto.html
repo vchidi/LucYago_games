@@ -47,8 +47,8 @@
 </head>
 <body>
 <div class="app">
-  <header class="top"><button class="home" onclick="location.href='index.html'">🏠</button><div class="title"><h1>Reto mixto LucYago</h1><p>Mapa de juegos: Yago puede escoger el orden. Cada juego empieza con 5 aciertos objetivo.</p></div><div class="topStats"><span class="pill" id="modePill">Normal · 35</span><span class="pill" id="scorePill">✅ 0 · ❌ 0</span></div></header>
-  <main class="main"><section class="panel"><div class="setup" id="setup"><h2>Elige el orden y completa todos los mundos</h2><p>En modo normal son 35 aciertos objetivo: 5 por juego. Los botones largos suben la carga total: +30%, +60% o doble.</p><div class="lengths" id="lengths"></div><div class="startRow"><button class="primary" id="startBtn">Nuevo reto</button><button class="blue" id="resumeBtn">Continuar reto</button><button onclick="location.href='index.html'">Volver al menú</button></div></div><div class="mapHeader"><h3>Mapa de retos</h3><button class="green" id="summaryBtn">Ver resumen</button></div><div class="gamesGrid" id="gamesGrid"></div><div class="summary" id="summary"></div></section><aside class="panel"><h3 style="margin:0 0 9px">Estado</h3><div class="sideList" id="sideList"></div></aside></main>
+  <header class="top"><button class="home" onclick="location.href='index.html'">🏠</button><div class="title"><h1>Reto mixto LucYago</h1><p>Mapa de juegos: Yago puede escoger el orden. En Normal: Pecera 8 operaciones y 5 objetivos en cada uno de los demás juegos.</p></div><div class="topStats"><span class="pill" id="modePill">Normal · 38</span><span class="pill" id="scorePill">✅ 0 · ❌ 0</span></div></header>
+  <main class="main"><section class="panel"><div class="setup" id="setup"><h2>Elige el orden y completa todos los mundos</h2><p>En modo Normal: Pecera tiene 8 operaciones; el resto empieza con 5 objetivos. Los botones largos aumentan la carga total.</p><div class="lengths" id="lengths"></div><div class="startRow"><button class="primary" id="startBtn">Nuevo reto</button><button class="blue" id="resumeBtn">Continuar reto</button><button onclick="location.href='index.html'">Volver al menú</button></div></div><div class="mapHeader"><h3>Mapa de retos</h3><button class="green" id="summaryBtn">Ver resumen</button></div><div class="gamesGrid" id="gamesGrid"></div><div class="summary" id="summary"></div></section><aside class="panel"><h3 style="margin:0 0 9px">Estado</h3><div class="sideList" id="sideList"></div></aside></main>
 </div>
 <script>
 const SESSION='lucyago_reto_session';
@@ -62,14 +62,19 @@ const GAMES=[
  {id:'fractions',name:'Fracciones Café',icon:'🧁',path:'Fractions-Cafe/index.html',win:.70,msgWin:'La cafetería sirve postres de campeón.',msgLose:'La cafetería necesita un poco más de azúcar.'}
 ];
 const LENGTHS=[
- {id:'normal',label:'Normal',total:35,minutes:'20–30 min'},
+ {id:'normal',label:'Normal',total:38,minutes:'20–30 min'},
  {id:'plus30',label:'+30%',total:46,minutes:'27–39 min'},
  {id:'plus60',label:'+60%',total:56,minutes:'32–48 min'},
  {id:'double',label:'Doble',total:70,minutes:'40–60 min'}
 ];
 let selected='normal';
 function balancedCounts(total){const base=Math.floor(total/GAMES.length), extra=total%GAMES.length, out={};GAMES.forEach((g,i)=>out[g.id]=base+(i<extra?1:0));return out;}
-function countsFor(id){return balancedCounts(LENGTHS.find(x=>x.id===id).total)}
+function countsFor(id){
+  if(id==='normal'){
+    return {pecera:8,footballEmpire:5,volcan:5,verbs:5,pirata:5,football:5,fractions:5};
+  }
+  return balancedCounts(LENGTHS.find(x=>x.id===id).total);
+}
 function get(){try{return JSON.parse(localStorage.getItem(SESSION)||'{}')}catch(e){return {}}}
 function set(s){localStorage.setItem(SESSION,JSON.stringify(s));}
 function newSession(){const counts=countsFor(selected), s={active:true,length:selected,counts,results:{},startedAt:Date.now()};GAMES.forEach(g=>s.results[g.id]={ok:0,bad:0,total:counts[g.id],target:counts[g.id],done:false,name:g.id});set(s);renderAll();}
@@ -77,7 +82,11 @@ function totalDone(results){return Object.values(results||{}).reduce((a,r)=>a+(r
 function totalOk(results){return Object.values(results||{}).reduce((a,r)=>a+(r.ok||0),0)}
 function totalBad(results){return Object.values(results||{}).reduce((a,r)=>a+(r.bad||0),0)}
 function gameState(g,s){const counts=s.counts||countsFor(selected); const r=(s.results&&s.results[g.id])||{ok:0,bad:0,total:counts[g.id]||5,target:counts[g.id]||5}; const n=r.total||counts[g.id]||5; const done=(r.ok||0)+(r.bad||0); const need=n; return {r,n,done,need,complete:(r.ok||0)>=n,win:(r.ok||0)>=n};}
-function launch(id){let s=get(); if(!s.active){newSession();s=get();} const g=GAMES.find(x=>x.id===id); if(!g)return; const st=gameState(g,s); if(st.complete){renderAll();return;} const url=g.path+`?reto=1&game=${encodeURIComponent(g.id)}&preguntas=${st.n}&session=${encodeURIComponent(SESSION)}&return=${encodeURIComponent('../reto_mixto.html')}`+(g.extra||''); location.href=url;}
+function launch(id){let s=get(); if(!s.active){newSession();s=get();} const g=GAMES.find(x=>x.id===id); if(!g)return; const st=gameState(g,s); if(st.complete){renderAll();return;} let retoExtra='&retoBar=0';
+  if(id==='pecera' && s.length==='normal') retoExtra+='&modo=mixto&sinFactores=1,2,10';
+  if(id==='verbs') retoExtra+='&retoAgrupar=5&retoUnidad=verboCompleto';
+  if(id==='football') retoExtra+='&retoAgrupar=5&retoUnidad=palabraCompleta&retoRepeticiones=2&retoFrase=siActiva';
+  const url=g.path+`?reto=1&game=${encodeURIComponent(g.id)}&preguntas=${st.n}&session=${encodeURIComponent(SESSION)}&return=${encodeURIComponent('../reto_mixto.html')}`+(g.extra||'')+retoExtra; location.href=url;}
 function renderLengths(){const box=document.getElementById('lengths');box.innerHTML='';LENGTHS.forEach(l=>{let b=document.createElement('button');b.className='lengthBtn '+(selected===l.id?'active':'');b.innerHTML=`<strong>${l.label}</strong><span>${l.total} preguntas</span><span>${l.minutes}</span>`;b.onclick=()=>{selected=l.id;renderLengths();document.getElementById('modePill').textContent=l.label+' · '+l.total};box.appendChild(b);});const l=LENGTHS.find(x=>x.id===selected);document.getElementById('modePill').textContent=l.label+' · '+l.total;}
 function renderCards(){const s=get(); const active=!!s.active; const counts=s.counts||countsFor(selected); let html=''; GAMES.forEach(g=>{const st=gameState(g,s); const mark=st.complete?(st.win?'🏆':'😅'):'▶️'; const btnText=st.complete?'Completado':'Jugar ahora'; html+=`<div class="gameCard ${st.complete?'done':''}"><div class="avatar">${g.icon}</div><div><div class="gameName">${g.name}</div><div class="gameMini">${st.done}/${st.n} intentos · ✅ ${st.r.ok||0} · ❌ ${st.r.bad||0} · objetivo ${st.need}</div></div><div class="gameActions"><span class="result">${mark}</span><button class="${st.complete?'':'primary'}" onclick="launch('${g.id}')" ${st.complete?'disabled':''}>${btnText}</button></div></div>`;}); document.getElementById('gamesGrid').innerHTML=html;}
 function renderSide(){const s=get(), results=s.results||{}; let ok=totalOk(results), bad=totalBad(results), done=totalDone(results), total=Object.values(s.counts||countsFor(selected)).reduce((a,b)=>a+b,0);document.getElementById('scorePill').textContent=`✅ ${ok} · ❌ ${bad}`;document.getElementById('sideList').innerHTML=`<div class="sideRow"><div>🎯</div><div><div class="gameName">Progreso total</div><div class="gameMini">✅ ${ok}/${total} aciertos objetivo · ${done} intentos</div></div><div class="result">${ok>=total?'✅':'…'}</div></div>`+GAMES.map(g=>{const st=gameState(g,s);return `<div class="sideRow"><div>${g.icon}</div><div><div class="gameName">${g.name}</div><div class="gameMini">${st.done}/${st.n}</div></div><div class="result">${st.complete?(st.win?'🏆':'😅'):'•'}</div></div>`}).join('');}
