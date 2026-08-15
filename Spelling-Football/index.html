@@ -5432,9 +5432,42 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   function isCoarsePortrait(){return mm('(pointer:coarse)')&&mm('(orientation:portrait)')}
   function isButtonLike(el){return !!(el&&el.closest&&el.closest('button,label.btn,select.select-pill,input[type=file],input[type=number],textarea,a'))}
   function wantsKeyboard(el){return !!(el&&el.closest&&el.closest('.learn-cell.editable,.learn-table,.learn-layout,.word-zone,.letters,.tile,.clue-card,.panel'))}
+  function learningInput(){
+    var el=byId('learningNativeInputFinal')||byId('learningNativeInput');
+    if(el) return el;
+    el=document.createElement('textarea');
+    el.id='learningNativeInputFinal';
+    el.setAttribute('autocomplete','off');
+    el.setAttribute('autocorrect','off');
+    el.setAttribute('autocapitalize','off');
+    el.setAttribute('spellcheck','false');
+    el.setAttribute('inputmode','text');
+    el.setAttribute('aria-hidden','true');
+    document.body.appendChild(el);
+    el.addEventListener('beforeinput',function(e){
+      if(!isLearning()) return;
+      if(e.inputType==='deleteContentBackward'){
+        e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+        if(typeof window.__spellingLearningPress==='function') window.__spellingLearningPress('Borrar');
+        el.value='';
+      }
+    },true);
+    el.addEventListener('input',function(e){
+      if(!isLearning()) return;
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      var text=el.value||'';
+      el.value='';
+      for(var i=0;i<text.length;i++){
+        var ch=text.charAt(i);
+        if(ch==='\n'||ch===' ') continue;
+        if(typeof window.__spellingLearningPress==='function') window.__spellingLearningPress(ch);
+      }
+    },true);
+    return el;
+  }
   function openKeyboard(force){
     if(!isCoarsePortrait()||!isLearning()) return;
-    var input=byId('hiddenInput');
+    var input=learningInput();
     if(!input) return;
     try{
       input.disabled=false;
@@ -5485,6 +5518,16 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   window.speakCurrent=function(force){
     if(force) markAudioReady();
     return typeof oldSpeakCurrent==='function' ? oldSpeakCurrent.apply(this,arguments) : undefined;
+  };
+  var nativeFocus=HTMLElement.prototype.focus;
+  HTMLElement.prototype.focus=function(opts){
+    if(this&&this.id==='hiddenInput'&&isCoarsePortrait()&&isLearning()){
+      var input=learningInput();
+      if(input&&input!==this){
+        try{return nativeFocus.call(input,opts)}catch(e){try{return nativeFocus.call(input)}catch(_){}}
+      }
+    }
+    return nativeFocus.call(this,opts);
   };
   function onTouch(e){
     if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
