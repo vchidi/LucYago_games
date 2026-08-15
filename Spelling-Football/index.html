@@ -5421,11 +5421,27 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
     transition:none!important;
     animation:none!important;
   }
+  #learningNativeInput,
+  #learningNativeInputFinal{
+    position:fixed!important;
+    left:16px!important;
+    bottom:calc(16px + env(safe-area-inset-bottom,0px))!important;
+    width:44px!important;
+    height:44px!important;
+    min-width:44px!important;
+    min-height:44px!important;
+    opacity:.012!important;
+    pointer-events:auto!important;
+    touch-action:manipulation!important;
+    z-index:2147483647!important;
+    font-size:18px!important;
+  }
 }
 </style>
 <script id="codex-spelling-football-ipad-audio-20260815">
 (function(){
-  var audioUserReady=!(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1));
+  var audioUserReady=true;
+  var lastAutoSpeak=0;
   function byId(id){return document.getElementById(id)}
   function mm(q){return !!(window.matchMedia&&matchMedia(q).matches)}
   function isLearning(){return document.body.classList.contains('learning-mode')}
@@ -5492,12 +5508,12 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
     [[word,audioEnabled('word'),'Audio spelling'],[match,audioEnabled('match'),'Audio partido']].forEach(function(row){
       var el=row[0], enabled=row[1], label=row[2];
       if(!el) return;
-      var reallyOn=enabled&&audioUserReady;
+      var reallyOn=enabled;
       el.classList.toggle('active',reallyOn);
       el.classList.toggle('audio-on',reallyOn);
       el.classList.toggle('audio-off',!reallyOn);
-      el.setAttribute('aria-label',label+(reallyOn?' activo':' pendiente'));
-      el.title=label+(reallyOn?' activo':' toca Repetir para activar sonido');
+      el.setAttribute('aria-label',label+(reallyOn?' activo':' apagado'));
+      el.title=label+(reallyOn?' activo':' apagado');
       el.style.setProperty('background',reallyOn?'#b9f3b8':'#ffa2a2','important');
     });
   }
@@ -5529,8 +5545,27 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
     }
     return nativeFocus.call(this,opts);
   };
+  var nativeBlur=HTMLElement.prototype.blur;
+  HTMLElement.prototype.blur=function(){
+    if(this&&(this.id==='learningNativeInputFinal'||this.id==='learningNativeInput')&&isCoarsePortrait()&&isLearning()){
+      return;
+    }
+    return nativeBlur.call(this);
+  };
+  function playDefaultAudio(){
+    if(isLearning()||!document.body.classList.contains('competition-mode')||!audioEnabled('word')) return;
+    var now=Date.now();
+    if(now-lastAutoSpeak<1800) return;
+    lastAutoSpeak=now;
+    markAudioReady();
+    try{
+      if(typeof forceSpeakWordNow==='function') forceSpeakWordNow(true);
+      else if(typeof speakCurrent==='function') speakCurrent(true);
+    }catch(e){}
+  }
   function onTouch(e){
     if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
+    else playDefaultAudio();
     if(!isButtonLike(e.target)&&wantsKeyboard(e.target)) openKeyboard(true);
   }
   document.addEventListener('touchstart',onTouch,{capture:true,passive:true});
@@ -5540,12 +5575,13 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   },{capture:true,passive:true});
   document.addEventListener('click',function(e){
     if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
+    else setTimeout(playDefaultAudio,0);
     if(!isButtonLike(e.target)&&wantsKeyboard(e.target)) setTimeout(function(){openKeyboard(true)},0);
     setTimeout(syncAudioButtons,0);
   },true);
   ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
     window.addEventListener(ev,function(){
-      setTimeout(function(){openKeyboard(false);syncAudioButtons();},80);
+      setTimeout(function(){openKeyboard(false);syncAudioButtons();playDefaultAudio();},80);
       setTimeout(syncAudioButtons,350);
     },true);
   });
@@ -5553,12 +5589,12 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   if(typeof oldRender==='function'){
     window.render=function(){
       var out=oldRender.apply(this,arguments);
-      setTimeout(function(){openKeyboard(false);syncAudioButtons();},0);
+      setTimeout(function(){openKeyboard(false);syncAudioButtons();playDefaultAudio();},0);
       return out;
     };
   }
   syncAudioButtons();
-  setInterval(syncAudioButtons,700);
+  setInterval(function(){syncAudioButtons();if(isLearning())openKeyboard(false);},700);
 })();
 </script>
 </body>
