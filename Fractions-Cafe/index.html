@@ -16,7 +16,7 @@ input{font-family:inherit}
 .app{height:100dvh;display:flex;flex-direction:column;padding:8px;gap:8px;overflow:hidden}
 .top{height:50px;min-height:50px;background:rgba(255,255,255,.9);border-radius:18px;padding:7px 12px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px rgba(120,60,20,.15)}
 .title{font-size:21px;font-weight:950;display:flex;align-items:center;gap:10px;white-space:nowrap}
-.titleTablet{display:inline-flex;align-items:center;justify-content:center;font-size:30px;line-height:1;transform:rotate(90deg);transform-origin:center}
+.titleTablet{display:inline-flex;align-items:center;justify-content:center;font-size:30px;line-height:1}
 .stats{font-weight:950;display:flex;gap:10px;flex-wrap:wrap;font-size:14px}
 .main{flex:1;min-height:0;display:grid;grid-template-columns:210px 1fr;gap:8px}
 .menu{background:rgba(255,255,255,.72);border-radius:18px;padding:8px;overflow:auto;box-shadow:0 8px 20px rgba(120,60,20,.12)}
@@ -439,7 +439,7 @@ svg.fracSvg.small{
 <body>
 <div class="app">
   <div class="top">
-    <div class="title">🍰 Sweet Fractions Café <span class="titleTablet" aria-label="tablet horizontal" title="Tablet horizontal">📱</span></div>
+    <div class="title">🍰 Sweet Fractions Café <span class="titleTablet" aria-label="tablet vertical" title="Tablet vertical">📱</span></div>
     <div class="stats">⭐ <span id="stars">0</span> | ❌ <span id="fails">0</span> | Estado: <span id="stateTxt">Construyendo</span></div>
   </div>
 
@@ -597,7 +597,21 @@ function selectInput(id){activeInputId=id; markActiveInput(); const el=$(id); if
 function inputOrder(){
   return ['wholeInput','numInput','denInput'].filter(id=>$(id));
 }
+function expectedInputLength(id){
+  if(current.type==='ops'){
+    if(id==='numInput') return String(current.n).length;
+    if(id==='denInput') return String(current.d).length;
+  }
+  if(current.type==='mixed'){
+    if(id==='wholeInput') return String(current.whole).length;
+    if(id==='numInput') return String(current.rem).length;
+    if(id==='denInput') return String(current.d).length;
+  }
+  return 1;
+}
 function moveToNextInput(fromId){
+  const el=$(fromId);
+  if(el && el.value.length<expectedInputLength(fromId)) return;
   const order=inputOrder();
   const index=order.indexOf(fromId);
   if(index>=0 && index<order.length-1) selectInput(order[index+1]);
