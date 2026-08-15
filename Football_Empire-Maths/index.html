@@ -4883,8 +4883,12 @@ updateControlAvailability();
 
   function forceInitialMixed(){
     try{localStorage.setItem('photoPanicMode','full')}catch(_e){}
+    const difficulty=qs('#difficulty');
+    if(difficulty) difficulty.value='all';
     if(typeof state!=='undefined'){
       state.mode='full';
+      state.difficulty='all';
+      if(state.specific===1) state.specific=null;
       qsa('.modeTop').forEach(b=>b.classList.toggle('selectedMode',b.dataset.mode==='full'));
     }
   }
