@@ -5188,6 +5188,15 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
 (function(){
   function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
   function targetIsTypingArea(t){return !!(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))}
+  function placeInput(el,e){
+    var target=e&&e.target&&e.target.closest&&e.target.closest('.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind,#learningView');
+    var rect=target&&target.getBoundingClientRect&&target.getBoundingClientRect();
+    var x=e&&typeof e.clientX==='number'?e.clientX:(rect?rect.left+Math.min(28,rect.width/2):16);
+    var y=e&&typeof e.clientY==='number'?e.clientY:(rect?rect.top+Math.min(28,rect.height/2):window.innerHeight-72);
+    el.style.setProperty('left',Math.max(8,Math.min(window.innerWidth-52,x-22))+'px','important');
+    el.style.setProperty('top',Math.max(8,Math.min(window.innerHeight-52,y-22))+'px','important');
+    el.style.setProperty('bottom','auto','important');
+  }
   function nativeInput(){
     var el=document.getElementById('learningNativeInputFinal')||document.getElementById('learningNativeInput');
     if(!el){
@@ -5230,9 +5239,10 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
     },true);
     return el;
   }
-  function focusNow(){
+  function focusNow(e){
     if(!isLearning())return;
     var el=nativeInput();
+    placeInput(el,e);
     el.readOnly=false;
     el.removeAttribute('readonly');
     el.removeAttribute('aria-hidden');
@@ -5248,7 +5258,7 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
     nativeInput();
   }
   ['touchstart','pointerdown'].forEach(function(ev){
-    document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target))focusNow()},true);
+    document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target))focusNow(e)},true);
   });
   ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
     window.addEventListener(ev,function(){setTimeout(prepare,0);setTimeout(prepare,160)},true);
