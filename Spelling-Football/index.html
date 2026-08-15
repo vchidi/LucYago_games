@@ -301,6 +301,9 @@ body.learning-mode .mini{
 body.learning-mode .controls>*:not(#menuBtn):not(#learnScreenBtn):not(#competitionScreenBtn):not(.photo-controls){
   display:none!important;
 }
+body.learning-mode:not(.learning-ui-ready) .controls{
+  visibility:hidden!important;
+}
 body.learning-mode .panel{
   overflow:hidden!important;
 }
