@@ -5517,6 +5517,9 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
       el.style.setProperty('background',reallyOn?'#b9f3b8':'#ffa2a2','important');
     });
   }
+  function keepLearningLayoutStable(){
+    if(isCoarsePortrait()&&isLearning()) document.body.classList.add('keyboard-open');
+  }
   function markAudioReady(){
     audioUserReady=true;
     try{
@@ -5552,6 +5555,22 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
     }
     return nativeBlur.call(this);
   };
+  var nativeRemove=DOMTokenList.prototype.remove;
+  DOMTokenList.prototype.remove=function(){
+    if(this===document.body.classList&&isCoarsePortrait()&&isLearning()&&Array.prototype.indexOf.call(arguments,'keyboard-open')!==-1){
+      var args=Array.prototype.filter.call(arguments,function(x){return x!=='keyboard-open'});
+      if(args.length) return nativeRemove.apply(this,args);
+      return;
+    }
+    return nativeRemove.apply(this,arguments);
+  };
+  var nativeToggle=DOMTokenList.prototype.toggle;
+  DOMTokenList.prototype.toggle=function(token,force){
+    if(this===document.body.classList&&token==='keyboard-open'&&isCoarsePortrait()&&isLearning()&&force===false){
+      return true;
+    }
+    return nativeToggle.apply(this,arguments);
+  };
   function playDefaultAudio(){
     if(isLearning()||!document.body.classList.contains('competition-mode')||!audioEnabled('word')) return;
     var now=Date.now();
@@ -5581,7 +5600,7 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   },true);
   ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
     window.addEventListener(ev,function(){
-      setTimeout(function(){openKeyboard(false);syncAudioButtons();playDefaultAudio();},80);
+      setTimeout(function(){keepLearningLayoutStable();syncAudioButtons();playDefaultAudio();},80);
       setTimeout(syncAudioButtons,350);
     },true);
   });
@@ -5589,12 +5608,12 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   if(typeof oldRender==='function'){
     window.render=function(){
       var out=oldRender.apply(this,arguments);
-      setTimeout(function(){openKeyboard(false);syncAudioButtons();playDefaultAudio();},0);
+      setTimeout(function(){keepLearningLayoutStable();syncAudioButtons();playDefaultAudio();},0);
       return out;
     };
   }
   syncAudioButtons();
-  setInterval(function(){syncAudioButtons();if(isLearning())openKeyboard(false);},700);
+  setInterval(function(){syncAudioButtons();keepLearningLayoutStable();},700);
 })();
 </script>
 </body>
