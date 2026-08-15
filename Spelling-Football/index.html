@@ -4975,7 +4975,7 @@ body.learning-mode.keyboard-open .learn-table .learn-cell.editable:not(.phrase) 
   function bind(btn,fn){if(!btn||btn.dataset.underStatsBound==='1')return;btn.dataset.underStatsBound='1';['pointerup','touchend','click'].forEach(function(ev){btn.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();var now=Date.now();if(btn.__lastUnderStatsRun&&now-btn.__lastUnderStatsRun<220)return;btn.__lastUnderStatsRun=now;fn()},true)})}
   function ensureNativeInput(){var el=byId('learningNativeInput');if(el)return el;el=document.createElement('textarea');el.id='learningNativeInput';el.setAttribute('autocomplete','off');el.setAttribute('autocorrect','off');el.setAttribute('autocapitalize','off');el.setAttribute('spellcheck','false');el.setAttribute('aria-hidden','true');document.body.appendChild(el);el.addEventListener('beforeinput',function(e){if(!isLearning())return;if(e.inputType==='deleteContentBackward'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress('Borrar');el.value=''}},true);el.addEventListener('input',function(e){if(!isLearning())return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();var text=el.value||'';el.value='';for(var i=0;i<text.length;i++){var ch=text.charAt(i);if(ch==='\n'||ch===' ')continue;if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(ch)}},true);return el}
   function ensureRefresh(strip){var btn=byId('learnIconRefreshBtn');if(!btn){btn=document.createElement('button');btn.id='learnIconRefreshBtn';btn.className='learn-control';btn.type='button';btn.title='Cambiar icono';btn.textContent='↻'}var anchor=byId('learnPhotoToggle');if(anchor&&anchor.parentElement===strip&&btn.parentElement!==strip)anchor.insertAdjacentElement('afterend',btn);else if(btn.parentElement!==strip)strip.insertBefore(btn,strip.firstChild||null);bind(btn,function(){if(typeof window.__learningRefreshIcon==='function')window.__learningRefreshIcon();setTimeout(place,0)});return btn}
-  function place(){if(!isLearning())return;ensureNativeInput();var kb=byId('spellingSpanishKeyboard');if(kb)kb.style.display='none';var strip=document.querySelector('.photo-controls'),controls=document.querySelector('.hero .controls');if(!strip||!controls)return;var comp=byId('competitionScreenBtn');if(strip.parentElement!==controls){if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',strip);else controls.appendChild(strip);}else if(comp&&comp.nextElementSibling!==strip){comp.insertAdjacentElement('afterend',strip);} strip.style.setProperty('display','flex','important');strip.style.setProperty('margin-left','auto','important');strip.style.setProperty('visibility','visible','important');strip.style.setProperty('opacity','1','important');ensureRefresh(strip);['learnGuessBtn','learnPhraseBtn','learnBlocksBtn','learnShuffleBtn','learnPhotoToggle','learnIconRefreshBtn'].forEach(function(id){var el=byId(id);if(el)strip.appendChild(el)});Array.prototype.slice.call(strip.querySelectorAll('.status')).forEach(function(el){el.style.display='none'});var photo=byId('learnPhotoToggle');if(photo)photo.textContent='Icono';['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){var b=byId(id);bind(b,function(){runOriginal(id);setTimeout(function(){var p=byId('learnPhotoToggle');if(p)p.textContent='Icono';place()},0)})})}
+  function place(){if(!isLearning())return;ensureNativeInput();var kb=byId('spellingSpanishKeyboard');if(kb)kb.style.display='none';var strip=document.querySelector('.photo-controls'),controls=document.querySelector('.hero .controls');if(!strip||!controls)return;var comp=byId('competitionScreenBtn');if(strip.parentElement!==controls){if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',strip);else controls.appendChild(strip);}else if(comp&&comp.nextElementSibling!==strip){comp.insertAdjacentElement('afterend',strip);} strip.style.setProperty('display','flex','important');strip.style.setProperty('margin-left','auto','important');strip.style.setProperty('visibility','visible','important');strip.style.setProperty('opacity','1','important');ensureRefresh(strip);var cursor=null;['learnGuessBtn','learnPhraseBtn','learnBlocksBtn','learnShuffleBtn','learnPhotoToggle','learnIconRefreshBtn'].forEach(function(id){var el=byId(id);if(!el)return;if(el.parentElement!==strip){strip.insertBefore(el,cursor?cursor.nextSibling:null)}else if(cursor&&cursor.nextSibling!==el){strip.insertBefore(el,cursor.nextSibling)}else if(!cursor&&strip.firstElementChild!==el){strip.insertBefore(el,strip.firstElementChild)}cursor=el});Array.prototype.slice.call(strip.querySelectorAll('.status')).forEach(function(el){el.style.display='none'});var photo=byId('learnPhotoToggle');if(photo)photo.textContent='Icono';['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){var b=byId(id);bind(b,function(){runOriginal(id);setTimeout(function(){var p=byId('learnPhotoToggle');if(p)p.textContent='Icono';place()},0)})})}
   function coverEntry(){if(!isLearning())return;if(document.body.dataset.learningIconCoveredNow==='1')return;document.body.dataset.learningIconCoveredNow='1';if(typeof window.__learningCoverIcon==='function')window.__learningCoverIcon();setTimeout(place,0)}
   function resetFlagIfLeaving(){if(!isLearning()&&document.body)delete document.body.dataset.learningIconCoveredNow}
   ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(place,0);setTimeout(place,160);setTimeout(coverEntry,220);setTimeout(resetFlagIfLeaving,260)},true)});
@@ -5404,6 +5404,38 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   body.learning-mode #learnScreenBtn,body.learning-mode #competitionScreenBtn{min-width:104px!important;padding:0 10px!important;font-size:13px!important}
   body.learning-mode .hero .controls>.photo-controls .learn-control,
   body.learning-mode.keyboard-open .hero .controls>.photo-controls .learn-control{min-width:44px!important;padding:0 5px!important;font-size:11px!important}
+}
+</style>
+<style id="codex-learning-menu-no-shift-20260815">
+body.learning-mode .hero .controls>.photo-controls,
+body.learning-mode.keyboard-open .hero .controls>.photo-controls{
+  flex:0 0 auto!important;
+  align-items:center!important;
+  contain:layout style!important;
+}
+body.learning-mode .hero .controls>.photo-controls .learn-control,
+body.learning-mode.keyboard-open .hero .controls>.photo-controls .learn-control{
+  flex:0 0 78px!important;
+  width:78px!important;
+  min-width:78px!important;
+  max-width:78px!important;
+  transform:none!important;
+  transition:none!important;
+  animation:none!important;
+}
+body.learning-mode #learnGuessBtn,
+body.learning-mode.keyboard-open #learnGuessBtn{flex-basis:82px!important;width:82px!important;min-width:82px!important;max-width:82px!important}
+body.learning-mode #learnBlocksBtn,
+body.learning-mode.keyboard-open #learnBlocksBtn{flex-basis:96px!important;width:96px!important;min-width:96px!important;max-width:96px!important}
+body.learning-mode #learnIconRefreshBtn,
+body.learning-mode.keyboard-open #learnIconRefreshBtn{flex-basis:34px!important;width:34px!important;min-width:34px!important;max-width:34px!important}
+@media(max-width:900px){
+  body.learning-mode .hero .controls>.photo-controls .learn-control,
+  body.learning-mode.keyboard-open .hero .controls>.photo-controls .learn-control{flex-basis:70px!important;width:70px!important;min-width:70px!important;max-width:70px!important;font-size:10px!important}
+  body.learning-mode #learnGuessBtn,
+  body.learning-mode.keyboard-open #learnGuessBtn{flex-basis:76px!important;width:76px!important;min-width:76px!important;max-width:76px!important}
+  body.learning-mode #learnBlocksBtn,
+  body.learning-mode.keyboard-open #learnBlocksBtn{flex-basis:86px!important;width:86px!important;min-width:86px!important;max-width:86px!important}
 }
 </style>
 <style id="codex-spelling-football-ipad-audio-20260815">
