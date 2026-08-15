@@ -205,18 +205,28 @@ body:before{
   z-index:3!important;
 }
 .part.base.visible{opacity:1!important}
+.part.ground{left:18px!important;top:260px!important;bottom:auto!important;width:210px!important;height:12px!important;background:linear-gradient(180deg,#d8ad65,#9a6736)!important;border-radius:999px!important;display:block!important;z-index:2!important}
+.part.baseCap{left:56px!important;top:224px!important;bottom:auto!important;width:104px!important;height:22px!important;background:linear-gradient(180deg,#d7a15c,#8b572f)!important;border-radius:10px!important;display:block!important;z-index:3!important}
 .part.pole{
   left:78px!important; top:34px!important; bottom:auto!important;
   width:15px!important; height:215px!important;
   display:block!important;
 }
+.part.poleTop{left:66px!important;top:24px!important;bottom:auto!important;width:40px!important;height:20px!important;background:linear-gradient(180deg,#d49b58,#8a542b)!important;border-radius:10px!important;display:block!important;z-index:3!important}
 .part.beam{left:78px!important;top:34px!important;width:158px!important;height:15px!important}
+.part.beamTip{left:226px!important;top:29px!important;width:22px!important;height:25px!important;background:linear-gradient(180deg,#d49b58,#8a542b)!important;border-radius:9px!important;display:block!important;z-index:3!important}
 .part.brace{left:89px!important;top:68px!important;width:84px!important;height:10px!important}
+.part.brace2{left:80px!important;top:112px!important;width:78px!important;height:9px!important;background:linear-gradient(180deg,#d99a55,#8c5729)!important;transform:rotate(-22deg)!important;transform-origin:left center!important;display:block!important;z-index:3!important}
 @media(max-width:760px){
+  .part.ground{left:12px!important;top:162px!important;width:132px!important;height:8px!important}
   .part.base{left:22px!important;top:150px!important;width:94px!important;height:9px!important}
+  .part.baseCap{left:35px!important;top:140px!important;width:65px!important;height:14px!important}
   .part.pole{left:49px!important;top:21px!important;height:134px!important;width:10px!important}
+  .part.poleTop{left:42px!important;top:15px!important;width:25px!important;height:13px!important}
   .part.beam{left:49px!important;top:21px!important;width:99px!important;height:10px!important}
+  .part.beamTip{left:142px!important;top:18px!important;width:14px!important;height:16px!important}
   .part.brace{left:56px!important;top:43px!important;width:53px!important;height:7px!important}
+  .part.brace2{left:50px!important;top:70px!important;width:49px!important;height:6px!important}
 }
 /* Sustituye la fotografía por un gran icono/emoticono oculto por bloques. */
 .photo-frame{
@@ -697,7 +707,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
           <div id="hangMsg" class="message"></div>
           <div class="tools"><button id="deleteBtn" class="btn">Borrar</button><button id="restartVerbBtn" class="btn">Reiniciar</button><label class="btn">Import Excel<input type="file" id="fileInput" style="display:none" accept=".xlsx,.xls,.xlsm,.json"></label><button id="exportBtn" class="btn">Export</button></div>
         </div>
-        <div class="hang-right"><div class="stage-card"><div class="stage-head"><div class="stage-title">Ahorcado</div><div class="stage-stats"><div class="mini"><span>Vidas</span><b id="lives">0</b></div><div class="mini"><span>Partes</span><b><span id="damage">0</span>/<span id="partsTotal">15</span></b></div></div></div><div id="stage" class="stage"><div id="result" class="result"><div class="result-card"><div id="resultTitle" style="font-size:34px"></div><div id="resultText"></div></div></div></div></div></div>
+        <div class="hang-right"><div class="stage-card"><div class="stage-head"><div class="stage-title">Ahorcado</div><div class="stage-stats"><div class="mini"><span>Vidas</span><b id="lives">0</b></div><div class="mini"><span>Partes</span><b><span id="damage">0</span>/<span id="partsTotal">20</span></b></div></div></div><div id="stage" class="stage"><div id="result" class="result"><div class="result-card"><div id="resultTitle" style="font-size:34px"></div><div id="resultText"></div></div></div></div></div></div>
       </div>
     </section>
     <section id="learnView" class="view active">
@@ -923,9 +933,9 @@ const HIDDEN_ICONS=[
 ];
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
-const PARTS=['base','pole','beam','brace','rope','head','neck','bodyTop','bodyBottom','leftArm','rightArm','leftForearm','rightForearm','leftLeg','rightLeg'];
+const PARTS=['ground','base','baseCap','pole','poleTop','beam','beamTip','brace','brace2','rope','head','neck','bodyTop','bodyBottom','leftArm','rightArm','leftForearm','rightForearm','leftLeg','rightLeg'];
 let rawData=[...D], dataset=[], idx=0, mode='learn', filter='new', score={good:0,bad:0}, activeTarget='pastSimple', seen=new Set(), solutionPending=false;
-let hang={damage:5,lives:0,status:'playing'};
+let hang={damage:10,lives:0,status:'playing'};
 let hangPromptMode='tricky';
 let learnPromptMode='tricky';
 let learn={phase:'tricky', col:0, cells:{}, done:{}, activeKey:'tricky_baseForm'};
@@ -1003,7 +1013,7 @@ function hangSuccess(){if(hang.status!=='playing')return ''; if(hang.damage>0) h
 function hangFail(){if(hang.status!=='playing')return ''; if(hang.lives>0){hang.lives--;return 'Una vida te protege.'} hang.damage++; if(hang.damage>=PARTS.length){hang.damage=PARTS.length;hang.status='lost';return 'Ahorcado completo.'} return 'Aparece una pieza.'}
 function reveal(){if(mode!=='hang'||!dataset.length)return; let it=cur(); ['pastSimple','pastParticiple'].forEach(k=>{let s=it.state[k]; [...s.answer].forEach((ch,i)=>{if(s.pattern[i]==='_')s.guessed[i]=ch});s.ok=true}); solutionPending=true; render(); showMsg('Solución mostrada. Pulsa Siguiente cuando la hayas revisado.')} 
 function restartVerb(){if(!dataset.length)return; resetItem(cur()); hangPromptMode='tricky'; learnPromptMode='tricky'; if(mode==='learn')resetLearn(false); activeTarget='pastSimple'; solutionPending=false; render(); showMsg('Reiniciado.')}
-function restartGame(){score={good:0,bad:0}; hang={damage:5,lives:0,status:'playing'}; hangPromptMode='tricky'; learnPromptMode='tricky'; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
+function restartGame(){score={good:0,bad:0}; hang={damage:10,lives:0,status:'playing'}; hangPromptMode='tricky'; learnPromptMode='tricky'; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
 function markSeen(){if(dataset.length)seen.add(keyOf(cur()))}
 function nextVerb(force=false){
  if(!dataset.length)return;
