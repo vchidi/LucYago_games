@@ -5616,5 +5616,179 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   setInterval(function(){syncAudioButtons();keepLearningLayoutStable();},700);
 })();
 </script>
+<style id="codex-spelling-learning-stable-keyboard-20260815">
+@media (pointer:coarse){
+  body.learning-mode:not(.codex-learning-ready) .hero .controls{
+    visibility:hidden!important;
+  }
+  body.learning-mode #hiddenInput,
+  body.learning-mode #learningNativeInput,
+  body.learning-mode #learningNativeInputFinal{
+    pointer-events:none!important;
+    input-mode:none!important;
+  }
+  body.learning-mode #codexLearningKeyboard{
+    display:grid!important;
+  }
+  #codexLearningKeyboard{
+    width:min(100%,720px);
+    margin:8px auto 0;
+    padding:6px;
+    border-radius:14px;
+    background:linear-gradient(180deg,#ffffff,#eefaff);
+    border:1px solid rgba(32,48,74,.10);
+    box-shadow:0 8px 18px rgba(40,44,70,.10);
+    gap:4px;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .codex-learning-key-row{
+    display:grid;
+    grid-template-columns:repeat(10,minmax(0,1fr));
+    gap:4px;
+  }
+  .codex-learning-key-row.last{
+    grid-template-columns:1.35fr repeat(8,minmax(0,1fr)) 1.75fr;
+  }
+  .codex-learning-key{
+    min-width:0!important;
+    width:auto!important;
+    height:34px!important;
+    min-height:34px!important;
+    padding:0!important;
+    border-radius:10px!important;
+    font-size:16px!important;
+    line-height:1!important;
+    box-shadow:none!important;
+    transform:none!important;
+    transition:none!important;
+    animation:none!important;
+    touch-action:manipulation!important;
+  }
+  .codex-learning-key.delete{
+    font-size:12px!important;
+    background:#ffe4e2!important;
+    color:#8f2020!important;
+  }
+  .codex-learning-key.shift{
+    background:#eef3ff!important;
+    color:#285bd5!important;
+  }
+  #codexLearningKeyboard.shift-on .codex-learning-key.shift{
+    background:#285bd5!important;
+    color:#fff!important;
+  }
+}
+</style>
+<script id="codex-spelling-learning-stable-keyboard-20260815">
+(function(){
+  var shift=false;
+  var lastPressKey='',lastPressTime=0;
+  var rows=[['q','w','e','r','t','y','u','i','o','p'],['a','s','d','f','g','h','j','k','l','ñ'],['↑','z','x','c','v','b','n','m','.', '⌫']];
+  function isCoarse(){return !!(window.matchMedia&&matchMedia('(pointer:coarse)').matches)}
+  function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  function press(value){
+    if(!isLearning()) return;
+    var now=Date.now();
+    if(value===lastPressKey&&now-lastPressTime<180) return;
+    lastPressKey=value;
+    lastPressTime=now;
+    if(value==='↑'){shift=!shift;paintShift();return}
+    var out=value==='⌫'?'Borrar':value;
+    if(/^[a-zñ]$/.test(out)&&shift) out=out.toUpperCase();
+    if(typeof window.__spellingLearningPress==='function') window.__spellingLearningPress(out);
+    if(value!=='⌫'){shift=false;paintShift()}
+  }
+  function paintShift(){
+    var kb=document.getElementById('codexLearningKeyboard');
+    if(!kb) return;
+    kb.classList.toggle('shift-on',shift);
+    kb.querySelectorAll('[data-key]').forEach(function(btn){
+      var key=btn.dataset.key;
+      if(/^[a-zñ]$/.test(key)) btn.textContent=shift?key.toUpperCase():key;
+    });
+  }
+  function build(){
+    var kb=document.getElementById('codexLearningKeyboard');
+    if(kb) return kb;
+    kb=document.createElement('div');
+    kb.id='codexLearningKeyboard';
+    rows.forEach(function(row,i){
+      var line=document.createElement('div');
+      line.className='codex-learning-key-row'+(i===2?' last':'');
+      row.forEach(function(key){
+        var btn=document.createElement('button');
+        btn.type='button';
+        btn.className='codex-learning-key'+(key==='⌫'?' delete':'')+(key==='↑'?' shift':'');
+        btn.dataset.key=key;
+        btn.textContent=key==='⌫'?'Borrar':key;
+        btn.tabIndex=-1;
+        btn.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();press(key)},true);
+        btn.addEventListener('touchstart',function(e){e.preventDefault();e.stopPropagation();press(key)},true);
+        btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation()},true);
+        line.appendChild(btn);
+      });
+      kb.appendChild(line);
+    });
+    return kb;
+  }
+  function place(){
+    if(!isCoarse()||!isLearning()) return;
+    var kb=build();
+    var target=document.getElementById('learnPhraseBlind')||document.getElementById('learnTable')||document.getElementById('learningView');
+    if(target&&target.parentElement&&kb.parentElement!==target.parentElement){
+      target.insertAdjacentElement('afterend',kb);
+    }
+    document.body.classList.add('codex-learning-ready');
+    document.body.classList.remove('keyboard-open');
+    ['hiddenInput','learningNativeInput','learningNativeInputFinal'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(!el) return;
+      el.setAttribute('readonly','readonly');
+      el.setAttribute('inputmode','none');
+      try{if(document.activeElement===el) el.blur()}catch(_){}
+    });
+  }
+  var nativeAdd=DOMTokenList.prototype.add;
+  DOMTokenList.prototype.add=function(){
+    if(this===document.body.classList&&isCoarse()&&isLearning()&&Array.prototype.indexOf.call(arguments,'keyboard-open')!==-1){
+      var args=Array.prototype.filter.call(arguments,function(x){return x!=='keyboard-open'});
+      if(args.length) return nativeAdd.apply(this,args);
+      return;
+    }
+    return nativeAdd.apply(this,arguments);
+  };
+  var nativeToggle=DOMTokenList.prototype.toggle;
+  DOMTokenList.prototype.toggle=function(token,force){
+    if(this===document.body.classList&&isCoarse()&&isLearning()&&token==='keyboard-open'){
+      return false;
+    }
+    return nativeToggle.apply(this,arguments);
+  };
+  var nativeFocus=HTMLElement.prototype.focus;
+  HTMLElement.prototype.focus=function(opts){
+    if(this&&isCoarse()&&isLearning()&&(this.id==='hiddenInput'||this.id==='learningNativeInput'||this.id==='learningNativeInputFinal')){
+      return;
+    }
+    return nativeFocus.call(this,opts);
+  };
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(place,0);setTimeout(place,160)},true);
+  });
+  ['click','pointerdown','touchstart'].forEach(function(ev){
+    document.addEventListener(ev,function(){setTimeout(place,0)},true);
+  });
+  var oldRender=window.render;
+  if(typeof oldRender==='function'){
+    window.render=function(){
+      var out=oldRender.apply(this,arguments);
+      setTimeout(place,0);
+      return out;
+    };
+  }
+  setInterval(place,800);
+  setTimeout(place,0);
+})();
+</script>
 </body>
 </html>
