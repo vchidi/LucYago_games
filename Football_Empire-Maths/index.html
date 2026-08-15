@@ -4869,6 +4869,145 @@ updateControlAvailability();
 })();
 </script>
 
+<script id="codex-football-mixed-mul-levels-20260815">
+(function(){
+  const qs=s=>document.querySelector(s);
+  const qsa=s=>[...document.querySelectorAll(s)];
+
+  function ensureAllLevel(){
+    const select=qs('#difficulty');
+    if(!select || select.querySelector('option[value="all"]')) return;
+    select.insertAdjacentHTML('beforeend','<option value="all">Todos</option>');
+    if(typeof diffNums!=='undefined') diffNums.all=[2,3,4,5,6,7,8,9];
+  }
+
+  function forceInitialMixed(){
+    try{localStorage.setItem('photoPanicMode','full')}catch(_e){}
+    if(typeof state!=='undefined'){
+      state.mode='full';
+      qsa('.modeTop').forEach(b=>b.classList.toggle('selectedMode',b.dataset.mode==='full'));
+    }
+  }
+
+  function fixSpecificAllButton(){
+    if(typeof renderSpecificBtns!=='function' || renderSpecificBtns.__codexAllButton) return;
+    const oldRenderSpecificBtns=renderSpecificBtns;
+    renderSpecificBtns=function(){
+      oldRenderSpecificBtns.apply(this,arguments);
+      const holder=qs('#specificBtns');
+      if(!holder || holder.querySelector('[data-spec-all]')) return;
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.dataset.specAll='1';
+      btn.textContent='Todos';
+      btn.className=state.specific==null?'selectedNumber':'';
+      btn.onclick=function(){
+        state.specific=null;
+        renderSpecificBtns();
+      };
+      holder.prepend(btn);
+    };
+    renderSpecificBtns.__codexAllButton=true;
+  }
+
+  function normalizeSpecificForAll(){
+    if(typeof state==='undefined') return;
+    if(state.difficulty==='all' && state.specific===1) state.specific=null;
+  }
+
+  function patchProblemGenerator(){
+    if(typeof makeProblem!=='function' || makeProblem.__codexNoRepeatedMultiplier) return;
+    const oldMakeProblem=makeProblem;
+    makeProblem=function(type){
+      normalizeSpecificForAll();
+      const p=oldMakeProblem.apply(this,arguments);
+      if(type==='mul' && p && p.type==='mul'){
+        let guard=0;
+        while(String(Math.abs(p.b)).length>1 && String(Math.abs(p.b))[0]===String(Math.abs(p.b))[1] && guard++<60){
+          const next=oldMakeProblem.call(this,type);
+          Object.assign(p,next);
+        }
+        p.partial1=p.a*(p.b%10);
+        p.partial2=p.a*Math.floor(p.b/10);
+        p.answer=p.a*p.b;
+      }
+      return p;
+    };
+    makeProblem.__codexNoRepeatedMultiplier=true;
+  }
+
+  function allowAllResultCellsEditable(){
+    if(typeof freeAddSubAnswerEditing==='function' && !freeAddSubAnswerEditing.__codexAllOps){
+      freeAddSubAnswerEditing=function(){
+        return typeof state!=='undefined' && state.current && state.current.type!=='comb';
+      };
+      freeAddSubAnswerEditing.__codexAllOps=true;
+    }
+  }
+
+  function nextUnfilledAnswer(){
+    if(typeof orderedAnswerCells!=='function') return null;
+    return orderedAnswerCells().find(b=>b.querySelector('input')?.value.trim()!==String(b.dataset.answer)) || orderedAnswerCells()[0] || null;
+  }
+
+  function patchCarryInputAdvance(){
+    if(typeof inputKey!=='function' || inputKey.__codexCarryBackToAnswer) return;
+    const oldInputKey=inputKey;
+    inputKey=function(k){
+      const wasMulCarry=typeof state!=='undefined' && state.current?.type==='mul' && state.activeElement?.classList?.contains('carryBlank') && k!=='del';
+      const result=oldInputKey.apply(this,arguments);
+      if(wasMulCarry){
+        state.activeKind='answer';
+        state.activeElement=nextUnfilledAnswer();
+        if(typeof updateActiveCell==='function') updateActiveCell();
+      }
+      return result;
+    };
+    inputKey.__codexCarryBackToAnswer=true;
+  }
+
+  function patchSetModeAndStart(){
+    if(typeof setMode==='function' && !setMode.__codexMixedStart){
+      const oldSetMode=setMode;
+      setMode=function(mode){
+        const result=oldSetMode.apply(this,arguments);
+        ensureAllLevel();
+        return result;
+      };
+      setMode.__codexMixedStart=true;
+    }
+    if(typeof startGame==='function' && !startGame.__codexMixedStart){
+      const oldStartGame=startGame;
+      startGame=function(){
+        ensureAllLevel();
+        normalizeSpecificForAll();
+        return oldStartGame.apply(this,arguments);
+      };
+      startGame.__codexMixedStart=true;
+    }
+  }
+
+  let booted=false;
+  function init(){
+    ensureAllLevel();
+    fixSpecificAllButton();
+    patchProblemGenerator();
+    allowAllResultCellsEditable();
+    patchCarryInputAdvance();
+    patchSetModeAndStart();
+    try{ if(typeof renderSpecificBtns==='function') renderSpecificBtns(); }catch(_e){}
+    if(!booted){
+      booted=true;
+      forceInitialMixed();
+      try{ if(typeof startGame==='function') startGame(); }catch(_e){}
+    }
+  }
+
+  window.addEventListener('load',function(){setTimeout(init,0);setTimeout(init,250);});
+  setTimeout(init,0);
+})();
+</script>
+
 
 </body>
 </html>
