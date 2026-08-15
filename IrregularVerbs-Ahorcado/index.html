@@ -683,14 +683,14 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
   <header class="top">
     <div class="brand"><span class="star">⭐</span><h1>Irregular Verbs</h1></div>
     <div class="meta"><button id="homeBtn" class="btn home">🏠</button><div class="stat"><div class="lab">Aciertos</div><div id="good" class="val">0</div></div><div class="stat"><div class="lab">Errores</div><div id="bad" class="val">0</div></div><div class="stat"><div class="lab">Verbo</div><div class="val"><span id="idx">1</span>/<span id="total">0</span></div></div><div class="stat"><div class="lab">Conjunto</div><div id="setName" class="val">Studying</div></div></div>
-    <nav class="nav"><button id="learnBtn" class="btn good active">🎓 Aprendizaje</button><button id="hangBtn" class="btn">🎯 Ahorcado</button><span class="gap"></span><button id="filterNew" class="btn active">Studying</button><button id="filterStudied" class="btn">Studied</button><button id="filterAll" class="btn">All</button><button id="shuffleBtn" class="btn">Mezclar</button></nav>
+    <nav class="nav"><button id="learnBtn" class="btn good active">🎓 Aprendizaje</button><button id="hangBtn" class="btn">🎯 Ahorcado</button><span class="gap"></span><button id="filterNew" class="btn active">Studying</button><button id="filterStudied" class="btn">Studied</button><button id="filterAll" class="btn">All</button><button id="shuffleBtn" class="btn">Mezclar</button><button id="blindBtn" class="btn">Blind</button></nav>
   </header>
   <main class="main" id="main">
     <input id="hiddenInput" class="hidden-input" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" autofocus>
     <section id="hangView" class="view">
       <div class="hangman-layout">
         <div class="hang-left">
-          <div class="actions"><button id="revealBtn" class="btn good">Solución</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button><button id="blindBtn" class="btn">Blind</button></div>
+          <div class="actions"><button id="revealBtn" class="btn good">Solución</button><button id="nextBtn" class="btn">Siguiente</button><button id="tryBtn" class="btn bad">Intentar otra vez</button><button id="restartGameBtn" class="btn">Re-empezar</button></div>
           <div class="base-card"><div id="baseWord" class="base-word letters">write</div></div>
           <div id="psCard" class="prompt active"><div class="rowtop"><div class="rowtitle">Past simple</div><div id="psStatus" class="pill">Pendiente</div></div><div id="psLetters" class="letters"></div></div>
           <div id="ppCard" class="prompt"><div class="rowtop"><div class="rowtitle">Past participle</div><div id="ppStatus" class="pill">Pendiente</div></div><div id="ppLetters" class="letters"></div></div>
@@ -703,7 +703,7 @@ button,.btn,.cell.editable,label.btn{pointer-events:auto!important;position:rela
     <section id="learnView" class="view active">
       <div class="learn-layout">
         <div class="learn-left">
-          <div class="photo-controls"><button id="photoToggle" class="btn active">Iconos sí</button><button id="guessBtn" class="btn warn">Guess!</button><button id="learnNextBtn" class="btn">Siguiente</button><button id="blocksBtn" class="btn active">1200 bloques</button><button id="studyBtn" class="btn">📘 Estudio</button></div>
+          <div class="photo-controls"><button id="photoToggle" class="btn active">Iconos sí</button><button id="guessBtn" class="btn warn">Guess!</button><button id="learnNextBtn" class="btn">Siguiente</button><button id="blocksBtn" class="btn active">300 bloques</button><button id="studyBtn" class="btn">📘 Estudio</button></div>
           <div id="learnTable" class="learn-table"></div>
           <div id="learnMsg" class="message">Completa las celdas. Toca una celda para escribir ahí.</div>
           <div id="hint" class="hint">Aquí aparecerá una ayuda visual.</div>
@@ -925,11 +925,12 @@ const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const PARTS=['base','pole','beam','brace','rope','head','neck','bodyTop','bodyBottom','leftArm','rightArm','leftForearm','rightForearm','leftLeg','rightLeg'];
 let rawData=[...D], dataset=[], idx=0, mode='learn', filter='new', score={good:0,bad:0}, activeTarget='pastSimple', seen=new Set(), solutionPending=false;
-let hang={damage:4,lives:0,status:'playing'};
+let hang={damage:5,lives:0,status:'playing'};
 let hangPromptMode='tricky';
+let learnPromptMode='tricky';
 let learn={phase:'tricky', col:0, cells:{}, done:{}, activeKey:'tricky_baseForm'};
 let studyOpen=false;
-let photo={on:true,blocks:1200,revealed:0,order:[],iconIdx:Math.floor(Math.random()*HIDDEN_ICONS.length),guessOpen:false,guessTries:3,guessSolved:false,streak:0,verbHits:0,choices:[],choicesKey:""};
+let photo={on:true,blocks:300,revealed:0,order:[],iconIdx:Math.floor(Math.random()*HIDDEN_ICONS.length),guessOpen:false,guessTries:3,guessSolved:false,streak:0,verbHits:0,choices:[],choicesKey:""};
 function esc(x){return String(x??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 function clean(e){let c={baseForm:String(e.baseForm||'').trim(),pastSimple:String(e.pastSimple||'').trim(),pastSimplePattern:String(e.pastSimplePattern||e.pastSimple||'').trim(),pastParticiple:String(e.pastParticiple||'').trim(),pastParticiplePattern:String(e.pastParticiplePattern||e.pastParticiple||'').trim(),psHighlight:String(e.psHighlight||e['PS Highlight']||e['Past Simple Highlight']||'').trim(),ppHighlight:String(e.ppHighlight||e['PP Highlight']||e['Past Participle Highlight']||'').trim(),studyVisual:String(e.studyVisual||e['Study Visual']||e.Visual||'').trim(),studyHint:String(e.studyHint||e.Hint||'').trim(),isNew:String(e.isNew||'').trim().toLowerCase()}; if(!c.baseForm||!c.pastSimple||!c.pastParticiple)return null; c.pastSimplePattern=norm(c.pastSimple,c.pastSimplePattern); c.pastParticiplePattern=norm(c.pastParticiple,c.pastParticiplePattern); return c}
 function norm(a,p){a=String(a||'');p=String(p||a);if(p.length>a.length)p=p.slice(0,a.length);if(p.length<a.length)p+=a.slice(p.length);return p}
@@ -980,7 +981,12 @@ function insert(ch){
      let other=activeTarget==='pastSimple'?'pastParticiple':'pastSimple';
      if(it.state[other].ok!==true) activeTarget=other;
      let bothComplete=it.state.pastSimple.ok===true&&it.state.pastParticiple.ok===true;
-     showMsg(bothComplete?'¡Correcto! Ya puedes pulsar Siguiente.':((hmsg?hmsg+' ':'')+'Bien. Completa la otra forma.'));
+     if(bothComplete){
+       showMsg('¡Correcto! Pasamos al siguiente verbo.');
+       setTimeout(()=>nextVerb(true),650);
+     }else{
+       showMsg((hmsg?hmsg+' ':'')+'Bien. Completa la otra forma.');
+     }
    } else {
      score.bad++; recordReto(false); hangFail();
      showHangError();
@@ -990,14 +996,14 @@ function insert(ch){
 }
 function del(){if(!dataset.length)return; if(mode==='learn') return learnDelete(); if(solutionPending){showMsg('Ya has visto la solución. Pulsa Siguiente para continuar.');return} let s=cur().state[activeTarget], i=lastFilled(s); if(i>=0){s.guessed[i]='';s.ok=null;render();showMsg('Letra borrada. Puedes corregirla y volver a intentarlo.')}}
 function setActiveTarget(t){if(solutionPending){showMsg('Ya has visto la solución. Pulsa Siguiente para continuar.');return} activeTarget=t;render();focusInput()}
-function renderHang(){if(!dataset.length)return; let it=cur(); renderStaticLetters($('#baseWord'),it.baseForm); renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k&&!solutionPending); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=solutionPending?'Solución':s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); let blindBtn=$('#blindBtn'); if(blindBtn)blindBtn.textContent=hangPromptMode==='blind'?'Tricky':'Blind'; renderHangman()}
+function renderHang(){if(!dataset.length)return; let it=cur(); renderStaticLetters($('#baseWord'),it.baseForm); renderLetters($('#psLetters'),it.state.pastSimple); renderLetters($('#ppLetters'),it.state.pastParticiple); ['pastSimple','pastParticiple'].forEach(k=>{let card=$(k==='pastSimple'?'#psCard':'#ppCard'), st=$(k==='pastSimple'?'#psStatus':'#ppStatus'), s=it.state[k]; card.classList.toggle('active',activeTarget===k&&!solutionPending); card.classList.toggle('good',s.ok===true); card.classList.toggle('bad',s.ok===false); st.textContent=solutionPending?'Solución':s.ok===true?'Bien':s.ok===false?'Mal':'Pendiente'}); renderHangman()}
 function initHangmanParts(){let stage=$('#stage'); if(stage.querySelector('.part'))return; PARTS.forEach(p=>{let d=document.createElement('div');d.className='part '+p;d.dataset.part=p;stage.appendChild(d)}); $('#partsTotal').textContent=PARTS.length}
 function renderHangman(){initHangmanParts(); PARTS.forEach((p,i)=>{$(`[data-part="${p}"]`).classList.toggle('visible',i<hang.damage)}); $('#lives').textContent=hang.lives; $('#damage').textContent=hang.damage; let res=$('#result'); res.classList.toggle('show',hang.status!=='playing'); $('#resultTitle').textContent=hang.status==='won'?'GANASTE!':hang.status==='lost'?'PERDISTE!':''; $('#resultText').textContent=hang.status==='won'?'Has desmontado el ahorcado.':hang.status==='lost'?'Se completó el ahorcado.':''}
 function hangSuccess(){if(hang.status!=='playing')return ''; if(hang.damage>0) hang.damage--; else hang.lives++; if(hang.damage<=0){hang.damage=0;hang.status='won';return '¡Ganaste!'} return 'Quitas una pieza.'}
 function hangFail(){if(hang.status!=='playing')return ''; if(hang.lives>0){hang.lives--;return 'Una vida te protege.'} hang.damage++; if(hang.damage>=PARTS.length){hang.damage=PARTS.length;hang.status='lost';return 'Ahorcado completo.'} return 'Aparece una pieza.'}
 function reveal(){if(mode!=='hang'||!dataset.length)return; let it=cur(); ['pastSimple','pastParticiple'].forEach(k=>{let s=it.state[k]; [...s.answer].forEach((ch,i)=>{if(s.pattern[i]==='_')s.guessed[i]=ch});s.ok=true}); solutionPending=true; render(); showMsg('Solución mostrada. Pulsa Siguiente cuando la hayas revisado.')} 
-function restartVerb(){if(!dataset.length)return; resetItem(cur()); hangPromptMode='tricky'; if(mode==='learn')resetLearn(false); activeTarget='pastSimple'; solutionPending=false; render(); showMsg('Reiniciado.')}
-function restartGame(){score={good:0,bad:0}; hang={damage:4,lives:0,status:'playing'}; hangPromptMode='tricky'; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
+function restartVerb(){if(!dataset.length)return; resetItem(cur()); hangPromptMode='tricky'; learnPromptMode='tricky'; if(mode==='learn')resetLearn(false); activeTarget='pastSimple'; solutionPending=false; render(); showMsg('Reiniciado.')}
+function restartGame(){score={good:0,bad:0}; hang={damage:5,lives:0,status:'playing'}; hangPromptMode='tricky'; learnPromptMode='tricky'; seen.clear(); idx=0; dataset.forEach(resetItem); resetLearn(); render(); showMsg('Partida re-empezada.')}
 function markSeen(){if(dataset.length)seen.add(keyOf(cur()))}
 function nextVerb(force=false){
  if(!dataset.length)return;
@@ -1013,8 +1019,8 @@ function nextVerb(force=false){
 }
 function shuffleVerbs(){if(!dataset.length)return; let currentKey=keyOf(cur()); let unseen=dataset.filter(x=>!seen.has(keyOf(x))&&keyOf(x)!==currentKey); let seenItems=dataset.filter(x=>seen.has(keyOf(x))||keyOf(x)===currentKey); unseen.sort(()=>Math.random()-.5); seenItems.sort(()=>Math.random()-.5); dataset=[...unseen,...seenItems]; idx=0; dataset.forEach(resetItem); hangPromptMode='tricky'; resetLearn(); render(); showMsg('Mezclado sin repetir hasta agotar el conjunto.')}
 function setHangPromptMode(nextMode){if(!dataset.length)return; let it=cur(); let blind=nextMode==='blind'; ['pastSimple','pastParticiple'].forEach(k=>{let pattern=blind?blindPattern(it[k]):ensureBlank(it[k],k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); it.state[k]=makeState(it[k],pattern,k==='pastSimple'?it.psHighlight:it.ppHighlight); it.meta.scored[k]=false}); hangPromptMode=nextMode; activeTarget='pastSimple'; solutionPending=false; render()}
-function toggleHangPromptMode(){if(!dataset.length)return; if(mode!=='hang')setMode('hang'); let nextMode=hangPromptMode==='blind'?'tricky':'blind'; setHangPromptMode(nextMode); showMsg(nextMode==='blind'?'Blind: todas las letras estan ocultas.':'Tricky: vuelven las pistas.')}
-function resetLearn(resetPhoto=false){if(!dataset.length)return; let it=cur(); learn={phase:'tricky',col:0,cells:{},done:{},activeKey:'tricky_baseForm'}; ['baseForm','pastSimple','pastParticiple'].forEach(k=>{let ans=it[k]; let pat=k==='baseForm'?ensureBlank(ans,ans):ensureBlank(ans,k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); learn.cells['tricky_'+k]=makeState(ans,pat); learn.cells['blind_'+k]=makeState(ans,blindPattern(ans)); learn.done['tricky_'+k]=false; learn.done['blind_'+k]=false}); if(resetPhoto){resetPhotoProgress()}}
+function toggleBlindMode(){if(!dataset.length)return; if(mode==='hang'){let nextMode=hangPromptMode==='blind'?'tricky':'blind'; setHangPromptMode(nextMode); showMsg(nextMode==='blind'?'Blind: todas las letras estan ocultas.':'Tricky: vuelven las pistas.'); return} learnPromptMode=learnPromptMode==='blind'?'tricky':'blind'; resetLearn(false); render(); showMsg(learnPromptMode==='blind'?'Blind: la fila de práctica lo oculta todo.':'Tricky: vuelven las pistas de letras difíciles.')}
+function resetLearn(resetPhoto=false){if(!dataset.length)return; let it=cur(); learn={phase:'tricky',col:0,cells:{},done:{},activeKey:'tricky_baseForm'}; ['baseForm','pastSimple','pastParticiple'].forEach(k=>{let ans=it[k]; let trickyPat=k==='baseForm'?ensureBlank(ans,ans):ensureBlank(ans,k==='pastSimple'?it.pastSimplePattern:it.pastParticiplePattern); let pat=learnPromptMode==='blind'?blindPattern(ans):trickyPat; learn.cells['tricky_'+k]=makeState(ans,pat); learn.cells['blind_'+k]=makeState(ans,blindPattern(ans)); learn.done['tricky_'+k]=false; learn.done['blind_'+k]=false}); if(resetPhoto){resetPhotoProgress()}}
 function highlightedWord(word,highlight){
  let hi=highlightIndexes(word,highlight), out='';
  [...String(word||'')].forEach((ch,i)=>{out+=hi.has(i)?`<span class="study-hi">${esc(ch)}</span>`:esc(ch)});
@@ -1162,10 +1168,11 @@ function guess(ch,b){
  }
 }
 function celebrate(){let c=$('#confetti'); c.innerHTML=''; let colors=['#4f8cff','#25c96f','#ffd34f','#ff6fb5','#7c5cff']; for(let i=0;i<42;i++){let el=document.createElement('i');el.style.left=Math.random()*100+'%';el.style.top='-20px';el.style.background=colors[i%colors.length];el.style.animationDelay=(Math.random()*0.25)+'s';c.appendChild(el)} setTimeout(()=>c.innerHTML='',1100)}
-function render(){updateStats(); if(mode==='hang')renderHang(); else renderLearn(); focusInput()}
+function renderBlindButton(){let blindBtn=$('#blindBtn'); if(!blindBtn)return; let isBlind=mode==='hang'?hangPromptMode==='blind':learnPromptMode==='blind'; blindBtn.textContent=isBlind?'Tricky':'Blind'; blindBtn.classList.toggle('active',isBlind)}
+function render(){updateStats(); if(mode==='hang')renderHang(); else renderLearn(); renderBlindButton(); focusInput()}
 function exportJson(){let blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'}); let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='irregular_verbs_lucyago.json';a.click();URL.revokeObjectURL(a.href)}
 function importFile(file){let r=new FileReader(); r.onload=e=>{try{if(file.name.endsWith('.json')) rawData=JSON.parse(e.target.result); else {let wb=XLSX.read(e.target.result,{type:'binary'}), ws=wb.Sheets[wb.SheetNames[0]], rows=XLSX.utils.sheet_to_json(ws,{defval:''}); rawData=rows.map(x=>({baseForm:x.baseForm||x.Base||x['Base Form']||x.base||'',pastSimple:x.pastSimple||x['Past Simple']||x.Past||'',pastSimplePattern:x.pastSimplePattern||x['Past Simple Pattern']||'',pastParticiple:x.pastParticiple||x['Past Participle']||x.Participle||'',pastParticiplePattern:x.pastParticiplePattern||x['Past Participle Pattern']||'',psHighlight:x.psHighlight||x['PS Highlight']||x['Past Simple Highlight']||'',ppHighlight:x.ppHighlight||x['PP Highlight']||x['Past Participle Highlight']||'',studyVisual:x.studyVisual||x['Study Visual']||x.Visual||'',studyHint:x.studyHint||x.Hint||'',isNew:x.isNew||x.Status||''}))} rebuild();render();showMsg('Conjunto importado.')}catch(err){showMsg('No he podido importar el archivo.')}}; if(file.name.endsWith('.json'))r.readAsText(file);else r.readAsBinaryString(file)}
-$('#learnBtn').onclick=()=>setMode('learn'); $('#learnNextBtn').onclick=nextVerb; $('#studyBtn').onclick=()=>{studyOpen=!studyOpen;render();showMsg(studyOpen?'Modo Estudio: mira las formas, el patrón y la ayuda del Excel.':'Modo práctica.');}; $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#blindBtn').onclick=toggleHangPromptMode; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='../index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Iconos sí':'Iconos no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $('#blocksBtn').onclick=()=>{
+$('#learnBtn').onclick=()=>setMode('learn'); $('#learnNextBtn').onclick=nextVerb; $('#studyBtn').onclick=()=>{studyOpen=!studyOpen;render();showMsg(studyOpen?'Modo Estudio: mira las formas, el patrón y la ayuda del Excel.':'Modo práctica.');}; $('#hangBtn').onclick=()=>setMode('hang'); $('#filterNew').onclick=()=>setFilter('new'); $('#filterStudied').onclick=()=>setFilter('studied'); $('#filterAll').onclick=()=>setFilter('all'); $('#shuffleBtn').onclick=shuffleVerbs; $('#blindBtn').onclick=toggleBlindMode; $('#nextBtn').onclick=nextVerb; $('#tryBtn').onclick=restartVerb; $('#restartVerbBtn').onclick=restartVerb; $('#restartGameBtn').onclick=restartGame; $('#deleteBtn').onclick=del; $('#revealBtn').onclick=reveal; $('#psCard').onclick=()=>setActiveTarget('pastSimple'); $('#ppCard').onclick=()=>setActiveTarget('pastParticiple'); $('#homeBtn').onclick=()=>{try{location.href='../index.html'}catch{}}; $('#exportBtn').onclick=exportJson; $('#fileInput').onchange=e=>e.target.files[0]&&importFile(e.target.files[0]); $('#photoToggle').onclick=()=>{photo.on=!photo.on;$('#photoToggle').textContent=photo.on?'Iconos sí':'Iconos no';$('#photoToggle').classList.toggle('active',photo.on);render()}; $('#blocksBtn').onclick=()=>{
   const levels=[300,600,1200,1800];
   const current=levels.indexOf(photo.blocks);
   photo.blocks=levels[(current+1)%levels.length];
