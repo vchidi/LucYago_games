@@ -2900,7 +2900,7 @@ body.competition-mode #competitionScreenBtn{background:linear-gradient(135deg,#3
   function guess(ch){var ok=ch.toLowerCase()===pObj().title.toLowerCase();photo.guessOpen=false;if(ok){photo.guessSolved=true;photo.revealed=grid().tiles;score.good++;showMsg('¡Correcto! Empieza un nuevo icono.');setTimeout(function(){resetPhoto(true);renderLearn()},650)}else{score.bad++;photo.guessTries=Math.max(0,photo.guessTries-1);showMsg('No era ese. Guess se ha cerrado y puedes seguir jugando.')}renderLearn()}
   window.__learningRefreshIcon=function(){resetPhoto(true);photo.revealed=0;photo.order=[];photo.guessOpen=false;photo.guessSolved=false;showMsg('');renderLearn()};
   window.__learningCoverIcon=function(){photo.revealed=0;photo.order=[];renderLearn()};
-  function focusLater(){setTimeout(function(){var input=$('learningNativeInput');if(input)try{input.focus({preventScroll:true})}catch(e){try{input.focus()}catch(_){}}},40)}
+  function focusLater(){setTimeout(function(){var input=$('learningNativeInputFinal')||$('learningNativeInput');if(input)try{input.focus({preventScroll:true})}catch(e){try{input.focus()}catch(_){}}},40)}
   function bindScreenButtons(){if(!document.body.dataset.learnDelegatedFinal){document.body.dataset.learnDelegatedFinal='1';var lastTap=0;document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#learnPhraseBtn,#learnScreenBtn,#competitionScreenBtn');if(!t)return;e.preventDefault();e.stopImmediatePropagation();var now=Date.now();if(now-lastTap<260)return;lastTap=now;if(t.id==='learnPhraseBtn'){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()}else{screen(t.id==='learnScreenBtn'?'learning':'competition')}},true)}var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),p=document.getElementById('learnPhraseBtn');if(a&&!a.dataset.learnBound){a.dataset.learnBound='1'}if(c&&!c.dataset.learnBound){c.dataset.learnBound='1'}if(p&&!p.dataset.learnPhraseBound){p.dataset.learnPhraseBound='1'}}
   function installUi(){var panel=document.querySelector('.panel'),controls=document.querySelector('.controls');if(controls&&!$('learnScreenBtn')){var a=document.createElement('button'),c=document.createElement('button');a.id='learnScreenBtn';a.textContent='Aprendizaje';c.id='competitionScreenBtn';c.textContent='Partido';controls.insertBefore(c,controls.children[1]||null);controls.insertBefore(a,c)}bindScreenButtons();if(!panel||$('learningView')){document.body.classList.add('learning-ui-ready');return}var view=document.createElement('div');view.id='learningView';view.innerHTML='<div class="learn-layout"><div class="learn-left"><div class="photo-controls"><button id="learnHomeBtn" class="learn-control" title="Volver al menu">&#x1F3E0;</button><button id="learnPhotoToggle" class="learn-control">Iconos sí</button><button id="learnGuessBtn" class="learn-control">&#x1F9E0; Guess</button><button id="learnBlocksBtn" class="learn-control">300 bloques</button><button id="learnShuffleBtn" class="learn-control">Mezclar</button><button id="learnPhraseBtn" class="learn-control">Frase no</button><span id="learnIndex" class="status">1/1</span><span class="status">✓ <span id="learnGood">0</span></span><span class="status">✗ <span id="learnBad">0</span></span></div><div id="learnMeaning" class="learn-meaning"></div><div id="learnTable" class="learn-table"></div><div id="learnSentence" class="learn-sentence"></div><div id="learnPhraseBlind" class="learn-phrase-blind"></div><div id="learnMsg" class="learn-message"></div><div class="actions"><button id="learnDeleteBtn">Borrar última</button><button id="learnRetryBtn">Intentar otra vez</button><button id="learnNextBtn">Siguiente</button></div></div><div class="learn-right"><div id="learnPhotoCard" class="learn-photo-card"><div id="learnPhotoFrame" class="learn-photo-frame"><div id="learnPhotoImage" class="learn-photo-image"><span id="learnIconGlyph"></span></div><div id="learnPhotoMask" class="learn-photo-mask"></div></div><div id="learnPhotoCaption" class="learn-caption">Icono oculto</div></div><div id="learnGuessPanel" class="learn-guess-panel"><div class="learn-guess-top"><div class="learn-guess-title">¿Qué icono?</div><div id="learnHearts" class="learn-hearts">♥♥♥</div></div><div id="learnChoices" class="learn-choices"></div></div></div></div>';panel.appendChild(view);document.body.classList.add('learning-ui-ready');$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnPhotoToggle').onclick=function(){photo.on=!photo.on;renderLearn()};$('learnBlocksBtn').onclick=function(){var levels=[300,600,1200,1800],i=levels.indexOf(photo.blocks);photo.blocks=levels[(i+1)%levels.length];resetPhoto(false);showMsg('');renderLearn()};$('learnGuessBtn').onclick=function(){if(!photo.on)return;photo.guessOpen=!photo.guessOpen;renderLearn()};$('learnShuffleBtn').onclick=toggleLearnOrder;$('learnPhraseBtn').onclick=function(){phraseMode=!phraseMode;initCells();showMsg('');renderLearn()};$('learnDeleteBtn').onclick=del;$('learnRetryBtn').onclick=retry;$('learnNextBtn').onclick=nextWord}
   function screen(s){var isLearning=s==='learning',already=document.body.classList.contains(isLearning?'learning-mode':'competition-mode');document.body.classList.toggle('learning-mode',isLearning);document.body.classList.toggle('competition-mode',!isLearning);var a=document.getElementById('learnScreenBtn'),c=document.getElementById('competitionScreenBtn'),ctl=document.querySelector('.hero .controls'),home=document.getElementById('menuBtn');if(home&&ctl&&(home.parentElement!==ctl||home.nextElementSibling!==a))ctl.insertBefore(home,a||ctl.firstElementChild);if(a)a.classList.toggle('active',isLearning);if(c)c.classList.toggle('active',!isLearning);if(ctl)ctl.scrollLeft=0;if(already){if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}return}if(isLearning){if(window.speechSynthesis)try{window.speechSynthesis.cancel()}catch(e){};renderLearn()}else{document.body.classList.remove('keyboard-open');if(typeof render==='function')render();if(ctl)ctl.scrollLeft=0}}
@@ -2913,6 +2913,315 @@ async function boot(){data=fallbackLearningData();originalData=data.slice();inst
 })();
 </script>
 <!-- SPELLING_LEARNING_MODE_END -->
+
+<style id="spelling-learning-phrase-and-audio-final">
+body.learning-mode .topline,
+body.learning-mode.keyboard-open .topline{
+  display:grid!important;
+  grid-template-columns:auto 1fr!important;
+  align-items:start!important;
+  gap:12px!important;
+}
+body.learning-mode .title,
+body.learning-mode.keyboard-open .title{
+  grid-column:1/-1!important;
+}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  grid-column:1!important;
+  width:auto!important;
+  margin-right:22px!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  grid-column:2!important;
+  align-self:center!important;
+  justify-self:end!important;
+  width:min(980px,calc(100vw - 360px))!important;
+  margin:8px 0 0!important;
+}
+body.learning-mode .stats .stat:first-child,
+body.learning-mode.keyboard-open .stats .stat:first-child{
+  background:linear-gradient(180deg,#fff,#f7fbff)!important;
+  border:1px solid var(--line)!important;
+  box-shadow:none!important;
+}
+.learn-phrase-blind{display:none;grid-template-columns:104px 1fr;gap:8px;align-items:stretch;margin-top:4px}
+.learn-phrase-blind.show{display:grid}
+.learn-phrase-label{font-size:12px;font-weight:1000;color:#7a5a22;display:flex;align-items:center;text-transform:uppercase;letter-spacing:.05em}
+body.learning-mode .photo-controls #learnPhraseBtn.active{
+  background:linear-gradient(135deg,#b8ffd7,#69e6a1)!important;
+  color:#145234!important;
+  box-shadow:0 6px 0 rgba(38,154,89,.28),0 12px 20px rgba(64,201,111,.20)!important;
+}
+@media(max-width:760px){
+  body.learning-mode .topline,body.learning-mode.keyboard-open .topline{display:block!important}
+  body.learning-mode .stats,body.learning-mode.keyboard-open .stats{width:100%!important}
+  .learn-phrase-blind{grid-template-columns:62px 1fr}
+}
+</style>
+
+
+
+<style id="spelling-learning-header-readable-fix">
+/* Final Aprendizaje header fix: keep mode buttons inside the first card and make counters readable. */
+body.learning-mode .wrap{
+  overflow:hidden!important;
+}
+body.learning-mode .hero{
+  height:auto!important;
+  min-height:148px!important;
+  overflow:visible!important;
+  padding:10px 12px 12px!important;
+}
+body.learning-mode .topline{
+  display:block!important;
+  pointer-events:auto!important;
+}
+body.learning-mode .title{
+  font-size:clamp(26px,3vw,38px)!important;
+  line-height:1.05!important;
+  margin:4px 0 8px!important;
+  max-width:none!important;
+}
+body.learning-mode .controls{
+  position:relative!important;
+  top:auto!important;
+  right:auto!important;
+  left:auto!important;
+  grid-column:auto!important;
+  grid-row:auto!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:10px!important;
+  margin:8px 0 10px!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:0!important;
+}
+body.learning-mode #learnScreenBtn,
+body.learning-mode #competitionScreenBtn{
+  position:relative!important;
+  top:auto!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:132px!important;
+  height:44px!important;
+  min-height:44px!important;
+  max-height:44px!important;
+  padding:0 18px!important;
+  font-size:15px!important;
+  line-height:1!important;
+  z-index:20!important;
+}
+body.learning-mode .stats{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+body.learning-mode .stat{
+  min-height:48px!important;
+  padding:8px 10px!important;
+  border-radius:14px!important;
+}
+body.learning-mode .stat .k,
+body.learning-mode .k{
+  font-size:10px!important;
+  line-height:1!important;
+}
+body.learning-mode .stat .v,
+body.learning-mode .v{
+  font-size:22px!important;
+  line-height:1.05!important;
+  margin-top:3px!important;
+}
+body.learning-mode .panel{
+  min-height:0!important;
+  padding-top:12px!important;
+}
+body.learning-mode #learningView{
+  padding-top:14px!important;
+}
+body.learning-mode .photo-controls{
+  min-height:70px!important;
+  align-items:center!important;
+  row-gap:8px!important;
+  overflow:visible!important;
+}
+body.learning-mode .photo-controls .learn-control{
+  height:48px!important;
+  min-height:48px!important;
+  max-height:48px!important;
+  font-size:16px!important;
+}
+body.learning-mode .photo-controls .status{
+  min-height:38px!important;
+  padding:8px 12px!important;
+  border-radius:16px!important;
+  font-size:18px!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  background:#fff!important;
+  color:#172033!important;
+  border:2px solid rgba(63,124,255,.14)!important;
+}
+@media(max-width:760px){
+  body.learning-mode .hero{min-height:172px!important}
+  body.learning-mode .stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  body.learning-mode #learnScreenBtn,
+  body.learning-mode #competitionScreenBtn{min-width:116px!important}
+}
+</style>
+
+
+
+<style id="spelling-learning-header-final-position">
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:220px!important;
+  min-height:220px!important;
+  flex:0 0 220px!important;
+  overflow:visible!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 238px)!important;
+  min-height:0!important;
+}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls,
+body.learning-mode .topline .controls,
+body.learning-mode.keyboard-open .topline .controls{
+  position:relative!important;
+  grid-column:1/-1!important;
+  grid-row:auto!important;
+  inset:auto!important;
+  width:100%!important;
+  max-width:none!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:flex-start!important;
+  align-content:flex-start!important;
+  align-items:center!important;
+  gap:10px!important;
+  margin:8px 0 10px!important;
+  padding:0!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+body.learning-mode #learnScreenBtn,
+body.learning-mode #competitionScreenBtn,
+body.learning-mode.keyboard-open #learnScreenBtn,
+body.learning-mode.keyboard-open #competitionScreenBtn{
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  transform:none!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin-top:10px!important;
+  z-index:1!important;
+}
+body.learning-mode .stat,
+body.learning-mode.keyboard-open .stat{
+  min-height:54px!important;
+}
+body.learning-mode #learningView{
+  padding-top:12px!important;
+}
+@media(max-width:760px){
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:250px!important;
+    min-height:250px!important;
+    flex-basis:250px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{
+    height:calc(100dvh - 268px)!important;
+  }
+}
+</style>
+
+
+<style id="spelling-learning-header-inline-stats-final">
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{position:relative!important;}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  width:auto!important;
+  max-width:430px!important;
+  margin:8px 0 10px!important;
+  padding:0!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  position:absolute!important;
+  left:340px!important;
+  right:16px!important;
+  top:104px!important;
+  width:auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:0!important;
+  z-index:5!important;
+}
+@media(max-width:900px){
+  body.learning-mode .stats,body.learning-mode.keyboard-open .stats{position:relative!important;left:auto!important;right:auto!important;top:auto!important;width:100%!important;margin-top:10px!important}
+  body.learning-mode .hero .controls,body.learning-mode.keyboard-open .hero .controls{max-width:none!important}
+}
+</style>
+
+<style id="spelling-learning-photo-controls-click-layer-final">
+body.learning-mode .photo-controls{
+  position:relative!important;
+  z-index:60!important;
+  isolation:isolate!important;
+}
+body.learning-mode .learn-table,
+body.learning-mode .learn-meaning,
+body.learning-mode .learn-sentence,
+body.learning-mode .learn-phrase-blind{
+  position:relative!important;
+  z-index:1!important;
+}
+</style>
+
+<style id="spelling-learning-word-total-green-final">
+body.learning-mode .stats .stat:has(#wordIndex),
+body.learning-mode.keyboard-open .stats .stat:has(#wordIndex){
+  background:linear-gradient(135deg,#d8ffe8,#79eba7)!important;
+  border:2px solid rgba(22,163,74,.30)!important;
+  box-shadow:0 6px 0 rgba(22,163,74,.18),0 12px 18px rgba(22,163,74,.12)!important;
+}
+</style>
+
+<style id="spelling-learning-current-total-green-final">
+body.learning-mode .stats .stat:has(#currentIndex),
+body.learning-mode.keyboard-open .stats .stat:has(#currentIndex){
+  background:linear-gradient(180deg,#fff,#f7fbff)!important;
+  border:1px solid var(--line)!important;
+  box-shadow:none!important;
+}
+</style>
+
 <style id="spelling-competition-header-stable-final">
 /* Partido: cabecera estable y botones de modo dentro de la barra superior. */
 body.competition-mode,
@@ -3151,6 +3460,284 @@ body.competition-mode.keyboard-open #repeatAudioBtn{
 })();
 </script>
 
+<style id="spelling-learning-ipad-compact-phrase-final">
+body.learning-mode,
+body.learning-mode.keyboard-open{
+  --hero-h:168px!important;
+}
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:168px!important;
+  min-height:168px!important;
+  max-height:168px!important;
+  flex:0 0 168px!important;
+  padding:8px 10px!important;
+  overflow:visible!important;
+  transition:none!important;
+  animation:none!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 180px)!important;
+  padding-top:8px!important;
+  transition:none!important;
+  animation:none!important;
+}
+body.learning-mode .title,
+body.learning-mode.keyboard-open .title{
+  font-size:clamp(24px,2.45vw,34px)!important;
+  margin:2px 0 6px!important;
+  line-height:1!important;
+}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  max-width:270px!important;
+  gap:8px!important;
+  margin:4px 0 6px!important;
+  transition:none!important;
+  animation:none!important;
+}
+body.learning-mode #learnScreenBtn,
+body.learning-mode #competitionScreenBtn,
+body.learning-mode.keyboard-open #learnScreenBtn,
+body.learning-mode.keyboard-open #competitionScreenBtn{
+  min-width:118px!important;
+  height:38px!important;
+  min-height:38px!important;
+  max-height:38px!important;
+  padding:0 14px!important;
+  font-size:14px!important;
+  transform:none!important;
+  transition:none!important;
+  animation:none!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  left:300px!important;
+  right:12px!important;
+  top:86px!important;
+  gap:6px!important;
+}
+body.learning-mode .stat,
+body.learning-mode.keyboard-open .stat{
+  min-height:42px!important;
+  padding:6px 8px!important;
+}
+body.learning-mode .stat .k,
+body.learning-mode.keyboard-open .stat .k{font-size:9px!important}
+body.learning-mode .stat .v,
+body.learning-mode.keyboard-open .stat .v{font-size:18px!important;margin-top:2px!important}
+#learningView{
+  padding:8px!important;
+  gap:8px!important;
+}
+.learn-layout{gap:10px!important}
+.photo-controls{padding:8px!important;gap:8px!important;border-radius:20px!important}
+body.learning-mode .photo-controls{min-height:56px!important}
+body.learning-mode .photo-controls .learn-control{
+  height:40px!important;
+  min-height:40px!important;
+  max-height:40px!important;
+  padding:0 14px!important;
+  font-size:14px!important;
+}
+body.learning-mode .photo-controls .status{
+  min-height:34px!important;
+  padding:7px 10px!important;
+  font-size:15px!important;
+}
+.learn-table{gap:7px!important}
+.learn-cell{min-height:68px!important;padding:10px 8px!important;overflow:visible!important}
+.learn-cell.ref{font-size:clamp(24px,3.4vw,38px)!important;line-height:1.12!important}
+.learn-letters{gap:.18em!important;overflow:visible!important;align-items:center!important;line-height:1.12!important}
+.learn-char{font-size:clamp(22px,calc(96cqw / var(--char-count,8)),38px)!important;line-height:1.12!important;min-width:.46em!important}
+.learn-char.blank{color:#3f7cff!important;opacity:.82!important;text-shadow:none!important}
+.learn-sentence{
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-size:32px!important;
+  font-weight:1000!important;
+  line-height:1.08!important;
+  padding:6px 12px 4px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  white-space:normal!important;
+  letter-spacing:0!important;
+}
+@media(max-width:900px){
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:188px!important;
+    min-height:188px!important;
+    max-height:188px!important;
+    flex-basis:188px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 200px)!important}
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    width:100%!important;
+    margin-top:6px!important;
+  }
+  body.learning-mode .hero .controls,
+  body.learning-mode.keyboard-open .hero .controls{max-width:none!important}
+}
+</style>
+<style id="valentina-final-visible-learning-menu-stable-partido-20260811">
+/* Aprendizaje: todos los controles quedan visibles, sin desplazamiento lateral. */
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  width:100%!important;
+  max-width:none!important;
+  flex-wrap:nowrap!important;
+  overflow:visible!important;
+}
+body.learning-mode .hero .controls > .photo-controls,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls{
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  margin-left:0!important;
+  justify-content:flex-start!important;
+  overflow:visible!important;
+  gap:5px!important;
+}
+body.learning-mode .hero .controls > .photo-controls > *,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls > *{
+  min-width:0!important;
+}
+body.learning-mode .hero .controls > .photo-controls .learn-control,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls .learn-control{
+  flex:1 1 auto!important;
+  min-width:52px!important;
+  max-width:92px!important;
+  height:34px!important;
+  padding:0 7px!important;
+  font-size:12px!important;
+}
+body.learning-mode #learnIconRefreshBtn,
+body.learning-mode.keyboard-open #learnIconRefreshBtn{
+  flex:0 0 34px!important;
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+}
+
+/* Partido: los tres controles tácticos mantienen una sola capa y una posición estable. */
+body.competition-mode #formationSelect,
+body.competition-mode #yagoRoleSelect,
+body.competition-mode.keyboard-open #formationSelect,
+body.competition-mode.keyboard-open #yagoRoleSelect{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body.competition-mode #formationCycleBtn,
+body.competition-mode #yagoRoleCycleBtn,
+body.competition-mode #regenTeamsBtn,
+body.competition-mode.keyboard-open #formationCycleBtn,
+body.competition-mode.keyboard-open #yagoRoleCycleBtn,
+body.competition-mode.keyboard-open #regenTeamsBtn{
+  position:relative!important;
+  transform:none!important;
+  transition:none!important;
+  animation:none!important;
+  -webkit-tap-highlight-color:transparent!important;
+  touch-action:manipulation!important;
+}
+body.competition-mode #formationCycleBtn:active,
+body.competition-mode #yagoRoleCycleBtn:active,
+body.competition-mode #regenTeamsBtn:active{
+  transform:none!important;
+}
+
+@media(max-width:900px){
+  body.learning-mode #learnScreenBtn,
+  body.learning-mode #competitionScreenBtn{
+    min-width:104px!important;
+    padding:0 10px!important;
+    font-size:13px!important;
+  }
+  body.learning-mode .hero .controls > .photo-controls .learn-control,
+  body.learning-mode.keyboard-open .hero .controls > .photo-controls .learn-control{
+    min-width:44px!important;
+    padding:0 5px!important;
+    font-size:11px!important;
+  }
+}
+</style>
+</body>
+<style id="spelling-learning-word-phrase-alignment-final">
+body.learning-mode .learn-cell.ref{
+  white-space:pre-wrap!important;
+  word-spacing:.08em!important;
+  color:#5b72ff!important;
+}
+body.learning-mode .learn-phrase-blind,
+body.learning-mode.keyboard-open .learn-phrase-blind{
+  position:relative!important;
+  display:none!important;
+  grid-template-columns:1fr!important;
+  gap:0!important;
+  margin-top:4px!important;
+}
+body.learning-mode .learn-phrase-blind.show,
+body.learning-mode.keyboard-open .learn-phrase-blind.show{
+  display:block!important;
+}
+body.learning-mode .learn-phrase-label{
+  position:absolute!important;
+  left:0!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  z-index:2!important;
+  width:88px!important;
+  pointer-events:none!important;
+}
+body.learning-mode .hero,
+body.learning-mode .panel,
+body.learning-mode .stats,
+body.learning-mode .stat,
+body.learning-mode .topline,
+body.learning-mode .title,
+body.learning-mode .controls,
+body.learning-mode .photo-controls,
+body.learning-mode .photo-controls .learn-control{
+  transition:none!important;
+  animation:none!important;
+}
+body.learning-mode .photo-controls .learn-control:active,
+body.learning-mode #learnScreenBtn:active,
+body.learning-mode #competitionScreenBtn:active{
+  transform:none!important;
+}
+</style>
+<script id="spelling-learning-header-pinned-final">
+(function(){
+  function pinLearningHeader(){
+    if(!document.body.classList.contains('learning-mode'))return;
+    var controls=document.querySelector('.hero .controls');
+    if(controls)controls.scrollLeft=0;
+  }
+  ['pointerdown','touchstart','click','focusin'].forEach(function(ev){
+    document.addEventListener(ev,function(e){
+      var t=e.target&&e.target.closest&&e.target.closest('.photo-controls button,#learnScreenBtn,#competitionScreenBtn');
+      if(!t)return;
+      pinLearningHeader();
+      setTimeout(pinLearningHeader,0);
+      setTimeout(pinLearningHeader,80);
+      setTimeout(pinLearningHeader,180);
+    },true);
+  });
+  window.addEventListener('resize',function(){setTimeout(pinLearningHeader,0)},true);
+})();
+</script>
 <style id="valentina-spelling-spanish-keyboard-20260726">
 .spelling-spanish-keyboard{
   display:grid;
@@ -3364,6 +3951,297 @@ body.learning-mode #learningView #spellingSpanishKeyboard{
   setTimeout(placeKeyboard,0);
 })();
 </script>
+
+
+<style id="valentina-clean-final-20260726">
+body.learning-mode .learn-cell.ref,body.learning-mode .learn-cell.editable:not(.phrase){background:linear-gradient(180deg,#fff,#f8fbff)!important;border:3px solid rgba(90,61,26,.07)!important;box-shadow:0 7px 0 rgba(109,72,33,.07),0 12px 20px rgba(40,44,70,.08)!important;color:#3f7cff!important;font-family:Inter,Arial,Helvetica,sans-serif!important;font-weight:1000!important;letter-spacing:0!important;word-spacing:0!important}
+body.learning-mode .learn-cell.ref .learn-letters,body.learning-mode .learn-cell.editable:not(.phrase) .learn-letters{gap:0!important;justify-content:center!important;align-items:center!important;white-space:nowrap!important;overflow:visible!important;font-family:Inter,Arial,Helvetica,sans-serif!important;font-weight:1000!important;letter-spacing:0!important;word-spacing:0!important;color:#3f7cff!important}
+body.learning-mode .learn-cell.ref .learn-char,body.learning-mode .learn-cell.editable:not(.phrase) .learn-char{font-size:clamp(22px,calc(96cqw / var(--char-count,8)),38px)!important;line-height:1.12!important;min-width:.46em!important;padding:0!important;margin:0!important;color:#3f7cff!important;font-family:inherit!important;font-weight:1000!important;letter-spacing:0!important;text-shadow:none!important}
+.learn-caret{display:inline-block!important;width:2px!important;height:1.12em!important;margin:0 1px!important;background:#172033!important;border-radius:2px!important;vertical-align:-.12em!important;animation:learnCaretBlink 1s steps(1,end) infinite!important}
+@keyframes learnCaretBlink{50%{opacity:0}}
+#learnHomeBtn{min-width:48px!important;padding:0 14px!important;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',Arial,sans-serif!important;font-size:20px!important;line-height:1!important}
+.learn-photo-mask .learn-tile{background:#334155!important}.learn-photo-mask .learn-tile:nth-child(2n){background:#2563eb!important}.learn-photo-mask .learn-tile:nth-child(3n){background:#0f766e!important}.learn-photo-mask .learn-tile:nth-child(5n){background:#7c2d12!important}.learn-photo-mask .learn-tile.revealed{opacity:0!important}
+#menuBtn::before{content:"\1F3E0"!important;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',Arial,sans-serif!important;font-size:17px!important;line-height:1!important}
+body.competition-mode,body.competition-mode *{scroll-behavior:auto!important}
+body.competition-mode .hero,body.competition-mode .panel,body.competition-mode .wrap,body.competition-mode .game-grid,body.competition-mode .clue-card,body.competition-mode .word-zone,body.competition-mode .match-stage,body.competition-mode .side-game-card,body.competition-mode .football-panel,body.competition-mode .football-field,body.competition-mode .stats,body.competition-mode .controls,body.competition-mode .actions,body.competition-mode .title,body.competition-mode .message{transition:none!important;animation:none!important;transform:none!important;will-change:auto!important}
+body.competition-mode .football-field.match-shake,body.competition-mode .football-field.match-zoom,body.competition-mode .football-speedline.visible,body.competition-mode .football-confetti i{animation:none!important;transform:none!important}
+</style>
+<script id="valentina-clean-final-20260726">
+(function(){
+  function inCompetition(){return document.body&&document.body.classList.contains('competition-mode')}
+  function inLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  var lastTypingTap=0;
+  function isRealTypingTarget(t){return !!(t&&t.closest&&t.closest('.learn-cell.editable,.word-zone,.letters,.tile,#hiddenInput'))}
+  function settle(){
+    var field=document.getElementById('footballField');
+    if(field){field.classList.remove('match-shake');field.classList.remove('match-zoom')}
+    if(inCompetition())document.body.classList.remove('keyboard-open');
+    var h=document.getElementById('learnHomeBtn');
+    if(h&&!h.dataset.boundHome){h.dataset.boundHome='1';h.onclick=function(){window.location.href='../index.html'}}
+  }
+  var nativeFocus=HTMLElement.prototype.focus;
+  HTMLElement.prototype.focus=function(opts){
+    if(this&&this.id==='hiddenInput'&&inCompetition()&&Date.now()-lastTypingTap>700)return;
+    return nativeFocus.call(this,opts);
+  };
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(settle,0)},true)});
+  ['click','pointerdown','touchstart'].forEach(function(ev){document.addEventListener(ev,function(e){if(isRealTypingTarget(e.target))lastTypingTap=Date.now();setTimeout(settle,0)},true)});
+  var oldRender=window.render;
+  if(typeof oldRender==='function')window.render=function(){var out=oldRender.apply(this,arguments);setTimeout(settle,0);return out};
+  settle();
+})();
+</script>
+
+
+
+
+
+<style id="valentina-green-learning-and-match-20260726">
+body.learning-mode #menuBtn,
+body.competition-mode #menuBtn{
+  order:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+  height:32px!important;
+  padding:0!important;
+  border-radius:12px!important;
+  background:linear-gradient(135deg,#ffffff,#e8fbff)!important;
+  border:2px solid rgba(45,109,89,.16)!important;
+  box-shadow:0 5px 0 rgba(48,86,68,.12)!important;
+  font-size:0!important;
+}
+body.learning-mode #menuBtn::before,
+body.competition-mode #menuBtn::before{
+  content:"\1F3E0"!important;
+  font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',Arial,sans-serif!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+body.learning-mode #learnScreenBtn,
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #learnScreenBtn,
+body.competition-mode #competitionScreenBtn{
+  position:static!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  height:32px!important;
+  min-height:32px!important;
+  max-height:32px!important;
+  padding:0 14px!important;
+  border-radius:14px!important;
+  font-size:13px!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  order:1!important;
+  box-shadow:0 5px 0 rgba(55,74,104,.16),0 10px 18px rgba(40,44,70,.10)!important;
+}
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #competitionScreenBtn{order:2!important}
+body.learning-mode #modeClassicBtn,
+body.competition-mode #modeClassicBtn{order:3!important}
+body.learning-mode #modeBlindBtn,
+body.competition-mode #modeBlindBtn{order:4!important}
+body.learning-mode #learnScreenBtn,
+body.competition-mode #learnScreenBtn{
+  background:linear-gradient(135deg,#b8ffd7,#69e6a1)!important;
+  color:#145234!important;
+  border:2px solid rgba(38,154,89,.22)!important;
+}
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #competitionScreenBtn{
+  background:linear-gradient(135deg,#3f7cff,#7557ff)!important;
+  color:#fff!important;
+  border:2px solid rgba(255,255,255,.28)!important;
+}
+body.competition-mode{
+  background:radial-gradient(circle at 14% 8%,rgba(255,209,102,.42),transparent 24%),radial-gradient(circle at 92% 20%,rgba(126,219,255,.36),transparent 26%),linear-gradient(135deg,#fff8db,#e8fbff 58%,#fff0f7)!important;
+}
+body.competition-mode .hero{
+  background:linear-gradient(180deg,#fffdf6,#fff6dc)!important;
+  border:3px solid rgba(255,255,255,.86)!important;
+  box-shadow:0 8px 0 rgba(109,72,33,.08),0 16px 28px rgba(40,44,70,.12)!important;
+}
+body.competition-mode .panel,
+body.competition-mode .clue-card,
+body.competition-mode .side-game-card{
+  background:radial-gradient(circle at 14% 8%,rgba(255,209,102,.28),transparent 24%),radial-gradient(circle at 92% 20%,rgba(126,219,255,.24),transparent 26%),linear-gradient(135deg,#fff8db,#e8fbff 58%,#fff0f7)!important;
+  border-color:rgba(90,61,26,.08)!important;
+}
+.learn-photo-mask .learn-tile{background:#064e3b!important}
+.learn-photo-mask .learn-tile:nth-child(2n){background:#047857!important}
+.learn-photo-mask .learn-tile:nth-child(3n){background:#10b981!important}
+.learn-photo-mask .learn-tile:nth-child(5n){background:#6ee7b7!important}
+.learn-photo-mask .learn-tile:nth-child(7n){background:#a7f3d0!important}
+.learn-photo-mask .learn-tile.revealed{opacity:0!important}
+</style>
+
+
+
+<style id="valentina-final-order-space-20260726">
+body.learning-mode .controls > #menuBtn,
+body.learning-mode.keyboard-open .controls > #menuBtn,
+body.competition-mode .controls > #menuBtn,
+body.competition-mode.keyboard-open .controls > #menuBtn{
+  display:inline-flex!important;
+  order:0!important;
+  position:static!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+body.learning-mode .controls > *:not(#menuBtn):not(#learnScreenBtn):not(#competitionScreenBtn):not(#modeClassicBtn):not(#modeBlindBtn),
+body.competition-mode .controls > *:not(#menuBtn):not(#learnScreenBtn):not(#competitionScreenBtn):not(#modeClassicBtn):not(#modeBlindBtn){
+  order:20!important;
+}
+body.learning-mode #learnScreenBtn,
+body.competition-mode #learnScreenBtn{order:1!important}
+body.learning-mode #competitionScreenBtn,
+body.competition-mode #competitionScreenBtn{order:2!important}
+body.learning-mode #modeClassicBtn,
+body.competition-mode #modeClassicBtn{order:3!important}
+body.learning-mode #modeBlindBtn,
+body.competition-mode #modeBlindBtn{order:4!important}
+body.learning-mode .hero .controls,
+body.competition-mode .hero .controls{
+  justify-content:flex-start!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  gap:6px!important;
+}
+</style>
+<style id="valentina-learning-compact-header-20260726">
+body.learning-mode,
+body.learning-mode.keyboard-open{
+  --hero-h:126px!important;
+}
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:126px!important;
+  min-height:126px!important;
+  max-height:126px!important;
+  flex:0 0 126px!important;
+  padding:6px 8px 6px!important;
+  overflow:visible!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 138px)!important;
+  min-height:0!important;
+  padding-top:5px!important;
+}
+body.learning-mode .title,
+body.learning-mode.keyboard-open .title{
+  font-size:clamp(22px,2.4vw,32px)!important;
+  line-height:1!important;
+  margin:0 0 2px!important;
+}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  margin:2px 0 3px!important;
+  gap:5px!important;
+  min-height:30px!important;
+  max-height:32px!important;
+  overflow:visible!important;
+}
+body.learning-mode .hero .controls button,
+body.learning-mode.keyboard-open .hero .controls button,
+body.learning-mode .hero .controls label.btn,
+body.learning-mode.keyboard-open .hero .controls label.btn{
+  height:30px!important;
+  min-height:30px!important;
+  max-height:30px!important;
+  padding:0 10px!important;
+  font-size:12px!important;
+}
+body.learning-mode .hero .controls > #menuBtn#menuBtn#menuBtn,
+body.learning-mode.keyboard-open .hero .controls > #menuBtn#menuBtn#menuBtn{
+  width:32px!important;
+  min-width:32px!important;
+  max-width:32px!important;
+  height:30px!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  margin-top:0!important;
+  gap:5px!important;
+  transform:translateY(-4px)!important;
+}
+body.learning-mode .stat,
+body.learning-mode.keyboard-open .stat{
+  min-height:38px!important;
+  padding:5px 8px!important;
+  border-radius:12px!important;
+}
+body.learning-mode .stat .k,
+body.learning-mode.keyboard-open .stat .k{
+  font-size:8px!important;
+  line-height:1!important;
+}
+body.learning-mode .stat .v,
+body.learning-mode.keyboard-open .stat .v{
+  font-size:18px!important;
+  line-height:1.05!important;
+  margin-top:1px!important;
+}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode,
+  body.learning-mode.keyboard-open{
+    --hero-h:116px!important;
+  }
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:116px!important;
+    min-height:116px!important;
+    max-height:116px!important;
+    flex-basis:116px!important;
+    padding:5px 8px 5px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{
+    height:calc(100dvh - 126px)!important;
+    padding-top:4px!important;
+  }
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title{
+    font-size:20px!important;
+    margin-bottom:1px!important;
+  }
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    transform:translateY(-5px)!important;
+  }
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{
+    min-height:35px!important;
+    padding:4px 7px!important;
+  }
+  body.learning-mode .stat .v,
+  body.learning-mode.keyboard-open .stat .v{
+    font-size:17px!important;
+  }
+}
+@media (max-width:760px){
+  body.learning-mode,
+  body.learning-mode.keyboard-open{
+    --hero-h:136px!important;
+  }
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:136px!important;
+    min-height:136px!important;
+    max-height:136px!important;
+    flex-basis:136px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{
+    height:calc(100dvh - 146px)!important;
+  }
+}
+</style>
 <style id="valentina-competition-compact-header-20260726">
 body.competition-mode,
 body.competition-mode.keyboard-open{
@@ -3500,6 +4378,340 @@ body.competition-mode.keyboard-open .stat .v{
   }
 }
 </style>
+<style id="valentina-header-fine-tune-20260726">
+body.competition-mode .title,
+body.competition-mode.keyboard-open .title{
+  line-height:1.08!important;
+  margin-bottom:4px!important;
+}
+body.competition-mode .stats,
+body.competition-mode.keyboard-open .stats{
+  transform:translateY(-1px)!important;
+}
+body.competition-mode .hero,
+body.competition-mode.keyboard-open .hero{
+  height:116px!important;
+  min-height:116px!important;
+  max-height:116px!important;
+  flex-basis:116px!important;
+}
+body.competition-mode .panel,
+body.competition-mode.keyboard-open .panel{
+  height:calc(100dvh - 128px)!important;
+}
+body.learning-mode .stats .stat:has(#stepCount),
+body.learning-mode.keyboard-open .stats .stat:has(#stepCount){
+  display:none!important;
+}
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:112px!important;
+  min-height:112px!important;
+  max-height:112px!important;
+  flex-basis:112px!important;
+  padding:6px 8px 5px!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 124px)!important;
+}
+body.learning-mode .title,
+body.learning-mode.keyboard-open .title{
+  line-height:1.08!important;
+  margin-bottom:4px!important;
+}
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  margin-bottom:0!important;
+}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  position:absolute!important;
+  left:486px!important;
+  right:10px!important;
+  top:10px!important;
+  width:auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(86px,1fr))!important;
+  gap:5px!important;
+  margin:0!important;
+  transform:none!important;
+  z-index:8!important;
+}
+body.learning-mode .stat,
+body.learning-mode.keyboard-open .stat{
+  min-height:28px!important;
+  height:28px!important;
+  padding:3px 7px!important;
+  border-radius:10px!important;
+}
+body.learning-mode .stat .k,
+body.learning-mode.keyboard-open .stat .k{
+  font-size:7.5px!important;
+  line-height:1!important;
+}
+body.learning-mode .stat .v,
+body.learning-mode.keyboard-open .stat .v{
+  font-size:14px!important;
+  line-height:1!important;
+  margin-top:1px!important;
+}
+@media (max-width:1350px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    left:430px!important;
+    grid-template-columns:repeat(4,minmax(74px,1fr))!important;
+  }
+}
+@media (max-width:1080px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    left:390px!important;
+    right:8px!important;
+    gap:4px!important;
+    grid-template-columns:repeat(4,minmax(62px,1fr))!important;
+  }
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{
+    padding:3px 5px!important;
+  }
+  body.learning-mode .stat .k,
+  body.learning-mode.keyboard-open .stat .k{
+    font-size:7px!important;
+  }
+  body.learning-mode .stat .v,
+  body.learning-mode.keyboard-open .stat .v{
+    font-size:13px!important;
+  }
+}
+@media (max-width:760px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    width:100%!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    margin-top:2px!important;
+  }
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:132px!important;
+    min-height:132px!important;
+    max-height:132px!important;
+    flex-basis:132px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{
+    height:calc(100dvh - 142px)!important;
+  }
+}
+</style>
+<style id="valentina-learning-title-breathing-20260726">
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{
+  margin-top:5px!important;
+}
+body.learning-mode .hero,
+body.learning-mode.keyboard-open .hero{
+  height:116px!important;
+  min-height:116px!important;
+  max-height:116px!important;
+  flex-basis:116px!important;
+}
+body.learning-mode .panel,
+body.learning-mode.keyboard-open .panel{
+  height:calc(100dvh - 128px)!important;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+<style id="valentina-ipad-learning-final-20260726">
+/* Ajuste final iPad: cabecera compacta, botones de ancho natural y scroll horizontal */
+@media (pointer:coarse) and (min-width:761px){
+  .hero{overflow:hidden!important;position:relative!important}
+  .hero .controls{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    justify-content:flex-start!important;
+    align-items:center!important;
+    gap:5px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    padding:0 4px 3px 0!important;
+  }
+  .hero .controls::-webkit-scrollbar{display:none!important}
+  .hero .controls > *,
+  .hero .controls button,
+  .hero .controls label.btn,
+  .hero .controls select.select-pill{
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:max-content!important;
+    max-width:none!important;
+    white-space:nowrap!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .hero .controls .icon-btn,
+  .hero .controls #menuBtn{
+    min-width:30px!important;
+    width:30px!important;
+    max-width:30px!important;
+    padding-left:0!important;
+    padding-right:0!important;
+  }
+  body.keyboard-open .hero .controls{
+    position:static!important;
+    right:auto!important;
+    top:auto!important;
+    max-width:100%!important;
+    justify-content:flex-start!important;
+  }
+}
+
+/* Aprendizaje: todos los controles propios en una sola linea, sin casita delante de Iconos si */
+body.learning-mode #learnHomeBtn,
+body.learning-mode.keyboard-open #learnHomeBtn{display:none!important}
+body.learning-mode .photo-controls,
+body.learning-mode.keyboard-open .photo-controls{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:5px!important;
+  width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  scrollbar-width:none!important;
+  padding:0 0 3px!important;
+  margin:0 0 4px!important;
+}
+body.learning-mode .photo-controls::-webkit-scrollbar{display:none!important}
+body.learning-mode .photo-controls > *,
+body.learning-mode.keyboard-open .photo-controls > *{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:max-content!important;
+  white-space:nowrap!important;
+}
+body.learning-mode .learn-control,
+body.learning-mode.keyboard-open .learn-control,
+body.learning-mode .photo-controls .status,
+body.learning-mode.keyboard-open .photo-controls .status{
+  min-height:26px!important;
+  height:26px!important;
+  padding:0 8px!important;
+  border-radius:10px!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+body.learning-mode .stats .stat:has(#stepCount),
+body.learning-mode.keyboard-open .stats .stat:has(#stepCount){display:none!important}
+body.learning-mode .stats,
+body.learning-mode.keyboard-open .stats{
+  display:grid!important;
+  grid-template-columns:34px repeat(4,minmax(74px,1fr))!important;
+  gap:4px!important;
+}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode,
+  body.learning-mode.keyboard-open{--hero-h:98px!important}
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:98px!important;
+    min-height:98px!important;
+    max-height:98px!important;
+    flex-basis:98px!important;
+    padding:4px 7px!important;
+  }
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 108px)!important}
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title{font-size:20px!important;line-height:1.08!important;margin:0 0 3px!important}
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    position:absolute!important;
+    left:392px!important;
+    right:7px!important;
+    top:7px!important;
+    width:auto!important;
+    margin:0!important;
+    grid-template-columns:31px repeat(4,minmax(58px,1fr))!important;
+  }
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{height:25px!important;min-height:25px!important;padding:2px 5px!important;border-radius:9px!important}
+  body.learning-mode .stat .k,
+  body.learning-mode.keyboard-open .stat .k{font-size:7px!important;line-height:1!important}
+  body.learning-mode .stat .v,
+  body.learning-mode.keyboard-open .stat .v{font-size:12.5px!important;line-height:1!important;margin-top:0!important}
+}
+@media (pointer:coarse) and (min-width:761px) and (max-width:1050px){
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    width:100%!important;
+    margin:2px 0 0!important;
+  }
+  body.learning-mode,
+  body.learning-mode.keyboard-open{--hero-h:116px!important}
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{height:116px!important;min-height:116px!important;max-height:116px!important;flex-basis:116px!important}
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 126px)!important}
+}
+
+/* Teclado visual: simbolos compactos y letras un poco mas grandes */
+.spelling-key{
+  font-size:18px!important;
+  font-weight:900!important;
+}
+.spelling-key-space,.spelling-key-delete{
+  font-family:'Segoe UI Symbol','Arial Unicode MS',Inter,Arial,sans-serif!important;
+  font-size:20px!important;
+  line-height:1!important;
+}
+@media (pointer:coarse){
+  .spelling-key{font-size:19px!important}
+  .spelling-key-space,.spelling-key-delete{font-size:22px!important}
+}
+
+/* BLIND exactamente con la misma base visual que WORD */
+.learn-phrase-blind,
+.learn-phrase-blind *,
+.learn-word,
+.learn-word *{
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-weight:900!important;
+  letter-spacing:0!important;
+}
+.learn-phrase-blind .learn-cell,
+.learn-word .learn-cell,
+.learn-phrase-blind .learn-letter,
+.learn-word .learn-letter{
+  font-size:inherit!important;
+  line-height:1.08!important;
+  color:var(--text)!important;
+}
+</style>
+
 <style id="valentina-hide-football-log-final-20260726">
 /* Quitar el log del partido de la interfaz */
 #footballLog,
@@ -3511,6 +4723,263 @@ body.competition-mode.keyboard-open .stat .v{
   display:none!important;
 }
 </style>
+<style id="valentina-ipad-polish-final-20260726">
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode .hero,
+  body.learning-mode.keyboard-open .hero{
+    height:102px!important;
+    min-height:102px!important;
+    max-height:102px!important;
+    flex-basis:102px!important;
+    padding:6px 8px 5px!important;
+  }
+  body.learning-mode .topline > div:first-child,
+  body.learning-mode.keyboard-open .topline > div:first-child{
+    min-width:210px!important;
+    max-width:210px!important;
+    overflow:hidden!important;
+  }
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title{
+    width:210px!important;
+    max-width:210px!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font-size:21px!important;
+    line-height:32px!important;
+    height:32px!important;
+  }
+  body.learning-mode .hero .controls,
+  body.learning-mode.keyboard-open .hero .controls{
+    left:0!important;
+    right:0!important;
+    top:0!important;
+    height:36px!important;
+    z-index:20!important;
+  }
+  body.learning-mode .hero .controls #menuBtn,
+  body.learning-mode.keyboard-open .hero .controls #menuBtn,
+  body.learning-mode .hero .controls #learnScreenBtn,
+  body.learning-mode.keyboard-open .hero .controls #learnScreenBtn,
+  body.learning-mode .hero .controls #competitionScreenBtn,
+  body.learning-mode.keyboard-open .hero .controls #competitionScreenBtn{
+    display:inline-flex!important;
+    flex:0 0 auto!important;
+    height:31px!important;
+    min-height:31px!important;
+    max-height:31px!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+  body.learning-mode .hero .controls #menuBtn,
+  body.learning-mode.keyboard-open .hero .controls #menuBtn{
+    width:31px!important;
+    min-width:31px!important;
+    max-width:31px!important;
+    padding:0!important;
+  }
+  body.learning-mode .stats,
+  body.learning-mode.keyboard-open .stats{
+    display:none!important;
+  }
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{
+    flex:0 0 auto!important;
+    width:88px!important;
+    min-width:88px!important;
+    max-width:88px!important;
+    height:30px!important;
+    min-height:30px!important;
+    padding:3px 6px!important;
+    border-radius:10px!important;
+  }
+  body.learning-mode .stat .k,
+  body.learning-mode.keyboard-open .stat .k{font-size:7px!important;line-height:1!important}
+  body.learning-mode .stat .v,
+  body.learning-mode.keyboard-open .stat .v{font-size:14px!important;line-height:1!important;margin-top:1px!important}
+  body.learning-mode .panel,
+  body.learning-mode.keyboard-open .panel{height:calc(100dvh - 112px)!important}
+
+  body.competition-mode .hero,
+  body.competition-mode.keyboard-open .hero{
+    height:92px!important;
+    min-height:92px!important;
+    max-height:92px!important;
+    flex-basis:92px!important;
+    padding:5px 8px 4px!important;
+  }
+  body.competition-mode .stats,
+  body.competition-mode.keyboard-open .stats{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:3px!important;
+    width:max-content!important;
+    max-width:100%!important;
+    margin:4px 0 0!important;
+  }
+  body.competition-mode .stat,
+  body.competition-mode.keyboard-open .stat{
+    flex:0 0 auto!important;
+    width:70px!important;
+    min-width:70px!important;
+    max-width:70px!important;
+    height:26px!important;
+    min-height:26px!important;
+    padding:2px 4px!important;
+    border-radius:8px!important;
+    overflow:visible!important;
+  }
+  body.competition-mode .stat .k,
+  body.competition-mode.keyboard-open .stat .k{font-size:6.5px!important;line-height:1!important}
+  body.competition-mode .stat .v,
+  body.competition-mode.keyboard-open .stat .v{font-size:12px!important;line-height:1!important;margin-top:1px!important}
+  body.competition-mode .panel,
+  body.competition-mode.keyboard-open .panel{height:calc(100dvh - 102px)!important}
+
+  body.competition-mode .letters,
+  body.competition-mode.keyboard-open .letters{
+    gap:3px!important;
+    align-items:center!important;
+  }
+  body.competition-mode .tile,
+  body.competition-mode.keyboard-open .tile{
+    width:34px!important;
+    min-width:34px!important;
+    height:38px!important;
+    border-radius:9px!important;
+    font-size:24px!important;
+    line-height:1!important;
+  }
+  body.competition-mode .tile.space,
+  body.competition-mode.keyboard-open .tile.space{
+    width:8px!important;
+    min-width:8px!important;
+  }
+}
+@media (pointer:coarse) and (min-width:761px) and (max-width:860px){
+  body.learning-mode .topline > div:first-child,
+  body.learning-mode.keyboard-open .topline > div:first-child,
+  body.learning-mode .title,
+  body.learning-mode.keyboard-open .title{
+    width:190px!important;
+    min-width:190px!important;
+    max-width:190px!important;
+    font-size:19px!important;
+  }
+  body.learning-mode .hero .controls,
+  body.learning-mode.keyboard-open .hero .controls{left:0!important}
+  body.learning-mode .stat,
+  body.learning-mode.keyboard-open .stat{width:78px!important;min-width:78px!important;max-width:78px!important}
+}
+</style>
+<script id="valentina-clean-title-final-20260726">
+(function(){
+  function cleanTitle(){
+    var t=document.querySelector('.title');
+    if(t&&/\s+-\s+Aprendizaje\s*$/i.test(t.textContent))t.textContent=t.textContent.replace(/\s+-\s+Aprendizaje\s*$/i,'');
+    if(t&&/\s+-\s+Partido\s*$/i.test(t.textContent))t.textContent=t.textContent.replace(/\s+-\s+Partido\s*$/i,'');
+  }
+  ['DOMContentLoaded','load','pageshow','click','pointerdown','touchstart','resize','orientationchange'].forEach(function(ev){
+    window.addEventListener(ev,function(){setTimeout(cleanTitle,0);setTimeout(cleanTitle,120)},true);
+  });
+  setInterval(cleanTitle,800);
+  cleanTitle();
+})();
+</script>
+<style id="valentina-remove-learning-title-suffix-final-20260726">
+body.learning-mode .title::after,
+body.learning-mode.keyboard-open .title::after{
+  content:"📱"!important;
+  display:inline-block!important;
+  margin-left:8px!important;
+  font-size:.78em!important;
+  line-height:1!important;
+  vertical-align:middle!important;
+  transform:none!important;
+}
+body.competition-mode .title::after,
+body.competition-mode.keyboard-open .title::after{
+  content:"📱"!important;
+  display:inline-block!important;
+  margin-left:8px!important;
+  font-size:.78em!important;
+  line-height:1!important;
+  vertical-align:middle!important;
+  transform:rotate(90deg)!important;
+}
+</style>
+<style id="valentina-learning-icons-under-stats-final-20260727">
+body.learning-mode .hero .controls > .photo-controls,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls,
+body.learning-mode .controls > .photo-controls:not(#learnScreenBtn):not(#competitionScreenBtn),
+body.learning-mode.keyboard-open .controls > .photo-controls:not(#learnScreenBtn):not(#competitionScreenBtn){
+  display:flex!important;visibility:visible!important;opacity:1!important;flex:1 1 auto!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;width:auto!important;min-width:0!important;max-width:none!important;overflow:visible!important;margin:0 0 0 12px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;position:relative!important;z-index:999!important;
+}
+body.learning-mode .hero .controls > .photo-controls::-webkit-scrollbar,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls::-webkit-scrollbar{display:none!important}
+body.learning-mode .hero > .photo-controls,
+body.learning-mode.keyboard-open .hero > .photo-controls,
+body.learning-mode .learn-left > .photo-controls,
+body.learning-mode.keyboard-open .learn-left > .photo-controls{display:none!important}
+body.learning-mode .hero .controls > .photo-controls > *,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls > *{flex:0 0 auto!important;width:auto!important;min-width:max-content!important;white-space:nowrap!important}
+body.learning-mode .hero .controls > .photo-controls .learn-control,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls .learn-control{display:inline-flex!important;align-items:center!important;justify-content:center!important;height:34px!important;min-height:34px!important;max-height:34px!important;padding:0 13px!important;border-radius:10px!important;font-size:14px!important;line-height:1!important;pointer-events:auto!important}
+body.learning-mode #learnIconRefreshBtn,
+body.learning-mode.keyboard-open #learnIconRefreshBtn{width:34px!important;min-width:34px!important;max-width:34px!important;padding:0!important;font-size:20px!important;font-family:'Segoe UI Symbol','Arial Unicode MS',Inter,Arial,sans-serif!important}
+body.learning-mode .hero .controls > .photo-controls .status,
+body.learning-mode.keyboard-open .hero .controls > .photo-controls .status,
+body.learning-mode #learnHomeBtn,
+body.learning-mode.keyboard-open #learnHomeBtn{display:none!important}
+body.learning-mode #spellingSpanishKeyboard,
+body.learning-mode.keyboard-open #spellingSpanishKeyboard{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#learningNativeInput{position:fixed!important;left:0!important;bottom:0!important;width:1px!important;height:1px!important;opacity:.01!important;border:0!important;padding:0!important;margin:0!important;background:transparent!important;color:transparent!important;caret-color:transparent!important;outline:0!important;z-index:1!important;font-size:16px!important}
+body.learning-mode #hiddenInput,
+body.learning-mode.keyboard-open #hiddenInput{pointer-events:none!important}
+body.learning-mode .learn-layout{grid-template-columns:minmax(0,1.05fr) minmax(416px,.95fr)!important;gap:12px!important;align-items:stretch!important}
+body.learning-mode .learn-right{align-self:stretch!important;max-height:none!important;overflow:hidden!important;display:flex!important}
+body.learning-mode .learn-photo-card{width:100%!important;min-width:0!important;max-width:none!important;height:100%!important;min-height:0!important;max-height:none!important;padding:14px!important;overflow:hidden!important;flex:1 1 auto!important}
+body.learning-mode .learn-photo-frame{width:100%!important;height:auto!important;min-height:360px!important;max-height:none!important;flex:1 1 auto!important;aspect-ratio:auto!important}
+body.learning-mode .learn-caption{flex:0 0 24px!important;max-height:24px!important;overflow:hidden!important}
+@media (pointer:coarse) and (min-width:761px) and (orientation:portrait){
+  body.learning-mode .learn-layout,body.learning-mode.keyboard-open .learn-layout{grid-template-columns:minmax(0,1fr) 360px!important;gap:10px!important;align-items:stretch!important}
+  body.learning-mode .learn-right,body.learning-mode.keyboard-open .learn-right{align-self:stretch!important;max-height:420px!important;overflow:hidden!important;display:flex!important}
+  body.learning-mode .learn-photo-card,body.learning-mode.keyboard-open .learn-photo-card{width:360px!important;min-width:360px!important;max-width:360px!important;height:420px!important;min-height:420px!important;max-height:420px!important;padding:10px!important;overflow:hidden!important;flex:0 0 420px!important}
+  body.learning-mode .learn-photo-frame,body.learning-mode.keyboard-open .learn-photo-frame{width:340px!important;height:366px!important;min-height:366px!important;max-height:366px!important;flex:0 0 366px!important;aspect-ratio:auto!important}
+  body.learning-mode .learn-caption,body.learning-mode.keyboard-open .learn-caption{flex:0 0 24px!important;max-height:24px!important;overflow:hidden!important}
+}
+body.learning-mode .learn-table .learn-cell.ref .learn-letters,
+body.learning-mode .learn-table .learn-cell.editable:not(.phrase) .learn-letters,
+body.learning-mode.keyboard-open .learn-table .learn-cell.ref .learn-letters,
+body.learning-mode.keyboard-open .learn-table .learn-cell.editable:not(.phrase) .learn-letters{font-family:Inter,Arial,Helvetica,sans-serif!important;font-weight:1000!important;letter-spacing:0!important;word-spacing:0!important;gap:0!important;line-height:1.08!important;color:#3f7cff!important}
+body.learning-mode .learn-table .learn-cell.ref .learn-char,
+body.learning-mode .learn-table .learn-cell.editable:not(.phrase) .learn-char,
+body.learning-mode.keyboard-open .learn-table .learn-cell.ref .learn-char,
+body.learning-mode.keyboard-open .learn-table .learn-cell.editable:not(.phrase) .learn-char{font-family:Inter,Arial,Helvetica,sans-serif!important;font-size:32px!important;font-weight:1000!important;line-height:1.08!important;min-width:.46em!important;padding:0!important;margin:0!important;color:#3f7cff!important;letter-spacing:0!important;word-spacing:0!important;text-shadow:none!important}
+@media (pointer:coarse) and (min-width:761px){
+  body.learning-mode .learn-table .learn-cell.ref .learn-char,
+  body.learning-mode .learn-table .learn-cell.editable:not(.phrase) .learn-char,
+  body.learning-mode.keyboard-open .learn-table .learn-cell.ref .learn-char,
+  body.learning-mode.keyboard-open .learn-table .learn-cell.editable:not(.phrase) .learn-char{font-size:32px!important}
+}
+</style>
+<script id="valentina-learning-icons-under-stats-final-20260727">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
+  function runOriginal(id){var b=byId(id);if(!b)return;var fn=b.__nativeLearningClick||b.onclick;if(typeof fn==='function')fn.call(b,new MouseEvent('click',{bubbles:false,cancelable:true}))}
+  function bind(btn,fn){if(!btn||btn.dataset.underStatsBound==='1')return;btn.dataset.underStatsBound='1';['pointerup','touchend','click'].forEach(function(ev){btn.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();var now=Date.now();if(btn.__lastUnderStatsRun&&now-btn.__lastUnderStatsRun<220)return;btn.__lastUnderStatsRun=now;fn()},true)})}
+  function ensureNativeInput(){var el=byId('learningNativeInput');if(el)return el;el=document.createElement('textarea');el.id='learningNativeInput';el.setAttribute('autocomplete','off');el.setAttribute('autocorrect','off');el.setAttribute('autocapitalize','off');el.setAttribute('spellcheck','false');el.setAttribute('aria-hidden','true');document.body.appendChild(el);el.addEventListener('beforeinput',function(e){if(!isLearning())return;if(e.inputType==='deleteContentBackward'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress('Borrar');el.value=''}},true);el.addEventListener('input',function(e){if(!isLearning())return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();var text=el.value||'';el.value='';for(var i=0;i<text.length;i++){var ch=text.charAt(i);if(ch==='\n'||ch===' ')continue;if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(ch)}},true);return el}
+  function ensureRefresh(strip){var btn=byId('learnIconRefreshBtn');if(!btn){btn=document.createElement('button');btn.id='learnIconRefreshBtn';btn.className='learn-control';btn.type='button';btn.title='Cambiar icono';btn.textContent='↻'}var anchor=byId('learnPhotoToggle');if(anchor&&anchor.parentElement===strip&&btn.parentElement!==strip)anchor.insertAdjacentElement('afterend',btn);else if(btn.parentElement!==strip)strip.insertBefore(btn,strip.firstChild||null);bind(btn,function(){if(typeof window.__learningRefreshIcon==='function')window.__learningRefreshIcon();setTimeout(place,0)});return btn}
+  function place(){if(!isLearning())return;ensureNativeInput();var kb=byId('spellingSpanishKeyboard');if(kb)kb.style.display='none';var strip=document.querySelector('.photo-controls'),controls=document.querySelector('.hero .controls');if(!strip||!controls)return;var comp=byId('competitionScreenBtn');if(strip.parentElement!==controls){if(comp&&comp.parentElement===controls)comp.insertAdjacentElement('afterend',strip);else controls.appendChild(strip);}else if(comp&&comp.nextElementSibling!==strip){comp.insertAdjacentElement('afterend',strip);} strip.style.setProperty('display','flex','important');strip.style.setProperty('margin-left','auto','important');strip.style.setProperty('visibility','visible','important');strip.style.setProperty('opacity','1','important');ensureRefresh(strip);['learnGuessBtn','learnPhraseBtn','learnBlocksBtn','learnShuffleBtn','learnPhotoToggle','learnIconRefreshBtn'].forEach(function(id){var el=byId(id);if(el)strip.appendChild(el)});Array.prototype.slice.call(strip.querySelectorAll('.status')).forEach(function(el){el.style.display='none'});var photo=byId('learnPhotoToggle');if(photo)photo.textContent='Icono';['learnPhotoToggle','learnGuessBtn','learnBlocksBtn','learnShuffleBtn','learnPhraseBtn'].forEach(function(id){var b=byId(id);bind(b,function(){runOriginal(id);setTimeout(function(){var p=byId('learnPhotoToggle');if(p)p.textContent='Icono';place()},0)})})}
+  function coverEntry(){if(!isLearning())return;if(document.body.dataset.learningIconCoveredNow==='1')return;document.body.dataset.learningIconCoveredNow='1';if(typeof window.__learningCoverIcon==='function')window.__learningCoverIcon();setTimeout(place,0)}
+  function resetFlagIfLeaving(){if(!isLearning()&&document.body)delete document.body.dataset.learningIconCoveredNow}
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange','click','pointerdown','touchstart'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(place,0);setTimeout(place,160);setTimeout(coverEntry,220);setTimeout(resetFlagIfLeaving,260)},true)});
+  setInterval(function(){place();coverEntry();resetFlagIfLeaving()},700);
+  setTimeout(function(){place();coverEntry()},0);
+})();
+</script>
 <style id="valentina-partido-top-menu-final-20260728">
 /* Partido: menu superior legible, sin controles de Aprendizaje. */
 body.competition-mode .photo-controls,
@@ -3639,153 +5108,18 @@ body.competition-mode.keyboard-open #regenTeamsBtn{min-width:86px!important}
   setTimeout(syncPartidoTopMenu,0);
 })();
 </script>
-
-<style id="codex-spelling-learning-clean-20260815">
-body.learning-mode,
-body.learning-mode *{
-  transition:none!important;
-  animation:none!important;
-  scroll-behavior:auto!important;
-}
+<style id="valentina-learning-ipad-native-keyboard-fix-20260728">
+/* Aprendizaje iPad: teclado nativo y recuadro de icono siempre dentro de la zona visible. */
 body.learning-mode #spellingSpanishKeyboard,
-body.learning-mode #learningView #spellingSpanishKeyboard{
+body.learning-mode.keyboard-open #spellingSpanishKeyboard,
+body.learning-mode #learningView #spellingSpanishKeyboard,
+body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
   display:none!important;
   visibility:hidden!important;
   pointer-events:none!important;
 }
-body.learning-mode #learnHomeBtn{display:none!important}
-body.learning-mode .hero{
-  height:auto!important;
-  min-height:132px!important;
-  flex:0 0 auto!important;
-  overflow:visible!important;
-  padding:10px 12px 12px!important;
-}
-body.learning-mode .topline{display:block!important}
-body.learning-mode .title{
-  font-size:clamp(24px,2.6vw,36px)!important;
-  line-height:1.05!important;
-  margin:2px 0 8px!important;
-  white-space:nowrap!important;
-}
-body.learning-mode .title::after{
-  content:"📱"!important;
-  display:inline-block!important;
-  margin-left:8px!important;
-  font-size:.78em!important;
-  line-height:1!important;
-  vertical-align:middle!important;
-}
-body.learning-mode .hero .controls{
-  position:static!important;
-  display:flex!important;
-  flex-wrap:wrap!important;
-  align-items:center!important;
-  justify-content:flex-start!important;
-  gap:8px!important;
-  width:100%!important;
-  max-width:none!important;
-  margin:0!important;
-  padding:0!important;
-  overflow:visible!important;
-}
-body.learning-mode #learnScreenBtn,
-body.learning-mode #competitionScreenBtn{
-  position:static!important;
-  transform:none!important;
-  min-width:118px!important;
-  height:38px!important;
-  min-height:38px!important;
-  max-height:38px!important;
-  padding:0 14px!important;
-  font-size:14px!important;
-}
-body.learning-mode .stats{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:6px!important;
-  margin:8px 0 0!important;
-}
-body.learning-mode .stats .stat:has(#stepCount){display:none!important}
-body.learning-mode .stats .stat:has(#wordIndex){
-  background:linear-gradient(135deg,#d8ffe8,#79eba7)!important;
-  border:2px solid rgba(22,163,74,.30)!important;
-  box-shadow:0 6px 0 rgba(22,163,74,.18),0 12px 18px rgba(22,163,74,.12)!important;
-}
-body.learning-mode .panel{
-  height:calc(100dvh - 148px)!important;
-  min-height:0!important;
-  padding-top:8px!important;
-}
-body.learning-mode #learningView{padding:8px!important}
-body.learning-mode .photo-controls{
-  display:flex!important;
-  flex-wrap:wrap!important;
-  align-items:center!important;
-  justify-content:flex-start!important;
-  gap:8px!important;
-  min-height:0!important;
-  margin:0 0 8px!important;
-  padding:8px!important;
-  overflow:visible!important;
-}
-body.learning-mode .photo-controls .learn-control{
-  height:40px!important;
-  min-height:40px!important;
-  max-height:40px!important;
-  padding:0 14px!important;
-  font-size:14px!important;
-  transform:none!important;
-}
-body.learning-mode .photo-controls .status{display:none!important}
-body.learning-mode .learn-cell.ref{
-  white-space:pre-wrap!important;
-  word-spacing:.08em!important;
-  color:#5b72ff!important;
-}
-body.learning-mode .learn-table{
-  grid-template-columns:70px minmax(0,1fr)!important;
-  gap:6px!important;
-}
-body.learning-mode .learn-label{
-  font-size:11px!important;
-  letter-spacing:.02em!important;
-  min-width:0!important;
-  overflow:hidden!important;
-  white-space:nowrap!important;
-}
-body.learning-mode .learn-phrase-blind,
-body.learning-mode .learn-phrase-blind.show{
-  grid-template-columns:minmax(0,1fr)!important;
-  gap:0!important;
-  align-items:stretch!important;
-  margin-top:4px!important;
-  position:relative!important;
-}
-body.learning-mode .learn-phrase-blind{display:none!important}
-body.learning-mode .learn-phrase-blind.show{display:grid!important}
-body.learning-mode .learn-phrase-label{display:none!important}
-body.learning-mode .learn-cell.phrase{
-  width:100%!important;
-  min-width:0!important;
-  min-height:88px!important;
-  padding:10px 12px!important;
-  overflow:hidden!important;
-}
-body.learning-mode .learn-cell.phrase .learn-letters,
-body.learning-mode .learn-sentence{
-  justify-content:center!important;
-  align-items:center!important;
-  flex-wrap:wrap!important;
-  white-space:normal!important;
-  font-family:Inter,Arial,Helvetica,sans-serif!important;
-  font-size:32px!important;
-  font-weight:1000!important;
-  line-height:1.08!important;
-  letter-spacing:0!important;
-  gap:0!important;
-}
-#learningNativeInput{
+#learningNativeInput,
+#learningNativeInputFinal{
   position:fixed!important;
   left:16px!important;
   bottom:calc(16px + env(safe-area-inset-bottom,0px))!important;
@@ -3808,113 +5142,251 @@ body.learning-mode .learn-sentence{
   font-size:18px!important;
   transform:translateZ(0)!important;
 }
-@media (pointer:coarse) and (min-width:761px) and (orientation:portrait){
-  body.learning-mode .hero{min-height:150px!important}
-  body.learning-mode .panel{height:calc(100dvh - 166px)!important}
+@media (pointer:coarse) and (min-width:761px) and (orientation:landscape){
   body.learning-mode .learn-layout{
-    grid-template-columns:1fr!important;
+    grid-template-columns:minmax(0,1fr) 360px!important;
     gap:10px!important;
+    align-items:start!important;
+  }
+  body.learning-mode .learn-right{
+    align-self:start!important;
+    max-height:calc(100dvh - 150px)!important;
+    overflow:hidden!important;
+    display:flex!important;
+  }
+  body.learning-mode .learn-photo-card{
+    width:360px!important;
+    min-width:360px!important;
+    max-width:360px!important;
+    height:calc(100dvh - 158px)!important;
+    min-height:280px!important;
+    max-height:calc(100dvh - 158px)!important;
+    padding:10px!important;
+    overflow:hidden!important;
+    flex:0 1 auto!important;
+  }
+  body.learning-mode .learn-photo-frame{
+    width:340px!important;
+    height:auto!important;
+    min-height:226px!important;
+    max-height:none!important;
+    flex:1 1 auto!important;
+    aspect-ratio:auto!important;
+  }
+  body.learning-mode .learn-caption,
+  body.learning-mode.keyboard-open .learn-caption{
+    flex:0 0 24px!important;
+    max-height:24px!important;
+    overflow:hidden!important;
   }
 }
-@media(max-width:760px){
-  body.learning-mode .hero{min-height:172px!important}
-  body.learning-mode .panel{height:calc(100dvh - 188px)!important}
-  body.learning-mode .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  body.learning-mode .learn-table{grid-template-columns:50px minmax(0,1fr)!important}
-}
 </style>
-<script id="codex-spelling-learning-clean-20260815">
+<script id="valentina-learning-ipad-native-keyboard-fix-20260728">
 (function(){
   function isLearning(){return document.body&&document.body.classList.contains('learning-mode')}
-  function byId(id){return document.getElementById(id)}
+  function targetIsTypingArea(t){return !!(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))}
   function nativeInput(){
-    var el=byId('learningNativeInput');
+    var el=document.getElementById('learningNativeInputFinal')||document.getElementById('learningNativeInput');
     if(el)return el;
     el=document.createElement('textarea');
-    el.id='learningNativeInput';
+    el.id='learningNativeInputFinal';
     el.setAttribute('autocomplete','off');
     el.setAttribute('autocorrect','off');
     el.setAttribute('autocapitalize','off');
     el.setAttribute('spellcheck','false');
     el.setAttribute('inputmode','text');
-    el.setAttribute('aria-label','Entrada de Aprendizaje');
     document.body.appendChild(el);
+    function routeText(text){
+      if(!isLearning()||!text)return;
+      for(var i=0;i<text.length;i++){
+        var ch=text.charAt(i);
+        if(ch==='\n'||ch===' ')continue;
+        if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(ch);
+      }
+    }
     el.addEventListener('beforeinput',function(e){
       if(!isLearning())return;
       if(e.inputType==='deleteContentBackward'){
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
+        e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
         if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress('Borrar');
         el.value='';
       }
     },true);
     el.addEventListener('input',function(e){
       if(!isLearning())return;
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
+      e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
       var text=el.value||'';
       el.value='';
-      for(var i=0;i<text.length;i++){
-        var ch=text.charAt(i);
-        if(ch==='\n'||ch===' ')continue;
-        if(typeof window.__spellingLearningPress==='function')window.__spellingLearningPress(ch);
-      }
+      routeText(text);
     },true);
     return el;
   }
-  function isControl(target){
-    return !!(target&&target.closest&&target.closest('button,label.btn,select,input[type=file],input[type=number],textarea,a'));
-  }
-  function isLearningTypingArea(target){
-    return !!(target&&target.closest&&target.closest('.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind,#learningView'));
-  }
-  function focusFromUserTap(){
+  function focusNow(){
     if(!isLearning())return;
     var el=nativeInput();
-    el.disabled=false;
     el.readOnly=false;
     el.removeAttribute('readonly');
+    el.disabled=false;
     el.setAttribute('inputmode','text');
+    if(document.activeElement===el)return;
     try{el.focus({preventScroll:true})}catch(e){try{el.focus()}catch(_){}}
   }
   function prepare(){
     if(!isLearning())return;
-    document.body.classList.remove('keyboard-open');
-    var oldKeyboard=byId('spellingSpanishKeyboard');
-    if(oldKeyboard){
-      oldKeyboard.style.setProperty('display','none','important');
-      oldKeyboard.style.setProperty('visibility','hidden','important');
-      oldKeyboard.style.setProperty('pointer-events','none','important');
-    }
-    var home=byId('learnHomeBtn');
-    if(home&&!home.dataset.cleanHomeBound){
-      home.dataset.cleanHomeBound='1';
-      home.onclick=function(){window.location.href='../index.html'};
-    }
+    var kb=document.getElementById('spellingSpanishKeyboard');
+    if(kb){kb.style.setProperty('display','none','important');kb.style.setProperty('visibility','hidden','important')}
     nativeInput();
   }
-  ['pointerdown','touchstart'].forEach(function(ev){
-    document.addEventListener(ev,function(e){
-      if(isLearning()&&!isControl(e.target)&&isLearningTypingArea(e.target))focusFromUserTap();
-    },true);
+  ['touchstart','pointerdown'].forEach(function(ev){
+    document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target))focusNow()},true);
   });
   ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
     window.addEventListener(ev,function(){setTimeout(prepare,0);setTimeout(prepare,160)},true);
   });
-  var oldRender=window.render;
-  if(typeof oldRender==='function'){
-    window.render=function(){
-      var out=oldRender.apply(this,arguments);
-      setTimeout(prepare,0);
-      return out;
-    };
-  }
+  setInterval(prepare,700);
   setTimeout(prepare,0);
 })();
 </script>
-
+<style id="valentina-learning-label-phrase-final-20260728">
+/* Aprendizaje: etiquetas cortas y FRASE sin solaparse. */
+body.learning-mode .learn-table,
+body.learning-mode.keyboard-open .learn-table{
+  grid-template-columns:70px minmax(0,1fr)!important;
+  gap:6px!important;
+}
+body.learning-mode .learn-label,
+body.learning-mode.keyboard-open .learn-label{
+  font-size:11px!important;
+  letter-spacing:.02em!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+}
+body.learning-mode .learn-phrase-blind,
+body.learning-mode.keyboard-open .learn-phrase-blind,
+body.learning-mode .learn-phrase-blind.show,
+body.learning-mode.keyboard-open .learn-phrase-blind.show{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:0!important;
+  align-items:stretch!important;
+  margin-top:4px!important;
+  position:relative!important;
+}
+body.learning-mode .learn-phrase-label,
+body.learning-mode.keyboard-open .learn-phrase-label{
+  position:static!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:auto!important;
+  min-width:0!important;
+  font-size:11px!important;
+  letter-spacing:.02em!important;
+  padding:0!important;
+  margin:0!important;
+  white-space:nowrap!important;
+}
+body.learning-mode .learn-cell.phrase,
+body.learning-mode.keyboard-open .learn-cell.phrase{
+  grid-column:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  min-height:88px!important;
+  padding:10px 12px!important;
+  overflow:hidden!important;
+}
+body.learning-mode .learn-cell.phrase .learn-letters,
+body.learning-mode.keyboard-open .learn-cell.phrase .learn-letters{
+  justify-content:center!important;
+  align-items:center!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-align:center!important;
+  flex-wrap:wrap!important;
+  white-space:normal!important;
+  font-family:Inter,Arial,Helvetica,sans-serif!important;
+  font-size:32px!important;
+  font-weight:1000!important;
+  line-height:1.08!important;
+  letter-spacing:0!important;
+  gap:0!important;
+  color:#172033!important;
+}
+body.learning-mode .learn-cell.phrase .learn-char,
+body.learning-mode.keyboard-open .learn-cell.phrase .learn-char,
+body.learning-mode .learn-sentence .learn-model-char,
+body.learning-mode.keyboard-open .learn-sentence .learn-model-char{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:.46em!important;
+  margin:0!important;
+  padding:0!important;
+  font-family:inherit!important;
+  font-size:1em!important;
+  font-weight:inherit!important;
+  line-height:1.08!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+  color:#172033!important;
+}
+body.learning-mode .learn-phrase-word,
+body.learning-mode.keyboard-open .learn-phrase-word{
+  display:inline-flex!important;
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+  break-inside:avoid!important;
+}
+body.learning-mode .learn-cell.phrase .phrase-space,
+body.learning-mode.keyboard-open .learn-cell.phrase .phrase-space,
+body.learning-mode .learn-sentence .learn-model-char.phrase-space,
+body.learning-mode.keyboard-open .learn-sentence .learn-model-char.phrase-space{
+  flex-basis:.32em!important;
+  width:.32em!important;
+  min-width:.32em!important;
+}
+body.learning-mode .learn-cell.phrase .learn-char.sentence-word,
+body.learning-mode.keyboard-open .learn-cell.phrase .learn-char.sentence-word,
+body.learning-mode .learn-sentence .learn-model-char.sentence-word,
+body.learning-mode.keyboard-open .learn-sentence .learn-model-char.sentence-word{
+  color:#3f7cff!important;
+}
+@media(max-width:760px){
+  body.learning-mode .learn-table,
+  body.learning-mode.keyboard-open .learn-table,
+  body.learning-mode .learn-phrase-blind,
+  body.learning-mode.keyboard-open .learn-phrase-blind,
+  body.learning-mode .learn-phrase-blind.show,
+  body.learning-mode.keyboard-open .learn-phrase-blind.show{grid-template-columns:50px minmax(0,1fr)!important}
+}
+</style>
+<style id="valentina-final-visible-learning-menu-stable-partido-20260811-last">
+body.learning-mode .hero .controls,
+body.learning-mode.keyboard-open .hero .controls{width:auto!important;max-width:none!important;flex-wrap:nowrap!important;overflow:visible!important}
+body.learning-mode .hero .controls>.photo-controls,
+body.learning-mode.keyboard-open .hero .controls>.photo-controls{display:flex!important;visibility:visible!important;opacity:1!important;flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:none!important;margin-left:12px!important;justify-content:flex-start!important;overflow:visible!important;gap:5px!important}
+body.learning-mode .hero .controls>.photo-controls>*,
+body.learning-mode.keyboard-open .hero .controls>.photo-controls>*{min-width:0!important}
+body.learning-mode .hero .controls>.photo-controls .learn-control,
+body.learning-mode.keyboard-open .hero .controls>.photo-controls .learn-control{display:inline-flex!important;flex:1 1 auto!important;min-width:52px!important;max-width:92px!important;height:34px!important;padding:0 7px!important;font-size:12px!important}
+body.learning-mode #learnIconRefreshBtn,
+body.learning-mode.keyboard-open #learnIconRefreshBtn{display:inline-flex!important;flex:0 0 34px!important;width:34px!important;min-width:34px!important;max-width:34px!important}
+body.competition-mode #formationSelect,body.competition-mode #yagoRoleSelect,
+body.competition-mode.keyboard-open #formationSelect,body.competition-mode.keyboard-open #yagoRoleSelect{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.competition-mode #formationCycleBtn,body.competition-mode #yagoRoleCycleBtn,body.competition-mode #regenTeamsBtn,
+body.competition-mode.keyboard-open #formationCycleBtn,body.competition-mode.keyboard-open #yagoRoleCycleBtn,body.competition-mode.keyboard-open #regenTeamsBtn{position:relative!important;transform:none!important;transition:none!important;animation:none!important;-webkit-tap-highlight-color:transparent!important;touch-action:manipulation!important}
+body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleCycleBtn:active,body.competition-mode #regenTeamsBtn:active{transform:none!important}
+@media(max-width:900px){
+  body.learning-mode #learnScreenBtn,body.learning-mode #competitionScreenBtn{min-width:104px!important;padding:0 10px!important;font-size:13px!important}
+  body.learning-mode .hero .controls>.photo-controls .learn-control,
+  body.learning-mode.keyboard-open .hero .controls>.photo-controls .learn-control{min-width:44px!important;padding:0 5px!important;font-size:11px!important}
+}
+</style>
 <style id="codex-spelling-football-ipad-audio-20260815">
 @media (pointer:coarse) and (orientation:portrait){
   body.competition-mode .hero .controls,
