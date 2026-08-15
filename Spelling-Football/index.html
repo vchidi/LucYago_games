@@ -5384,5 +5384,139 @@ body.competition-mode #formationCycleBtn:active,body.competition-mode #yagoRoleC
   body.learning-mode.keyboard-open .hero .controls>.photo-controls .learn-control{min-width:44px!important;padding:0 5px!important;font-size:11px!important}
 }
 </style>
+<style id="codex-spelling-football-ipad-audio-20260815">
+@media (pointer:coarse) and (orientation:portrait){
+  body.learning-mode #hiddenInput,
+  body.learning-mode.keyboard-open #hiddenInput{
+    width:44px!important;
+    height:44px!important;
+    opacity:.015!important;
+    pointer-events:auto!important;
+    touch-action:manipulation!important;
+  }
+  body.learning-mode .learn-cell.editable,
+  body.learning-mode .learn-table,
+  body.learning-mode .learn-layout,
+  body.learning-mode .word-zone,
+  body.learning-mode .letters,
+  body.learning-mode .tile{
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+  body.learning-mode .hero .controls,
+  body.learning-mode.keyboard-open .hero .controls,
+  body.competition-mode .hero .controls,
+  body.competition-mode.keyboard-open .hero .controls{
+    scroll-snap-type:none!important;
+    overscroll-behavior:contain!important;
+  }
+  body.learning-mode .hero .controls button,
+  body.learning-mode .hero .controls label.btn,
+  body.learning-mode .hero .controls select.select-pill,
+  body.competition-mode .hero .controls button,
+  body.competition-mode .hero .controls label.btn,
+  body.competition-mode .hero .controls select.select-pill{
+    flex-shrink:0!important;
+    transform:none!important;
+    transition:none!important;
+    animation:none!important;
+  }
+}
+</style>
+<script id="codex-spelling-football-ipad-audio-20260815">
+(function(){
+  var audioUserReady=!(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1));
+  function byId(id){return document.getElementById(id)}
+  function mm(q){return !!(window.matchMedia&&matchMedia(q).matches)}
+  function isLearning(){return document.body.classList.contains('learning-mode')}
+  function isCoarsePortrait(){return mm('(pointer:coarse)')&&mm('(orientation:portrait)')}
+  function isButtonLike(el){return !!(el&&el.closest&&el.closest('button,label.btn,select.select-pill,input[type=file],input[type=number],textarea,a'))}
+  function wantsKeyboard(el){return !!(el&&el.closest&&el.closest('.learn-cell.editable,.learn-table,.learn-layout,.word-zone,.letters,.tile,.clue-card,.panel'))}
+  function openKeyboard(force){
+    if(!isCoarsePortrait()||!isLearning()) return;
+    var input=byId('hiddenInput');
+    if(!input) return;
+    try{
+      input.disabled=false;
+      input.removeAttribute('readonly');
+      input.setAttribute('inputmode','text');
+      input.style.pointerEvents='auto';
+      input.focus({preventScroll:true});
+      input.setSelectionRange(input.value.length,input.value.length);
+      document.body.classList.add('keyboard-open');
+    }catch(e){
+      if(force){try{input.focus();document.body.classList.add('keyboard-open');}catch(_){}}
+    }
+  }
+  function audioEnabled(name){
+    try{
+      if(name==='word') return typeof autoAudio==='undefined' ? true : !!autoAudio;
+      return typeof commentaryEnabled==='undefined' ? true : !!commentaryEnabled;
+    }catch(e){return true}
+  }
+  function syncAudioButtons(){
+    var word=byId('autoAudioBtn'), match=byId('commentaryBtn');
+    [[word,audioEnabled('word'),'Audio spelling'],[match,audioEnabled('match'),'Audio partido']].forEach(function(row){
+      var el=row[0], enabled=row[1], label=row[2];
+      if(!el) return;
+      var reallyOn=enabled&&audioUserReady;
+      el.classList.toggle('active',reallyOn);
+      el.classList.toggle('audio-on',reallyOn);
+      el.classList.toggle('audio-off',!reallyOn);
+      el.setAttribute('aria-label',label+(reallyOn?' activo':' pendiente'));
+      el.title=label+(reallyOn?' activo':' toca Repetir para activar sonido');
+      el.style.setProperty('background',reallyOn?'#b9f3b8':'#ffa2a2','important');
+    });
+  }
+  function markAudioReady(){
+    audioUserReady=true;
+    try{
+      if(typeof speechUnlocked!=='undefined') speechUnlocked=true;
+      if(typeof audioActivated!=='undefined') audioActivated=true;
+      if(window.speechSynthesis) window.speechSynthesis.resume();
+    }catch(e){}
+    syncAudioButtons();
+  }
+  var oldUnlock=window.unlockSpeech;
+  window.unlockSpeech=function(){
+    if(typeof oldUnlock==='function') return oldUnlock.apply(this,arguments);
+  };
+  var oldSpeakCurrent=window.speakCurrent;
+  window.speakCurrent=function(force){
+    if(force) markAudioReady();
+    return typeof oldSpeakCurrent==='function' ? oldSpeakCurrent.apply(this,arguments) : undefined;
+  };
+  function onTouch(e){
+    if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
+    if(!isButtonLike(e.target)&&wantsKeyboard(e.target)) openKeyboard(true);
+  }
+  document.addEventListener('touchstart',onTouch,{capture:true,passive:true});
+  document.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse') return;
+    onTouch(e);
+  },{capture:true,passive:true});
+  document.addEventListener('click',function(e){
+    if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
+    if(!isButtonLike(e.target)&&wantsKeyboard(e.target)) setTimeout(function(){openKeyboard(true)},0);
+    setTimeout(syncAudioButtons,0);
+  },true);
+  ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
+    window.addEventListener(ev,function(){
+      setTimeout(function(){openKeyboard(false);syncAudioButtons();},80);
+      setTimeout(syncAudioButtons,350);
+    },true);
+  });
+  var oldRender=window.render;
+  if(typeof oldRender==='function'){
+    window.render=function(){
+      var out=oldRender.apply(this,arguments);
+      setTimeout(function(){openKeyboard(false);syncAudioButtons();},0);
+      return out;
+    };
+  }
+  syncAudioButtons();
+  setInterval(syncAudioButtons,700);
+})();
+</script>
 </body>
 </html>
