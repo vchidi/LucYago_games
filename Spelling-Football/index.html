@@ -5187,15 +5187,21 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
   function targetIsTypingArea(t){return !!(t&&t.closest&&t.closest('#learningView,.learn-cell.editable,.learn-table,.learn-sentence,.learn-phrase-blind'))}
   function nativeInput(){
     var el=document.getElementById('learningNativeInputFinal')||document.getElementById('learningNativeInput');
-    if(el)return el;
-    el=document.createElement('textarea');
-    el.id='learningNativeInputFinal';
+    if(!el){
+      el=document.createElement('textarea');
+      el.id='learningNativeInputFinal';
+      document.body.appendChild(el);
+    }
     el.setAttribute('autocomplete','off');
     el.setAttribute('autocorrect','off');
     el.setAttribute('autocapitalize','off');
     el.setAttribute('spellcheck','false');
     el.setAttribute('inputmode','text');
-    document.body.appendChild(el);
+    el.removeAttribute('aria-hidden');
+    el.readOnly=false;
+    el.disabled=false;
+    if(el.dataset.learningNativeBound==='1')return el;
+    el.dataset.learningNativeBound='1';
     function routeText(text){
       if(!isLearning()||!text)return;
       for(var i=0;i<text.length;i++){
@@ -5226,6 +5232,7 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
     var el=nativeInput();
     el.readOnly=false;
     el.removeAttribute('readonly');
+    el.removeAttribute('aria-hidden');
     el.disabled=false;
     el.setAttribute('inputmode','text');
     if(document.activeElement===el)return;
@@ -5240,6 +5247,14 @@ body.learning-mode.keyboard-open #learningView #spellingSpanishKeyboard{
   ['touchstart','pointerdown'].forEach(function(ev){
     document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target))focusNow()},true);
   });
+  ['touchend','pointerup','click'].forEach(function(ev){
+    document.addEventListener(ev,function(e){if(isLearning()&&targetIsTypingArea(e.target))focusNow()},true);
+  });
+  var nativeBlur=HTMLElement.prototype.blur;
+  HTMLElement.prototype.blur=function(){
+    if(isLearning()&&this&&(this.id==='learningNativeInputFinal'||this.id==='learningNativeInput'))return;
+    return nativeBlur.apply(this,arguments);
+  };
   ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
     window.addEventListener(ev,function(){setTimeout(prepare,0);setTimeout(prepare,160)},true);
   });
