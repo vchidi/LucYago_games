@@ -539,6 +539,7 @@ let activeSpeech=null;
 let activeSpeechKind='';
 let pendingWordSpeech=null;
 let pendingCommentarySpeech=null;
+let wordAudioPausedUntilNextMatch=false;
 const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 let speechUnlocked=!IS_IOS;
 let audioActivated=!IS_IOS;
@@ -893,7 +894,7 @@ function penaltiesActive(){
   return !!(modal&&modal.classList.contains('show'));
 }
 function suppressWordAudio(){
-  return penaltiesActive();
+  return penaltiesActive()||wordAudioPausedUntilNextMatch;
 }
 function clearSpeechNow(){
   pendingWordSpeech=null;
@@ -903,6 +904,14 @@ function clearSpeechNow(){
   }
   activeSpeech=null;
   activeSpeechKind='';
+}
+function clearWordSpeechOnly(){
+  pendingWordSpeech=null;
+  if(activeSpeechKind==='word'&&window.speechSynthesis&&window.speechSynthesis.speaking){
+    try{window.speechSynthesis.cancel();window.speechSynthesis.resume();}catch(e){}
+    activeSpeech=null;
+    activeSpeechKind='';
+  }
 }
 const footballEngine=(()=>{
   const lineOrder=['goalkeeper','defense','midfield','attack'];
@@ -6402,11 +6411,14 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     renderChamp();
   }
   function playCurrentMatch(){
+    wordAudioPausedUntilNextMatch=false;
+    pendingWordSpeech=null;
     if(champ.current&&!champ.over)setRivalForMatch(champ.current.match);
     var modal=byId('championshipModal');
     if(modal)modal.classList.remove('show');
   }
   function setRivalForMatch(match){
+    wordAudioPausedUntilNextMatch=false;
     var rival=match.a==='Atletic'?match.b:match.a;
     if(!rival)rival='Rival';
     try{currentRivalTeamName=rival}catch(e){}
@@ -6453,13 +6465,8 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   }
   function startCupForCurrentMatch(){
     if(champ.active||champ.over||champ.type!=='cup')return;
-    var rival=(currentRivalTeamName&&currentRivalTeamName!=='Rival')?currentRivalTeamName:(randomFrom(uniqueRivals())||'Real Madrid');
-    var match={a:'Atletic',b:rival,done:false,winner:null,score:null};
-    champ.active=true;champ.locked=false;champ.over=false;champ.results=[];champ.table={};
-    champ.teams=['Atletic',rival];champ.teams.forEach(tableRow);
-    champ.cupStage=0;champ.cupStages=[{name:'Final',matches:[match]}];
-    champ.current={stage:0,index:0,match:match};
-    champ.lastMessage='Champions: Atletic contra '+firstName(rival)+'.';
+    startCup();
+    champ.lastMessage='Champions iniciada: Atletic contra '+firstName(opponentName(champ.current&&champ.current.match))+'.';
   }
   function finishLeague(score){
     var cur=champ.current;if(!cur)return;
@@ -6510,7 +6517,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     var action=penaltyMode==='manual'?(yagoTurn?'elige dónde chutar':'elige dónde se tira el portero'):'modo automático';
     var roundText='Tiros: Atletic '+atleticTaken+'/5, faltan '+atleticLeft+' · '+rivalShort+' '+rivalTaken+'/5, faltan '+rivalLeft;
     if(info)info.textContent=teamName+' · '+action+' · '+roundText;
-    if(log)log.innerHTML=penalty.log.slice(-3).join('<br>')||'Empate en Champions: tanda de penaltis.';
+    if(log)log.innerHTML=penalty.log.slice(-3).join('<br>')||'El partido se decide en penaltis.';
     if(keeper){
       var keeperTeamName=yagoTurn?penalty.names.rivalName:'Atletic',kkit=teamKit(keeperTeamName),doll=keeper.querySelector('.player-doll');
       applyTeamKeeperVars(keeper,kkit);
@@ -6690,13 +6697,14 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   }
   function startPenaltyShootout(match,score,onWinner){
     var names=getPenaltyNames(match);
-    penalty={match:match,regularScore:score,onWinner:onWinner,names:names,score:{yago:0,rival:0},turn:0,aIndex:0,rIndex:0,nextAtletic:names.atletic[0]||'Yago',nextRival:names.rival[0]||'Rival',log:['Empate: Champions se decide en penaltis.'],summary:[],animating:false,done:false};
+    penalty={match:match,regularScore:score,onWinner:onWinner,names:names,score:{yago:0,rival:0},turn:0,aIndex:0,rIndex:0,nextAtletic:names.atletic[0]||'Yago',nextRival:names.rival[0]||'Rival',log:['El partido se decide en penaltis.'],summary:[],animating:false,done:false};
+    wordAudioPausedUntilNextMatch=true;
     if(typeof footballEngine!=='undefined'&&footballEngine.cancelPendingGoalReset)footballEngine.cancelPendingGoalReset();
-    if(typeof clearSpeechNow==='function') clearSpeechNow();
+    if(typeof clearWordSpeechOnly==='function') clearWordSpeechOnly();
     ensurePenaltyModal();
     renderPenalty();
-    setMessage('Empate en Champions: tanda de penaltis.');
-    if(typeof speakCommentary==='function')speakCommentary('Empate en Champions. Vamos a penaltis. El partido se decide en la tanda.',true);
+    setMessage('El partido se decide en penaltis.');
+    if(typeof speakCommentary==='function')speakCommentary('Vamos a penaltis. El partido se decide en penaltis.',false);
     if(penaltyMode==='auto')setTimeout(function(){resolvePenaltyChoice(null)},900);
   }
   function completeCupMatch(match,score,winner,pen,penaltySummary){
@@ -6710,7 +6718,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
       var s=simScore(champ.limit),win=s[0]>s[1]?other.a:other.b;
       other.done=true;other.score=s;other.winner=win;record(other.a,other.b,s[0],s[1],false);
     });
-    if(winner!=='Atletic'){champ.over=true;champ.lastMessage='Atletic queda eliminado. Campeón provisional: '+winner+'.';showWinnerParty({title:firstName(winner)+' gana el partido',score:'Atletic '+score.yago+' - '+score.rival+' '+firstName(opponentName(match))+(pen?' · penaltis '+pen[0]+'-'+pen[1]:''),next:champ.lastMessage,penaltySummary:penaltySummary});return}
+    if(winner!=='Atletic'){champ.over=true;champ.lastMessage='ATLETIC HA SIDO ELIMINADO. Campeón provisional: '+winner+'.';showWinnerParty({title:'ATLETIC HA SIDO ELIMINADO',score:'Atletic '+score.yago+' - '+score.rival+' '+firstName(opponentName(match))+(pen?' · penaltis '+pen[0]+'-'+pen[1]:''),next:champ.lastMessage,penaltySummary:penaltySummary});return}
     if(stage.name==='Final'){champ.over=true;champ.lastMessage='Atletic gana la Champions.';showWinnerParty({title:'Atletic gana la Champions',score:'Atletic '+score.yago+' - '+score.rival+' '+firstName(opponentName(match))+(pen?' · penaltis '+pen[0]+'-'+pen[1]:''),next:'Campeonato terminado.',penaltySummary:penaltySummary});return}
     buildNextCupStage();
     champ.current=activeCupMatch();
