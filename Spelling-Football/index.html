@@ -5746,7 +5746,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   function startChampionship(){
     champ.type=champ.type==='cup'?'cup':'league';
     if(champ.type==='cup')startCup();else startLeague();
-    champ.lastMessage='Campeonato nuevo: '+(champ.type==='cup'?'Copa':'Liga')+'.';
+    champ.lastMessage='Campeonato nuevo: '+(champ.type==='cup'?'Eliminatoria':'Liga')+'.';
     showChamp(true);
   }
   function finishLeague(score){
@@ -5794,7 +5794,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
       other.done=true;other.score=s;other.winner=win;record(other.a,other.b,s[0],s[1],false);
     });
     if(winner!=='Atletic'){champ.over=true;champ.lastMessage='Atletic queda eliminado. Campeón provisional: '+winner+'.';setTimeout(function(){showChamp(true)},600);return}
-    if(stage.name==='Final'){champ.over=true;champ.lastMessage='Atletic gana la Copa.';setTimeout(function(){showChamp(true)},600);return}
+    if(stage.name==='Final'){champ.over=true;champ.lastMessage='Atletic gana la eliminatoria.';setTimeout(function(){showChamp(true)},600);return}
     buildNextCupStage();
     champ.current=activeCupMatch();
     if(champ.current){champ.lastMessage='Siguiente ronda: Atletic contra '+firstName(champ.current.match.a==='Atletic'?champ.current.match.b:champ.current.match.a)+'.';setTimeout(function(){setRivalForMatch(champ.current.match)},900)}
@@ -5820,7 +5820,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   }
   function renderChamp(){
     var body=byId('championshipBody');if(!body)return;
-    var modeLabel=champ.type==='cup'?'Copa':'Liga';
+    var modeLabel=champ.type==='cup'?'Eliminatoria':'Liga';
     var html='<div class="championship-block"><h3>Estado</h3><div><strong>'+modeLabel+'</strong> · límite '+champ.limit+' goles</div><div>'+((champ.lastMessage)||'Pulsa Nuevo campeonato para empezar.')+'</div></div>';
     if(champ.type==='league'){
       html+='<div class="championship-grid"><div class="championship-block"><h3>Clasificación</h3><table class="championship-table"><thead><tr><th>Equipo</th><th>Pts</th><th>GF</th><th>GC</th></tr></thead><tbody>';
@@ -5835,7 +5835,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     }
     body.innerHTML=html;
     var typeBtn=byId('championshipTypeBtn'),limitBtn=byId('championshipLimitBtn'),viewBtn=byId('championshipViewBtn');
-    if(typeBtn)typeBtn.textContent=champ.type==='cup'?'Copa':'Liga';
+    if(typeBtn)typeBtn.textContent=champ.type==='cup'?'Eliminatoria':'Liga';
     if(limitBtn)limitBtn.textContent=champ.limit+' goles';
     if(viewBtn)viewBtn.textContent='Campeonato';
   }
@@ -5845,11 +5845,11 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     if(force===true)modal.classList.add('show');else modal.classList.toggle('show');
     renderChamp();
   }
-  function cycleType(){champ.type=champ.type==='league'?'cup':'league';champ.active=false;champ.over=false;champ.lastMessage='Modo elegido: '+(champ.type==='cup'?'Copa':'Liga')+'.';renderChamp();setMessage('Campeonato en modo '+(champ.type==='cup'?'Copa':'Liga')+'.')}
+  function cycleType(){champ.type=champ.type==='league'?'cup':'league';champ.active=false;champ.over=false;champ.lastMessage='Modo elegido: '+(champ.type==='cup'?'Eliminatoria':'Liga')+'.';renderChamp();setMessage('Campeonato en modo '+(champ.type==='cup'?'Eliminatoria':'Liga')+'.')}
   function cycleLimit(){champ.limit=champ.limit===5?10:champ.limit===10?15:5;renderChamp();setMessage('El partido se decide al llegar a '+champ.limit+' goles.')}
   function ensureButtons(){
     var controls=document.querySelector('.hero .controls')||document.querySelector('.controls');if(!controls)return;
-    if(!byId('championshipTypeBtn')){var t=document.createElement('button');t.id='championshipTypeBtn';t.type='button';t.textContent='Liga';t.title='Liga o Copa';t.addEventListener('click',function(e){e.preventDefault();cycleType()});controls.appendChild(t)}
+    if(!byId('championshipTypeBtn')){var t=document.createElement('button');t.id='championshipTypeBtn';t.type='button';t.textContent='Liga';t.title='Liga o eliminatoria';t.addEventListener('click',function(e){e.preventDefault();cycleType()});controls.appendChild(t)}
     if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent='5 goles';l.title='Goles para ganar el partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
     if(!byId('championshipViewBtn')){var v=document.createElement('button');v.id='championshipViewBtn';v.type='button';v.textContent='Campeonato';v.title='Ver campeonato';v.addEventListener('click',function(e){e.preventDefault();showChamp()});controls.appendChild(v)}
   }
