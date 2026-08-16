@@ -5550,5 +5550,349 @@ body.learning-mode #learnPhotoToggle.active{
   setInterval(syncAudioButtons,700);
 })();
 </script>
+<style id="codex-spelling-championship-20260816">
+body.competition-mode #modeBlindBtn,
+body.competition-mode.keyboard-open #modeBlindBtn{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+body.learning-mode #championshipTypeBtn,
+body.learning-mode #championshipLimitBtn,
+body.learning-mode #championshipViewBtn{
+  display:none!important;
+}
+body.competition-mode #championshipTypeBtn,
+body.competition-mode #championshipLimitBtn,
+body.competition-mode #championshipViewBtn,
+body.competition-mode.keyboard-open #championshipTypeBtn,
+body.competition-mode.keyboard-open #championshipLimitBtn,
+body.competition-mode.keyboard-open #championshipViewBtn{
+  display:inline-flex!important;
+}
+.championship-modal{
+  position:fixed;
+  inset:0;
+  z-index:2147483200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:rgba(23,38,55,.32);
+}
+.championship-modal.show{display:flex}
+.championship-sheet{
+  width:min(860px,calc(100vw - 24px));
+  max-height:min(760px,calc(100dvh - 24px));
+  overflow:auto;
+  border-radius:18px;
+  background:#fffdf6;
+  border:3px solid rgba(255,255,255,.86);
+  box-shadow:0 18px 44px rgba(21,36,54,.28);
+  padding:14px;
+  color:#182033;
+}
+.championship-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.championship-title{font-weight:1000;font-size:20px;line-height:1}
+.championship-tools{display:flex;gap:6px;flex-wrap:wrap}
+.championship-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.championship-block{
+  border:1px solid rgba(42,63,92,.12);
+  border-radius:12px;
+  background:#fff;
+  padding:10px;
+}
+.championship-block h3{margin:0 0 8px;font-size:13px;text-transform:uppercase;color:#5e7b70}
+.championship-table{width:100%;border-collapse:collapse;font-size:13px}
+.championship-table th,.championship-table td{padding:6px;border-bottom:1px solid rgba(42,63,92,.10);text-align:left}
+.championship-table th:last-child,.championship-table td:last-child{text-align:right}
+.championship-fixture{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  padding:7px 0;
+  border-bottom:1px solid rgba(42,63,92,.10);
+  font-weight:850;
+}
+.championship-fixture small{color:#607383;font-weight:900}
+.championship-current{background:#eaf8ff;border-radius:10px;padding:7px 8px}
+@media(max-width:760px){
+  .championship-grid{grid-template-columns:1fr}
+  .championship-sheet{padding:10px}
+  .championship-title{font-size:17px}
+}
+</style>
+<script id="codex-spelling-championship-20260816">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function firstName(name){return (String(name||'Rival').trim().split(/\s+/)[0]||'Rival')}
+  function uniqueRivals(){
+    var seen=new Set(), out=[];
+    (typeof rivalTeamNames!=='undefined'?rivalTeamNames:[]).forEach(function(name){
+      var label=String(name||'').trim();
+      var key=label.toLowerCase();
+      if(label&&key!=='atletic'&&!seen.has(key)){seen.add(key);out.push(label)}
+    });
+    return out.length?out:['Tigres Rojos','Dragones FC','Lobos United','Rayos Azules','Panteras Negras','Halcones City','Leones del Norte'];
+  }
+  function shuffle(list){var a=list.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+  function simScore(limit){var a=Math.floor(Math.random()*limit),b=Math.floor(Math.random()*limit);if(a===b)b=(b+1)%limit;return [a,b]}
+  function parseScore(){
+    var text=(typeof footballEngine!=='undefined'&&footballEngine.getScoreText)?footballEngine.getScoreText():(byId('footballScore')||{}).textContent||'0 - 0';
+    var m=String(text).match(/(\d+)\s*-\s*(\d+)/);
+    return m?{yago:Number(m[1]),rival:Number(m[2])}:{yago:0,rival:0};
+  }
+  var champ={
+    type:'league',
+    limit:5,
+    active:false,
+    locked:false,
+    over:false,
+    teams:[],
+    table:{},
+    rounds:[],
+    cupStage:0,
+    cupStages:[],
+    current:null,
+    results:[],
+    lastMessage:''
+  };
+  function tableRow(name){if(!champ.table[name])champ.table[name]={team:name,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};return champ.table[name]}
+  function record(teamA,teamB,scoreA,scoreB,played){
+    var a=tableRow(teamA),b=tableRow(teamB);
+    a.p++;b.p++;a.gf+=scoreA;a.ga+=scoreB;b.gf+=scoreB;b.ga+=scoreA;
+    if(scoreA>scoreB){a.w++;b.l++;a.pts+=3}
+    else if(scoreA<scoreB){b.w++;a.l++;b.pts+=3}
+    else{a.d++;b.d++;a.pts++;b.pts++}
+    champ.results.push({teamA:teamA,teamB:teamB,scoreA:scoreA,scoreB:scoreB,played:!!played});
+  }
+  function makeLeague(teams){
+    var arr=teams.slice(), rounds=[];
+    if(arr.length%2)arr.push('Descanso');
+    for(var r=0;r<arr.length-1;r++){
+      var matches=[];
+      for(var i=0;i<arr.length/2;i++){
+        var a=arr[i],b=arr[arr.length-1-i];
+        if(a!=='Descanso'&&b!=='Descanso')matches.push({a:a,b:b,done:false});
+      }
+      rounds.push(matches);
+      arr.splice(1,0,arr.pop());
+    }
+    return rounds;
+  }
+  function makeCup(teams){
+    var rivals=teams.filter(function(t){return t!=='Atletic'}), seeded=['Atletic'].concat(rivals).slice(0,8);
+    var q=[];
+    for(var i=0;i<seeded.length;i+=2)q.push({a:seeded[i],b:seeded[i+1],done:false,winner:null,score:null});
+    return [{name:'Cuartos',matches:q},{name:'Semifinal',matches:[]},{name:'Final',matches:[]}];
+  }
+  function activeLeagueMatch(){
+    for(var r=0;r<champ.rounds.length;r++){
+      for(var i=0;i<champ.rounds[r].length;i++){
+        var m=champ.rounds[r][i];
+        if(!m.done&&(m.a==='Atletic'||m.b==='Atletic'))return {round:r,index:i,match:m};
+      }
+    }
+    return null;
+  }
+  function activeCupMatch(){
+    var stage=champ.cupStages[champ.cupStage];
+    if(!stage)return null;
+    for(var i=0;i<stage.matches.length;i++){
+      var m=stage.matches[i];
+      if(!m.done&&(m.a==='Atletic'||m.b==='Atletic'))return {stage:champ.cupStage,index:i,match:m};
+    }
+    return null;
+  }
+  function setRivalForMatch(match){
+    var rival=match.a==='Atletic'?match.b:match.a;
+    if(!rival)rival='Rival';
+    try{currentRivalTeamName=rival}catch(e){}
+    try{
+      var old=rivalTeamNames.slice();
+      rivalTeamNames=[rival];
+      footballEngine.reset();
+      rivalTeamNames=old;
+    }catch(e){
+      try{footballEngine.reset()}catch(_){}
+    }
+    champ.locked=false;
+    renderChamp();
+    try{render()}catch(e){}
+    setMessage('Campeonato: Atletic juega contra '+firstName(rival)+'. Gana quien llegue a '+champ.limit+' goles.');
+  }
+  function startLeague(){
+    champ.active=true;champ.locked=false;champ.over=false;champ.results=[];champ.table={};
+    champ.teams=['Atletic'].concat(shuffle(uniqueRivals()).slice(0,7));
+    champ.teams.forEach(tableRow);
+    champ.rounds=makeLeague(champ.teams);
+    champ.current=activeLeagueMatch();
+    setRivalForMatch(champ.current.match);
+  }
+  function startCup(){
+    champ.active=true;champ.locked=false;champ.over=false;champ.results=[];champ.table={};
+    champ.teams=['Atletic'].concat(shuffle(uniqueRivals()).slice(0,7));
+    champ.teams.forEach(tableRow);
+    champ.cupStage=0;champ.cupStages=makeCup(champ.teams);
+    champ.current=activeCupMatch();
+    setRivalForMatch(champ.current.match);
+  }
+  function startChampionship(){
+    champ.type=champ.type==='cup'?'cup':'league';
+    if(champ.type==='cup')startCup();else startLeague();
+    champ.lastMessage='Campeonato nuevo: '+(champ.type==='cup'?'Copa':'Liga')+'.';
+    showChamp(true);
+  }
+  function finishLeague(score){
+    var cur=champ.current;if(!cur)return;
+    var m=cur.match;
+    var atHome=m.a==='Atletic';
+    var scoreA=atHome?score.yago:score.rival, scoreB=atHome?score.rival:score.yago;
+    m.done=true;m.score=[scoreA,scoreB];
+    record(m.a,m.b,scoreA,scoreB,true);
+    champ.rounds[cur.round].forEach(function(other){
+      if(other.done)return;
+      var s=simScore(champ.limit);
+      other.done=true;other.score=s;
+      record(other.a,other.b,s[0],s[1],false);
+    });
+    champ.current=activeLeagueMatch();
+    if(champ.current){champ.lastMessage='Siguiente jornada: Atletic contra '+firstName(champ.current.match.a==='Atletic'?champ.current.match.b:champ.current.match.a)+'.';setTimeout(function(){setRivalForMatch(champ.current.match)},900)}
+    else{champ.over=true;champ.lastMessage='Liga terminada.';setTimeout(function(){showChamp(true)},500)}
+  }
+  function penalties(score){
+    if(score.yago!==score.rival)return score;
+    var py=3+Math.floor(Math.random()*3),pr=3+Math.floor(Math.random()*3);
+    if(py===pr)py++;
+    return {yago:score.yago,rival:score.rival,penY:py,penR:pr,winner:py>pr?'Atletic':'Rival'};
+  }
+  function buildNextCupStage(){
+    var prev=champ.cupStages[champ.cupStage],winners=prev.matches.map(function(m){return m.winner}).filter(Boolean);
+    champ.cupStage++;
+    if(!champ.cupStages[champ.cupStage])return;
+    var matches=[];
+    for(var i=0;i<winners.length;i+=2)matches.push({a:winners[i],b:winners[i+1],done:false,winner:null,score:null});
+    champ.cupStages[champ.cupStage].matches=matches;
+  }
+  function finishCup(score){
+    var cur=champ.current;if(!cur)return;
+    var stage=champ.cupStages[cur.stage],m=cur.match,atHome=m.a==='Atletic';
+    var resolved=penalties(score),scoreA=atHome?score.yago:score.rival,scoreB=atHome?score.rival:score.yago;
+    var winner=score.yago>score.rival?'Atletic':score.yago<score.rival?(atHome?m.b:m.a):resolved.winner;
+    if(winner==='Rival')winner=atHome?m.b:m.a;
+    m.done=true;m.score=[scoreA,scoreB];m.pen=resolved.penY?[(atHome?resolved.penY:resolved.penR),(atHome?resolved.penR:resolved.penY)]:null;m.winner=winner;
+    record(m.a,m.b,scoreA,scoreB,true);
+    stage.matches.forEach(function(other){
+      if(other.done)return;
+      var s=simScore(champ.limit),win=s[0]>s[1]?other.a:other.b;
+      other.done=true;other.score=s;other.winner=win;record(other.a,other.b,s[0],s[1],false);
+    });
+    if(winner!=='Atletic'){champ.over=true;champ.lastMessage='Atletic queda eliminado. Campeón provisional: '+winner+'.';setTimeout(function(){showChamp(true)},600);return}
+    if(stage.name==='Final'){champ.over=true;champ.lastMessage='Atletic gana la Copa.';setTimeout(function(){showChamp(true)},600);return}
+    buildNextCupStage();
+    champ.current=activeCupMatch();
+    if(champ.current){champ.lastMessage='Siguiente ronda: Atletic contra '+firstName(champ.current.match.a==='Atletic'?champ.current.match.b:champ.current.match.a)+'.';setTimeout(function(){setRivalForMatch(champ.current.match)},900)}
+  }
+  function checkMatchEnd(){
+    if(!champ.active||champ.over||champ.locked||typeof footballEngine==='undefined')return;
+    var score=parseScore();
+    if(score.yago<champ.limit&&score.rival<champ.limit)return;
+    champ.locked=true;
+    champ.lastMessage='Partido terminado: Atletic '+score.yago+' - '+score.rival+' '+firstName(currentRivalTeamName)+'.';
+    setMessage(champ.lastMessage);
+    if(champ.type==='cup')finishCup(score);else finishLeague(score);
+    renderChamp();
+  }
+  function sortedTable(){
+    return Object.keys(champ.table).map(function(k){return champ.table[k]}).sort(function(a,b){
+      return b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf||a.team.localeCompare(b.team);
+    });
+  }
+  function fixtureHtml(m,current){
+    var score=m.score?('<small>'+m.score[0]+' - '+m.score[1]+(m.pen?' pen '+m.pen[0]+'-'+m.pen[1]:'')+'</small>'):(current?'<small>ahora</small>':'<small>pendiente</small>');
+    return '<div class="championship-fixture '+(current?'championship-current':'')+'"><span>'+m.a+' vs '+m.b+'</span>'+score+'</div>';
+  }
+  function renderChamp(){
+    var body=byId('championshipBody');if(!body)return;
+    var modeLabel=champ.type==='cup'?'Copa':'Liga';
+    var html='<div class="championship-block"><h3>Estado</h3><div><strong>'+modeLabel+'</strong> · límite '+champ.limit+' goles</div><div>'+((champ.lastMessage)||'Pulsa Nuevo campeonato para empezar.')+'</div></div>';
+    if(champ.type==='league'){
+      html+='<div class="championship-grid"><div class="championship-block"><h3>Clasificación</h3><table class="championship-table"><thead><tr><th>Equipo</th><th>Pts</th><th>GF</th><th>GC</th></tr></thead><tbody>';
+      sortedTable().forEach(function(r){html+='<tr><td>'+r.team+'</td><td>'+r.pts+'</td><td>'+r.gf+'</td><td>'+r.ga+'</td></tr>'});
+      html+='</tbody></table></div><div class="championship-block"><h3>Jornadas</h3>';
+      champ.rounds.forEach(function(round,ri){html+='<h3>Jornada '+(ri+1)+'</h3>';round.forEach(function(m){html+=fixtureHtml(m,champ.current&&champ.current.match===m)})});
+      html+='</div></div>';
+    }else{
+      html+='<div class="championship-grid">';
+      champ.cupStages.forEach(function(stage,si){html+='<div class="championship-block"><h3>'+stage.name+'</h3>';(stage.matches||[]).forEach(function(m){html+=fixtureHtml(m,champ.current&&champ.current.match===m)});html+='</div>'});
+      html+='</div>';
+    }
+    body.innerHTML=html;
+    var typeBtn=byId('championshipTypeBtn'),limitBtn=byId('championshipLimitBtn'),viewBtn=byId('championshipViewBtn');
+    if(typeBtn)typeBtn.textContent=champ.type==='cup'?'Copa':'Liga';
+    if(limitBtn)limitBtn.textContent=champ.limit+' goles';
+    if(viewBtn)viewBtn.textContent='Campeonato';
+  }
+  function showChamp(force){
+    ensureModal();
+    var modal=byId('championshipModal');
+    if(force===true)modal.classList.add('show');else modal.classList.toggle('show');
+    renderChamp();
+  }
+  function cycleType(){champ.type=champ.type==='league'?'cup':'league';champ.active=false;champ.over=false;champ.lastMessage='Modo elegido: '+(champ.type==='cup'?'Copa':'Liga')+'.';renderChamp();setMessage('Campeonato en modo '+(champ.type==='cup'?'Copa':'Liga')+'.')}
+  function cycleLimit(){champ.limit=champ.limit===5?10:champ.limit===10?15:5;renderChamp();setMessage('El partido se decide al llegar a '+champ.limit+' goles.')}
+  function ensureButtons(){
+    var controls=document.querySelector('.hero .controls')||document.querySelector('.controls');if(!controls)return;
+    if(!byId('championshipTypeBtn')){var t=document.createElement('button');t.id='championshipTypeBtn';t.type='button';t.textContent='Liga';t.title='Liga o Copa';t.addEventListener('click',function(e){e.preventDefault();cycleType()});controls.appendChild(t)}
+    if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent='5 goles';l.title='Goles para ganar el partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
+    if(!byId('championshipViewBtn')){var v=document.createElement('button');v.id='championshipViewBtn';v.type='button';v.textContent='Campeonato';v.title='Ver campeonato';v.addEventListener('click',function(e){e.preventDefault();showChamp()});controls.appendChild(v)}
+  }
+  function ensureModal(){
+    if(byId('championshipModal'))return;
+    var modal=document.createElement('div');
+    modal.id='championshipModal';
+    modal.className='championship-modal';
+    modal.innerHTML='<div class="championship-sheet"><div class="championship-top"><div class="championship-title">Campeonato</div><div class="championship-tools"><button id="championshipNewBtn" type="button">Nuevo campeonato</button><button id="championshipCloseBtn" type="button">Cerrar</button></div></div><div id="championshipBody"></div></div>';
+    document.body.appendChild(modal);
+    byId('championshipNewBtn').addEventListener('click',function(){startChampionship()});
+    byId('championshipCloseBtn').addEventListener('click',function(){modal.classList.remove('show')});
+    modal.addEventListener('click',function(e){if(e.target===modal)modal.classList.remove('show')});
+  }
+  function wrapFootball(){
+    if(typeof footballEngine==='undefined'||footballEngine.__championshipWrapped)return;
+    footballEngine.__championshipWrapped=true;
+    ['onSpellingSuccess','onSpellingFail'].forEach(function(name){
+      var old=footballEngine[name];
+      footballEngine[name]=function(){
+        if(champ.locked)return;
+        var out=old.apply(footballEngine,arguments);
+        setTimeout(checkMatchEnd,120);
+        setTimeout(checkMatchEnd,900);
+        return out;
+      };
+    });
+    var oldReset=footballEngine.reset;
+    footballEngine.reset=function(){
+      champ.locked=false;
+      var out=oldReset.apply(footballEngine,arguments);
+      setTimeout(renderChamp,0);
+      return out;
+    };
+  }
+  function boot(){
+    ensureButtons();ensureModal();wrapFootball();renderChamp();
+  }
+  ['DOMContentLoaded','load','pageshow'].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(boot,0);setTimeout(boot,250)},true)});
+  document.addEventListener('click',function(){setTimeout(function(){ensureButtons();renderChamp()},0)},true);
+  setInterval(function(){ensureButtons();wrapFootball();checkMatchEnd()},1000);
+  boot();
+})();
+</script>
 </body>
 </html>
