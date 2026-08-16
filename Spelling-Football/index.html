@@ -536,6 +536,7 @@ let commentaryEnabled=true;
 let lastCommentarySpoken={text:'',time:0};
 let lastWordSpoken={word:'',time:0};
 let activeSpeech=null;
+let activeSpeechKind='';
 let pendingWordSpeech=null;
 let pendingCommentarySpeech=null;
 const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -677,6 +678,11 @@ function lineRoleLabel(lineKey){
 function teamKit(teamName){
   return TEAM_KITS[teamName]||TEAM_KITS[firstName(teamName)]||TEAM_KITS['Real Madrid'];
 }
+function distinctShortColor(shirt,preferred,fallback){
+  var a=String(shirt||'').toLowerCase(),b=String(preferred||'').toLowerCase();
+  if(!b||a===b||(a==='#ffffff'&&(b==='#f3f3f3'||b==='#fff')))return fallback||'#111111';
+  return preferred;
+}
 function applyKitVars(el,kit){
   if(!el||!kit)return;
   el.style.setProperty('--kit-shirt',kit.shirt);
@@ -684,7 +690,7 @@ function applyKitVars(el,kit){
   el.style.setProperty('--kit-shorts',kit.shorts||'#111111');
   el.style.setProperty('--kit-socks',kit.socks||kit.shirt);
   el.style.setProperty('--keeper-shirt',kit.keeper||'#42e66f');
-  el.style.setProperty('--keeper-shorts',kit.keeperShorts||'#181818');
+  el.style.setProperty('--keeper-shorts',distinctShortColor(kit.keeper||kit.shirt,kit.keeperShorts||kit.alt,kit.shorts||'#181818'));
   el.style.setProperty('--keeper-socks',kit.keeperSocks||kit.keeper||'#42e66f');
 }
 function applyTeamKeeperVars(el,kit){
@@ -692,7 +698,7 @@ function applyTeamKeeperVars(el,kit){
   applyKitVars(el,kit);
   el.style.setProperty('--keeper-shirt',kit.shirt);
   el.style.setProperty('--keeper-alt',kit.alt||kit.shirt);
-  el.style.setProperty('--keeper-shorts',kit.shorts||kit.alt||kit.shirt);
+  el.style.setProperty('--keeper-shorts',distinctShortColor(kit.shirt,kit.alt||kit.shorts,kit.shorts||'#111111'));
   el.style.setProperty('--keeper-socks',kit.socks||kit.alt||kit.shirt);
 }
 function playerTeamName(teamId){return teamId==='yago'?'Atletic':currentRivalTeamName}
@@ -792,13 +798,18 @@ function renderLetters(){const el=$('#letters');el.innerHTML='';const s=current(
 function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
 function buildSpeechUtterance(text,langPattern,fallbackLang,voicePattern,rate,pitch){
   const utter=new SpeechSynthesisUtterance(text);
-  const pick=(/^en/i.test(fallbackLang)?(voices.find(v=>new RegExp(langPattern,'i').test(v.lang)&&/(alex|daniel|fred|male|tom|arthur|oliver|aaron|ralph|jorge)/i.test(v.name))||voices.find(v=>new RegExp(langPattern,'i').test(v.lang)&&new RegExp(voicePattern,'i').test(v.name))||voices.find(v=>new RegExp(langPattern,'i').test(v.lang))):(voices.find(v=>new RegExp(langPattern,'i').test(v.lang)&&new RegExp(voicePattern,'i').test(v.name))||voices.find(v=>new RegExp(langPattern,'i').test(v.lang))));
+  const langRe=new RegExp(langPattern,'i');
+  const voiceRe=new RegExp(voicePattern,'i');
+  const langVoices=voices.filter(v=>langRe.test(v.lang));
+  const pick=/^en/i.test(fallbackLang)
+    ?(langVoices.find(v=>/(alex|daniel|fred|male|tom|arthur|oliver|aaron|ralph|jorge)/i.test(v.name))||langVoices.find(v=>voiceRe.test(v.name))||langVoices[0])
+    :(langVoices.find(v=>/(monica|m[oó]nica|paulina|luciana|helena|marisol|sabina|laura|elvira|dalia|female|mujer)/i.test(v.name))||langVoices.find(v=>voiceRe.test(v.name)&&!/(jorge|diego|carlos|male|hombre)/i.test(v.name))||langVoices.find(v=>!/(jorge|diego|carlos|male|hombre)/i.test(v.name))||langVoices[0]);
   if(pick) utter.voice=pick;
   utter.lang=(pick&&pick.lang)||fallbackLang;
   utter.rate=rate;
   utter.pitch=pitch;
-  utter.onend=()=>{if(activeSpeech===utter){activeSpeech=null;setTimeout(flushSpeechQueue,20);}};
-  utter.onerror=()=>{if(activeSpeech===utter){activeSpeech=null;setTimeout(flushSpeechQueue,20);}};
+  utter.onend=()=>{if(activeSpeech===utter){activeSpeech=null;activeSpeechKind='';setTimeout(flushSpeechQueue,20);}};
+  utter.onerror=()=>{if(activeSpeech===utter){activeSpeech=null;activeSpeechKind='';setTimeout(flushSpeechQueue,20);}};
   return utter;
 }
 function safeSpeak(utter){
@@ -810,6 +821,7 @@ function safeSpeak(utter){
   }
 }
 function forceSpeakWordNow(force=false){
+  if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;
   const s=current();
   if(!s||!window.speechSynthesis) return;
   const now=Date.now();
@@ -823,6 +835,7 @@ function forceSpeakWordNow(force=false){
     window.speechSynthesis.resume();
   }catch(e){}
   activeSpeech=buildSpeechUtterance(s.english,'en-','en-US','Google|Samantha|Daniel|Serena|Alex',0.82,1);
+  activeSpeechKind='word';
   safeSpeak(activeSpeech);
   if(force) setMessage('Escucha y completa la palabra.');
 }
@@ -831,12 +844,14 @@ function flushSpeechQueue(){
   // La narración del partido tiene prioridad para que GOL/PARADA se oiga justo después del chut.
   if(commentaryEnabled&&pendingCommentarySpeech){
     activeSpeech=buildSpeechUtterance(pendingCommentarySpeech,'es-','es-ES','Google|Monica|Paulina|Jorge|Luciana|Helena',1,1.05);
+    activeSpeechKind='commentary';
     pendingCommentarySpeech=null;
     safeSpeak(activeSpeech);
     return;
   }
   if(pendingWordSpeech){
     activeSpeech=buildSpeechUtterance(pendingWordSpeech,'en-','en-US','Google|Samantha|Daniel|Serena|Alex',0.82,1);
+    activeSpeechKind='word';
     pendingWordSpeech=null;
     safeSpeak(activeSpeech);
   }
@@ -859,10 +874,35 @@ function speakCommentary(text,urgent=false){
     if(window.speechSynthesis&&window.speechSynthesis.speaking){
       window.speechSynthesis.cancel();
       activeSpeech=null;
+      activeSpeechKind='';
     }
   }
   pendingCommentarySpeech=cleaned;
   flushSpeechQueue();
+}
+function cancelFootballCommentary(){
+  pendingCommentarySpeech=null;
+  if(activeSpeechKind==='commentary'&&window.speechSynthesis&&window.speechSynthesis.speaking){
+    try{window.speechSynthesis.cancel();}catch(e){}
+    activeSpeech=null;
+    activeSpeechKind='';
+  }
+}
+function penaltiesActive(){
+  var modal=document.getElementById('penaltyModal');
+  return !!(modal&&modal.classList.contains('show'));
+}
+function suppressWordAudio(){
+  return penaltiesActive();
+}
+function clearSpeechNow(){
+  pendingWordSpeech=null;
+  pendingCommentarySpeech=null;
+  if(window.speechSynthesis){
+    try{window.speechSynthesis.cancel();window.speechSynthesis.resume();}catch(e){}
+  }
+  activeSpeech=null;
+  activeSpeechKind='';
 }
 const footballEngine=(()=>{
   const lineOrder=['goalkeeper','defense','midfield','attack'];
@@ -870,7 +910,7 @@ const footballEngine=(()=>{
   const lineShort={goalkeeper:'POR',defense:'DEF',midfield:'MED',attack:'ATA'};
   const lineY={goalkeeper:{yago:86,rival:14},defense:{yago:68,rival:32},midfield:{yago:50,rival:50},attack:{yago:24,rival:76}};
   const xMap={one:[50],two:[36,64],three:[24,50,76]};
-  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,interactionsSinceGoal:0,bannerTimer:null,eventTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
+  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,commentaryToken:0,interactionsSinceGoal:0,bannerTimer:null,eventTimer:null,goalResetTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
   const refs={};
 
   function firstRivalWord(name){
@@ -1090,6 +1130,30 @@ const footballEngine=(()=>{
     if(commentaryText) speakCommentary(commentaryText,eventKind==='save'||eventKind==='goal');
     render();
   }
+  function goalCommentaryOptions(teamId,attackerName,scoreText){
+    const team=getTeamLabel(teamId);
+    return [
+      `¡Goooooooool de ${team}! ¡Marca ${attackerName}! Marcador: ${scoreText}.`,
+      `¡Gol de ${attackerName}! ${team} suma uno y el marcador queda ${scoreText}.`,
+      `¡La mete ${attackerName}! Gol para ${team}. Ahora van ${scoreText}.`,
+      `¡Dentro! ${attackerName} supera al portero y marca para ${team}. ${scoreText}.`,
+      `¡Qué definición de ${attackerName}! Gol de ${team}. Marcador actualizado: ${scoreText}.`,
+      `¡Gol, gol, gol! ${attackerName} la manda a la red para ${team}. ${scoreText}.`,
+      `¡No falla ${attackerName}! Gol para ${team}; el partido va ${scoreText}.`,
+      `¡A la red! ${attackerName} firma el gol de ${team}. Resultado: ${scoreText}.`,
+      `¡Golazo de ${attackerName}! Sube al marcador para ${team}: ${scoreText}.`,
+      `¡Marca ${attackerName}! La pelota entra y ${team} celebra. Marcador: ${scoreText}.`
+    ];
+  }
+  function speakConfirmedGoal(teamId,attackerName,scoreSnapshot,token){
+    const voice=randomFrom(goalCommentaryOptions(teamId,attackerName,`${scoreSnapshot.yago} a ${scoreSnapshot.rival}`));
+    setTimeout(()=>{
+      if(token!==state.commentaryToken) return;
+      if(!state.lastEvent||state.lastEvent.kind!=='goal') return;
+      if(state.score.yago!==scoreSnapshot.yago||state.score.rival!==scoreSnapshot.rival) return;
+      speakCommentary(voice,true);
+    },180);
+  }
 
   function attemptAdvance(teamId){
     const currentLine=state.line;
@@ -1109,8 +1173,24 @@ const footballEngine=(()=>{
         eventKind:'pass',
         explanation:makeDuelExplanation('Has acertado: eso da una oportunidad y un bonus. Ahora se resuelve el duelo de fútbol.',attacker.name,defender.name,duel,true),
         commentaryText:targetLine==='attack'
-          ?randomFrom([`${getTeamLabel(teamId)} pisa área con ${attacker.name}.`,`${attacker.name} rompe líneas y llega el peligro.`,`¡Ojo que ${getTeamLabel(teamId)} ya está en ataque!`])
-          :randomFrom([`${attacker.name} encuentra el pase bueno.`,`Buena combinación de ${getTeamLabel(teamId)}.`,`${attacker.name} supera la presión y avanza.`,`Jugada limpia: ${attacker.name} gana metros.`])
+          ?randomFrom([
+            `${getTeamLabel(teamId)} pisa área con ${attacker.name}.`,
+            `${attacker.name} rompe líneas y llega el peligro.`,
+            `¡Ojo que ${getTeamLabel(teamId)} ya está en ataque!`,
+            `${attacker.name} se planta cerca de portería.`,
+            `Ataque prometedor de ${getTeamLabel(teamId)} con ${attacker.name}.`,
+            `${attacker.name} encuentra espacio y ya mira la portería.`
+          ])
+          :randomFrom([
+            `${attacker.name} encuentra el pase bueno.`,
+            `Buena combinación de ${getTeamLabel(teamId)}.`,
+            `${attacker.name} supera la presión y avanza.`,
+            `Jugada limpia: ${attacker.name} gana metros.`,
+            `${getTeamLabel(teamId)} mueve la pelota con calma.`,
+            `${attacker.name} da continuidad a la jugada.`,
+            `Pase seguro de ${attacker.name}; el equipo progresa.`,
+            `${attacker.name} elige bien y rompe la primera línea.`
+          ])
       });
     }
     return moveBallTo(opponentId,targetLine,{
@@ -1121,7 +1201,14 @@ const footballEngine=(()=>{
       bannerTone:teamId==='yago'?'bad':'good',
       eventKind:'steal',
       explanation:makeDuelExplanation('Has acertado, pero no siempre avanzas: el acierto crea la jugada; el defensor puede ganar si su defensa sale más alta.',attacker.name,defender.name,duel,false),
-      commentaryText:randomFrom([`Robo de ${getTeamLabel(opponentId)}.`,`La defensa se anticipa y recupera ${getTeamLabel(opponentId)}.`,`Corte importante: balón para ${getTeamLabel(opponentId)}.`])
+      commentaryText:randomFrom([
+        `Robo de ${getTeamLabel(opponentId)}.`,
+        `La defensa se anticipa y recupera ${getTeamLabel(opponentId)}.`,
+        `Corte importante: balón para ${getTeamLabel(opponentId)}.`,
+        `${defender.name} mete el pie justo a tiempo.`,
+        `Recuperación de ${getTeamLabel(opponentId)} en una zona peligrosa.`,
+        `${defender.name} lee la jugada y corta el avance.`
+      ])
     });
   }
 
@@ -1141,7 +1228,14 @@ const footballEngine=(()=>{
         bannerTone:teamId==='yago'?'good':'bad',
         eventKind:'steal',
         explanation:makeDuelExplanation(teamId==='yago'?'Has acertado mientras atacaba el rival: eso da bonus para recuperar.':'Error: el rival recibe bonus para presionar y robar.',recoverer.name,carrier.name,duel,true),
-        commentaryText:randomFrom([`Robo de ${getTeamLabel(teamId)}.`,`Presión perfecta de ${getTeamLabel(teamId)}.`,`Recupera ${getTeamLabel(teamId)} tras una buena presión.`])
+        commentaryText:randomFrom([
+          `Robo de ${getTeamLabel(teamId)}.`,
+          `Presión perfecta de ${getTeamLabel(teamId)}.`,
+          `Recupera ${getTeamLabel(teamId)} tras una buena presión.`,
+          `${recoverer.name} aprieta y gana la pelota.`,
+          `Buena lectura de ${recoverer.name}; posesión para ${getTeamLabel(teamId)}.`,
+          `${getTeamLabel(teamId)} vuelve a tenerla gracias a ${recoverer.name}.`
+        ])
       });
     }
     return moveBallTo(opponentId,lineKey,{
@@ -1152,7 +1246,14 @@ const footballEngine=(()=>{
       bannerTone:teamId==='yago'?'bad':'good',
       eventKind:'pass',
       explanation:makeDuelExplanation(teamId==='yago'?'Has intentado recuperar, pero el rival protegió mejor el balón.':'El rival intentó robar, pero tu jugador protegió el balón.',recoverer.name,carrier.name,duel,false),
-      commentaryText:randomFrom([`${getTeamLabel(opponentId)} protege la pelota.`,`No hay robo: ${getTeamLabel(opponentId)} conserva el balón.`,`Aguanta bien ${getTeamLabel(opponentId)} y sigue la jugada.`])
+      commentaryText:randomFrom([
+        `${getTeamLabel(opponentId)} protege la pelota.`,
+        `No hay robo: ${getTeamLabel(opponentId)} conserva el balón.`,
+        `Aguanta bien ${getTeamLabel(opponentId)} y sigue la jugada.`,
+        `${carrier.name} se gira bien y mantiene la posesión.`,
+        `${getTeamLabel(opponentId)} respira y conserva el control.`,
+        `${carrier.name} aguanta la presión sin perderla.`
+      ])
     });
   }
 
@@ -1174,7 +1275,13 @@ const footballEngine=(()=>{
         eventKind:'save',
         keeperId:goalkeeper.id,
         explanation:'Regla anti-gol rapido: antes de marcar tiene que haber al menos 6 interacciones previas desde el saque.',
-        commentaryText:goalkeeper.name+' bloquea el tiro. Todavia no puede haber gol: faltan jugadas previas.'});
+        commentaryText:randomFrom([
+          `${goalkeeper.name} bloquea el tiro. Todavia faltan jugadas previas.`,
+          `Disparo frenado por ${goalkeeper.name}. Aun hacen falta mas jugadas.`,
+          `${goalkeeper.name} se queda con la pelota: todavia era pronto para marcar.`,
+          `Intento peligroso, pero ${goalkeeper.name} tapa bien. La jugada no sube al marcador.`,
+          `Tiro bloqueado. ${goalkeeper.name} evita el peligro hasta que haya mas jugadas.`
+        ])});
     }
     const duel=resolveContest(getShotPower(attacker)+3,getSavePower(goalkeeper)*0.82,'tiro','parada',isYago?2:4);
     if(duel.attackerWins){
@@ -1184,11 +1291,12 @@ const footballEngine=(()=>{
       state.lastExplanation=makeDuelExplanation('Tiro a puerta: se compara el tiro del atacante con la parada del portero.',attacker.name,goalkeeper.name,duel,true);
       showBanner('¡GOOOL!','Disparo potente y la pelota entra.',isYago?'good':'bad',1600,'goal');
       if(state.lastEvent) state.lastEvent.keeperId=goalkeeper.id;
-      const scoreText=`${state.score.yago} a ${state.score.rival}`;
-      const goalVoice=randomFrom([`¡Goooooooool de ${getTeamLabel(teamId)}! ¡Marca ${attacker.name}! Atención, marcador: ${scoreText}.`,`¡Gol, gol, gol! ${attacker.name} la manda dentro para ${getTeamLabel(teamId)}. El partido va ${scoreText}.`,`¡Goooooooool! ${getTeamLabel(teamId)} suma uno con ${attacker.name}. Marcador actualizado: ${scoreText}.`]);
-      speakCommentary(goalVoice,true);
+      const scoreSnapshot={yago:state.score.yago,rival:state.score.rival};
       render();
-      return setTimeout(()=>resetAfterGoal(getOpponentId(teamId)),950);
+      speakConfirmedGoal(teamId,attacker.name,scoreSnapshot,state.commentaryToken);
+      if(state.goalResetTimer)clearTimeout(state.goalResetTimer);
+      state.goalResetTimer=setTimeout(()=>{state.goalResetTimer=null;resetAfterGoal(getOpponentId(teamId));},950);
+      return state.goalResetTimer;
     }
     const saveY=isYago?28:72;
     const saveX=Math.max(22,Math.min(78,getX(goalkeeper)+(Math.random()>.5?8:-8)));
@@ -1202,7 +1310,16 @@ const footballEngine=(()=>{
       eventKind:'save',
       keeperId:goalkeeper.id,
       explanation:makeDuelExplanation('Tiro a puerta: si la parada supera al tiro, el balón se queda dentro del campo, delante del portero.',attacker.name,goalkeeper.name,duel,false),
-      commentaryText:randomFrom([`¡Paradón de ${goalkeeper.name}! El balón queda vivo dentro del campo.`,`¡Qué parada de ${goalkeeper.name}! Evita el gol y se queda con la pelota.`,`¡Mano salvadora de ${goalkeeper.name}! No entra, sigue el partido.`])
+      commentaryText:randomFrom([
+        `¡Paradón de ${goalkeeper.name}! El balón queda vivo dentro del campo.`,
+        `¡Qué parada de ${goalkeeper.name}! Se queda con la pelota.`,
+        `¡Mano salvadora de ${goalkeeper.name}! No entra, sigue el partido.`,
+        `${goalkeeper.name} responde bajo palos y detiene el disparo.`,
+        `¡La saca ${goalkeeper.name}! Era una ocasión clara, pero no entra.`,
+        `El portero aguanta y gana el duelo: parada de ${goalkeeper.name}.`,
+        `Buen tiro de ${attacker.name}, mejor respuesta de ${goalkeeper.name}.`,
+        `${goalkeeper.name} lee el disparo y bloquea la ocasión.`
+      ])
     });
   }
 
@@ -1223,11 +1340,22 @@ const footballEngine=(()=>{
       bannerTone:teamId==='yago'?'good':'bad',
       eventKind:'pass',
       explanation:reasonText||'Si fallas mientras el rival tiene la pelota, no hay robo de Atletic: el rival conserva y avanza.',
-      commentaryText:randomFrom([`${getTeamLabel(teamId)} conserva la pelota y avanza.`,`${actor.name} sigue conduciendo para ${getTeamLabel(teamId)}.`,`${getTeamLabel(teamId)} progresa con el balón controlado.`])
+      commentaryText:randomFrom([
+        `${getTeamLabel(teamId)} conserva la pelota y avanza.`,
+        `${actor.name} sigue conduciendo para ${getTeamLabel(teamId)}.`,
+        `${getTeamLabel(teamId)} progresa con el balón controlado.`,
+        `${actor.name} acelera la jugada por delante.`,
+        `El rival no pierde la pelota y gana metros con ${actor.name}.`,
+        `${getTeamLabel(teamId)} estira el campo y se acerca al área.`
+      ])
     });
   }
 
-  function recordFootballInteraction(){state.interactionsSinceGoal=(state.interactionsSinceGoal||0)+1;} 
+  function recordFootballInteraction(){
+    state.commentaryToken=(state.commentaryToken||0)+1;
+    if(typeof clearSpeechNow==='function') clearSpeechNow();
+    state.interactionsSinceGoal=(state.interactionsSinceGoal||0)+1;
+  } 
 
   function onSpellingSuccess(){
     if(!gameEnabled) return;
@@ -1250,6 +1378,7 @@ const footballEngine=(()=>{
   }
 
   function resetAfterGoal(kickoffTeam){
+    if(state.goalResetTimer){clearTimeout(state.goalResetTimer);state.goalResetTimer=null;}
     state.possession=kickoffTeam||getOpponentId(state.possession);
     state.line='midfield';
     state.playerId=pickBallOwner(state.possession,state.line);
@@ -1260,7 +1389,7 @@ const footballEngine=(()=>{
     state.kickoffMode=true;
     showBanner('SAQUE','Saque desde el centro.','good',1100,'kickoff');
     if(state.lastEvent) state.lastEvent.teamId=state.possession;
-    speakCommentary(`Saca ${getTeamLabel(state.possession)} desde el centro.`,true);
+    speakCommentary(`Saca ${getTeamLabel(state.possession)} desde el centro.`,false);
     render();
   }
 
@@ -1394,11 +1523,12 @@ const footballEngine=(()=>{
   }
 
   function reset(){
+    if(state.goalResetTimer){clearTimeout(state.goalResetTimer);state.goalResetTimer=null;}
     createDefaultTeams();
     state.score={yago:0,rival:0};
     state.log=[];
     state.banner={title:'',text:'',tone:'good',visible:false};
-    state.lastEvent=null; state.ballTarget=null; state.kickoffMode=false; state.interactionsSinceGoal=0;
+    state.lastEvent=null; state.ballTarget=null; state.kickoffMode=false; state.interactionsSinceGoal=0; state.commentaryToken=(state.commentaryToken||0)+1;
     pickStartingTeam();
     addLog('Atletic empieza sacando desde el centro.');
     render();
@@ -1407,8 +1537,9 @@ const footballEngine=(()=>{
   function getScoreText(){return `${state.score.yago} - ${state.score.rival}`}
   function getPossessionText(){return getTeamLabel(state.possession)}
   function getZoneText(){return lineLabel[state.line]}
+  function cancelPendingGoalReset(){if(state.goalResetTimer){clearTimeout(state.goalResetTimer);state.goalResetTimer=null;}}
 
-  return {init,render,reset,onSpellingSuccess,onSpellingFail,getScoreText,getPossessionText,getZoneText};
+  return {init,render,reset,onSpellingSuccess,onSpellingFail,getScoreText,getPossessionText,getZoneText,cancelPendingGoalReset};
 })();
 function updateStats(){$('#goodCount').textContent=stats.good;$('#badCount').textContent=stats.bad;$('#streakCount').textContent=stats.streak;$('#stepCount').textContent=footballEngine.getScoreText();$('#livesLabel').textContent=footballEngine.getPossessionText();$('#goalLabel').textContent=footballEngine.getZoneText();$('#currentIndex').textContent=window.datasetStates.length?index+1:0;$('#totalCount').textContent=window.datasetStates.length;$('#datasetName').textContent=datasetName;$('#playersDatasetName').textContent=`Jugadores: ${playersDatasetName}`;}
 function render(){const s=current();if(!s){$('#spanishWord').textContent='Sin datos';$('#statusPill').textContent='Vacío';$('#letters').innerHTML='';updateStats();footballEngine.render();renderPlayersEditor();return;}$('#spanishWord').textContent=s.spanish;$('#modeExplain').textContent=mode==='blind'?'Blind: solo te guías por la palabra en español y por el audio si quieres usarlo.':'Tricky letters: algunas letras ya están y tú completas solo las que faltan.';$('#statusPill').textContent=s.revealed?'Solución':s.solved?'¡Bien!':s.checked?'Revisa :-) ':'Pendiente';const total=blanksTotal(s),done=blanksDone(s),pct=total?Math.round(done*100/total):100;$('#progressBar').style.width=pct+'%';$('#statusPill').style.background=s.checked&&!s.solved?'#fff1d6':'#effbf1';$('#statusPill').style.color=s.checked&&!s.solved?'#8a5800':'#2c7a4b';renderLetters();footballEngine.render();renderPlayersEditor();updateStats();setButtons();}
@@ -1424,7 +1555,7 @@ function setButtons(){
   if($('#formationSelect')) $('#formationSelect').value=formationKey;
   if($('#yagoRoleSelect')) $('#yagoRoleSelect').value=preferredYagoLine;
 }
-function speakCurrent(force=false){const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
+function speakCurrent(force=false){if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
 function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
 function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
@@ -1537,7 +1668,7 @@ async function importPlayersFile(file){
 function focusInput(){const input=$('#hiddenInput');if(!input) return;try{input.removeAttribute('readonly');input.focus({preventScroll:true});input.click&&input.click();}catch(e){try{input.focus();}catch(_){}}}
 function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextTimer=null;}}
 function showSolutionThenNext(){const s=current();if(!s) return;clearAutoNext();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});s.revealed=true;render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra. Sigue la jugada.');},2000);}
-function speakCurrent(force=false){const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
+function speakCurrent(force=false){if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
 function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
 function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
@@ -5648,10 +5779,18 @@ body.learning-mode #learnPhotoToggle.active{
   };
   var oldSpeakCurrent=window.speakCurrent;
   window.speakCurrent=function(force){
+    if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;
     if(force) markAudioReady();
     return typeof oldSpeakCurrent==='function' ? oldSpeakCurrent.apply(this,arguments) : undefined;
   };
+  var oldForceSpeakWordNow=window.forceSpeakWordNow;
+  window.forceSpeakWordNow=function(force){
+    if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;
+    if(force) markAudioReady();
+    return typeof oldForceSpeakWordNow==='function' ? oldForceSpeakWordNow.apply(this,arguments) : undefined;
+  };
   function playDefaultAudio(){
+    if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;
     if(isLearning()||!document.body.classList.contains('competition-mode')||!audioEnabled('word')) return;
     var now=Date.now();
     if(now-lastAutoSpeak<1800) return;
@@ -5731,13 +5870,13 @@ body.competition-mode.keyboard-open #championshipViewBtn{
 .football-player .player-doll .leg{background:var(--kit-shorts,#111111)!important}
 .football-player .player-doll .boot{background:var(--kit-socks,#ffffff)!important;border:1px solid rgba(0,0,0,.25)!important}
 .football-player.line-goalkeeper .player-doll .body{
-  background:linear-gradient(180deg,var(--kit-shirt,#42e66f) 0 58%,var(--kit-shorts,#181818) 58%)!important;
+  background:linear-gradient(180deg,var(--keeper-shirt,var(--kit-shirt,#42e66f)) 0 58%,var(--keeper-shorts,var(--kit-alt,#181818)) 58%)!important;
 }
 .football-player.line-goalkeeper .player-doll.kit-striped .body{
-  background:repeating-linear-gradient(90deg,var(--kit-shirt,#42e66f) 0 6px,var(--kit-shirt,#42e66f) 6px,var(--kit-alt,#181818) 6px,var(--kit-alt,#181818) 12px)!important;
+  background:repeating-linear-gradient(90deg,var(--keeper-shirt,var(--kit-shirt,#42e66f)) 0 6px,var(--keeper-shirt,var(--kit-shirt,#42e66f)) 6px,var(--keeper-alt,var(--kit-alt,#181818)) 6px,var(--keeper-alt,var(--kit-alt,#181818)) 12px)!important;
 }
-.football-player.line-goalkeeper .player-doll .leg{background:var(--kit-shorts,#181818)!important}
-.football-player.line-goalkeeper .player-doll .boot{background:var(--kit-socks,#42e66f)!important}
+.football-player.line-goalkeeper .player-doll .leg{background:var(--keeper-shorts,var(--kit-alt,#181818))!important}
+.football-player.line-goalkeeper .player-doll .boot{background:var(--keeper-socks,var(--kit-socks,#42e66f))!important}
 .football-crest.rival{
   background:linear-gradient(90deg,var(--rival-shirt,#ff5b69) 0 50%,var(--rival-alt,#d93b49) 50% 100%)!important;
 }
@@ -5745,7 +5884,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   background:linear-gradient(90deg,#23c7d6 0 50%,#ffe45c 50% 100%)!important;
 }
 .penalty-keeper::before{display:none!important}
-.penalty-keeper .player-doll{width:42px;height:58px;transform-origin:center center}
+.penalty-keeper .player-doll{width:42px;height:58px;transform:scale(1.7);transform-origin:center center}
 .penalty-keeper .player-doll .body{
   background:linear-gradient(180deg,var(--keeper-shirt,#ffb84d) 0 58%,var(--keeper-shorts,#071b49) 58%)!important;
 }
@@ -6033,8 +6172,8 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   position:absolute;
   left:50%;
   top:39%;
-  width:54px;
-  height:66px;
+  width:92px;
+  height:112px;
   transform:translate(-50%,-50%);
   transition:left .42s ease,top .42s ease,transform .42s ease;
   z-index:5;
@@ -6361,12 +6500,16 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     var modal=byId('penaltyModal'),score=byId('penaltyScore'),info=byId('penaltyInfo'),log=byId('penaltyLog'),mode=byId('penaltyModeBtn'),ball=byId('penaltyBall'),keeper=byId('penaltyKeeper'),shooter=byId('penaltyShooter'),lineup=byId('penaltyLineup'),resultLabel=byId('penaltyResult');
     if(!penalty||!modal)return;
     modal.classList.add('show');
-    if(score)score.textContent='Penaltis '+penalty.score.yago+' - '+penalty.score.rival;
+    var rivalShort=firstName(penalty.names.rivalName);
+    var atleticTaken=penalty.aIndex||0,rivalTaken=penalty.rIndex||0;
+    var atleticLeft=Math.max(0,5-atleticTaken),rivalLeft=Math.max(0,5-rivalTaken);
+    if(score)score.textContent='Penaltis Atletic '+penalty.score.yago+' - '+penalty.score.rival+' '+rivalShort;
     if(mode)mode.textContent='Penaltis: '+(penaltyMode==='manual'?'Manual':'Auto');
     var yagoTurn=penalty.turn%2===0;
-    var teamName=yagoTurn?'Atletic':firstName(penalty.names.rivalName);
+    var teamName=yagoTurn?'Atletic':rivalShort;
     var action=penaltyMode==='manual'?(yagoTurn?'elige dónde chutar':'elige dónde se tira el portero'):'modo automático';
-    if(info)info.textContent=teamName+' · '+action;
+    var roundText='Tiros: Atletic '+atleticTaken+'/5, faltan '+atleticLeft+' · '+rivalShort+' '+rivalTaken+'/5, faltan '+rivalLeft;
+    if(info)info.textContent=teamName+' · '+action+' · '+roundText;
     if(log)log.innerHTML=penalty.log.slice(-3).join('<br>')||'Empate en Champions: tanda de penaltis.';
     if(keeper){
       var keeperTeamName=yagoTurn?penalty.names.rivalName:'Atletic',kkit=teamKit(keeperTeamName),doll=keeper.querySelector('.player-doll');
@@ -6502,6 +6645,12 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     penalty=null;
     callback(match,score,winner,pen,summary);
   }
+  function speakPenaltyOutcome(actor,teamLabel,result){
+    if(typeof speakCommentary!=='function')return;
+    var outcome=result.goal?'GOL':result.off?'FUERA':'PARADA';
+    var text=outcome+'. Penalti de '+actor+' para '+teamLabel+'. Tanda: Atletic '+penalty.score.yago+' - '+penalty.score.rival+' '+firstName(penalty.names.rivalName)+'.';
+    speakCommentary(text,true);
+  }
   function resolvePenaltyChoice(choiceId){
     if(!penalty||penalty.animating||penalty.done)return;
     var yagoTurn=penalty.turn%2===0,aim,saveIntent,save,actor,keeperName,teamLabel,manualChoice=penaltyMode==='manual'&&choiceId;
@@ -6529,6 +6678,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     var shotText=result.off?'se le va fuera':result.drift?'no la coloca exacta y acaba '+shot.label.toLowerCase():'tira '+shot.label.toLowerCase();
     penalty.log.push(actor+' '+shotText+'. '+keeperName+' va '+visualSave.label.toLowerCase()+'. '+(goal?'Gol.':result.off?'Fuera.':'Parada.'));
     penalty.turn++;
+    speakPenaltyOutcome(actor,teamLabel,result);
     animatePenalty(shot,visualSave,result,function(){
       var winner=shouldEndShootout();
       nextPenaltyNames();
@@ -6541,9 +6691,12 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   function startPenaltyShootout(match,score,onWinner){
     var names=getPenaltyNames(match);
     penalty={match:match,regularScore:score,onWinner:onWinner,names:names,score:{yago:0,rival:0},turn:0,aIndex:0,rIndex:0,nextAtletic:names.atletic[0]||'Yago',nextRival:names.rival[0]||'Rival',log:['Empate: Champions se decide en penaltis.'],summary:[],animating:false,done:false};
+    if(typeof footballEngine!=='undefined'&&footballEngine.cancelPendingGoalReset)footballEngine.cancelPendingGoalReset();
+    if(typeof clearSpeechNow==='function') clearSpeechNow();
     ensurePenaltyModal();
     renderPenalty();
     setMessage('Empate en Champions: tanda de penaltis.');
+    if(typeof speakCommentary==='function')speakCommentary('Empate en Champions. Vamos a penaltis. El partido se decide en la tanda.',true);
     if(penaltyMode==='auto')setTimeout(function(){resolvePenaltyChoice(null)},900);
   }
   function completeCupMatch(match,score,winner,pen,penaltySummary){
