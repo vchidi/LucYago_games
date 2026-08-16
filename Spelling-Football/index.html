@@ -497,6 +497,7 @@ let pendingCommentarySpeech=null;
 const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 let speechUnlocked=!IS_IOS;
 let audioActivated=!IS_IOS;
+const DEFAULT_WORDS_EXCEL_FILE='./yago_common_english_words.xlsx';
 const FORMATIONS={
   '1-2-2-1':{goalkeeper:1,defense:2,midfield:2,attack:1},
   '1-3-1-1':{goalkeeper:1,defense:3,midfield:1,attack:1},
@@ -527,6 +528,19 @@ function repairUnicodeText(value){
   return text;
 }
 function normalizeText(s){return repairUnicodeText(s).trim().toLowerCase()}
+function lettersOnly(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z]/g,'').toLowerCase()}
+function makeAutoPattern(word){
+  const clean=lettersOnly(word);
+  if(!clean) return '';
+  let hidden=0;
+  let pattern=clean.split('').map((ch,i)=>{
+    const hide=/[aeiou]/.test(ch)||(clean.length>4&&i===clean.length-1);
+    if(hide){hidden++;return '_'}
+    return ch;
+  }).join('');
+  if(!hidden) pattern=clean.slice(0,-1)+'_';
+  return pattern;
+}
 function normalizePattern(answer,pattern){answer=normalizeText(answer);pattern=normalizeText(pattern||answer);if(!pattern) pattern=answer;if(pattern.length>answer.length) pattern=pattern.slice(0,answer.length);if(pattern.length<answer.length) pattern+=answer.slice(pattern.length);return pattern;}
 function cleanEntry(d){const english=normalizeText(d.english||d.baseForm);const pattern=normalizePattern(english,d.pattern||d['tricky letters']);const spanish=repairUnicodeText(d.spanish||d['español']||d['spanish']||'').trim();if(!english||!spanish) return null;return {english,pattern,spanish};}
 function toNumber(value,fallback=0){const n=Number(value);return Number.isFinite(n)?n:fallback}
@@ -1321,7 +1335,34 @@ function toggleNoGame(){gameEnabled=!gameEnabled;if(!gameEnabled) pendingComment
 function setMode(nextMode){clearAutoNext();mode=nextMode;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'El partido vuelve a empezar con el nuevo modo.':'Modo cambiado sin juego.';setMessage(mode==='blind'?'Modo Blind activado.':'Modo Tricky letters activado.');}
 function exportJson(){const blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='yago_common_words_game.json';a.click();URL.revokeObjectURL(url);}
 function exportAtleticTemplate(){const data={version:'atletic_roster_v1',rules:{team_mode:'fixed_atletic_names_random_lineup',atletic_team_name:'Atletic',always_include_player:'Yago',yago_is_best:false,yago_is_strong:true,never_mix_atletic_and_rivals:true,rival_team_name_mode:'random_from_list',rival_players_mode:'random_from_list'},atletic_players:atleticPlayerNames.map(name=>normalizeText(name)==='yago'?{name,role:'crack total',gk:9,def:9,mid:8,att:9,pass:9,save:9,speed:8,must_play:true,special:'best_everything'}:{name}),rival_team_names:rivalTeamNames,rival_players:rivalPlayerNames,prompt_for_game_logic:'Atletic usa solo atletic_players. Yago siempre juega y tiene 8-9 en todo. Rival usa rival_players y rival_team_names. Nunca se mezclan.'};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='atletic_players_random.json';a.click();URL.revokeObjectURL(url);}
-function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>repairUnicodeText(v).trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/español|español|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return [];return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
+function parseDefaultWordsRows(rows){
+  const out=[];
+  (rows||[]).forEach((r,i)=>{
+    if(!r||!r.length) return;
+    const wordRaw=repairUnicodeText(r[1]||'').trim();
+    const spanish=repairUnicodeText(r[2]||'').trim();
+    const letters=repairUnicodeText(r[3]||wordRaw).trim();
+    if(i===0&&normalizeText(wordRaw)==='palabra') return;
+    const english=lettersOnly(wordRaw||letters);
+    if(!english||!spanish) return;
+    out.push({english,pattern:makeAutoPattern(letters||english),spanish});
+  });
+  return out;
+}
+async function loadDefaultWordsExcel(){
+  if(!window.fetch||!window.XLSX) return false;
+  const res=await fetch(DEFAULT_WORDS_EXCEL_FILE,{cache:'no-store'});
+  if(!res.ok) throw new Error('No se puede leer '+DEFAULT_WORDS_EXCEL_FILE);
+  const wb=XLSX.read(await res.arrayBuffer(),{type:'array'});
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:''});
+  const parsed=parseDefaultWordsRows(rows);
+  if(!parsed.length) throw new Error('El Excel no tiene palabras válidas.');
+  rawData=parsed;
+  datasetName='yago_common_english_words.xlsx';
+  return true;
+}
+function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>repairUnicodeText(v).trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/español|español|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return parseDefaultWordsRows(rows);return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
 function parsePlayerRows(rows){
   if(!rows.length) return [];
   const headers=rows[0].map(v=>normalizeText(v).replace(/\s+/g,'_'));
@@ -1406,7 +1447,7 @@ function restartGame(){clearAutoNext();stats={good:0,bad:0,streak:0};index=0;bui
 function toggleNoGame(){gameEnabled=!gameEnabled;if(!gameEnabled) pendingCommentarySpeech=null;if(gameEnabled) footballEngine.reset();render();setButtons();setMessage(gameEnabled?'Partido activado.':'Partido desactivado: solo spelling.');}
 function setMode(nextMode){clearAutoNext();mode=nextMode;buildDataset();if(gameEnabled) footballEngine.reset();render();if(autoAudio) speakCurrent();$('#builderEvent').textContent=gameEnabled?'El partido vuelve a empezar con el nuevo modo.':'Modo cambiado sin juego.';setMessage(mode==='blind'?'Modo Blind activado.':'Modo Tricky letters activado.');}
 function exportJson(){const blob=new Blob([JSON.stringify(rawData,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='yago_common_words_game.json';a.click();URL.revokeObjectURL(url);}
-function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>repairUnicodeText(v).trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/español|español|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return [];return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
+function parseRows(rows){if(!rows.length) return [];const headers=rows[0].map(v=>repairUnicodeText(v).trim());const eIdx=headers.findIndex(h=>/baseform|english/i.test(h));const pIdx=headers.findIndex(h=>/tricky letters|pattern/i.test(h));const sIdx=headers.findIndex(h=>/español|español|spanish/i.test(h));if(eIdx===-1||sIdx===-1) return parseDefaultWordsRows(rows);return rows.slice(1).map(r=>cleanEntry({english:r[eIdx],pattern:pIdx===-1?'':r[pIdx],spanish:r[sIdx]})).filter(Boolean);}
 function parsePlayerRows(rows){
   if(!rows.length) return [];
   const headers=rows[0].map(v=>normalizeText(v).replace(/\s+/g,'_'));
@@ -1491,7 +1532,7 @@ function relocateFootballInfoPanel(){
     message.insertAdjacentElement('afterend',grid);
   }
 }
-window.addEventListener('load',()=>{relocateFootballInfoPanel();loadSaved();footballEngine.init();setupVoices();buildDataset();if(!document.body.classList.contains('learning-mode')){render();setButtons();setTimeout(focusInput,150);if(autoAudio) setTimeout(()=>{if(!document.body.classList.contains('learning-mode')) speakCurrent();},300);}else{setButtons();try{if(window.speechSynthesis)window.speechSynthesis.cancel()}catch(_){}}});
+window.addEventListener('load',async()=>{relocateFootballInfoPanel();loadSaved();try{await loadDefaultWordsExcel();}catch(e){try{console.warn('Partido usa la copia incrustada de palabras:',e.message)}catch(_){}}footballEngine.init();setupVoices();buildDataset();if(!document.body.classList.contains('learning-mode')){render();setButtons();setTimeout(focusInput,150);if(autoAudio) setTimeout(()=>{if(!document.body.classList.contains('learning-mode')) speakCurrent();},300);}else{setButtons();try{if(window.speechSynthesis)window.speechSynthesis.cancel()}catch(_){}}});
 </script>
 <script id="ipad-compact-keyboard-detector">
 (function(){function setCompactViewport(){var vv=window.visualViewport;var h=vv?vv.height:window.innerHeight;document.documentElement.style.setProperty('--compact-vh',Math.max(260,Math.round(h))+'px');var keyboardOpen=vv?(window.innerHeight-vv.height>120||vv.height<520):false;document.body.classList.toggle('keyboard-open',keyboardOpen&&!document.body.classList.contains('learning-mode'));}setCompactViewport();window.addEventListener('resize',setCompactViewport,{passive:true});window.addEventListener('orientationchange',function(){setTimeout(setCompactViewport,80)},{passive:true});if(window.visualViewport){visualViewport.addEventListener('resize',setCompactViewport,{passive:true});visualViewport.addEventListener('scroll',setCompactViewport,{passive:true});}document.addEventListener('focusin',setCompactViewport);document.addEventListener('focusout',function(){setTimeout(setCompactViewport,120)});})();
