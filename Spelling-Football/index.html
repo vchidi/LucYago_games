@@ -505,6 +505,23 @@ const PLAYER_POSITION_OVERRIDES={
   Arsenal:{Raya:'goalkeeper',Ramsdale:'goalkeeper',Saliba:'defense',Gabriel:'defense',Timber:'defense',Calafiori:'defense',White:'defense',Rice:'midfield',Odegaard:'midfield',Zubimendi:'midfield',Merino:'midfield',Nwaneri:'midfield',Saka:'attack',Martinelli:'attack',Madueke:'attack',Gyokeres:'attack',Havertz:'attack',Trossard:'attack'},
   'Inter Milan':{Sommer:'goalkeeper',Martinez:'goalkeeper',Bastoni:'defense',Acerbi:'defense',Pavard:'defense',Dumfries:'defense',Dimarco:'defense','Carlos Augusto':'defense',Bisseck:'defense','De Vrij':'defense',Barella:'midfield',Calhanoglu:'midfield',Mkhitaryan:'midfield',Frattesi:'midfield',Zielinski:'midfield',Thuram:'attack',Lautaro:'attack',Esposito:'attack'}
 };
+const TEAM_KITS={
+  Atletic:{shirt:'#23c7d6',alt:'#ffe45c',shorts:'#23c7d6',socks:'#ffe45c',keeper:'#23c7d6',keeperShorts:'#ffe45c',keeperSocks:'#ffe45c',striped:true},
+  'Real Madrid':{shirt:'#ffffff',alt:'#f3f3f3',shorts:'#ffffff',socks:'#ffffff',keeper:'#72e06a',keeperShorts:'#143b1b',keeperSocks:'#72e06a'},
+  'FC Barcelona':{shirt:'#004d98',alt:'#a50044',shorts:'#004d98',socks:'#a50044',keeper:'#28d66d',keeperShorts:'#10391f',keeperSocks:'#28d66d',striped:true},
+  'Atletico Madrid':{shirt:'#d71920',alt:'#ffffff',shorts:'#1b2c64',socks:'#d71920',keeper:'#ffe03d',keeperShorts:'#111111',keeperSocks:'#ffe03d',striped:true},
+  'Athletic Club':{shirt:'#e30613',alt:'#ffffff',shorts:'#111111',socks:'#e30613',keeper:'#32d46b',keeperShorts:'#15361e',keeperSocks:'#32d46b',striped:true},
+  'Real Betis':{shirt:'#00954c',alt:'#ffffff',shorts:'#ffffff',socks:'#00954c',keeper:'#ff7a00',keeperShorts:'#111111',keeperSocks:'#ff7a00',striped:true},
+  Villarreal:{shirt:'#ffe500',alt:'#ffe500',shorts:'#ffe500',socks:'#ffe500',keeper:'#4fd4ff',keeperShorts:'#062b3b',keeperSocks:'#4fd4ff'},
+  Valencia:{shirt:'#ffffff',alt:'#111111',shorts:'#111111',socks:'#ffffff',keeper:'#7a39ff',keeperShorts:'#18062f',keeperSocks:'#7a39ff'},
+  Sevilla:{shirt:'#ffffff',alt:'#d71920',shorts:'#ffffff',socks:'#111111',keeper:'#2fd06b',keeperShorts:'#10361d',keeperSocks:'#2fd06b'},
+  PSG:{shirt:'#0b1f5e',alt:'#d00027',shorts:'#0b1f5e',socks:'#0b1f5e',keeper:'#91ff4f',keeperShorts:'#17340c',keeperSocks:'#91ff4f'},
+  Liverpool:{shirt:'#c8102e',alt:'#c8102e',shorts:'#c8102e',socks:'#c8102e',keeper:'#1ed760',keeperShorts:'#08331a',keeperSocks:'#1ed760'},
+  'Bayern Munich':{shirt:'#dc052d',alt:'#ffffff',shorts:'#dc052d',socks:'#dc052d',keeper:'#2ed573',keeperShorts:'#10371d',keeperSocks:'#2ed573'},
+  'Manchester City':{shirt:'#6cabdd',alt:'#6cabdd',shorts:'#ffffff',socks:'#6cabdd',keeper:'#ff8c1a',keeperShorts:'#111111',keeperSocks:'#ff8c1a'},
+  Arsenal:{shirt:'#ef0107',alt:'#ffffff',shorts:'#ffffff',socks:'#ef0107',keeper:'#24d05a',keeperShorts:'#0b3317',keeperSocks:'#24d05a'},
+  'Inter Milan':{shirt:'#0057b8',alt:'#111111',shorts:'#111111',socks:'#0057b8',keeper:'#f4e04d',keeperShorts:'#111111',keeperSocks:'#f4e04d',striped:true}
+};
 let currentRivalTeamName='Rival';
 let mode='classic';
 let autoAudio=true;
@@ -657,6 +674,28 @@ function playerPosition(teamName,name){
 function lineRoleLabel(lineKey){
   return lineKey==='goalkeeper'?'portero':lineKey==='defense'?'defensa':lineKey==='midfield'?'medio':'atacante';
 }
+function teamKit(teamName){
+  return TEAM_KITS[teamName]||TEAM_KITS[firstName(teamName)]||TEAM_KITS['Real Madrid'];
+}
+function applyKitVars(el,kit){
+  if(!el||!kit)return;
+  el.style.setProperty('--kit-shirt',kit.shirt);
+  el.style.setProperty('--kit-alt',kit.alt||kit.shirt);
+  el.style.setProperty('--kit-shorts',kit.shorts||'#111111');
+  el.style.setProperty('--kit-socks',kit.socks||kit.shirt);
+  el.style.setProperty('--keeper-shirt',kit.keeper||'#42e66f');
+  el.style.setProperty('--keeper-shorts',kit.keeperShorts||'#181818');
+  el.style.setProperty('--keeper-socks',kit.keeperSocks||kit.keeper||'#42e66f');
+}
+function applyTeamKeeperVars(el,kit){
+  if(!el||!kit)return;
+  applyKitVars(el,kit);
+  el.style.setProperty('--keeper-shirt',kit.shirt);
+  el.style.setProperty('--keeper-alt',kit.alt||kit.shirt);
+  el.style.setProperty('--keeper-shorts',kit.shorts||kit.alt||kit.shirt);
+  el.style.setProperty('--keeper-socks',kit.socks||kit.alt||kit.shirt);
+}
+function playerTeamName(teamId){return teamId==='yago'?'Atletic':currentRivalTeamName}
 function positionedNamesForSlots(teamName,roster,slots,totalNeeded){
   const used=new Set(), ordered=[];
   const take=(lineKey,count)=>{
@@ -840,7 +879,8 @@ const footballEngine=(()=>{
   }
   function getTeamLabel(teamId){return teamId==='yago'?'Atletic':firstRivalWord(currentRivalTeamName||'Rival')}
   function playerDollHtml(teamId){
-    return `<div class="player-doll ${teamId}"><span class="hair"></span><span class="head"></span><span class="body"></span><span class="arm l"></span><span class="arm r"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span></div>`;
+    const kit=teamKit(playerTeamName(teamId));
+    return `<div class="player-doll ${teamId} ${kit&&kit.striped?'kit-striped':''}"><span class="hair"></span><span class="head"></span><span class="body"></span><span class="arm l"></span><span class="arm r"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span></div>`;
   }
   function stableHash(value){return String(value||'').split('').reduce((a,ch)=>((a*31+ch.charCodeAt(0))%997),7)}
 
@@ -1285,6 +1325,7 @@ const footballEngine=(()=>{
         wrap.style.top=getY(player)+'%';
         const card=document.createElement('div');
         card.className='football-player '+team.color+' line-'+player.line+(player.id===state.playerId&&team.id===state.possession?' has-ball':'');
+        applyKitVars(card,teamKit(playerTeamName(team.id)));
         card.innerHTML=playerDollHtml(team.id);
         const name=document.createElement('div');
         name.className='football-player-name';
@@ -1328,6 +1369,9 @@ const footballEngine=(()=>{
   function renderMeta(){
     refs.score.textContent=`${state.score.yago} - ${state.score.rival}`;
     const rivalNameEl=document.querySelector('.football-team.right span:first-child'); if(rivalNameEl) rivalNameEl.textContent=getTeamLabel('rival');
+    const rivalCrest=document.querySelector('.football-crest.rival');
+    const kit=teamKit(currentRivalTeamName);
+    if(rivalCrest&&kit){rivalCrest.style.setProperty('--rival-shirt',kit.shirt);rivalCrest.style.setProperty('--rival-alt',kit.alt||kit.shirt)}
     refs.possession.textContent=getTeamLabel(state.possession);
     refs.zone.textContent=lineLabel[state.line];
     refs.log.innerHTML=state.log.map(item=>`<div class="football-log-item">${item}</div>`).join('');
@@ -5678,6 +5722,42 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   color:#173f5a!important;
   border-color:#acd8f1!important;
 }
+.football-player .player-doll .body{
+  background:linear-gradient(180deg,var(--kit-shirt,#ffffff) 0 58%,var(--kit-shorts,#111111) 58%)!important;
+}
+.football-player .player-doll.kit-striped .body{
+  background:repeating-linear-gradient(90deg,var(--kit-shirt,#ffffff) 0 6px,var(--kit-shirt,#ffffff) 6px,var(--kit-alt,#111111) 6px,var(--kit-alt,#111111) 12px)!important;
+}
+.football-player .player-doll .leg{background:var(--kit-shorts,#111111)!important}
+.football-player .player-doll .boot{background:var(--kit-socks,#ffffff)!important;border:1px solid rgba(0,0,0,.25)!important}
+.football-player.line-goalkeeper .player-doll .body{
+  background:linear-gradient(180deg,var(--kit-shirt,#42e66f) 0 58%,var(--kit-shorts,#181818) 58%)!important;
+}
+.football-player.line-goalkeeper .player-doll.kit-striped .body{
+  background:repeating-linear-gradient(90deg,var(--kit-shirt,#42e66f) 0 6px,var(--kit-shirt,#42e66f) 6px,var(--kit-alt,#181818) 6px,var(--kit-alt,#181818) 12px)!important;
+}
+.football-player.line-goalkeeper .player-doll .leg{background:var(--kit-shorts,#181818)!important}
+.football-player.line-goalkeeper .player-doll .boot{background:var(--kit-socks,#42e66f)!important}
+.football-crest.rival{
+  background:linear-gradient(90deg,var(--rival-shirt,#ff5b69) 0 50%,var(--rival-alt,#d93b49) 50% 100%)!important;
+}
+.football-crest.yago{
+  background:linear-gradient(90deg,#23c7d6 0 50%,#ffe45c 50% 100%)!important;
+}
+.penalty-keeper::before{display:none!important}
+.penalty-keeper .player-doll{width:42px;height:58px;transform-origin:center center}
+.penalty-keeper .player-doll .body{
+  background:linear-gradient(180deg,var(--keeper-shirt,#ffb84d) 0 58%,var(--keeper-shorts,#071b49) 58%)!important;
+}
+.penalty-keeper .player-doll.kit-striped .body{
+  background:repeating-linear-gradient(90deg,var(--keeper-shirt,#ffb84d) 0 6px,var(--keeper-shirt,#ffb84d) 6px,var(--keeper-alt,#071b49) 6px,var(--keeper-alt,#071b49) 12px)!important;
+}
+.penalty-keeper .player-doll .leg{background:var(--keeper-shorts,#071b49)!important}
+.penalty-keeper .player-doll .boot{background:var(--keeper-socks,#ffb84d)!important;border:1px solid rgba(0,0,0,.25)!important}
+.penalty-shooter{
+  border:2px solid var(--shooter-shirt,#ffffff);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--shooter-shirt,#ffffff) 28%,transparent);
+}
 .championship-modal{
   position:fixed;
   inset:0;
@@ -5924,15 +6004,43 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   cursor:pointer;
 }
 .penalty-zone:hover,.penalty-zone:focus{background:rgba(255,255,255,.16);outline:0}
+.penalty-result{
+  position:absolute;
+  left:50%;
+  top:56%;
+  transform:translate(-50%,-50%) scale(.92);
+  z-index:9;
+  min-width:170px;
+  padding:10px 18px;
+  border-radius:18px;
+  border:3px solid rgba(255,255,255,.9);
+  background:rgba(7,27,73,.88);
+  color:#fff;
+  font-size:34px;
+  font-weight:1000;
+  text-align:center;
+  letter-spacing:1px;
+  opacity:0;
+  pointer-events:none;
+  box-shadow:0 14px 28px rgba(0,0,0,.28);
+  transition:opacity .18s ease,transform .18s ease;
+}
+.penalty-result.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.penalty-result.goal{background:#16a34a}
+.penalty-result.miss{background:#f97316}
+.penalty-result.save{background:#2563eb}
 .penalty-keeper{
   position:absolute;
   left:50%;
   top:39%;
-  width:48px;
-  height:60px;
+  width:54px;
+  height:66px;
   transform:translate(-50%,-50%);
   transition:left .42s ease,top .42s ease,transform .42s ease;
   z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .penalty-keeper::before{
   content:"";
@@ -6076,6 +6184,16 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   ];
   function zoneById(id){return penaltyZones.find(function(z){return z.id===id})||penaltyZones[1]}
   function randomZone(){return penaltyZones[Math.floor(Math.random()*penaltyZones.length)]}
+  function weightedZone(weights){
+    var total=weights.reduce(function(sum,row){return sum+row[1]},0),pick=Math.random()*total;
+    for(var i=0;i<weights.length;i++){pick-=weights[i][1];if(pick<=0)return zoneById(weights[i][0])}
+    return zoneById(weights[weights.length-1][0]);
+  }
+  function shooterAimZone(){
+    return weightedZone([
+      ['left-low',21],['right-low',21],['center-low',18],['left-high',15],['right-high',15],['center-high',10]
+    ]);
+  }
   function shortList(list,count){return shuffle((list||[]).slice()).slice(0,count)}
   function tableRow(name){if(!champ.table[name])champ.table[name]={team:name,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};return champ.table[name]}
   function record(teamA,teamB,scoreA,scoreB,played){
@@ -6240,7 +6358,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   }
   function renderPenalty(){
     ensurePenaltyModal();
-    var modal=byId('penaltyModal'),score=byId('penaltyScore'),info=byId('penaltyInfo'),log=byId('penaltyLog'),mode=byId('penaltyModeBtn'),ball=byId('penaltyBall'),keeper=byId('penaltyKeeper'),shooter=byId('penaltyShooter'),lineup=byId('penaltyLineup');
+    var modal=byId('penaltyModal'),score=byId('penaltyScore'),info=byId('penaltyInfo'),log=byId('penaltyLog'),mode=byId('penaltyModeBtn'),ball=byId('penaltyBall'),keeper=byId('penaltyKeeper'),shooter=byId('penaltyShooter'),lineup=byId('penaltyLineup'),resultLabel=byId('penaltyResult');
     if(!penalty||!modal)return;
     modal.classList.add('show');
     if(score)score.textContent='Penaltis '+penalty.score.yago+' - '+penalty.score.rival;
@@ -6250,22 +6368,113 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     var action=penaltyMode==='manual'?(yagoTurn?'elige dónde chutar':'elige dónde se tira el portero'):'modo automático';
     if(info)info.textContent=teamName+' · '+action;
     if(log)log.innerHTML=penalty.log.slice(-3).join('<br>')||'Empate en Champions: tanda de penaltis.';
-    if(shooter)shooter.textContent=(yagoTurn?penalty.nextAtletic:penalty.nextRival)||teamName;
+    if(keeper){
+      var keeperTeamName=yagoTurn?penalty.names.rivalName:'Atletic',kkit=teamKit(keeperTeamName),doll=keeper.querySelector('.player-doll');
+      applyTeamKeeperVars(keeper,kkit);
+      if(doll)doll.className='player-doll penalty-doll '+(kkit&&kkit.striped?'kit-striped':'');
+    }
+    if(shooter){
+      var shooterTeam=yagoTurn?'Atletic':penalty.names.rivalName,skit=teamKit(shooterTeam);
+      shooter.textContent=(yagoTurn?penalty.nextAtletic:penalty.nextRival)||teamName;
+      if(skit){shooter.style.setProperty('--shooter-shirt',skit.shirt);shooter.style.background='linear-gradient(90deg,'+skit.shirt+' 0 50%,'+(skit.alt||skit.shirt)+' 50% 100%)';shooter.style.color=(skit.shirt==='#ffffff'||skit.alt==='#ffffff')?'#182033':'#ffffff'}
+    }
     if(lineup)lineup.innerHTML=[].concat(penalty.names.atletic,penalty.names.rival).slice(0,10).map(function(n){return '<span>'+n+'</span>'}).join('');
     if(ball&&!penalty.animating){ball.style.left='50%';ball.style.top='78%';ball.style.transform='scale(1)'}
     if(keeper&&!penalty.animating){keeper.style.left='50%';keeper.style.top='39%';keeper.style.transform='translate(-50%,-50%)'}
+    if(resultLabel&&!penalty.animating){resultLabel.className='penalty-result';resultLabel.textContent=''}
   }
-  function penaltyOutcome(shot,save){
-    if(shot.id===save.id)return false;
-    if(shot.h===save.h&&shot.v!==save.v)return Math.random()>0.48;
-    if(shot.h!==save.h&&shot.v===save.v)return Math.random()>0.18;
-    return true;
+  function pHash(value){return String(value||'').split('').reduce(function(a,ch){return (a*33+ch.charCodeAt(0))%997},11)}
+  function trait(name,min,max){return min+(pHash(name)%(max-min+1))}
+  function pressureFactor(){
+    if(penalty.turn>=10)return .10;
+    if(penalty.turn>=8)return .07;
+    if(penalty.turn>=4)return .04;
+    return 0;
   }
-  function animatePenalty(shot,save,goal,done){
-    var ball=byId('penaltyBall'),keeper=byId('penaltyKeeper');
+  function shooterProfile(name){
+    return {accuracy:trait(name,55,92),composure:trait(name+' calm',50,92),power:trait(name+' power',54,94)};
+  }
+  function keeperProfile(name){
+    return {reflex:trait(name,55,92),read:trait(name+' read',50,92),center:trait(name+' center',0,100)};
+  }
+  function shotRisk(zone,shooterName){
+    var high=zone.v==='high',center=zone.h==='center',p=shooterProfile(shooterName),pressure=pressureFactor();
+    var off=high?(center ? .12 : .23):(center ? .035 : .075);
+    var drift=high?(center ? .11 : .18):(center ? .05 : .09);
+    off+=pressure*(1-(p.composure/120));
+    drift+=pressure*(1-(p.accuracy/130));
+    off*=1+(70-p.accuracy)/180;
+    drift*=1+(74-p.accuracy)/190;
+    return {off:Math.max(.015,Math.min(.34,off)),drift:Math.max(.025,Math.min(.28,drift))};
+  }
+  function nearbyShot(zone){
+    var candidates=penaltyZones.filter(function(z){
+      return z.id!==zone.id&&(z.h===zone.h||z.v===zone.v);
+    });
+    return randomFrom(candidates.length?candidates:penaltyZones);
+  }
+  function offTargetZone(zone){
+    var x=zone.h==='left'?8:zone.h==='right'?92:50;
+    var y=zone.v==='high'?12:58;
+    return {id:'off-'+zone.id,label:'fuera',x:x,y:y,h:zone.h,v:zone.v,off:true};
+  }
+  function teamLastPenalty(team){
+    for(var i=(penalty.summary||[]).length-1;i>=0;i--)if(penalty.summary[i].team===team)return penalty.summary[i];
+    return null;
+  }
+  function keeperGuessZone(keeperName,teamLabel){
+    var kp=keeperProfile(keeperName),last=teamLastPenalty(teamLabel),weights=[
+      ['left-low',22],['right-low',22],['left-high',18],['right-high',18],['center-low',12],['center-high',5]
+    ];
+    if(kp.center>72){weights[4][1]+=8;weights[5][1]+=3}
+    if(kp.center<25){weights[0][1]+=3;weights[1][1]+=3;weights[2][1]+=2;weights[3][1]+=2}
+    if(pHash(keeperName)%2===0){weights[0][1]+=3;weights[2][1]+=3}else{weights[1][1]+=3;weights[3][1]+=3}
+    if(last&&last.shotH){
+      weights.forEach(function(row){var z=zoneById(row[0]);if(z.h===last.shotH)row[1]+=kp.read>72?8:4});
+    }
+    return weightedZone(weights);
+  }
+  function keeperExecution(chosen,keeperName,manual){
+    var kp=keeperProfile(keeperName),miss=manual ? .05 : .12;
+    miss*=1+(70-kp.reflex)/220;
+    if(Math.random()<miss)return nearbyShot(chosen);
+    return chosen;
+  }
+  function executePenalty(aim,save,shooterName,keeperName){
+    var risk=shotRisk(aim,shooterName),roll=Math.random(),shot=aim,off=false,drift=false;
+    if(roll<risk.off){shot=offTargetZone(aim);off=true}
+    else if(roll<risk.off+risk.drift){shot=nearbyShot(aim);drift=true}
+    if(off)return {goal:false,shot:shot,off:true,drift:drift,detail:'fuera'};
+    var kp=keeperProfile(keeperName),sp=shooterProfile(shooterName),saveChance=.015;
+    var col={left:0,center:1,right:2},row={high:0,low:1};
+    var colDiff=Math.abs(col[shot.h]-col[save.h]),rowDiff=Math.abs(row[shot.v]-row[save.v]);
+    if(shot.id===save.id)saveChance=.86;
+    else if(colDiff===0&&rowDiff===1)saveChance=shot.v==='low' ? .46 : .26;
+    else if(rowDiff===0&&colDiff===1)saveChance=(shot.h==='center'||save.h==='center') ? .08 : .04;
+    else if(colDiff===1&&rowDiff===1)saveChance=.035;
+    else saveChance=.01;
+    if(shot.h==='center'&&save.h==='center')saveChance+=.10;
+    if(shot.h==='center'&&save.h!=='center')saveChance+=.05;
+    if(shot.v==='high')saveChance-=.06;
+    saveChance+=(kp.reflex-70)/260+(kp.read-70)/340-(sp.power-70)/420;
+    saveChance=Math.max(.05,Math.min(.92,saveChance));
+    var saved=Math.random()<saveChance,visualSave=saved?shot:save;
+    return {goal:!saved,shot:shot,save:visualSave,off:false,drift:drift,saved:saved,detail:saved?'parada':'gol'};
+  }
+  function animatePenalty(shot,save,result,done){
+    var ball=byId('penaltyBall'),keeper=byId('penaltyKeeper'),resultLabel=byId('penaltyResult'),goal=result&&result.goal;
     penalty.animating=true;
+    if(resultLabel){resultLabel.className='penalty-result';resultLabel.textContent=''}
     if(keeper){keeper.style.left=save.x+'%';keeper.style.top=save.y+'%';keeper.style.transform='translate(-50%,-50%) rotate('+(save.h==='left'?-28:save.h==='right'?28:0)+'deg)'}
     setTimeout(function(){if(ball){ball.style.left=shot.x+'%';ball.style.top=shot.y+'%';ball.style.transform=goal?'scale(.82)':'scale(1.15)'}},120);
+    setTimeout(function(){
+      if(resultLabel){
+        var text=goal?'GOL':result.off?'FUERA':'PARADA!';
+        var kind=goal?'goal':result.off?'miss':'save';
+        resultLabel.textContent=text;
+        resultLabel.className='penalty-result show '+kind;
+      }
+    },360);
     setTimeout(function(){penalty.animating=false;done&&done()},760);
   }
   function nextPenaltyNames(){
@@ -6295,23 +6504,32 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   }
   function resolvePenaltyChoice(choiceId){
     if(!penalty||penalty.animating||penalty.done)return;
-    var yagoTurn=penalty.turn%2===0,shot,save,actor;
+    var yagoTurn=penalty.turn%2===0,aim,saveIntent,save,actor,keeperName,teamLabel,manualChoice=penaltyMode==='manual'&&choiceId;
     nextPenaltyNames();
-    if(penaltyMode==='manual'&&choiceId){
-      if(yagoTurn){shot=zoneById(choiceId);save=randomZone();actor=penalty.nextAtletic;penalty.aIndex++}
-      else{shot=randomZone();save=zoneById(choiceId);actor=penalty.nextRival;penalty.rIndex++}
+    if(yagoTurn){
+      actor=penalty.nextAtletic;
+      keeperName=penalty.names.rival[0]||'Portero rival';
+      teamLabel='Atletic';
+      aim=manualChoice?zoneById(choiceId):shooterAimZone();
+      saveIntent=keeperGuessZone(keeperName,teamLabel);
+      save=keeperExecution(saveIntent,keeperName,false);
+      penalty.aIndex++;
     }else{
-      shot=randomZone();save=randomZone();actor=yagoTurn?penalty.nextAtletic:penalty.nextRival;
-      if(yagoTurn)penalty.aIndex++;else penalty.rIndex++;
+      actor=penalty.nextRival;
+      keeperName=penalty.names.atletic[0]||'Yago';
+      teamLabel=firstName(penalty.names.rivalName);
+      aim=shooterAimZone();
+      saveIntent=manualChoice?zoneById(choiceId):keeperGuessZone(keeperName,teamLabel);
+      save=keeperExecution(saveIntent,keeperName,!!manualChoice);
+      penalty.rIndex++;
     }
-    var goal=penaltyOutcome(shot,save);
+    var result=executePenalty(aim,save,actor,keeperName),shot=result.shot,goal=result.goal,visualSave=result.save||save;
     if(goal){if(yagoTurn)penalty.score.yago++;else penalty.score.rival++}
-    var keeperName=yagoTurn?(penalty.names.rival[0]||'Portero rival'):(penalty.names.atletic[0]||'Yago');
-    var teamLabel=yagoTurn?'Atletic':firstName(penalty.names.rivalName);
-    penalty.summary.push({team:teamLabel,player:actor,goal:goal});
-    penalty.log.push(actor+' tira '+shot.label.toLowerCase()+'. '+keeperName+' va '+save.label.toLowerCase()+'. '+(goal?'Gol.':'Parada.'));
+    penalty.summary.push({team:teamLabel,player:actor,goal:goal,shotH:shot.h,shotV:shot.v,outcome:result.detail});
+    var shotText=result.off?'se le va fuera':result.drift?'no la coloca exacta y acaba '+shot.label.toLowerCase():'tira '+shot.label.toLowerCase();
+    penalty.log.push(actor+' '+shotText+'. '+keeperName+' va '+visualSave.label.toLowerCase()+'. '+(goal?'Gol.':result.off?'Fuera.':'Parada.'));
     penalty.turn++;
-    animatePenalty(shot,save,goal,function(){
+    animatePenalty(shot,visualSave,result,function(){
       var winner=shouldEndShootout();
       nextPenaltyNames();
       renderPenalty();
@@ -6454,7 +6672,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     var modal=document.createElement('div');
     modal.id='penaltyModal';
     modal.className='penalty-modal';
-    modal.innerHTML='<div class="penalty-sheet"><div class="penalty-top"><div class="penalty-title">Penaltis Champions</div><div class="championship-tools"><button id="penaltyModeBtn" type="button">Penaltis: Manual</button><button id="penaltyCloseBtn" type="button">Cerrar</button></div></div><div class="penalty-meta"><strong id="penaltyScore">Penaltis 0 - 0</strong><span id="penaltyInfo">Tanda preparada</span></div><div class="penalty-stage"><div class="penalty-goal"></div><div class="penalty-zone-grid" id="penaltyZoneGrid"></div><div class="penalty-keeper" id="penaltyKeeper"></div><div class="penalty-ball" id="penaltyBall"></div><div class="penalty-shooter" id="penaltyShooter">Yago</div><div class="penalty-lineup" id="penaltyLineup"></div></div><div class="penalty-log" id="penaltyLog"></div></div>';
+    modal.innerHTML='<div class="penalty-sheet"><div class="penalty-top"><div class="penalty-title">Penaltis Champions</div><div class="championship-tools"><button id="penaltyModeBtn" type="button">Penaltis: Manual</button><button id="penaltyCloseBtn" type="button">Cerrar</button></div></div><div class="penalty-meta"><strong id="penaltyScore">Penaltis 0 - 0</strong><span id="penaltyInfo">Tanda preparada</span></div><div class="penalty-stage"><div class="penalty-goal"></div><div class="penalty-zone-grid" id="penaltyZoneGrid"></div><div class="penalty-keeper" id="penaltyKeeper"><div class="player-doll penalty-doll"><span class="hair"></span><span class="head"></span><span class="body"></span><span class="arm l"></span><span class="arm r"></span><span class="leg l"></span><span class="leg r"></span><span class="boot l"></span><span class="boot r"></span></div></div><div class="penalty-ball" id="penaltyBall"></div><div class="penalty-result" id="penaltyResult"></div><div class="penalty-shooter" id="penaltyShooter">Yago</div><div class="penalty-lineup" id="penaltyLineup"></div></div><div class="penalty-log" id="penaltyLog"></div></div>';
     document.body.appendChild(modal);
     var grid=byId('penaltyZoneGrid');
     penaltyZones.forEach(function(zone){
