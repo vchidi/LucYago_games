@@ -476,8 +476,19 @@ let datasetName='yago_common_english_words';
 let playersData=JSON.parse(JSON.stringify(DEFAULT_PLAYER_POOL));
 let playersDatasetName='atletic_players_random.json';
 let atleticPlayerNames=['Yago','Nico','Pau','Pol','Joel','Sasha','Felix','Alex','Arnau','Khaled'];
-let rivalPlayerNames=['Lucas','Thiago','Bruno','Hugo','Leo','Max','Gonzalo','Iker','Martín','Enzo','Álvaro','Nil','Biel','Guillem','Omar','Rayan','Noah','Liam','Gael','Ian','Joel','Eric','Marc','Pol','Unai','Axel','Teo','Raúl','Adrián','Sergi'];
-let rivalTeamNames=['Tigres Rojos','Dragones FC','Lobos United','Rayos Azules','Panteras Negras','Halcones City','Leones del Norte','Tormenta FC','Cóndores Club','Titanes Junior','Piratas FC','Águilas Rápidas'];
+const NORMAL_LIGA_ROSTERS={
+  'Real Madrid':['Courtois','Lunin','Militao','Rudiger','Huijsen','Trent','Carreras','Fran Garcia','Bellingham','Camavinga','Valverde','Tchouameni','Arda Guler','Vinicius','Mbappe','Rodrygo','Brahim','Endrick'],
+  'FC Barcelona':['Ter Stegen','Joan Garcia','Szczesny','Balde','Araujo','Cubarsi','Kounde','Eric Garcia','Pedri','Gavi','Fermin','Marc Casado','Frenkie de Jong','Marc Bernal','Lamine Yamal','Raphinha','Ferran','Olmo'],
+  'Atletico Madrid':['Oblak','Musso','Gimenez','Ruggeri','Lenglet','Molina','Hancko','Le Normand','Koke','Barrios','Alex Baena','Marcos Llorente','Giuliano','Nico','Griezmann','Sorloth','Almada','Julian Alvarez'],
+  'Athletic Club':['Unai Simon','Agirrezabala','Areso','Vivian','Paredes','Yuri','Lekue','Prados','Sancet','Galarreta','Jauregizar','Nico Williams','Inaki Williams','Guruzeta','Berenguer','Robert Navarro','Urko Izeta','Selton'],
+  'Real Betis':['Alvaro Valles','Angel Ortiz','Diego Llorente','Fran Garcia','Bellerin','Junior Firpo','Marc Bartra','Natan','Valentin Gomez','Fidalgo','Facundo Bernal','Lo Celso','Isco','Marc Roca','Pablo Fornals','Antony','Cucho','Ez Abde'],
+  'Villarreal':['Diego Conde','Junior Reis','Logan Costa','Rafa Marin','Kambwala','Pau Navarro','Foyth','Parejo','Santi Comesana','Renato Veiga','Thomas Partey','Gueye','Buchanan','Alfon','Moleiro','Gerard Moreno','Mikautadze','Pepe'],
+  'Valencia':['Vicent Abri','Mayol','Iker Cordoba','Tarrega','Gaya','Pepelu','Ugrinic','Otorbi','Luis Rioja','Javi Guerra','Hugo Duro','Rubo','De Haas','Wanjala','Jesus Vazquez','Dieng','Guido','Almeida'],
+  'Sevilla':['Nyland','Juanlu','Nianzou','Bade','Pedrosa','Gudelj','Sow','Agoume','Suso','Lukebakio','Isaac Romero','Ejuke','Idumbo','Peque','Kike Salas','Carmona','Marcao','Rafa Mir']
+};
+const NORMAL_LIGA_TEAMS=Object.keys(NORMAL_LIGA_ROSTERS);
+let rivalPlayerNames=Object.values(NORMAL_LIGA_ROSTERS).flat();
+let rivalTeamNames=NORMAL_LIGA_TEAMS.slice();
 let currentRivalTeamName='Rival';
 let mode='classic';
 let autoAudio=true;
@@ -634,8 +645,9 @@ function pickNamesForTeam(teamId,totalNeeded){
     const others=shuffleCopy(atleticPlayerNames.filter(n=>normalizeText(n)!=='yago'));
     return ['Yago',...others.slice(0,Math.max(0,totalNeeded-1))];
   }
-  currentRivalTeamName=randomFrom(rivalTeamNames)||'Rival';
-  return shuffleCopy(rivalPlayerNames).slice(0,totalNeeded);
+  currentRivalTeamName=randomFrom(rivalTeamNames)||'Real Madrid';
+  const roster=NORMAL_LIGA_ROSTERS[currentRivalTeamName]||rivalPlayerNames;
+  return shuffleCopy(roster).slice(0,totalNeeded);
 }
 function buildTeamFromPool(pool,teamId,usedIds=new Set()){
   const slots={...getFormationSlots()};
@@ -662,7 +674,7 @@ function validatePlayersPool(pool){
   return pool.map((entry,index)=>normalizePlayerEntry(entry,index));
 }
 function makeState(item){const answer=item.english;const sourcePattern=normalizePattern(answer,item.pattern);const pattern=mode==='blind'?answer.replace(/[a-z]/g,'_'):sourcePattern;return {english:answer,spanish:item.spanish,sourcePattern,pattern,guess:[...pattern].map(ch=>ch==='_'?'':ch),solved:false,revealed:false,checked:false};}
-function loadSaved(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed)&&parsed.length) rawData=parsed.map(cleanEntry).filter(Boolean);}datasetName=localStorage.getItem(STORAGE_NAME)||datasetName;const playersRaw=localStorage.getItem(PLAYERS_STORAGE_KEY);if(playersRaw){const parsedPlayers=JSON.parse(playersRaw);if(Array.isArray(parsedPlayers)&&parsedPlayers.length) playersData=validatePlayersPool(parsedPlayers);}playersDatasetName=localStorage.getItem(PLAYERS_STORAGE_NAME)||playersDatasetName;const savedAtletic=localStorage.getItem(ATLETIC_NAMES_STORAGE_KEY);if(savedAtletic) atleticPlayerNames=JSON.parse(savedAtletic); atleticPlayerNames=['Yago','Nico','Pau','Pol','Joel','Sasha','Felix','Alex','Arnau','Khaled'];const savedRivals=localStorage.getItem(RIVAL_NAMES_STORAGE_KEY);if(savedRivals) rivalPlayerNames=JSON.parse(savedRivals);const savedRivalTeams=localStorage.getItem(RIVAL_TEAM_NAMES_STORAGE_KEY);if(savedRivalTeams) rivalTeamNames=JSON.parse(savedRivalTeams);formationKey=localStorage.getItem(FORMATION_STORAGE_KEY)||formationKey;preferredYagoLine=localStorage.getItem(YAGO_POSITION_STORAGE_KEY)||preferredYagoLine;}catch{}}
+function loadSaved(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed)&&parsed.length) rawData=parsed.map(cleanEntry).filter(Boolean);}datasetName=localStorage.getItem(STORAGE_NAME)||datasetName;const playersRaw=localStorage.getItem(PLAYERS_STORAGE_KEY);if(playersRaw){const parsedPlayers=JSON.parse(playersRaw);if(Array.isArray(parsedPlayers)&&parsedPlayers.length) playersData=validatePlayersPool(parsedPlayers);}playersDatasetName=localStorage.getItem(PLAYERS_STORAGE_NAME)||playersDatasetName;const savedAtletic=localStorage.getItem(ATLETIC_NAMES_STORAGE_KEY);if(savedAtletic) atleticPlayerNames=JSON.parse(savedAtletic); atleticPlayerNames=['Yago','Nico','Pau','Pol','Joel','Sasha','Felix','Alex','Arnau','Khaled'];rivalPlayerNames=Object.values(NORMAL_LIGA_ROSTERS).flat();rivalTeamNames=NORMAL_LIGA_TEAMS.slice();formationKey=localStorage.getItem(FORMATION_STORAGE_KEY)||formationKey;preferredYagoLine=localStorage.getItem(YAGO_POSITION_STORAGE_KEY)||preferredYagoLine;}catch{}}
 function saveData(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(rawData));localStorage.setItem(STORAGE_NAME,datasetName);localStorage.setItem(PLAYERS_STORAGE_KEY,JSON.stringify(playersData));localStorage.setItem(PLAYERS_STORAGE_NAME,playersDatasetName);localStorage.setItem(ATLETIC_NAMES_STORAGE_KEY,JSON.stringify(atleticPlayerNames));localStorage.setItem(RIVAL_NAMES_STORAGE_KEY,JSON.stringify(rivalPlayerNames));localStorage.setItem(RIVAL_TEAM_NAMES_STORAGE_KEY,JSON.stringify(rivalTeamNames));localStorage.setItem(FORMATION_STORAGE_KEY,formationKey);localStorage.setItem(YAGO_POSITION_STORAGE_KEY,preferredYagoLine);}catch{}}
 function buildDataset(){const cleaned=rawData.map(cleanEntry).filter(Boolean);window.datasetStates=cleaned.map(makeState);if(index>=window.datasetStates.length) index=0;}
 function current(){return window.datasetStates[index]}
@@ -5611,6 +5623,14 @@ body.competition-mode.keyboard-open #championshipLimitBtn,
 body.competition-mode.keyboard-open #championshipViewBtn{
   display:inline-flex!important;
 }
+body.competition-mode #championshipTypeBtn,
+body.competition-mode #championshipViewBtn,
+body.competition-mode.keyboard-open #championshipTypeBtn,
+body.competition-mode.keyboard-open #championshipViewBtn{
+  background:#dff3ff!important;
+  color:#173f5a!important;
+  border-color:#acd8f1!important;
+}
 .championship-modal{
   position:fixed;
   inset:0;
@@ -6174,8 +6194,9 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   function ensureButtons(){
     var controls=document.querySelector('.hero .controls')||document.querySelector('.controls');if(!controls)return;
     if(!byId('championshipTypeBtn')){var t=document.createElement('button');t.id='championshipTypeBtn';t.type='button';t.textContent='Liga';t.title='Liga o Champions';t.addEventListener('click',function(e){e.preventDefault();cycleType()});controls.appendChild(t)}
-    if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent='5 goles';l.title='Goles para ganar el partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
     if(!byId('championshipViewBtn')){var v=document.createElement('button');v.id='championshipViewBtn';v.type='button';v.textContent='Campeonato';v.title='Ver campeonato';v.addEventListener('click',function(e){e.preventDefault();showChamp()});controls.appendChild(v)}
+    if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent='5 goles';l.title='Goles para ganar el partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
+    ['championshipTypeBtn','championshipViewBtn','championshipLimitBtn'].forEach(function(id){var btn=byId(id);if(btn&&btn.parentElement===controls)controls.appendChild(btn)});
   }
   function ensureModal(){
     if(byId('championshipModal'))return;
