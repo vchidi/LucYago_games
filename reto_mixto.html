@@ -85,6 +85,7 @@ function gameState(g,s){const counts=s.counts||countsFor(selected); const r=(s.r
 function launch(id){let s=get(); if(!s.active){newSession();s=get();} const g=GAMES.find(x=>x.id===id); if(!g)return; const st=gameState(g,s); if(st.complete){renderAll();return;} let retoExtra='&retoBar=0';
   if(id==='pecera' && s.length==='normal') retoExtra+='&modo=mixto&sinFactores=1,2,10';
   if(id==='verbs') retoExtra+='&retoAgrupar=5&retoUnidad=verboCompleto';
+  if(id==='pirata') retoExtra+='&retoUnitatsSeq=testChoice,testChoice,abbrToName,writeScale,convert';
   if(id==='football') retoExtra+='&retoAgrupar=5&retoUnidad=palabraCompleta&retoRepeticiones=2&retoFrase=siActiva';
   const url=g.path+`?reto=1&game=${encodeURIComponent(g.id)}&preguntas=${st.n}&session=${encodeURIComponent(SESSION)}&return=${encodeURIComponent('../reto_mixto.html')}`+(g.extra||'')+retoExtra; location.href=url;}
 function renderLengths(){const box=document.getElementById('lengths');box.innerHTML='';LENGTHS.forEach(l=>{let b=document.createElement('button');b.className='lengthBtn '+(selected===l.id?'active':'');b.innerHTML=`<strong>${l.label}</strong><span>${l.total} preguntas</span><span>${l.minutes}</span>`;b.onclick=()=>{selected=l.id;renderLengths();document.getElementById('modePill').textContent=l.label+' · '+l.total};box.appendChild(b);});const l=LENGTHS.find(x=>x.id===selected);document.getElementById('modePill').textContent=l.label+' · '+l.total;}

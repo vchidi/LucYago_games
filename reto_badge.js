@@ -3,7 +3,8 @@
   var cfg={
     selector:script.dataset?script.dataset.titleSelector:"",
     title:script.dataset?script.dataset.titleName:"",
-    orientation:script.dataset?script.dataset.orientation:"vertical"
+    orientation:script.dataset?script.dataset.orientation:"vertical",
+    showCount:!(script.dataset&&script.dataset.showCount==="0")
   };
   if(!cfg.selector) return;
 
@@ -34,13 +35,13 @@
   function getSession(){
     var p=params();
     var key=p.get("session")||"default";
-    try{return JSON.parse(localStorage.getItem("lucyago_reto_"+key)||"{}");}
+    try{return JSON.parse(localStorage.getItem(key)||localStorage.getItem("lucyago_reto_"+key)||"{}");}
     catch(e){return {};}
   }
   function progress(){
     var p=params();
     var game=p.get("game")||"game";
-    var target=parseInt(p.get("target")||"3",10)||3;
+    var target=parseInt(p.get("preguntas")||p.get("target")||"3",10)||3;
     var s=getSession();
     var r=s.results&&s.results[game]?s.results[game]:{};
     return {ok:Math.min(target,r.ok||0),bad:r.bad||0,target:target};
@@ -92,7 +93,7 @@
     orient.appendChild(tablet);
     wrap.appendChild(orient);
 
-    if(active()){
+    if(active()&&cfg.showCount){
       var count=document.createElement("span");
       count.className="ly-reto-count";
       count.dataset.lyRetoCounter="1";

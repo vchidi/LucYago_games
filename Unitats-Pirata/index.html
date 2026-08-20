@@ -963,6 +963,11 @@ body.no-adventure .mode-badge{background:#eef3ff;color:#285bd5}
   background:#fff3df!important;
   box-shadow:inset 0 0 0 2px rgba(255,139,46,.45)!important;
 }
+.test-conversion-table.test-grid-with-gaps{
+  grid-template-columns:minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr) 12px minmax(0,1fr)!important;
+  gap:2px!important;
+}
+.test-conversion-table .convert-comma-gap{min-height:34px}
 </style>
 
 </head>
@@ -1195,6 +1200,7 @@ let save=loadSave();
 const LUCYAGO_RETO_PARAMS=new URLSearchParams(location.search);
 const LUCYAGO_RETO_ACTIVE=LUCYAGO_RETO_PARAMS.get('reto')==='1';
 const LUCYAGO_RETO_TARGET=Math.max(1,parseInt(LUCYAGO_RETO_PARAMS.get('preguntas')||'5',10));
+const LUCYAGO_RETO_SEQUENCE=(LUCYAGO_RETO_PARAMS.get('retoUnitatsSeq')||'testChoice,testChoice,abbrToName,writeScale,convert').split(",").map(v=>v.trim()).filter(Boolean);
 if(LUCYAGO_RETO_ACTIVE){
   save.route=LUCYAGO_RETO_TARGET;
   save.gameOn=true;
@@ -1331,6 +1337,13 @@ function finishRetoByRoute(){
   if(window.LucYagoReto&&typeof window.LucYagoReto.finish==="function")window.LucYagoReto.finish();
   return true;
 }
+function recordRetoQuestion(ok){
+  const q=game.current;
+  if(!window.LucYagoReto||q&&q._retoCounted)return null;
+  window.LucYagoReto.record(ok);
+  if(q)q._retoCounted=true;
+  return window.LucYagoReto.progress();
+}
 function difficulty(){
   const ratio=game.playerPos/Math.max(1,game.route);
   if(ratio>.68)return "avancat";
@@ -1393,7 +1406,12 @@ function makeTestQuestion(){
 
 function makeQuestion(){
   const kinds=cleanSelectedTests(game.selectedTests);
-  const kind=kinds[randint(0,kinds.length-1)];
+  let kind=kinds[randint(0,kinds.length-1)];
+  if(LUCYAGO_RETO_ACTIVE&&LUCYAGO_RETO_SEQUENCE.length){
+    const idx=game.retoQuestionIndex||0;
+    kind=LUCYAGO_RETO_SEQUENCE[idx%LUCYAGO_RETO_SEQUENCE.length];
+    game.retoQuestionIndex=idx+1;
+  }
   if(kind==="testChoice")return makeTestQuestion();
   if(kind==="magnitudeDef"){
     return {kind:"magnitudeDef",title:"Magnitud i definici\u00f3",level:"Conceptes",question:"Uneix cada magnitud amb la seva definici\u00f3",answer:"match",names:shuffle(MAGNITUDES.map(item=>item.definition))};
@@ -1493,6 +1511,7 @@ function nextQuestion(){
   game.testSolved=false;
   game.showSolution=false;
   game.testDraft=[];
+  game.testCommaAfter=[];
   game.testActive=null;
   game.testReadyForNext=false;
   game.ordered=[];
@@ -1556,9 +1575,8 @@ function hasAnswer(){
 function handleCorrect(){
   const q=game.current;
   if(window.LucYagoReto && !(q&&q._retoCounted)){
-    window.LucYagoReto.record(true);
-    const rp=window.LucYagoReto.progress();
-    if(rp.ok>=window.LucYagoReto.target){return;}
+    const rp=recordRetoQuestion(true);
+    if(rp&&rp.ok>=window.LucYagoReto.target){return;}
   }
   game.streak+=1;
   if(!isGameOn()){
@@ -1584,7 +1602,7 @@ function handleCorrect(){
 }
 function handleWrong(){
   const q=game.current;
-  if(window.LucYagoReto){window.LucYagoReto.record(false);}
+  if(window.LucYagoReto){recordRetoQuestion(false);}
   game.streak=0;
   if(!isGameOn()){
     setMessage("Resposta incorrecta. Era: "+correctAnswerText(q)+".","bad");
@@ -1679,10 +1697,7 @@ function applyHelpPenalty(){
   if(!game.running)return;
   game.streak=0;
   game.showHelpTable=true;
-  if(window.LucYagoReto){
-    window.LucYagoReto.record(false);
-    window.LucYagoReto.record(false);
-  }
+  if(window.LucYagoReto){recordRetoQuestion(false);}
   if(game.final)game.playerLives=Math.max(0,game.playerLives-2);
   else if(isGameOn()){
     game.piratePos=Math.min(game.route,game.piratePos+2);
@@ -1875,21 +1890,30 @@ function renderConversionHelperTable(infos,showFilled){
     title.textContent=system==="mass"?"Taula de massa":system==="capacity"?"Taula de capacitat":"Taula de longitud";
     frag.appendChild(title);
     const table=document.createElement("div");
-    table.className="test-conversion-table";
+    table.className="test-conversion-table test-grid-with-gaps";
     for(let i=0;i<2;i+=1){
       const head=document.createElement("div");
       head.className="test-conv-cell test-conv-head empty-head";
       table.appendChild(head);
+      const gap=document.createElement("div");
+      gap.className="convert-comma-gap";
+      table.appendChild(gap);
     }
-    group[0].info.units.forEach(u=>{
+    group[0].info.units.forEach((u,index)=>{
       const head=document.createElement("div");
       head.className="test-conv-cell test-conv-head";
       head.textContent=u.abbr;
       table.appendChild(head);
+      if(index<group[0].info.units.length-1){
+        const gap=document.createElement("div");
+        gap.className="convert-comma-gap";
+        table.appendChild(gap);
+      }
     });
     group.forEach(({info,idx})=>{
       const solutionCells=tableDigitsForConversion(info);
       const draft=(game.testDraft&&game.testDraft[idx])||["","","","","","","","",""];
+      if(!Array.isArray(game.testCommaAfter))game.testCommaAfter=[];
       const cells=showFilled?solutionCells:draft.map(v=>({text:v,comma:false}));
       cells.forEach((c,cellIndex)=>{
         const cell=document.createElement("button");
@@ -1897,6 +1921,16 @@ function renderConversionHelperTable(infos,showFilled){
         cell.innerHTML=(c.text||"")+(c.comma?"<span class='big-comma'>,</span>":"");
         cell.addEventListener("click",()=>{ if(!showFilled){ game.testActive={row:idx,cell:cellIndex}; renderInputArea(); }});
         table.appendChild(cell);
+        if(cellIndex<8){
+          const commaGap=makeButton(showFilled&&c.comma?",":(!showFilled&&game.testCommaAfter[idx]===cellIndex?",":""),"convert-comma-gap"+(!showFilled&&game.testCommaAfter[idx]===cellIndex?" active":""),()=>{
+            if(showFilled)return;
+            game.testCommaAfter[idx]=game.testCommaAfter[idx]===cellIndex?-1:cellIndex;
+            game.testActive={row:idx,cell:cellIndex};
+            renderInputArea();
+          });
+          commaGap.setAttribute("aria-label","Posar la coma decimal entre aquestes dues xifres");
+          table.appendChild(commaGap);
+        }
       });
     });
     frag.appendChild(table);
@@ -1906,7 +1940,7 @@ function renderConversionHelperTable(infos,showFilled){
 function renderTestNumberPad(){
   const pad=document.createElement("div");
   pad.className="number-pad";
-  ["1","2","3","4","5","6","7","8","9","0",",","."].forEach(ch=>pad.appendChild(makeButton(ch,"pad-btn",()=>inputTestTableNumber(ch))));
+  ["1","2","3","4","5","6","7","8","9","0",","].forEach(ch=>pad.appendChild(makeButton(ch,"pad-btn",()=>inputTestTableNumber(ch))));
   pad.appendChild(makeButton("Borrar","pad-btn delete wide",deleteTestTableNumber));
   return pad;
 }
@@ -1918,6 +1952,12 @@ function inputTestTableNumber(ch){
   if(!game.testActive)game.testActive={row:0,cell:0};
   const r=Math.max(0,Math.min(game.testDraft.length-1,game.testActive.row));
   const c=Math.max(0,Math.min(8,game.testActive.cell));
+  if(ch===","){
+    if(!Array.isArray(game.testCommaAfter))game.testCommaAfter=[];
+    game.testCommaAfter[r]=game.testCommaAfter[r]===c?-1:c;
+    renderInputArea();
+    return;
+  }
   game.testDraft[r][c]=(game.testDraft[r][c]||"")+ch;
   renderInputArea();
 }
@@ -2061,10 +2101,8 @@ function checkChoiceAnswer(choice){
   game.testChosen=choice;
   if(choice===game.current.answer){
     if(window.LucYagoReto){
-      window.LucYagoReto.record(true);
-      const rp=window.LucYagoReto.progress();
-      if(game.current) game.current._retoCounted=true;
-      if(rp.ok>=window.LucYagoReto.target){return;}
+      const rp=recordRetoQuestion(true);
+      if(rp&&rp.ok>=window.LucYagoReto.target){return;}
     }
     game.testSolved=true;
     game.showSolution=true;
@@ -2073,7 +2111,7 @@ function checkChoiceAnswer(choice){
     renderInputArea();
     renderAnswer();
   }else{
-    if(window.LucYagoReto){window.LucYagoReto.record(false);}
+    if(window.LucYagoReto){recordRetoQuestion(false);}
     game.testWrong=choice;
     game.streak=0;
     if(game.final){game.playerLives=Math.max(0,game.playerLives-1);}
@@ -2396,9 +2434,8 @@ function tryResolveMatch(){
     const target=q.kind==="matchAbbr"?UNITS.length:MAGNITUDES.length;
     if(Object.keys(game.matchPairs).length===target){
       if(window.LucYagoReto){
-        window.LucYagoReto.record(true);
-        const rp=window.LucYagoReto.progress();
-        if(rp.ok>=window.LucYagoReto.target){return;}
+        const rp=recordRetoQuestion(true);
+        if(rp&&rp.ok>=window.LucYagoReto.target){return;}
       }
       setMessage("Totes les parelles fetes. Seg\u00fcent repte!","good");
       setTimeout(nextQuestion,650);
@@ -2441,7 +2478,7 @@ function rewardPairCorrect(){
   renderMap();
 }
 function punishPairWrong(){
-  if(window.LucYagoReto){window.LucYagoReto.record(false);}
+  if(window.LucYagoReto){recordRetoQuestion(false);}
   if(game.final){
     game.playerLives=Math.max(0,game.playerLives-1);
     setMessage("Parella incorrecta. Perds una vida.","bad");
@@ -2959,9 +2996,10 @@ setTimeout(lucyagoApplyDefaultStart,80);
   setTimeout(ensureKeyboard,0);
 })();
 </script>
-<script src="../reto_badge.js" data-title-selector=".brand h1" data-title-name="Unitats" data-orientation="horizontal"></script>
+<script src="../reto_badge.js" data-title-selector=".brand h1" data-title-name="Unitats" data-orientation="horizontal" data-show-count="0"></script>
 </body>
 </html>
+
 
 
 

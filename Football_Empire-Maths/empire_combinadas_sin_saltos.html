@@ -3083,7 +3083,7 @@ state.topDigits = Number(localStorage.getItem('photoPanicTopDigits') || state.to
 $('#lengthBtn').textContent='Cifras: '+state.topDigits;
 if(state.goal!=='infinite') state.goal=Number(state.goal);
 $('#goalBtn').textContent = 'Meta: ' + (state.goal==='infinite' ? 'infinito' : state.goal);
-setMode(localStorage.getItem('photoPanicMode') || state.mode);
+setMode(new URLSearchParams(location.search).get('reto')==='1' ? 'full' : (localStorage.getItem('photoPanicMode') || state.mode));
 updateUI();
 updateControlAvailability();
 </script>
@@ -4870,6 +4870,7 @@ updateControlAvailability();
 </script>
 
 
+<script src="../reto_badge.js" data-title-selector=".topbar .brand .cam" data-title-name="Operaciones" data-orientation="horizontal"></script>
 </body>
 </html>
 

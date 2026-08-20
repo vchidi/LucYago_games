@@ -863,8 +863,22 @@ function unlockSpeech(){
   try{window.speechSynthesis.resume();}catch(e){}
   setTimeout(flushSpeechQueue,0);
 }
+let footballGoalSpeechAuthorizedUntil=0;
+function authorizeFootballGoalSpeech(ms=1600){
+  footballGoalSpeechAuthorizedUntil=Date.now()+ms;
+}
+function isFootballGoalSpeechAuthorized(){
+  return Date.now()<=footballGoalSpeechAuthorizedUntil;
+}
+function footballTextLooksLikeGoal(text){
+  return /\bGol de\b|(?:^|[¡!.\s])go+o*l\b|\bgol\b|\bgolazo\b/i.test(String(text||''));
+}
+function shouldBlockFootballGoalSpeech(text){
+  return footballTextLooksLikeGoal(text)&&!isFootballGoalSpeechAuthorized();
+}
 function speakCommentary(text,urgent=false){
   if(!commentaryEnabled||!text) return;
+  if(shouldBlockFootballGoalSpeech(text)) return;
   const cleaned=String(text).replace(/\bRival\b/gi,(currentRivalTeamName||'Rival').trim().split(/\s+/)[0]||'Rival');
   const now=Date.now();
   const key=cleaned.toLowerCase().replace(/\s+/g,' ').trim();
@@ -1160,6 +1174,7 @@ const footballEngine=(()=>{
       if(token!==state.commentaryToken) return;
       if(!state.lastEvent||state.lastEvent.kind!=='goal') return;
       if(state.score.yago!==scoreSnapshot.yago||state.score.rival!==scoreSnapshot.rival) return;
+      authorizeFootballGoalSpeech();
       speakCommentary(voice,true);
     },180);
   }
@@ -1288,7 +1303,7 @@ const footballEngine=(()=>{
           `${goalkeeper.name} bloquea el tiro. Todavia faltan jugadas previas.`,
           `Disparo frenado por ${goalkeeper.name}. Aun hacen falta mas jugadas.`,
           `${goalkeeper.name} se queda con la pelota: todavia era pronto para marcar.`,
-          `Intento peligroso, pero ${goalkeeper.name} tapa bien. La jugada no sube al marcador.`,
+          `Intento peligroso, pero ${goalkeeper.name} tapa bien. La jugada queda bloqueada.`,
           `Tiro bloqueado. ${goalkeeper.name} evita el peligro hasta que haya mas jugadas.`
         ])});
     }
@@ -1566,8 +1581,8 @@ function setButtons(){
 }
 function speakCurrent(force=false){if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
-function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
-function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled&&mode!=='blind') footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled&&mode!=='blind') footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;const typed=letter.toLowerCase();s.guess[i]=typed;if(gameEnabled&&mode==='blind'){if(typed===s.english[i]) footballEngine.onSpellingSuccess();else footballEngine.onSpellingFail();}render();if(isComplete(s)) evaluateWord(false);}
 function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Última letra borrada.');}
 function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
 function revealCurrent(){evaluateWord(true)}
@@ -1679,8 +1694,8 @@ function clearAutoNext(){if(autoNextTimer){clearTimeout(autoNextTimer);autoNextT
 function showSolutionThenNext(){const s=current();if(!s) return;clearAutoNext();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});s.revealed=true;render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;index=(index+1)%window.datasetStates.length;render();if(autoAudio) speakCurrent();setMessage('Nueva palabra. Sigue la jugada.');},2000);}
 function speakCurrent(force=false){if(typeof suppressWordAudio==='function'&&suppressWordAudio()) return;const s=current();if(!s) return;if(IS_IOS&&speechUnlocked){forceSpeakWordNow(force);return;}const now=Date.now();if(!force&&lastWordSpoken.word===s.english&&now-lastWordSpoken.time<2200) return;lastWordSpoken={word:s.english,time:now};pendingWordSpeech=s.english;flushSpeechQueue();if(force) setMessage('Escucha y completa la palabra.');}
 function setupVoices(){const assign=()=>{voices=window.speechSynthesis.getVoices();};assign();window.speechSynthesis.onvoiceschanged=assign;}
-function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled) footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
-function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;s.guess[i]=letter.toLowerCase();render();if(isComplete(s)) evaluateWord(false);}
+function evaluateWord(showSolution=false){const s=current();if(!s) return;if(s.checked&&!showSolution) return;if(showSolution){clearAutoNext();s.checked=true;s.solved=false;s.revealed=true;if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled) footballEngine.onSpellingFail();s.english.split('').forEach((ch,i)=>{if(s.pattern[i]==='_') s.guess[i]=ch;});render();setMessage('Has pedido la solución: cuenta como fallo y tu equipo pierde la pelota. Repetimos esta misma palabra.');autoNextTimer=setTimeout(()=>{autoNextTimer=null;s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Repite la misma palabra.');},2000);return;}s.checked=true;const ok=guessedWord(s)===s.english;s.solved=ok;if(ok){if(window.LucYagoReto) window.LucYagoReto.record(true);stats.good++;stats.streak++;if(gameEnabled&&mode!=='blind') footballEngine.onSpellingSuccess();setMessage('Buen pase. Has acertado el spelling.');render();autoNextTimer=setTimeout(()=>{autoNextTimer=null;nextWord();},900);return;}if(window.LucYagoReto) window.LucYagoReto.record(false);stats.bad++;stats.streak=0;if(gameEnabled&&mode!=='blind') footballEngine.onSpellingFail();setMessage('Robo del rival. Revisa la palabra y corrige.');render();}
+function insertLetter(letter){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=nextBlank(s);if(i===-1) return;const typed=letter.toLowerCase();s.guess[i]=typed;if(gameEnabled&&mode==='blind'){if(typed===s.english[i]) footballEngine.onSpellingSuccess();else footballEngine.onSpellingFail();}render();if(isComplete(s)) evaluateWord(false);}
 function deleteLast(){const s=current();if(!s) return;clearAutoNext();if(s.checked&&s.solved) return;if(s.checked&&!s.solved) s.checked=false;const i=lastFilled(s);if(i===-1) return;s.guess[i]='';render();setMessage('Última letra borrada.');}
 function retryCurrent(){const s=current();if(!s) return;clearAutoNext();s.pattern=(mode==='blind'?s.english.replace(/[a-z]/g,'_'):s.sourcePattern);s.guess=[...s.pattern].map(ch=>ch==='_'?'':ch);s.solved=false;s.revealed=false;s.checked=false;render();setMessage('Vuelve a intentarlo.');}
 function revealCurrent(){evaluateWord(true)}
@@ -1827,8 +1842,11 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
     var t=String(text||'').replace(/Atletic/g,'Atletic').replace(/Atletic/g,'Atletic');
     var low=t.toLowerCase();
     var team=low.indexOf('rival')!==-1?'Rival':'Atletic';
-    if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
     if(/parad|parada|mano salvadora|evita el gol/.test(low)) return t.match(/de ([^.!?]+)/i)?'Paradón de '+t.match(/de ([^.!?]+)/i)[1].replace(/\s*(el balón|no entra|evita).*$/i,'')+'.':'Paradón.';
+    if(/(?:^|[¡!.\s])go+o*l\b|\bgol\b|\bgolazo\b/.test(low)){
+      if(typeof isFootballGoalSpeechAuthorized==='function'&&isFootballGoalSpeechAuthorized()) return 'Gol de '+team+'.';
+      return t.split(/[.!?]/)[0].slice(0,70)+'.';
+    }
     if(/chuta|dispara/.test(low)) return t.replace(/\..*$/,'').replace(/Atletic/g,'Atletic')+'.';
     if(/robo|recupera|corte/.test(low)) return 'Recupera '+team+'.';
     if(/saca/.test(low)) return 'Saca '+team+'.';
@@ -1882,6 +1900,7 @@ body.keyboard-open #shuffleVerbsBtn{display:inline-flex!important}
 
   function queueSpeech(text,type,force){
     if(!text||!window.speechSynthesis) return;
+    if(type==='commentary'&&typeof shouldBlockFootballGoalSpeech==='function'&&shouldBlockFootballGoalSpeech(text)) return;
     audioReady=true;
     if(typeof speechUnlocked!=='undefined') speechUnlocked=true;
     if(typeof audioActivated!=='undefined') audioActivated=true;
@@ -2500,8 +2519,11 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
     var t=String(text||'').trim();
     var low=t.toLowerCase();
     var team=low.indexOf('rival')!==-1?'Rival':'Atletic';
-    if(/gol|goool|marca/.test(low)) return 'Gol de '+team+'.';
     if(/parad|parada|mano salvadora|evita el gol/.test(low)) return t.match(/de ([^.!?]+)/i)?'Paradón de '+t.match(/de ([^.!?]+)/i)[1].replace(/\s*(el balón|no entra|evita).*$/i,'')+'.':'Paradón.';
+    if(/(?:^|[¡!.\s])go+o*l\b|\bgol\b|\bgolazo\b/.test(low)){
+      if(typeof isFootballGoalSpeechAuthorized==='function'&&isFootballGoalSpeechAuthorized()) return 'Gol de '+team+'.';
+      return t.split(/[.!?]/)[0].slice(0,78)+'.';
+    }
     if(/chuta|dispara/.test(low)) return t.split(/[.!?]/)[0]+'.';
     if(/robo|recupera|corte/.test(low)) return 'Recupera '+team+'.';
     if(/saca/.test(low)) return 'Saca '+team+'.';
@@ -2539,6 +2561,7 @@ body.keyboard-open #formationSelect,body.keyboard-open #yagoRoleSelect{display:n
   }
   function enqueue(text,type,force){
     if(!text||!window.speechSynthesis) return;
+    if(type==='commentary'&&typeof shouldBlockFootballGoalSpeech==='function'&&shouldBlockFootballGoalSpeech(text)) return;
     ready=true;
     if(typeof speechUnlocked!=='undefined') speechUnlocked=true;
     if(typeof audioActivated!=='undefined') audioActivated=true;
@@ -2696,7 +2719,6 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     var low=t.toLowerCase();
     var team=teamFromText(t);
     var current=visiblePossession();
-    if(/gol|goool|marca/.test(low)) { lastPossession=current; return 'Gol de '+team+'.'; }
     if(/saca/.test(low)) { lastPossession=current; return 'Saca '+current+' desde el centro.'; }
     if(/robo|recupera|corte|se anticipa|presión perfecta|presion perfecta/.test(low)){
       var changed=(current!==lastPossession);
@@ -2706,6 +2728,10 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
     lastPossession=current;
     var first=t.split(/[.!?]/)[0].replace(/\s+/g,' ').trim();
     if(/parad|parada|mano salvadora|evita el gol/.test(low)) return first.slice(0,74)+'.';
+    if(/(?:^|[¡!.\s])go+o*l\b|\bgol\b|\bgolazo\b/.test(low)){
+      if(typeof isFootballGoalSpeechAuthorized==='function'&&isFootballGoalSpeechAuthorized()) return 'Gol de '+team+'.';
+      return first.slice(0,68)+'.';
+    }
     if(/chuta|dispara/.test(low)) return first.slice(0,68)+'.';
     if(/pase|avanza|oportunidad|aguanta|protege|combinación|combinacion/.test(low)) return next(playSyn,first.slice(0,68));
     return first.slice(0,68)+'.';
@@ -2739,6 +2765,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   }
   function enqueue(text,type,force){
     if(!text||!window.speechSynthesis) return;
+    if(type==='commentary'&&typeof shouldBlockFootballGoalSpeech==='function'&&shouldBlockFootballGoalSpeech(text)) return;
     if(force&&type==='word') q=q.filter(function(x){return x.type!=='word'});
     q.push({text:String(text),type:type||'word'}); play();
   }
@@ -2904,7 +2931,9 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   var previousSpeak=window.speakCommentary;
   window.speakCommentary=function(text,urgent){
     var t=String(text||'').replace(/\bRival\b/gi,currentRival()).replace(/\boponente\b/gi,currentRival()).replace(/\bcontrario\b/gi,currentRival());
-    if(/gol|goool|marca/i.test(t) && !/Gol de/i.test(t)){
+    var goalish=/(?:^|[¡!.\s])go+o*l\b|\bgol\b|\bgolazo\b/i.test(t);
+    if(goalish && typeof shouldBlockFootballGoalSpeech==='function'&&shouldBlockFootballGoalSpeech(t)) return;
+    if(goalish && !/Gol de/i.test(t)){
       var team=/Atletic/i.test(t)?'Atletic':(new RegExp(currentRival(),'i').test(t)?currentRival():(document.getElementById('footballPossession')?.textContent||'Atletic'));
       t='Gol de '+firstName(team)+'.';
     }
@@ -2936,7 +2965,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
   var oldForce=window.forceSpeakWordNow;
   window.forceSpeakWordNow=function(force){try{var s=(typeof current==='function')?current():null;if(s&&!force){var n=now();if(lastWord===s.english&&n-lastWordTime<2200)return;lastWord=s.english;lastWordTime=n;}}catch(e){}return oldForce&&oldForce.apply(this,arguments)};
   var oldCom=window.speakCommentary;
-  window.speakCommentary=function(text,urgent){var t=String(text||'').replace(/\bRival\b/gi,shortRival());var key=t.toLowerCase().replace(/\s+/g,' ').trim(),n=now();if(key&&lastCom===key&&n-lastComTime<1800)return;lastCom=key;lastComTime=n;return oldCom&&oldCom.call(this,t,urgent)};
+  window.speakCommentary=function(text,urgent){var t=String(text||'').replace(/\bRival\b/gi,shortRival());if(typeof shouldBlockFootballGoalSpeech==='function'&&shouldBlockFootballGoalSpeech(t))return;var key=t.toLowerCase().replace(/\s+/g,' ').trim(),n=now();if(key&&lastCom===key&&n-lastComTime<1800)return;lastCom=key;lastComTime=n;return oldCom&&oldCom.call(this,t,urgent)};
   if(!matchMedia('(pointer:coarse)').matches){document.body.classList.remove('keyboard-open');window.addEventListener('load',function(){document.body.classList.remove('keyboard-open')});}
 })();
 </script>
@@ -5810,8 +5839,12 @@ body.learning-mode #learnPhotoToggle.active{
       else if(typeof speakCurrent==='function') speakCurrent(true);
     }catch(e){}
   }
+  function isCompetitionTypingTarget(target){
+    return !!(target&&target.closest&&target.closest('.word-zone,.letters,.tile,#hiddenInput'));
+  }
   function onTouch(e){
     if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
+    else if(isCompetitionTypingTarget(e.target)) markAudioReady();
     else playDefaultAudio();
   }
   document.addEventListener('touchstart',onTouch,{capture:true,passive:true});
@@ -5821,6 +5854,7 @@ body.learning-mode #learnPhotoToggle.active{
   },{capture:true,passive:true});
   document.addEventListener('click',function(e){
     if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
+    else if(isCompetitionTypingTarget(e.target)) markAudioReady();
     else setTimeout(playDefaultAudio,0);
     setTimeout(syncAudioButtons,0);
   },true);
@@ -5834,7 +5868,7 @@ body.learning-mode #learnPhotoToggle.active{
   if(typeof oldRender==='function'){
     window.render=function(){
       var out=oldRender.apply(this,arguments);
-      setTimeout(function(){syncAudioButtons();playDefaultAudio();},0);
+      setTimeout(syncAudioButtons,0);
       return out;
     };
   }
@@ -6305,7 +6339,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   }
   var champ={
     type:'cup',
-    limit:2,
+    limit:3,
     active:false,
     locked:false,
     over:false,
@@ -6656,6 +6690,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     if(typeof speakCommentary!=='function')return;
     var outcome=result.goal?'GOL':result.off?'FUERA':'PARADA';
     var text=outcome+'. Penalti de '+actor+' para '+teamLabel+'. Tanda: Atletic '+penalty.score.yago+' - '+penalty.score.rival+' '+firstName(penalty.names.rivalName)+'.';
+    if(result.goal&&typeof authorizeFootballGoalSpeech==='function') authorizeFootballGoalSpeech(1600);
     speakCommentary(text,true);
   }
   function resolvePenaltyChoice(choiceId){
@@ -6801,12 +6836,12 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     renderChamp();
   }
   function cycleType(){champ.type=champ.type==='league'?'cup':'league';champ.active=false;champ.over=false;champ.lastMessage='Modo elegido: '+(champ.type==='cup'?'Champions':'Liga')+'.';renderChamp();setMessage('Campeonato en modo '+(champ.type==='cup'?'Champions':'Liga')+'.')}
-  function cycleLimit(){champ.limit=champ.limit===5?10:champ.limit===10?15:champ.limit===15?2:5;renderChamp();setMessage(champ.type==='cup'?'Champions acaba con '+champ.limit+' goles totales; si hay empate = penaltis.':'El partido se decide al llegar a '+champ.limit+' goles.')}
+  function cycleLimit(){champ.limit=champ.limit===3?5:champ.limit===5?10:champ.limit===10?15:3;renderChamp();setMessage(champ.type==='cup'?'Champions acaba con '+champ.limit+' goles totales; si hay empate = penaltis.':'El partido se decide al llegar a '+champ.limit+' goles.')}
   function ensureButtons(){
     var controls=document.querySelector('.hero .controls')||document.querySelector('.controls');if(!controls)return;
     if(!byId('championshipTypeBtn')){var t=document.createElement('button');t.id='championshipTypeBtn';t.type='button';t.textContent='Champions';t.title='Liga o Champions';t.addEventListener('click',function(e){e.preventDefault();cycleType()});controls.appendChild(t)}
     if(!byId('championshipViewBtn')){var v=document.createElement('button');v.id='championshipViewBtn';v.type='button';v.textContent='Clasificación';v.title='Ver clasificación';v.addEventListener('click',function(e){e.preventDefault();showChamp()});controls.appendChild(v)}
-    if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent='2 goles';l.title='Goles para ganar el partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
+    if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent='3 goles';l.title='Goles para ganar el partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
     var anchor=byId('shuffleVerbsBtn');
     ['championshipTypeBtn','championshipViewBtn','championshipLimitBtn'].forEach(function(id){
       var btn=byId(id);if(!btn||btn.parentElement!==controls)return;
@@ -6882,5 +6917,6 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   boot();
 })();
 </script>
+<script src="../reto_badge.js" data-title-selector=".title" data-title-name="Football Spelling" data-orientation="horizontal"></script>
 </body>
 </html>
