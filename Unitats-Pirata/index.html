@@ -2478,7 +2478,7 @@ function rewardPairCorrect(){
   renderMap();
 }
 function punishPairWrong(){
-  if(window.LucYagoReto){recordRetoQuestion(false);}
+  if(window.LucYagoReto&&!(game.current&&game.current.kind==="matchAbbr")){recordRetoQuestion(false);}
   if(game.final){
     game.playerLives=Math.max(0,game.playerLives-1);
     setMessage("Parella incorrecta. Perds una vida.","bad");

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
@@ -3734,7 +3734,7 @@ updateControlAvailability();
     const panel=document.createElement('div');
     panel.id='cmSavePanel';
     panel.className='cmSavePanel';
-    panel.innerHTML='<input id="cmSaveName" maxlength="32" placeholder="Nombre de la partida"><button type="button" id="cmSaveBtn">Guardar</button><button type="button" class="cmLoadSave" id="cmLoadBtn">Cargar</button><select id="cmSaveSelect"></select><div class="cmSaveHint">La fecha se añade automáticamente. Puedes recuperar una partida guardada cuando quieras.</div><div class="cmSaveMsg" id="cmSaveMsg"></div>';
+    panel.innerHTML='<input id="cmSaveName" maxlength="32" placeholder="Club..."><button type="button" id="cmSaveBtn">Guardar</button><button type="button" class="cmLoadSave" id="cmLoadBtn">Cargar</button><select id="cmSaveSelect"></select><div class="cmSaveHint">La fecha se añade automáticamente. Puedes recuperar una partida guardada cuando quieras.</div><div class="cmSaveMsg" id="cmSaveMsg"></div>';
     const lives=document.getElementById('lives');
     topbar.insertBefore(panel, lives||null);
     panel.querySelector('#cmSaveName').value=defaultName();
@@ -4448,6 +4448,20 @@ updateControlAvailability();
   font-size:clamp(18px,2.6vw,28px)!important;
   color:#5b376d!important;
 }
+.topbar .brand .codex-reto-badge{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:6px 10px!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:linear-gradient(135deg,#ff006e 0%,#ffbe0b 52%,#21d4fd 100%)!important;
+  color:#fff!important;
+  font:1000 13px/1 Arial,sans-serif!important;
+  letter-spacing:.06em!important;
+  box-shadow:0 5px 14px rgba(255,0,110,.26),inset 0 0 0 2px rgba(255,255,255,.42)!important;
+  cursor:pointer!important;
+}
 .topbar .brand .codex-title-tablet,
 .topbar .brand .ly-orientation-pill{
   display:inline-flex!important;
@@ -4540,6 +4554,23 @@ updateControlAvailability();
   function ensureTitleTablet(){
     const brand=qs('.topbar .brand');
     if(!brand) return;
+    let reto=brand.querySelector('.codex-reto-badge');
+    if(new URLSearchParams(location.search).get('reto')==='1'){
+      if(!reto){
+        reto=document.createElement('button');
+        reto.type='button';
+        reto.className='codex-reto-badge';
+        reto.textContent='RETO';
+        reto.title='Volver al menú del reto';
+        reto.onclick=function(){
+          const p=new URLSearchParams(location.search);
+          const ret=p.get('return')||'../reto_mixto.html';
+          const session=p.get('session')||'lucyago_reto_session';
+          location.href=ret+'?continue=1&session='+encodeURIComponent(session);
+        };
+        brand.prepend(reto);
+      }
+    }else if(reto){reto.remove();}
     let title=brand.querySelector('.cam');
     if(!title){
       title=document.createElement('span');
@@ -4559,7 +4590,7 @@ updateControlAvailability();
     }
     tablet.innerHTML='<span class="ly-tablet-emoji horizontal" aria-hidden="true">&#128241;</span>';
     if(title.nextElementSibling!==tablet) title.insertAdjacentElement('afterend',tablet);
-    const hidden=brand.querySelector(':scope > span:not(.cam)');
+    const hidden=brand.querySelector(':scope > span:not(.cam):not(.codex-title-tablet)');
     if(hidden) hidden.style.display='none';
   }
   function placeHomeBeforeSave(){
@@ -4842,6 +4873,7 @@ updateControlAvailability();
       if(state.current===p && stageBefore+1<p.stages.length){
         p.stage=Math.max(p.stage,stageBefore+1);
         p.awaitingSelection=true;
+        setTimeout(()=>{if(state.current===p&&typeof nextCombinedTarget==='function'){state.activeKind='answer';state.activeElement=nextCombinedTarget();updateActiveCell&&updateActiveCell();}},0);
       }
       return result;
     };
@@ -4879,6 +4911,20 @@ updateControlAvailability();
     if(!select || select.querySelector('option[value="all"]')) return;
     select.insertAdjacentHTML('beforeend','<option value="all">Todos</option>');
     if(typeof diffNums!=='undefined') diffNums.all=[2,3,4,5,6,7,8,9];
+  }
+
+  if(typeof inputKey==='function' && !inputKey.__combNewLineAutoTarget){
+    const originalInputKey=inputKey;
+    inputKey=function(k){
+      if(typeof state!=='undefined' && state.current?.type==='comb'){
+        if(!state.activeElement || !document.body.contains(state.activeElement) || !state.activeElement.querySelector?.('input')){
+          state.activeKind='answer';
+          state.activeElement=typeof nextCombinedTarget==='function'?nextCombinedTarget():null;
+        }
+      }
+      return originalInputKey.apply(this,arguments);
+    };
+    inputKey.__combNewLineAutoTarget=true;
   }
 
   function forceInitialMixed(){
@@ -5013,9 +5059,10 @@ updateControlAvailability();
 </script>
 
 
-<script src="../reto_badge.js" data-title-selector=".topbar .brand .cam" data-title-name="Operaciones" data-orientation="horizontal"></script>
+
 </body>
 </html>
+
 
 
 

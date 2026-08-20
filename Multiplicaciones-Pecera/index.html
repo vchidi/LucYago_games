@@ -470,6 +470,13 @@ if(LUCYAGO_RETO_ACTIVE){
   WIN_TARGET=LUCYAGO_RETO_TARGET;
   state.aquariumEnabled=true;
   state.winTarget=WIN_TARGET;
+  state.operationMode="mixed";
+  state.sourceMode="difficult";
+  state.difficultFacts=[
+    {table:3,factor:7,result:21},{table:3,factor:8,result:24},{table:4,factor:6,result:24},{table:4,factor:7,result:28},{table:4,factor:8,result:32},
+    {table:6,factor:7,result:42},{table:6,factor:8,result:48},{table:6,factor:9,result:54},{table:7,factor:8,result:56},{table:7,factor:9,result:63},{table:8,factor:9,result:72}
+  ];
+  state.difficultEditorOpen=true;
 }
 QUESTION_SECONDS=state.questionSeconds||30;
 let session=freshSession();

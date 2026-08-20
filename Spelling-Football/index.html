@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -938,6 +938,8 @@ const footballEngine=(()=>{
 
   function firstRivalWord(name){
     const raw=String(name||'Rival').trim();
+    if(/^athletic\b/i.test(raw)) return 'Atlético de Bilbao';
+    if(/^atletico madrid\b/i.test(raw)) return 'Atlético de Madrid';
     return (raw.split(/\s+/)[0]||'Rival');
   }
   function getTeamLabel(teamId){return teamId==='yago'?'Atletic':firstRivalWord(currentRivalTeamName||'Rival')}
@@ -2665,7 +2667,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
 <script id="valentina-1305-final-football-fixes">
 (function(){
   function byId(id){return document.getElementById(id)}
-  function firstName(name){return (String(name||'Rival').trim().split(/\s+/)[0]||'Rival');}
+  function firstName(name){var raw=String(name||'Rival').trim();if(/^athletic\b/i.test(raw))return 'Atlético de Bilbao';if(/^atletico madrid\b/i.test(raw))return 'Atlético de Madrid';return (raw.split(/\s+/)[0]||'Rival');}
   function rivalName(){
     try{return firstName(window.currentRivalTeamName||document.querySelector('.football-team.right span:first-child')?.textContent||'Rival');}
     catch(e){return 'Rival';}
@@ -2876,7 +2878,7 @@ body.keyboard-open .football-player-name{font-size:7.5px!important;max-width:54p
 (function(){
   function byId(id){return document.getElementById(id)}
   function isCoarse(){return matchMedia('(pointer:coarse)').matches}
-  function firstName(name){return (String(name||'Rival').trim().split(/\s+/)[0]||'Rival')}
+  function firstName(name){var raw=String(name||'Rival').trim();if(/^athletic\b/i.test(raw))return 'Atlético de Bilbao';if(/^atletico madrid\b/i.test(raw))return 'Atlético de Madrid';return (raw.split(/\s+/)[0]||'Rival')}
   function currentRival(){try{return firstName(window.currentRivalTeamName||document.querySelector('.football-team.right span:first-child')?.textContent||'Rival')}catch(e){return 'Rival'}}
 
   /* En ordenador, no reenfocar el input oculto ni activar keyboard-open al tocar botones. */
@@ -6294,7 +6296,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
 <script id="codex-spelling-championship-20260816">
 (function(){
   function byId(id){return document.getElementById(id)}
-  function firstName(name){return (String(name||'Rival').trim().split(/\s+/)[0]||'Rival')}
+  function firstName(name){var raw=String(name||'Rival').trim();if(/^athletic\b/i.test(raw))return 'Atlético de Bilbao';if(/^atletico madrid\b/i.test(raw))return 'Atlético de Madrid';return (raw.split(/\s+/)[0]||'Rival')}
   var PRO_LIGA_TEAMS=[
     {name:'Real Madrid',players:['Courtois','Lunin','Militao','Rudiger','Huijsen','Trent','Carreras','Fran Garcia','Bellingham','Camavinga','Valverde','Tchouameni','Arda Guler','Vinicius','Mbappe','Rodrygo','Brahim','Endrick']},
     {name:'FC Barcelona',players:['Ter Stegen','Joan Garcia','Szczesny','Balde','Araujo','Cubarsi','Kounde','Eric Garcia','Pedri','Gavi','Fermin','Marc Casado','Frenkie de Jong','Marc Bernal','Lamine Yamal','Raphinha','Ferran','Olmo']},
@@ -6920,3 +6922,4 @@ body.competition-mode.keyboard-open #championshipViewBtn{
 <script src="../reto_badge.js" data-title-selector=".title" data-title-name="Football Spelling" data-orientation="horizontal"></script>
 </body>
 </html>
+
