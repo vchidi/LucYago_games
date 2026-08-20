@@ -81,17 +81,19 @@
     title.textContent=text;
     wrap.appendChild(title);
 
-    var orient=document.createElement("span");
-    orient.className="ly-orientation-pill";
-    var horizontal=cfg.orientation==="horizontal";
-    orient.title=horizontal?"Horizontal":"Vertical";
-    orient.setAttribute("aria-label",orient.title);
-    var tablet=document.createElement("span");
-    tablet.className="ly-tablet-emoji "+(horizontal?"horizontal":"vertical");
-    tablet.textContent="\u{1F4F1}";
-    tablet.setAttribute("aria-hidden","true");
-    orient.appendChild(tablet);
-    wrap.appendChild(orient);
+    if(cfg.orientation!=="none"){
+      var orient=document.createElement("span");
+      orient.className="ly-orientation-pill";
+      var horizontal=cfg.orientation==="horizontal";
+      orient.title=horizontal?"Horizontal":"Vertical";
+      orient.setAttribute("aria-label",orient.title);
+      var tablet=document.createElement("span");
+      tablet.className="ly-tablet-emoji "+(horizontal?"horizontal":"vertical");
+      tablet.textContent="\u{1F4F1}";
+      tablet.setAttribute("aria-hidden","true");
+      orient.appendChild(tablet);
+      wrap.appendChild(orient);
+    }
 
     if(active()&&cfg.showCount){
       var count=document.createElement("span");

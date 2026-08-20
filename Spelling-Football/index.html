@@ -771,7 +771,7 @@ function loadSaved(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){con
 function saveData(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(rawData));localStorage.setItem(STORAGE_NAME,datasetName);localStorage.setItem(PLAYERS_STORAGE_KEY,JSON.stringify(playersData));localStorage.setItem(PLAYERS_STORAGE_NAME,playersDatasetName);localStorage.setItem(ATLETIC_NAMES_STORAGE_KEY,JSON.stringify(atleticPlayerNames));localStorage.setItem(RIVAL_NAMES_STORAGE_KEY,JSON.stringify(rivalPlayerNames));localStorage.setItem(RIVAL_TEAM_NAMES_STORAGE_KEY,JSON.stringify(rivalTeamNames));localStorage.setItem(FORMATION_STORAGE_KEY,formationKey);localStorage.setItem(YAGO_POSITION_STORAGE_KEY,preferredYagoLine);}catch{}}
 function buildDataset(){const cleaned=rawData.map(cleanEntry).filter(Boolean);window.datasetStates=cleaned.map(makeState);if(index>=window.datasetStates.length) index=0;}
 function current(){return window.datasetStates[index]}
-function visibleCells(state){return state.english.split('').map((ch,i)=>{if(ch===' ') return {type:'space',value:''};if(state.pattern[i]==='_'){const value=state.guess[i]||'•';const wrong=!!state.guess[i]&&state.guess[i]!==ch&&!state.revealed;return {type:wrong?'wrong':(state.guess[i]?'filled':'blank'),value};}return {type:'fixed',value:ch};});}
+function visibleCells(state){return state.english.split('').map((ch,i)=>{if(ch===' ') return {type:'space',value:''};if(state.pattern[i]==='_'){const value=state.guess[i]||'•';const wrong=state.checked&&!!state.guess[i]&&state.guess[i]!==ch&&!state.revealed;return {type:wrong?'wrong':(state.guess[i]?'filled':'blank'),value};}return {type:'fixed',value:ch};});}
 function nextBlank(state){return state.pattern.split('').findIndex((ch,i)=>ch==='_'&&!state.guess[i])}
 function lastFilled(state){for(let i=state.guess.length-1;i>=0;i--) if(state.pattern[i]==='_'&&state.guess[i]) return i; return -1}
 function guessedWord(state){return state.english.split('').map((ch,i)=>state.pattern[i]==='_'?(state.guess[i]||''):ch).join('')}
@@ -797,6 +797,7 @@ function renderPlayersEditor(){
 }
 function renderLetters(){const el=$('#letters');el.innerHTML='';const s=current();if(!s) return;visibleCells(s).forEach(c=>{const d=document.createElement('div');let cls=c.type==='filled'?'blank filled':c.type==='wrong'?'blank filled wrong':c.type;d.className='tile '+cls+(s.revealed&&c.type!=='space'?' solution':'');d.textContent=c.value;el.appendChild(d);});}
 function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
+function nextGoalInteractionTarget(){return 2+Math.floor(Math.random()*7)}
 function buildSpeechUtterance(text,langPattern,fallbackLang,voicePattern,rate,pitch){
   const utter=new SpeechSynthesisUtterance(text);
   const langRe=new RegExp(langPattern,'i');
@@ -933,7 +934,7 @@ const footballEngine=(()=>{
   const lineShort={goalkeeper:'POR',defense:'DEF',midfield:'MED',attack:'ATA'};
   const lineY={goalkeeper:{yago:86,rival:14},defense:{yago:68,rival:32},midfield:{yago:50,rival:50},attack:{yago:24,rival:76}};
   const xMap={one:[50],two:[36,64],three:[24,50,76]};
-  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,commentaryToken:0,interactionsSinceGoal:0,bannerTimer:null,eventTimer:null,goalResetTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
+  const state={teams:[],score:{yago:0,rival:0},possession:'yago',line:'defense',playerId:null,log:[],moveToken:0,commentaryToken:0,interactionsSinceGoal:0,goalInteractionTarget:4,bannerTimer:null,eventTimer:null,goalResetTimer:null,lastEvent:null,ballTarget:null,kickoffMode:false,banner:{title:'',text:'',tone:'good',visible:false},lastExplanation:'Acierto = oportunidad. Después se compara tu jugada con la defensa rival.'};
   const refs={};
 
   function firstRivalWord(name){
@@ -1288,19 +1289,19 @@ const footballEngine=(()=>{
     const attacker=getBallOwner()||pickZoneDefender(teamId,'attack');
     const goalkeeper=pickZoneDefender(getOpponentId(teamId),'goalkeeper');
     pendingWordSpeech=null;
-    if(state.interactionsSinceGoal<=6){
+    if(state.interactionsSinceGoal<(state.goalInteractionTarget||4)){
       const earlyY=isYago?28:72;
       const earlyX=Math.max(22,Math.min(78,getX(goalkeeper)+(Math.random()>.5?8:-8)));
       return moveBallTo(getOpponentId(teamId),'goalkeeper',{
         playerId:goalkeeper.id,
         ballTarget:{x:earlyX,y:earlyY},
-        logText:'Todavia no puede haber gol: hacen falta 6 jugadas anteriores. '+goalkeeper.name+' bloquea el tiro de '+attacker.name+'.',
+        logText:'Todavia no puede haber gol: hacen falta '+(state.goalInteractionTarget||4)+' interacciones como maximo 8. '+goalkeeper.name+' bloquea el tiro de '+attacker.name+'.',
         bannerTitle:'BLOQUEO',
         bannerText:'Aun faltan jugadas antes de que pueda haber gol.',
         bannerTone:isYago?'bad':'good',
         eventKind:'save',
         keeperId:goalkeeper.id,
-        explanation:'Regla anti-gol rapido: antes de marcar tiene que haber al menos 6 interacciones previas desde el saque.',
+        explanation:'Regla anti-gol rapido: cada tramo elige al azar cuantas interacciones hacen falta antes de que pueda haber gol, con un maximo de 8.',
         commentaryText:randomFrom([
           `${goalkeeper.name} bloquea el tiro. Todavia faltan jugadas previas.`,
           `Disparo frenado por ${goalkeeper.name}. Aun hacen falta mas jugadas.`,
@@ -1405,6 +1406,8 @@ const footballEngine=(()=>{
 
   function resetAfterGoal(kickoffTeam){
     if(state.goalResetTimer){clearTimeout(state.goalResetTimer);state.goalResetTimer=null;}
+    state.interactionsSinceGoal=0;
+    state.goalInteractionTarget=nextGoalInteractionTarget();
     state.possession=kickoffTeam||getOpponentId(state.possession);
     state.line='midfield';
     state.playerId=pickBallOwner(state.possession,state.line);
@@ -1554,7 +1557,7 @@ const footballEngine=(()=>{
     state.score={yago:0,rival:0};
     state.log=[];
     state.banner={title:'',text:'',tone:'good',visible:false};
-    state.lastEvent=null; state.ballTarget=null; state.kickoffMode=false; state.interactionsSinceGoal=0; state.commentaryToken=(state.commentaryToken||0)+1;
+    state.lastEvent=null; state.ballTarget=null; state.kickoffMode=false; state.interactionsSinceGoal=0; state.goalInteractionTarget=nextGoalInteractionTarget(); state.commentaryToken=(state.commentaryToken||0)+1;
     pickStartingTeam();
     addLog('Atletic empieza sacando desde el centro.');
     render();
@@ -5847,7 +5850,6 @@ body.learning-mode #learnPhotoToggle.active{
   function onTouch(e){
     if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
     else if(isCompetitionTypingTarget(e.target)) markAudioReady();
-    else playDefaultAudio();
   }
   document.addEventListener('touchstart',onTouch,{capture:true,passive:true});
   document.addEventListener('pointerdown',function(e){
@@ -5857,7 +5859,6 @@ body.learning-mode #learnPhotoToggle.active{
   document.addEventListener('click',function(e){
     if(e.target&&e.target.closest&&e.target.closest('#repeatAudioBtn')) markAudioReady();
     else if(isCompetitionTypingTarget(e.target)) markAudioReady();
-    else setTimeout(playDefaultAudio,0);
     setTimeout(syncAudioButtons,0);
   },true);
   ['DOMContentLoaded','load','pageshow','resize','orientationchange'].forEach(function(ev){
@@ -6333,7 +6334,13 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     return out.length?out:['Tigres Rojos','Dragones FC','Lobos United','Rayos Azules','Panteras Negras','Halcones City','Leones del Norte'];
   }
   function shuffle(list){var a=list.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
-  function simScore(limit){var a=Math.floor(Math.random()*limit),b=Math.floor(Math.random()*limit);if(a===b)b=(b+1)%limit;return [a,b]}
+  function simScore(setting){
+    var isTime=setting&&setting.kind==='time';
+    var max=isTime?4:Math.max(2,Number(setting&&setting.value)||3);
+    var a=Math.floor(Math.random()*max),b=Math.floor(Math.random()*max);
+    if(a===b)b=(b+1)%max;
+    return [a,b];
+  }
   function parseScore(){
     var text=(typeof footballEngine!=='undefined'&&footballEngine.getScoreText)?footballEngine.getScoreText():(byId('footballScore')||{}).textContent||'0 - 0';
     var m=String(text).match(/(\d+)\s*-\s*(\d+)/);
@@ -6341,7 +6348,10 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   }
   var champ={
     type:'cup',
+    settingIndex:2,
     limit:3,
+    limitKind:'time',
+    matchStartedAt:0,
     active:false,
     locked:false,
     over:false,
@@ -6358,6 +6368,30 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   };
   var penaltyMode='manual';
   var penalty=null;
+  var MATCH_SETTINGS=[
+    {kind:'goals',value:2,label:'2 goles'},
+    {kind:'goals',value:3,label:'3 goles'},
+    {kind:'time',value:3,label:'3 min'},
+    {kind:'time',value:5,label:'5 min'}
+  ];
+  function currentMatchSetting(){return MATCH_SETTINGS[champ.settingIndex]||MATCH_SETTINGS[2]}
+  function syncMatchSetting(){
+    var s=currentMatchSetting();
+    champ.limit=s.value;
+    champ.limitKind=s.kind;
+    return s;
+  }
+  function matchSettingLabel(){return syncMatchSetting().label}
+  function matchRuleText(){
+    var s=syncMatchSetting();
+    if(s.kind==='time')return 'El partido dura '+s.value+' minutos.';
+    return champ.type==='cup'?'Champions acaba con '+s.value+' goles totales; si hay empate = penaltis.':'Gana quien llegue a '+s.value+' goles.';
+  }
+  function startMatchClock(){champ.matchStartedAt=Date.now()}
+  function timeLimitReached(){
+    var s=syncMatchSetting();
+    return s.kind==='time'&&champ.matchStartedAt&&Date.now()-champ.matchStartedAt>=s.value*60000;
+  }
   var penaltyZones=[
     {id:'left-high',label:'Arriba izq.',x:27,y:25,h:'left',v:'high'},
     {id:'center-high',label:'Arriba centro',x:50,y:25,h:'center',v:'high'},
@@ -6449,6 +6483,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   function playCurrentMatch(){
     wordAudioPausedUntilNextMatch=false;
     pendingWordSpeech=null;
+    startMatchClock();
     if(champ.current&&!champ.over)setRivalForMatch(champ.current.match);
     var modal=byId('championshipModal');
     if(modal)modal.classList.remove('show');
@@ -6474,9 +6509,10 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     champ.view='board';
     renderChamp();
     try{render()}catch(e){}
-    setMessage('Campeonato: Atletic juega contra '+firstName(rival)+'. '+(champ.type==='cup'?'Champions acaba con '+champ.limit+' goles totales; si hay empate = penaltis.':'Gana quien llegue a '+champ.limit+' goles.'));
+    setMessage('Campeonato: Atletic juega contra '+firstName(rival)+'. '+matchRuleText());
   }
   function startLeague(){
+    syncMatchSetting();
     champ.active=true;champ.locked=false;champ.over=false;champ.results=[];champ.table={};
     champ.teams=['Atletic'].concat(shuffle(uniqueRivals()).slice(0,7));
     champ.teams.forEach(tableRow);
@@ -6485,6 +6521,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     setRivalForMatch(champ.current.match);
   }
   function startCup(){
+    syncMatchSetting();
     champ.active=true;champ.locked=false;champ.over=false;champ.results=[];champ.table={};
     champ.teams=['Atletic'].concat(shuffle(uniqueRivals()).slice(0,7));
     champ.teams.forEach(tableRow);
@@ -6502,6 +6539,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   function startCupForCurrentMatch(){
     if(champ.active||champ.over||champ.type!=='cup')return;
     startCup();
+    startMatchClock();
     champ.lastMessage='Champions iniciada: Atletic contra '+firstName(opponentName(champ.current&&champ.current.match))+'.';
   }
   function finishLeague(score){
@@ -6513,7 +6551,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     record(m.a,m.b,scoreA,scoreB,true);
     champ.rounds[cur.round].forEach(function(other){
       if(other.done)return;
-      var s=simScore(champ.limit);
+      var s=simScore(currentMatchSetting());
       other.done=true;other.score=s;
       record(other.a,other.b,s[0],s[1],false);
     });
@@ -6752,7 +6790,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     record(match.a,match.b,scoreA,scoreB,true);
     stage.matches.forEach(function(other){
       if(other.done)return;
-      var s=simScore(champ.limit),win=s[0]>s[1]?other.a:other.b;
+      var s=simScore(currentMatchSetting()),win=s[0]>s[1]?other.a:other.b;
       other.done=true;other.score=s;other.winner=win;record(other.a,other.b,s[0],s[1],false);
     });
     if(winner!=='Atletic'){champ.over=true;champ.lastMessage='ATLETIC HA SIDO ELIMINADO. Campeón provisional: '+winner+'.';showWinnerParty({title:'ATLETIC HA SIDO ELIMINADO',score:'Atletic '+score.yago+' - '+score.rival+' '+firstName(opponentName(match))+(pen?' · penaltis '+pen[0]+'-'+pen[1]:''),next:champ.lastMessage,penaltySummary:penaltySummary});return}
@@ -6773,9 +6811,12 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     if(!champ.active&&champ.type==='cup')startCupForCurrentMatch();
     if(!champ.active||champ.over||champ.locked||typeof footballEngine==='undefined')return;
     var score=parseScore();
-    if(champ.type==='cup'){
-      if(score.yago+score.rival<champ.limit)return;
-    }else if(score.yago<champ.limit&&score.rival<champ.limit)return;
+    var setting=syncMatchSetting();
+    if(setting.kind==='time'){
+      if(!timeLimitReached())return;
+    }else if(champ.type==='cup'){
+      if(score.yago+score.rival<setting.value)return;
+    }else if(score.yago<setting.value&&score.rival<setting.value)return;
     champ.locked=true;
     champ.lastMessage='Partido terminado: Atletic '+score.yago+' - '+score.rival+' '+firstName(currentRivalTeamName)+'.';
     setMessage(champ.lastMessage);
@@ -6804,11 +6845,11 @@ body.competition-mode.keyboard-open #championshipViewBtn{
       if(playOnly){playOnly.style.display=(champ.current&&!champ.over)?'inline-flex':'none';playOnly.addEventListener('click',function(e){e.preventDefault();playCurrentMatch()})}
       var typeOnly=byId('championshipTypeBtn'),limitOnly=byId('championshipLimitBtn'),viewOnly=byId('championshipViewBtn');
       if(typeOnly)typeOnly.textContent=champ.type==='cup'?'Champions':'Liga';
-      if(limitOnly)limitOnly.textContent=champ.limit+' goles';
+      if(limitOnly)limitOnly.textContent=matchSettingLabel();
       if(viewOnly)viewOnly.textContent='Clasificación';
       return;
     }
-    html+='<div class="championship-block"><h3>Estado</h3><div><strong>'+modeLabel+'</strong> · límite '+champ.limit+' goles</div><div>'+((champ.lastMessage)||'Pulsa Nuevo campeonato para empezar.')+'</div>';
+    html+='<div class="championship-block"><h3>Estado</h3><div><strong>'+modeLabel+'</strong> · '+matchSettingLabel()+'</div><div>'+((champ.lastMessage)||'Pulsa Nuevo campeonato para empezar.')+'</div>';
     if(champ.current&&!champ.over)html+='<div class="championship-actions championship-board-actions"><button id="championshipPlayBtn" type="button">Jugar</button></div>';
     html+='</div>';
     if(champ.type==='league'){
@@ -6828,7 +6869,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     if(playBtn){playBtn.style.display=(champ.current&&!champ.over)?'inline-flex':'none';playBtn.addEventListener('click',function(e){e.preventDefault();playCurrentMatch()})}
     var typeBtn=byId('championshipTypeBtn'),limitBtn=byId('championshipLimitBtn'),viewBtn=byId('championshipViewBtn');
     if(typeBtn)typeBtn.textContent=champ.type==='cup'?'Champions':'Liga';
-    if(limitBtn)limitBtn.textContent=champ.limit+' goles';
+    if(limitBtn)limitBtn.textContent=matchSettingLabel();
     if(viewBtn)viewBtn.textContent='Clasificación';
   }
   function showChamp(force){
@@ -6838,12 +6879,12 @@ body.competition-mode.keyboard-open #championshipViewBtn{
     renderChamp();
   }
   function cycleType(){champ.type=champ.type==='league'?'cup':'league';champ.active=false;champ.over=false;champ.lastMessage='Modo elegido: '+(champ.type==='cup'?'Champions':'Liga')+'.';renderChamp();setMessage('Campeonato en modo '+(champ.type==='cup'?'Champions':'Liga')+'.')}
-  function cycleLimit(){champ.limit=champ.limit===3?5:champ.limit===5?10:champ.limit===10?15:3;renderChamp();setMessage(champ.type==='cup'?'Champions acaba con '+champ.limit+' goles totales; si hay empate = penaltis.':'El partido se decide al llegar a '+champ.limit+' goles.')}
+  function cycleLimit(){champ.settingIndex=(champ.settingIndex+1)%MATCH_SETTINGS.length;syncMatchSetting();champ.active=false;champ.locked=false;champ.over=false;champ.matchStartedAt=0;champ.lastMessage='Duración elegida: '+matchSettingLabel()+'.';renderChamp();setMessage(matchRuleText())}
   function ensureButtons(){
     var controls=document.querySelector('.hero .controls')||document.querySelector('.controls');if(!controls)return;
     if(!byId('championshipTypeBtn')){var t=document.createElement('button');t.id='championshipTypeBtn';t.type='button';t.textContent='Champions';t.title='Liga o Champions';t.addEventListener('click',function(e){e.preventDefault();cycleType()});controls.appendChild(t)}
     if(!byId('championshipViewBtn')){var v=document.createElement('button');v.id='championshipViewBtn';v.type='button';v.textContent='Clasificación';v.title='Ver clasificación';v.addEventListener('click',function(e){e.preventDefault();showChamp()});controls.appendChild(v)}
-    if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent='3 goles';l.title='Goles para ganar el partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
+    if(!byId('championshipLimitBtn')){var l=document.createElement('button');l.id='championshipLimitBtn';l.type='button';l.textContent=matchSettingLabel();l.title='Goles o tiempo del partido';l.addEventListener('click',function(e){e.preventDefault();cycleLimit()});controls.appendChild(l)}
     var anchor=byId('shuffleVerbsBtn');
     ['championshipTypeBtn','championshipViewBtn','championshipLimitBtn'].forEach(function(id){
       var btn=byId(id);if(!btn||btn.parentElement!==controls)return;
@@ -6919,7 +6960,7 @@ body.competition-mode.keyboard-open #championshipViewBtn{
   boot();
 })();
 </script>
-<script src="../reto_badge.js" data-title-selector=".title" data-title-name="Football Spelling" data-orientation="horizontal"></script>
+<script src="../reto_badge.js" data-title-selector=".title" data-title-name="Football Spelling" data-orientation="none"></script>
 </body>
 </html>
 
