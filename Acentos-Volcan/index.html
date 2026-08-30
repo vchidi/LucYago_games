@@ -2354,7 +2354,7 @@ function applyCorrectVisual(){
 
 function applyWrongVisual(reason){
   volcanoHeat = Math.min(5, volcanoHeat + 1);
-  eventText("💥 El volcán explota: -4 iconos");
+  eventText("💥 El volcán explota: -2 iconos");
   heatParticles();
   eruptionCount++;
   eruptAndDestroy();
@@ -2362,7 +2362,7 @@ function applyWrongVisual(reason){
 }
 
 function eruptAndDestroy(){
-  eventText("💥 erupción destruye 4 iconos");
+  eventText("💥 erupción destruye 2 iconos");
   const scene=$("scene");
   if(scene){
     scene.classList.add("panic");
@@ -2378,7 +2378,7 @@ function eruptAndDestroy(){
     spawnEruption(["🔥","🪨","💥","🌋"][Math.floor(Math.random()*4)], 250+Math.random()*70, 90+Math.random()*40, -250+Math.random()*180, -170+Math.random()*230);
   }
 
-  setTimeout(()=>destroyVillageItem(4), 380);
+  setTimeout(()=>destroyVillageItem(2), 380);
 }
 
 function spawnEruption(char,x,y,dx,dy){
@@ -2605,3 +2605,4 @@ resetGame();
 <script src="../reto_badge.js" data-title-selector=".title" data-title-name="Volcán" data-orientation="horizontal" data-show-count="0"></script>
 </body>
 </html>
+
