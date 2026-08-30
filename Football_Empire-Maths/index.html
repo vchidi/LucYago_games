@@ -2308,16 +2308,19 @@ function renderMul(p){
   const width = Math.max(...rows.map(x=>x.length));
   const topFormatted = padFormattedToWidth(padThousands(p.a), width);
   const bottomFormatted = padFormattedToWidth(padThousands(p.b), width);
+  const answerFormatted = padFormattedToWidth(padThousands(p.answer), width);
+  const twoDigitMultiplier = String(Math.abs(p.b)).replace(/\D/g,'').length>1;
   let html=`<div class="mathGrid mulAlignedGrid" style="--mul-cols:${width}">`;
   html += carryRowFor(topFormatted);
-  if(String(Math.abs(p.b)).replace(/\D/g,'').length>1) html += carryRowFor(topFormatted);
+  if(twoDigitMultiplier) html += carryRowFor(topFormatted);
   html += '<div class="rowMath"><div class="opMark"></div>'+cellsFromFormattedText(topFormatted)+'</div>';
   html += '<div class="rowMath"><div class="opMark">x</div>'+cellsFromFormattedText(bottomFormatted)+'</div>';
   html += '<div class="line"></div>';
   html += rowFromAnswer(padFormattedToWidth(padThousands(p.partial1), width),'p1');
   html += rowFromAnswer(padFormattedToWidth(padThousands(p.partial2*10), width),'p2');
+  if(twoDigitMultiplier) html += carryRowFor(answerFormatted).replace('carryRow','carryRow mulSumCarryRow');
   html += '<div class="line"></div>';
-  html += rowFromAnswer(padFormattedToWidth(padThousands(p.answer), width),'ans');
+  html += rowFromAnswer(answerFormatted,'ans');
   html += '</div>';
   $('#operationArea').innerHTML=html;
 }
