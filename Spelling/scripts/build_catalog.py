@@ -14,7 +14,7 @@ from pathlib import Path
 from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = int(os.environ.get('CATALOG_SIZE', '240'))
+TARGET = int(os.environ.get('CATALOG_SIZE', '1000'))
 CLASSES = 'https://storage.googleapis.com/openimages/v7/oidv7-class-descriptions.csv'
 LABELS = 'https://storage.googleapis.com/openimages/v5/validation-annotations-human-imagelabels-boxable.csv'
 META = 'https://storage.googleapis.com/openimages/2018_04/validation/validation-images-with-rotation.csv'
@@ -72,11 +72,23 @@ print('Metadata filtered:',dict(rejected),flush=True)
 if len(candidates)<6:
     raise RuntimeError('Menos de seis categorías disponibles. Revisar filtros de metadatos y licencias.')
 
+existing_catalog=ROOT/'openimages-catalog.json'
+existing=[]
+if existing_catalog.exists():
+    try:
+        saved=json.loads(existing_catalog.read_text(encoding='utf-8'))
+        existing=[x for x in saved.get('images',[]) if (ROOT/x.get('url','')).is_file() and x.get('id') and x.get('name')]
+    except (ValueError,OSError,TypeError) as exc:
+        print('Existing catalog could not be read:',exc,flush=True)
+existing_ids={x['id'] for x in existing}
+print('Preserving existing photos:',len(existing),flush=True)
+for name,entries in candidates.items():
+    candidates[name]=[x for x in entries if x['id'] not in existing_ids]
 random.seed(20261019)
 for entries in candidates.values(): random.shuffle(entries)
 # Limit downloads while sampling fairly across categories.
 selected=[]
-limit=max(TARGET*8, 1200)
+limit=max((TARGET-len(existing))*4,1200)
 while len(selected)<limit and any(candidates.values()):
     for name in sorted(candidates):
         if candidates[name]: selected.append(candidates[name].pop())
@@ -112,7 +124,7 @@ def download(item):
     with lock: errors[last_error]+=1
     return None
 
-results=[]
+results=list(existing)
 with ThreadPoolExecutor(max_workers=8) as executor:
     for f in as_completed([executor.submit(download,item) for item in selected]):
         item=f.result()
