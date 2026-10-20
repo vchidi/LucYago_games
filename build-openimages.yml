@@ -1,0 +1,30 @@
+name: Crear catálogo Open Images
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 1 */3 *'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pillow
+      - name: Descargar y reducir fotografías verificadas
+        run: python scripts/build_catalog.py
+        env:
+          CATALOG_SIZE: '240'
+      - name: Publicar catálogo y fotos en el repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add openimages-catalog.json images/
+          if ! git diff --cached --quiet; then
+            git commit -m "Actualizar catálogo Open Images"
+            git push
+          fi
