@@ -16,14 +16,14 @@ jobs:
           python-version: '3.11'
       - run: pip install pillow
       - name: Descargar y reducir fotografías verificadas
-        run: python scripts/build_catalog.py
+        run: python Spelling/scripts/build_catalog.py
         env:
           CATALOG_SIZE: '240'
       - name: Publicar catálogo y fotos en el repositorio
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add openimages-catalog.json images/
+          git add Spelling/openimages-catalog.json Spelling/images/
           if ! git diff --cached --quiet; then
             git commit -m "Actualizar catálogo Open Images"
             git push
