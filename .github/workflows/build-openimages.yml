@@ -18,7 +18,7 @@ jobs:
       - name: Descargar y reducir fotografías verificadas
         run: python Spelling/scripts/build_catalog.py
         env:
-          CATALOG_SIZE: '240'
+          CATALOG_SIZE: '1000'
       - name: Publicar catálogo y fotos en el repositorio
         run: |
           git config user.name "github-actions[bot]"
