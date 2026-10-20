@@ -23,7 +23,7 @@ function restore(){try{const x=JSON.parse(localStorage.getItem(key)||'null');if(
 function setting(id){settings[id]=$(id).value;persist()}
 function applySettings(){for(const id of ['setSelect','gameSelect','modeSelect','repeatSelect','imageMode','accent','speed','difficulty','activitySelect'])if(settings[id]&&[...$(id).options].some(x=>x.value===settings[id]))$(id).value=settings[id]}
 function stat(w){return progress[wordKey(w)]||(progress[wordKey(w)]={attempts:0,success:0,errors:0,streak:0,last:0})}
-function chosen(){let arr=$('setSelect').value==='all'?all:$('setSelect').value==='studying'?studying:all.filter(w=>(progress[wordKey(w)]||{}).errors>0);return [...arr]}
+function chosen(){let arr=$('setSelect').value==='all'?all:$('setSelect').value==='studying'?studying:all.filter(w=>(progress[wordKey(w)]||{}).errors>0&&(progress[wordKey(w)]||{}).streak<3);return [...arr]}
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function begin(reshuffle=false){cancelAdvance();wordFeedback('','');queue=chosen();if(reshuffle)shuffle(queue);idx=0;round=1;good=0;bad=0;streak=0;newGame();render()}
 function getTarget(){return (word()?.word||'').trim()}
@@ -31,12 +31,12 @@ function isHint(i){if(round===2||$('modeSelect').value==='blind'||$('activitySel
 function letters(){const target=getTarget();let pos=0;return [...target].map((c,i)=>{if(!/[a-záéíóúüñ]/i.test(c))return `<span class="letter hint">${safe(c)}</span>`;if(isHint(i))return `<span class="letter hint">${safe(c)}</span>`;const t=typed[pos++]||'';return `<span class="letter ${t?(t.toLowerCase()===c.toLowerCase()?'right':'wrong'):''}">${safe(t||'·')}</span>`}).join('')}
 function expected(){return [...getTarget()].filter((c,i)=>/[a-záéíóúüñ]/i.test(c)&&!isHint(i)).join('')}
 function hideAnswer(sentence,target){const t=String(target||'').trim();if(!t)return String(sentence||'');const escapeRe=x=>x.replace(/[.*+?^\$\{\}()|[\]\\]/g,'\\$&');let output=String(sentence||'');for(const part of t.split(/\s+/).filter(Boolean)){const re=new RegExp('\\b'+escapeRe(part)+'\\b','gi');output=output.replace(re,m=>'_'.repeat([...m].length))}return output}
-function render(){const w=word();$('setSelect').options[0].text=`Studying (${studying.length})`;$('setSelect').options[1].text=`All (${all.length})`;$('setSelect').options[2].text=`Difíciles (${all.filter(x=>(progress[wordKey(x)]||{}).errors>0).length})`;
+function render(){const w=word();$('setSelect').options[0].text=`Studying (${studying.length})`;$('setSelect').options[1].text=`All (${all.length})`;$('setSelect').options[2].text=`Difíciles (${all.filter(x=>(progress[wordKey(x)]||{}).errors>0&&(progress[wordKey(x)]||{}).streak<3).length})`;
 $('datasetInfo').textContent=`Excel cargado: all ${all.length} palabras · studying ${studying.length} palabras. Puedes importar otra versión cuando cambien.`;
 $('good').textContent=good;$('bad').textContent=bad;$('streak').textContent=streak;$('position').textContent=w?`${idx+1}/${queue.length}`:`0/${queue.length}`;
 $('roundLabel').textContent=Number($('repeatSelect').value)===2?`Escritura ${round} de 2`:'Escritura única';$('meaning').textContent=w?w.meaning:'No hay palabras en esta selección';$('letters').innerHTML=w?letters():'';
 $('sentence').textContent=w?($('activitySelect').value==='learning'?w.sentence:hideAnswer(w.sentence,w.word)):'';$('activityTitle').textContent=$('activitySelect').value==='learning'?'✏️ Aprendizaje':'🎯 Juego';$('translation').textContent=w?.translation||'';$('nextBtn').disabled=!w;
-$('masteryStats').textContent=`Dominadas: ${all.filter(x=>(progress[wordKey(x)]||{}).streak>=3).length} · Con errores: ${all.filter(x=>(progress[wordKey(x)]||{}).errors>0).length}`;
+$('masteryStats').textContent=`Dominadas: ${all.filter(x=>(progress[wordKey(x)]||{}).streak>=3).length} · Con errores: ${all.filter(x=>(progress[wordKey(x)]||{}).errors>0&&(progress[wordKey(x)]||{}).streak<3).length}`;
 renderGame();}
 let advanceTimer=null;function cancelAdvance(){if(advanceTimer!==null){clearTimeout(advanceTimer);advanceTimer=null}}function wordFeedback(t,kind){const el=$('wordFeedback');el.textContent=t;el.className='word-feedback'+(kind?' '+kind:'')}function message(t){$('message').textContent=t}
 function focus(){if(word())$('keyboard').focus({preventScroll:true})}
