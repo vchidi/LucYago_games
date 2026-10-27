@@ -42,13 +42,14 @@ body{
 a{color:inherit;text-decoration:none}
 .app{
   max-width:1080px;
-  height:100dvh;
+  min-height:100dvh;
+  height:auto;
   margin:0 auto;
   padding:calc(12px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));
   display:flex;
   flex-direction:column;
   gap:10px;
-  overflow:hidden;
+  overflow:visible;
 }
 .hero,.game-card{
   background:rgba(255,253,248,.88);
@@ -376,7 +377,11 @@ h1{
         <span>&#10145;&#65039;</span>
       </div>
     </a>
-
+    <a class="game-card" href="./Geoaventura/index.html">
+      <div class="game-top"><div class="icon geo">🌍</div><div class="pill">Català</div></div>
+      <div><h2 class="game-title">Geoaventura</h2><p class="game-copy">Aprèn els rius, el relleu costaner, les muntanyes i les serralades amb mapes i definicions.</p></div>
+      <div class="cta geo"><span>Jugar a Geoaventura</span><span>➡️</span></div>
+    </a>
   </section>
 
   <div class="versions" id="versions" aria-label="Fechas de edición"></div>
