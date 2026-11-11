@@ -46,13 +46,16 @@ a{color:#145f99}#definitions{display:none}
 <div class="ibbank" id="ibclassbank"></div><div class="ibar"><button id="ibclassreset">Reiniciar</button><button id="ibclasssolution">Solució</button><span class="ibmsg" id="ibclassmessage"></span></div></div></section></main><script>
 const data={"Rius": [["Volga", 89.0, 39.0], ["Rin", 30.22, 46.78], ["Elba", 42.41, 48.41], ["Vístula", 49.38, 41.06], ["Danubi", 54.25, 68.96], ["Dnièper", 67.97, 52.85], ["Loira", 24.19, 56.82], ["Ebre", 17.15, 68.96], ["Tajo", 8.15, 72.93]], "Mars": [["Mar Mediterrani", 23.39, 85.3], ["Mar Negre", 68.77, 73.86], ["Mar Caspi", 94.97, 65.34], ["Mar del Nord", 30.36, 37.56], ["Mar Bàltic", 50.11, 35.69], ["Mar Cantàbric", 12.94, 61.26]], "Oceans": [["Oceà Atlàntic", 4.23, 48.3], ["Oceà Glacial Àrtic", 36.53, 4.41]]},defs={"Riu": "Corrent natural d'aigua que circula per una llera.", "Afluent": "Riu o curs d'aigua que desemboca en un altre riu.", "Cabal": "Quantitat d'aigua que transporta un riu.", "Curs d'un riu": "Recorregut que fa un riu des del naixement fins a la desembocadura.", "Desembocadura": "Lloc on un riu acaba i aboca les aigües a un altre riu, llac o mar.", "Delta": "Acumulació de sediments a la desembocadura d'un riu."};
 let category="Rius",chosen=null,editing=false,completed={},custom={},currentQuestion=0;
+function barreja(llista){const a=[...llista];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const ordreEuropa={};
+for(const cat of Object.keys(data))ordreEuropa[cat]=barreja(data[cat].map(x=>x[0]));
 const map=document.getElementById('map'),bank=document.getElementById('bank'),status=document.getElementById('status');
 const saved=localStorage.getItem('geo_europa_rius_pos_sense_prefix_v2');if(saved){try{custom=JSON.parse(saved)}catch{}}
 function items(){return data[category]}
 function position(name,x,y){return custom[category]?.[name]||[x,y]}
 function draw(){
 map.querySelectorAll('.target').forEach(e=>e.remove());bank.innerHTML='';chosen=null;
-for(const [name,x,y] of items()){
+for(const name of ordreEuropa[category]){const [,x,y]=items().find(row=>row[0]===name);
 const pos=position(name,x,y),done=completed[category]?.includes(name);
 const z=document.createElement('div');z.className='target'+(done?' done':'')+(editing?' adjust':'');z.style.left=pos[0]+'%';z.style.top=pos[1]+'%';z.dataset.name=name;z.textContent=editing?name:done?name:'?';map.append(z);
 z.addEventListener('click',()=>{if(!editing&&chosen)attempt(name)});
@@ -77,7 +80,7 @@ function switchCat(c){category=c;document.querySelectorAll('[data-cat]').forEach
 document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{document.getElementById('placement').style.display='block';document.getElementById('definitions').style.display='none';switchCat(b.dataset.cat)});
 document.getElementById('prev').onclick=()=>switchCat(Object.keys(data)[(Object.keys(data).indexOf(category)+2)%3]);
 document.getElementById('next').onclick=()=>switchCat(Object.keys(data)[(Object.keys(data).indexOf(category)+1)%3]);
-document.getElementById('reset').onclick=()=>{completed[category]=[];draw()};
+document.getElementById('reset').onclick=()=>{completed[category]=[];ordreEuropa[category]=barreja(items().map(x=>x[0]));draw()};
 document.getElementById('solution').onclick=()=>{completed[category]=items().map(i=>i[0]);draw()};
 
 const questions=Object.entries(defs);
@@ -90,12 +93,13 @@ const groups={'Oceà Atlàntic':['Miño','Duero','Tajo','Guadiana','Guadalquivir
 const names=Object.values(groups).flat();
 const defaults={Miño:[29.85,25.01],Duero:[28.91,38.91],Tajo:[26.66,56.6],Guadiana:[34.5,63.87],Guadalquivir:[48.58,74.4],Segura:[63.1,70.61],Xúquer:[65.64,60.81],Ebre:[66.23,33.75],Llobregat:[79.66,28.06]};
 let coords={...defaults},editing=false,chosen=null,classChosen=null,placed=new Set(),classified=new Set();
+let ordreIberia=barreja(names),ordreDesembocadura=barreja(names);
 const $=id=>document.getElementById(id),map=$('iberiaMap');
 
 function msg(id,t){$(id).textContent=t}
 function position(e){const r=map.getBoundingClientRect();return [Math.max(0,Math.min(100,Math.round((e.clientX-r.left)/r.width*10000)/100)),Math.max(0,Math.min(100,Math.round((e.clientY-r.top)/r.height*10000)/100))]}
 function renderMap(){map.querySelectorAll('.ibpoint').forEach(n=>n.remove());$('ibbank').replaceChildren();chosen=null;
-for(const name of names){const point=document.createElement('div'),p=coords[name],done=placed.has(name);
+for(const name of ordreIberia){const point=document.createElement('div'),p=coords[name],done=placed.has(name);
 point.className='ibpoint'+(done?' done':'')+(editing?' edit':'');point.dataset.name=name;point.style.left=p[0]+'%';point.style.top=p[1]+'%';point.textContent=editing||done?name:'?';map.append(point);
 point.addEventListener('click',()=>{if(!editing&&chosen)answer(name)});
 point.addEventListener('dragover',e=>e.preventDefault());point.addEventListener('drop',e=>{e.preventDefault();chosen=e.dataTransfer.getData('text/plain');answer(name)});
@@ -114,7 +118,7 @@ $('ibbank').append(chip);
 function answer(target){if(editing||!chosen||placed.has(target))return;if(target===chosen){placed.add(target);renderMap();msg('ibmessage',placed.size===9?'🎉 Tots correctes!':'✅ Correcte! '+placed.size+'/9')}else{msg('ibmessage','❌ Torna-ho a provar');const z=[...map.querySelectorAll('.ibpoint')].find(n=>n.dataset.name===target);if(z){z.style.background='#ffb3b3';setTimeout(()=>z.style.background='',450)}}}
 function renderClass(){const bank=$('ibclassbank');bank.replaceChildren();document.querySelectorAll('.ibaccepted').forEach(e=>e.replaceChildren());
 for(const [sea,ns] of Object.entries(groups))for(const name of ns)if(classified.has(name)){const span=document.createElement('span');span.className='ibcorrect';span.textContent=name;document.querySelector('.ibdrop[data-sea="'+sea+'"] .ibaccepted').append(span)}
-for(const name of names.filter(n=>!classified.has(n)).sort(()=>Math.random()-.5)){const chip=document.createElement('button');chip.className='ibchip';chip.textContent=name;chip.draggable=true;
+for(const name of ordreDesembocadura.filter(n=>!classified.has(n))){const chip=document.createElement('button');chip.className='ibchip';chip.textContent=name;chip.draggable=true;
 chip.onclick=()=>{classChosen=name;bank.querySelectorAll('.ibchip').forEach(n=>n.classList.toggle('selected',n===chip))};
 chip.addEventListener('dragstart',e=>{classChosen=name;e.dataTransfer.setData('text/plain',name)});
 chip.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;classChosen=name;chip.dataset.drag=e.pointerId;chip.setPointerCapture(e.pointerId)});
@@ -128,8 +132,8 @@ document.querySelectorAll('nav [data-cat],nav #defbtn').forEach(b=>b.addEventLis
 $('ibmaptab').onclick=()=>{$('ibmapmode').hidden=false;$('ibclassmode').hidden=true;$('ibmaptab').classList.add('active');$('ibclasstab').classList.remove('active')};
 $('ibclasstab').onclick=()=>{$('ibmapmode').hidden=true;$('ibclassmode').hidden=false;$('ibclasstab').classList.add('active');$('ibmaptab').classList.remove('active');renderClass()};
 $('ibsolution').onclick=()=>{editing=false;placed=new Set(names);renderMap();msg('ibmessage','Solució completa')};
-$('ibreset').onclick=()=>{placed.clear();renderMap();msg('ibmessage','')};
-$('ibclassreset').onclick=()=>{classified.clear();classChosen=null;renderClass();msg('ibclassmessage','')};
+$('ibreset').onclick=()=>{placed.clear();ordreIberia=barreja(names);renderMap();msg('ibmessage','')};
+$('ibclassreset').onclick=()=>{classified.clear();classChosen=null;ordreDesembocadura=barreja(names);renderClass();msg('ibclassmessage','')};
 $('ibclasssolution').onclick=()=>{classified=new Set(names);renderClass();msg('ibclassmessage','Solució completa')};
 renderMap();renderClass();
 })();
